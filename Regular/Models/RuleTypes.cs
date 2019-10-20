@@ -8,6 +8,7 @@ namespace Regular.Models
 {
     enum RuleTypes
     {
+        None,
         AnyLetter,
         SpecificLetter,
         AnyNumber,

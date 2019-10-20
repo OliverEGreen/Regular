@@ -10,25 +10,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Collections.ObjectModel;
-using Regular.Models;
-using Autodesk.Revit.DB.ExtensibleStorage;
 
-namespace Regular.Views
+namespace temp
 {
     /// <summary>
-    /// Interaction logic for RuleManager.xaml
+    /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class RuleManager : Window
+    public partial class MainWindow : Window
     {
-        public RuleManager(List<Entity> entityList)
+        public MainWindow()
         {
             InitializeComponent();
-            ResultsListBox.ItemsSource = regularRegexRules;
         }
-
-        private ObservableCollection<RegexRule> regularRegexRules = new ObservableCollection<RegexRule>();
-
     }
 }

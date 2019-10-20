@@ -10,8 +10,8 @@ namespace Regular.Models
     class RegexRule
     {
         //Constructor, when user creates a new rule we require the following information
-        public RegexRule(string ruleName, List<Category> TargetCategoriesList, Parameter trackingParameter, string outputParameterName) { }
-
+        public RegexRule(string ruleName, Category targetCategory, Parameter trackingParameter, string outputParameterName) { }
+        public RegexRule(string ruleName, Category targetCategory, Parameter trackingParameter, Parameter outputParameter) { }
         public string regexString = "";
         public List<RegexRulePart> regexRuleParts = new List<RegexRulePart>();
         public bool isCaseSensitive = false;

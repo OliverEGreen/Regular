@@ -7,6 +7,25 @@
         mc:Ignorable="d"
         Title="RuleManager" Height="450" Width="800">
     <Grid>
-        
+        <ListBox Name="ResultsListBox" HorizontalAlignment="Left" BorderThickness="0" Background="Transparent" Padding="3" Width="795" Margin="0,0,0,0.5" >
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid Width="431">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="26.5"/>
+                            <RowDefinition Height="30"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="50"/>
+                        </Grid.ColumnDefinitions>
+                        <Rectangle HorizontalAlignment="Stretch" Fill="#EBEBEB" VerticalAlignment="Stretch" Grid.ColumnSpan="2" Grid.RowSpan="2" Margin="-4,-1,-5,-1"/>
+                        <TextBlock x:Name="DocumentNameTextBlock" Text="{Binding DocumentName}" FontSize="13" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Margin="4,8,4,0"/>
+                        <TextBlock x:Name="DocumentURITextBlock" Text="{Binding DocumentURI}" Foreground="#808080" Grid.Row="1" Grid.RowSpan="2" Grid.Column="0" Margin="5"/>
+                        <TextBlock x:Name="DocumentSizeTextBlock" Text="{Binding DocumentSize}" Foreground="#666666" VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.RowSpan="2" Grid.Row="1" Grid.Column="1" Margin="0,0,9,9"/>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </Grid>
 </Window>

@@ -8,8 +8,6 @@ namespace Regular.Models
 {
     class RegexRulePart
     {
-        public RegexRulePart(string rulePartName, RuleTypes ruleType) { }
-        //Lets the user decide whether a rule part can be applied optionally
-        public bool isOptional = false;
+        public RegexRulePart(string rawUserInputValue, RuleTypes ruleType, bool isOptional) { }
     }
 }
