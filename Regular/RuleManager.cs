@@ -7,6 +7,7 @@ using System.Windows;
 using System.Linq;
 using Autodesk.Revit.DB.ExtensibleStorage;
 using Regular.Models;
+using System.Collections.ObjectModel;
 
 [Transaction(TransactionMode.Manual)]
 public class RuleManager : IExternalCommand
@@ -124,7 +125,7 @@ public class RuleManager : IExternalCommand
 
         #endregion
 
-        //Helper method to take Entities returned from Storage and convert them to RegexRules
+        //Helper method to take Entities returned from Storage and convert them to RegexRules (including their RegexRuleParts)
         RegexRule ConvertEntityToRegexRule(Entity entity)
         {
             string name = entity.Get<string>("ruleName");
@@ -140,9 +141,9 @@ public class RuleManager : IExternalCommand
             RegexRule regexRule = new RegexRule(name, category, trackingParameter, outputParameter);
             
             //Helper method to deserialize our smushed-down regex rule parts
-            List<RegexRulePart> DeserializeRegexRuleParts(List<string> _regexRulePartsString)
+            ObservableCollection<RegexRulePart> DeserializeRegexRuleParts(List<string> _regexRulePartsString)
             {
-                List<RegexRulePart> _regexRuleParts = new List<RegexRulePart>();
+                ObservableCollection<RegexRulePart> _regexRuleParts = new ObservableCollection<RegexRulePart>();
 
                 //Converting RuleParts from serialized strings to real RegexRuleParts
                 foreach (string serializedString in regexRulePartsString)
@@ -199,8 +200,8 @@ public class RuleManager : IExternalCommand
                 return _regexRuleParts;
             }
 
-            List<RegexRulePart> regexRuleParts = DeserializeRegexRuleParts(regexRulePartsString);
-            regexRule.regexRuleParts = regexRuleParts;
+            ObservableCollection<RegexRulePart> regexRuleParts = DeserializeRegexRuleParts(regexRulePartsString);
+            regexRule.RegexRuleParts = regexRuleParts;
             return regexRule;
         }
 
@@ -213,13 +214,12 @@ public class RuleManager : IExternalCommand
             List<Entity> regexRuleEntities = ReturnExistingRegexRules(regularSchema);
 
             //Let's parse those Entities into RegexRules
-            List<RegexRule> regexRules = new List<RegexRule>();
+            ObservableCollection<RegexRule> regexRules = new ObservableCollection<RegexRule>();
             foreach(Entity entity in regexRuleEntities) { regexRules.Add(ConvertEntityToRegexRule(entity)); }
 
             //The Rule Manager is a modal WPF Window with an IObservableCollection displaying any found RegexRules
-            Regular.Views.RuleManager ruleManager = new Regular.Views.RuleManager(regexRuleEntities);
+            Regular.Views.RuleManager ruleManager = new Regular.Views.RuleManager(regexRules);
             ruleManager.ShowDialog();
-
             //We need to build the rule manager UI using IObservableCollection and Listbox. 
             //Need to build the new rule button in order to have ability to create new rules
             //This will involve building a parsing function to parse a new, sort of empty RegexRule into ExtensibleStorage

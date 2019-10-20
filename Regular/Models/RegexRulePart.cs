@@ -6,8 +6,18 @@ using System.Threading.Tasks;
 
 namespace Regular.Models
 {
-    class RegexRulePart
+    public class RegexRulePart
     {
-        public RegexRulePart(string rawUserInputValue, RuleTypes ruleType, bool isOptional) { }
+        public string RawUserInputValue { get; set; }
+        public RuleTypes RuleType { get; set; }
+        public bool IsOptional { get; set; }
+        
+        //Our constructor with all the information we want when creating a RegexRulePart
+        public RegexRulePart(string rawUserInputValue, RuleTypes ruleType, bool isOptional)
+        {
+            RawUserInputValue = rawUserInputValue;
+            RuleType = ruleType;
+            IsOptional = IsOptional;
+        }
     }
 }

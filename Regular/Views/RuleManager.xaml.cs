@@ -17,18 +17,21 @@ using Autodesk.Revit.DB.ExtensibleStorage;
 
 namespace Regular.Views
 {
-    /// <summary>
-    /// Interaction logic for RuleManager.xaml
-    /// </summary>
     public partial class RuleManager : Window
     {
-        public RuleManager(List<Entity> entityList)
+        public RuleManager(ObservableCollection<RegexRule> regexRules)
         {
             InitializeComponent();
-            ResultsListBox.ItemsSource = regularRegexRules;
+            RegexRulesListBox.ItemsSource = regexRules;
+            regexRules.Add(new RegexRule("mycoolrule", null, null, null));
+            regexRules.Add(new RegexRule("anotherrule", null, null, null));
         }
 
-        private ObservableCollection<RegexRule> regularRegexRules = new ObservableCollection<RegexRule>();
-
+        private void ButtonAddNewRule_Click(object sender, RoutedEventArgs e)
+        {
+            RegexRule myTestRegexRule = new RegexRule("anotherrule", null, null, null);
+            RuleEditor ruleEditor = new RuleEditor(myTestRegexRule);
+            ruleEditor.ShowDialog();
+        }
     }
 }

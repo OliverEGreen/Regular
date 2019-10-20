@@ -54,14 +54,8 @@
     <Compile Include="RegularApp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RuleManager.cs" />
-    <Compile Include="Views\EditRule.xaml.cs">
-      <DependentUpon>EditRule.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\EditRulePart.xaml.cs">
-      <DependentUpon>EditRulePart.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\NewRule.xaml.cs">
-      <DependentUpon>NewRule.xaml</DependentUpon>
+    <Compile Include="Views\RuleEditor.xaml.cs">
+      <DependentUpon>RuleEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\RuleManager.xaml.cs">
       <DependentUpon>RuleManager.xaml</DependentUpon>
@@ -69,15 +63,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Page Include="Views\EditRule.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\EditRulePart.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\NewRule.xaml">
+    <Page Include="Views\RuleEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

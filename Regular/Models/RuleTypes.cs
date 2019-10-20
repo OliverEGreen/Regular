@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Regular.Models
 {
-    enum RuleTypes
+    public enum RuleTypes
     {
         None,
         AnyLetter,
