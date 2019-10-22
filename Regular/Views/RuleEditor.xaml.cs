@@ -9,11 +9,15 @@ using System.Collections;
 using Autodesk.Revit.UI;
 using System;
 using System.Windows.Controls;
+using Autodesk.Revit.DB.ExtensibleStorage;
 
 namespace Regular.Views
 {
     public partial class RuleEditor : Window
     {
+        public static Document _doc { get; set; }
+        public static Autodesk.Revit.ApplicationServices.Application _app { get; set; }
+
         //Helper method to build regex string
         public string GetRegexPartFromRuleType(RegexRulePart regexRulePart)
         {
@@ -48,11 +52,53 @@ namespace Regular.Views
 
         public ObservableCollection<RegexRulePart> selectedRegexRuleParts = new ObservableCollection<RegexRulePart>();
         public RegexRule RegexRule { get; set; }
-        
-        //Constructor
-        public RuleEditor(RegexRule regexRule)
+
+        //Constructor for creating a new rule
+        public RuleEditor(Document doc, Autodesk.Revit.ApplicationServices.Application app)
         {
             InitializeComponent();
+            _doc = doc;
+            _app = app;
+            Title = "Creating New Rule";
+            //Depending on the OpeningType we either need to edit and existing rule
+            //In which case we need to take it as an argument and fill out the UI boxes
+            //Or we are creating a new rule from scratch
+            //In which case we instantiate the new DataObject once the form is filled out and closed
+            selectedRegexRuleParts.Clear();
+            RulePartsListBox.ItemsSource = selectedRegexRuleParts;
+
+            //We create a new RegexRule placeholder
+            RegexRule = new RegexRule(null, null, null, null);
+
+            Categories categories = Regular.RuleManager._doc.Settings.Categories;
+            List<string> categoryNames = new List<string>();
+
+            foreach (Category category in categories)
+            {
+                if (category.AllowsBoundParameters == true)
+                {
+                    categoryNames.Add(category.Name);
+                }
+            }
+            categoryNames = categoryNames.OrderBy(x => x).ToList();
+            ComboBoxInputCategory.Items.Clear();
+            ComboBoxInputCategory.ItemsSource = categoryNames;
+
+            //Binding ComboBox to our RuleType enumeration
+            ComboBoxInputRulePartType.ItemsSource = Enum.GetValues(typeof(RuleTypes)).Cast<RuleTypes>();
+        }
+
+        //Constructor overload for editing existing rules
+        public RuleEditor(Document doc, Autodesk.Revit.ApplicationServices.Application app, RegexRule regexRule)
+        {
+            InitializeComponent();
+            _doc = doc;
+            _app = app;
+            Title = $"Editing Rule: {regexRule.RuleName}";
+            //Depending on the OpeningType we either need to edit and existing rule
+            //In which case we need to take it as an argument and fill out the UI boxes
+            //Or we are creating a new rule from scratch
+            //In which case we instantiate the new DataObject once the form is filled out and closed
             RegexRule = regexRule;
             RulePartsListBox.ItemsSource = selectedRegexRuleParts;
 
@@ -73,6 +119,7 @@ namespace Regular.Views
             //Binding ComboBox to our RuleType enumeration
             ComboBoxInputRulePartType.ItemsSource = Enum.GetValues(typeof(RuleTypes)).Cast<RuleTypes>();
         }
+
 
         private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
@@ -131,14 +178,40 @@ namespace Regular.Views
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
+            string ruleName = TextblockInputRuleName.Text;
+            string outputParameterName = TextblockOutputParameterName.Text;
+            List<Category> categoriesList = new List<Category>();
+            categoriesList.Add(Utilities.GetCategoryFromBuiltInCategory(_doc, BuiltInCategory.OST_Doors)); //Placeholder; we need to read this from the form
+            CategorySet categorySet = Utilities.CreateCategorySetFromListOfCategories(_doc, _app, categoriesList);
+            Parameter outputParameter = Utilities.CreateProjectParameter(_doc, _app, outputParameterName, ParameterType.Text, categorySet, BuiltInParameterGroup.PG_AREA, true);
+            //RegexRule.OutputParameterName = outputParameter.Definition.Name;
+
             foreach(RegexRulePart regexRulePart in selectedRegexRuleParts)
             {
                 RegexRule.RegexString += GetRegexPartFromRuleType(regexRulePart); //Something!! We build the string as we close the editor 
             }
+            //Saving the rule to a Datastorage object of the RegularSchema
+            Entity entity = new Entity(Utilities.ReturnRegularSchema(_doc));
+            entity.Set("ruleName", ruleName);
+            entity.Set("categoryName", categoriesList.First().Name);
+            entity.Set("trackingParameterName", ComboBoxInputTargetParameter.SelectedItem.ToString());
+            entity.Set("outputParameterName", outputParameterName);
+            entity.Set("regexString", RegexRule.RegexString);
+            IList<string> regexRulePartList = new List<string>();
+            foreach(RegexRulePart regexRulePart in selectedRegexRuleParts)
+            {
+                regexRulePartList.Add($@"{regexRulePart.RawUserInputValue}:{regexRulePart.RuleType.ToString()}:{regexRulePart.IsOptional.ToString()}");
+            }
+            entity.Set<IList<string>>("regexRuleParts", regexRulePartList);
+            Transaction transaction = new Transaction(_doc, "Saving RegexRule");
+            transaction.Start();
+            DataStorage dataStorage = DataStorage.Create(_doc);
+            dataStorage.SetEntity(entity);
+            if (dataStorage != null) TaskDialog.Show("Test", "Datastorage object was created successfully");
+            else TaskDialog.Show("Test", "Datastorage object is null");
+            transaction.Commit();
 
             Close();
-            TaskDialog.Show("FOR DEMO", $"Regex is: {RegexRule.RegexString}");
-            //We have to add the rules back now
         }
 
         private void DeleteRegexRulePartButton_Click(object sender, RoutedEventArgs e)

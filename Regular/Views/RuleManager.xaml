@@ -33,12 +33,13 @@
                             <Rectangle HorizontalAlignment="Stretch" Fill="#EBEBEB" VerticalAlignment="Stretch" Grid.ColumnSpan="2" Grid.RowSpan="2" Margin="-4,-1,-5,-1"/>
                             <TextBlock x:Name="RuleNameTextBlock" Text="{Binding RuleName}" FontSize="13" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Margin="4,8,4,0"/>
                             <TextBlock x:Name="RegexStringTextBlock" Text="{Binding RegexString}" Foreground="#808080" Grid.Row="1" Grid.RowSpan="2" Grid.Column="0" Margin="5"/>
+                            <Button Name="ButtonEditRule" Content="Edit Rule" HorizontalAlignment="Right" Click="ButtonEditRule_Click"></Button>
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
         </ScrollViewer>
         <Button Name="CloseButton" Style="{StaticResource StandardButton}" Click="CloseButton_Click" Content="Close" Grid.Row="2"/>
-        <Button Name="TestButton" Style="{StaticResource StandardButton}" Click="TestButton_Click" Content="Test" Grid.Row="3"/>
+        <Button Name="TestButton" Style="{StaticResource StandardButton}" Click="TestButton_Click" Content="Test Functionality Button" Grid.Row="3"/>
     </Grid>
 </Window>

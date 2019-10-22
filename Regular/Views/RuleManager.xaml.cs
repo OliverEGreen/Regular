@@ -1,21 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.Collections.ObjectModel;
 using Regular.Models;
-using Regular.Views;
-using Autodesk.Revit.DB.ExtensibleStorage;
 using Autodesk.Revit.DB;
+using Autodesk.Revit.DB.ExtensibleStorage;
 
 namespace Regular.Views
 {
@@ -27,18 +15,14 @@ namespace Regular.Views
         public RuleManager(ObservableCollection<RegexRule> regexRules, Document doc, Autodesk.Revit.ApplicationServices.Application app)
         {
             InitializeComponent();
-            RegexRulesListBox.ItemsSource = regexRules;
-            //Setting properties for forms to access document by
             _doc = doc;
             _app = app;
-            regexRules.Add(new RegexRule("Dummy Rule 1", null, null, null));
-            regexRules.Add(new RegexRule("Dummy Rule 2", null, null, null));
+            RegexRulesListBox.ItemsSource = regexRules;
         }
 
         private void ButtonAddNewRule_Click(object sender, RoutedEventArgs e)
         {
-            RegexRule myTestRegexRule = new RegexRule("anotherrule", null, null, null);
-            RuleEditor ruleEditor = new RuleEditor(myTestRegexRule);
+            RuleEditor ruleEditor = new RuleEditor(_doc, _app);
             ruleEditor.ShowDialog();
         }
 
@@ -50,11 +34,18 @@ namespace Regular.Views
         private void TestButton_Click(object sender, RoutedEventArgs e)
         {
             List<Category> categoriesList = new List<Category>();
-            categoriesList.Add(Utilities.GetCategoryFromBuiltInCategory(_doc, BuiltInCategory.OST_Walls));
-            categoriesList.Add(Utilities.GetCategoryFromBuiltInCategory(_doc, BuiltInCategory.OST_Doors));
+            categoriesList.Add(Utilities.GetCategoryFromBuiltInCategory(_doc, BuiltInCategory.OST_Walls)); //Testing placeholder for now
+            categoriesList.Add(Utilities.GetCategoryFromBuiltInCategory(_doc, BuiltInCategory.OST_Doors)); //Testing placeholder for now
             CategorySet categorySet = Utilities.CreateCategorySetFromListOfCategories(_doc, _app, categoriesList);
             
             Utilities.CreateProjectParameter(_doc, _app, "RegularTestParameter", ParameterType.Text, categorySet, BuiltInParameterGroup.INVALID, true);
+        }
+
+        private void ButtonEditRule_Click(object sender, RoutedEventArgs e)
+        {
+            RegexRule testRegexRule = new RegexRule("Test Rule", Utilities.GetCategoryFromBuiltInCategory(_doc, BuiltInCategory.OST_Doors), null, null);
+            RuleEditor ruleEditor = new RuleEditor(_doc, _app, testRegexRule);
+            ruleEditor.ShowDialog();
         }
     }
 }

@@ -14,7 +14,7 @@
     <SolidColorBrush x:Key="WindowBackgroundColor" Color="#FAFAFA"/>
     <Style x:Key="StandardWindow" TargetType="Window">
         <Setter Property="ResizeMode" Value="NoResize"/>
-        <Setter Property="Topmost" Value="True"/>
+        <Setter Property="Topmost" Value="False"/>
         <Setter Property="Background" Value="{StaticResource WindowBackgroundColor}"/>
         <Setter Property="Icon" Value="../Resources/RegularIcon32px.png"/>
     </Style>

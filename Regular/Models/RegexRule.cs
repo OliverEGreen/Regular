@@ -12,19 +12,19 @@ namespace Regular.Models
     {
         public string RuleName { get; set; }
         public Category TargetCategory { get; set; }
-        public Parameter TrackingParameter { get; set; }
-        public Parameter OutputParameter { get; set; }
+        public string TrackingParameterName { get; set; }
+        public string OutputParameterName { get; set; }
         public string RegexString { get; set; }
         public ObservableCollection<RegexRulePart> RegexRuleParts { get; set; }
         public bool IsCaseSensitive { get; set; }
 
         //Constructor, when user creates a new rule we require (and set) the following information
-        public RegexRule(string ruleName, Category targetCategory, Parameter trackingParameter, Parameter outputParameter)
+        public RegexRule(string ruleName, Category targetCategory, string trackingParameterName, string outputParameterName)
         {
             RuleName = ruleName;
             TargetCategory = targetCategory;
-            TrackingParameter = trackingParameter;
-            OutputParameter = outputParameter;
+            TrackingParameterName = trackingParameterName;
+            OutputParameterName = outputParameterName;
         }
     }
 }
