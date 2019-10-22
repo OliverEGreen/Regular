@@ -5,9 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Regular.Views"
         mc:Ignorable="d"
-        Title="Rule Editor" Height="500" Width="400">
+        Title=" Rule Editor" WindowStartupLocation="CenterScreen" Style="{DynamicResource StandardWindow}" Height="500" Width="400">
+    <Window.Resources>
+        <ResourceDictionary Source="../Resources/RegularStyles.xaml"/>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
             <RowDefinition Height="40"/>
             <RowDefinition Height="40"/>
             <RowDefinition Height="40"/>
@@ -33,14 +37,16 @@
             <ComboBoxItem>Mark</ComboBoxItem>
             <ComboBoxItem>Number</ComboBoxItem>
         </ComboBox>
-        <ComboBox Name="ComboBoxInputRulePartType" Grid.Row="3" Grid.Column="1" Width="150" HorizontalAlignment="Left"/>
-        <Button Name="AddRulePartButton" Content="Add" Width="50" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Right" Click="AddRulePartButton_Click"/>
-        <Label Content="Edit Rule Parts" Grid.Row="3" ></Label>
-        <ScrollViewer VerticalScrollBarVisibility="Visible" Grid.Row="4" Grid.ColumnSpan="2" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
+        <ComboBox Name="ComboBoxInputRulePartType" Grid.Row="4" Grid.Column="1" Width="142" HorizontalAlignment="Left" Margin="0.5,0,0,0"/>
+        <Label Content="Output Parameter Name" Grid.Row="3"/>
+        <TextBox Name="TextblockOutputParameterName" Text="Type Here..." Grid.Row="3" Grid.Column="1"/>
+        <Button Style="{StaticResource StandardButton}" Name="AddRulePartButton" Content="Add" Width="50" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Right" Click="AddRulePartButton_Click"/>
+        <Label Content="Edit Rule Parts" Grid.Row="4" ></Label>
+        <ScrollViewer Style="{StaticResource DefaultScrollerViewerStyle}" VerticalScrollBarVisibility="Visible" Grid.Row="5" Grid.ColumnSpan="2" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
             <ListBox Name="RulePartsListBox">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Grid Width="380">
+                        <Grid Width="350">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="26.5"/>
                                 <RowDefinition Height="30"/>
@@ -50,13 +56,28 @@
                                 <ColumnDefinition Width="50"/>
                             </Grid.ColumnDefinitions>
                             <Rectangle HorizontalAlignment="Stretch" Fill="#EBEBEB" VerticalAlignment="Stretch" Grid.ColumnSpan="2" Grid.RowSpan="2" Margin="-4,-1,-5,-1"/>
-                            <TextBlock x:Name="RegexRulePartTypeTextBlock" Text="{Binding RuleType}" FontSize="13" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Margin="4,8,4,0"/>
-                            <TextBox x:Name="RegexRulePartUserInputTextBlock" Text="{Binding RawUserInputValue}" Width="100" FontSize="11" Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Margin="4,8,4,0"/>
+                            <TextBlock x:Name="RegexRulePartTypeTextBlock" Text="{Binding DisplayString}" FontSize="13" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Margin="4,8,4,0"/>
+                            <TextBox x:Name="RegexRulePartUserInputTextBlock" Text="{Binding RawUserInputValue}" HorizontalAlignment="Left" Width="100" FontSize="11" Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Margin="4,8,4,0">
+                                <TextBox.Style>
+                                    <Style TargetType="{x:Type TextBox}">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                        <Setter Property="IsReadOnly" Value="False"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Text, ElementName=RegexRulePartUserInputTextBlock}" Value="">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Setter Property="IsReadOnly" Value="True"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBox.Style>
+                            </TextBox>
+                            <Button Name="DeleteRegexRulePartButton" Style="{StaticResource ImageButton}" Tag="../Resources/TrashCanIcon.png" HorizontalAlignment="Right" VerticalAlignment="Center" Width="20" Height="20" Content="Delete" Click="DeleteRegexRulePartButton_Click" Grid.Column="1"/>
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
         </ScrollViewer>
-        <Button Name="CloseButton" Content="OK" Grid.Row="6" Grid.Column="1"/>
+        <Button Name="CloseButton" Style="{StaticResource StandardButton}" Click="CloseButton_Click" Content="OK" Grid.Row="6" Grid.Column="1"/>
     </Grid>
 </Window>
+

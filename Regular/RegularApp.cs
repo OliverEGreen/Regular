@@ -15,7 +15,7 @@ namespace Regular
     {
        public Result OnStartup(UIControlledApplication uiControlledApp)
         {
-            //Creates the AHMM Revit Ribbon
+            //Creates the Regular Revit Ribbon
             RegularRibbon.BuildRegularRibbon(uiControlledApp);
             return Result.Succeeded;
         }

@@ -68,7 +68,7 @@ namespace Regular
                     if (allSchemaNames.Contains("RegularSchema"))
                     {
                         regularSchema = allSchemas.Where(x => x.SchemaName == "RegularSchema").FirstOrDefault();
-                        TaskDialog.Show("Regular", "Yay we found the regular schema all is well.");
+                        TaskDialog.Show("Regular - DEMO", "An existing schema for Regular was found in this file. It has been loaded.");
                         //Now we've found there's our valid schema in the model, we'll need to gather the Entities
                         //That employ our schema and load each of them in to display the rule manager page
                         //We'll want to populate these as RegexRule objects into our IObservableCollection
@@ -77,14 +77,14 @@ namespace Regular
                     else
                     {
                         regularSchema = ConstructRegularSchema(doc);
-                        TaskDialog.Show("Regular", "We just built the regularschema");
+                        TaskDialog.Show("Regular - DEMO", "No existing validation rules were found.\nA new Regular schema has been constructed.");
                     }
                 }
                 //There are no schemas in this model, we'll need to build the Regular schema
                 else
                 {
                     regularSchema = ConstructRegularSchema(doc);
-                    TaskDialog.Show("Regular", "We just built the regularschema");
+                    TaskDialog.Show("Regular - DEMO", "No existing validation rules were found.\nA new Regular schema has been constructed.");
                 }
                 return regularSchema;
             }
@@ -218,7 +218,7 @@ namespace Regular
                 foreach (Entity entity in regexRuleEntities) { regexRules.Add(ConvertEntityToRegexRule(entity)); }
 
                 //The Rule Manager is a modal WPF Window with an IObservableCollection displaying any found RegexRules
-                Regular.Views.RuleManager ruleManager = new Regular.Views.RuleManager(regexRules);
+                Regular.Views.RuleManager ruleManager = new Views.RuleManager(regexRules, doc, app);
                 ruleManager.ShowDialog();
                 //We need to build the rule manager UI using IObservableCollection and Listbox. 
                 //Need to build the new rule button in order to have ability to create new rules

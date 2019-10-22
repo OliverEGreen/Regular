@@ -5,31 +5,40 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Regular.Views"
         mc:Ignorable="d"
-        Title="RuleManager" Height="450" Width="600">
+        Title=" Rule Manager" Height="450" Width="500" Style="{DynamicResource StandardWindow}">
+    <Window.Resources>
+        <ResourceDictionary Source="../Resources/RegularStyles.xaml"/>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="100"/>
             <RowDefinition />
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
-        <Button Name="ButtonAddNewRule" Content="Add Rule" Click="ButtonAddNewRule_Click"></Button>
-        <ListBox Name="RegexRulesListBox" HorizontalAlignment="Left" BorderThickness="0" Background="Transparent" Padding="3" Width="595" Margin="0,0,0,0" Grid.Row="1" >
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Grid Width="431">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="26.5"/>
-                            <RowDefinition Height="30"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="50"/>
-                        </Grid.ColumnDefinitions>
-                        <Rectangle HorizontalAlignment="Stretch" Fill="#EBEBEB" VerticalAlignment="Stretch" Grid.ColumnSpan="2" Grid.RowSpan="2" Margin="-4,-1,-5,-1"/>
-                        <TextBlock x:Name="RuleNameTextBlock" Text="{Binding RuleName}" FontSize="13" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Margin="4,8,4,0"/>
-                        <TextBlock x:Name="RegexStringTextBlock" Text="{Binding RegexString}" Foreground="#808080" Grid.Row="1" Grid.RowSpan="2" Grid.Column="0" Margin="5"/>
-                    </Grid>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <Button Name="ButtonAddNewRule" Style="{StaticResource StandardButton}" Content="Add Rule" Click="ButtonAddNewRule_Click"></Button>
+        <ScrollViewer Style="{StaticResource DefaultScrollerViewerStyle}" Grid.Row="1">
+            <ListBox Name="RegexRulesListBox" HorizontalAlignment="Left" BorderThickness="0" Background="Transparent" Padding="3" Width="494" Margin="0,0,0,49.5" Grid.Row="1" Grid.RowSpan="2" >
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Width="431">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="26.5"/>
+                                <RowDefinition Height="30"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="50"/>
+                            </Grid.ColumnDefinitions>
+                            <Rectangle HorizontalAlignment="Stretch" Fill="#EBEBEB" VerticalAlignment="Stretch" Grid.ColumnSpan="2" Grid.RowSpan="2" Margin="-4,-1,-5,-1"/>
+                            <TextBlock x:Name="RuleNameTextBlock" Text="{Binding RuleName}" FontSize="13" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Margin="4,8,4,0"/>
+                            <TextBlock x:Name="RegexStringTextBlock" Text="{Binding RegexString}" Foreground="#808080" Grid.Row="1" Grid.RowSpan="2" Grid.Column="0" Margin="5"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </ScrollViewer>
+        <Button Name="CloseButton" Style="{StaticResource StandardButton}" Click="CloseButton_Click" Content="Close" Grid.Row="2"/>
+        <Button Name="TestButton" Style="{StaticResource StandardButton}" Click="TestButton_Click" Content="Test" Grid.Row="3"/>
     </Grid>
 </Window>

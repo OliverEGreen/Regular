@@ -11,13 +11,15 @@ namespace Regular.Models
         public string RawUserInputValue { get; set; }
         public RuleTypes RuleType { get; set; }
         public bool IsOptional { get; set; }
-        
+        public string DisplayString { get; set; }
+
         //Our constructor with all the information we want when creating a RegexRulePart
         public RegexRulePart(string rawUserInputValue, RuleTypes ruleType, bool isOptional)
         {
             RawUserInputValue = rawUserInputValue;
             RuleType = ruleType;
             IsOptional = IsOptional;
+            DisplayString = ruleType.ToString();
         }
     }
 }
