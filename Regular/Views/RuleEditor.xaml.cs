@@ -52,6 +52,7 @@ namespace Regular.Views
 
         public ObservableCollection<RegexRulePart> selectedRegexRuleParts = new ObservableCollection<RegexRulePart>();
         public RegexRule RegexRule { get; set; }
+        public EditorOpeningType EditorOpeningType { get; set; }
 
         //Constructor for creating a new rule
         public RuleEditor(Document doc, Autodesk.Revit.ApplicationServices.Application app)
@@ -59,7 +60,10 @@ namespace Regular.Views
             InitializeComponent();
             _doc = doc;
             _app = app;
+
+            EditorOpeningType = EditorOpeningType.CreateNewRule;
             Title = "Creating New Rule";
+            
             //Depending on the OpeningType we either need to edit and existing rule
             //In which case we need to take it as an argument and fill out the UI boxes
             //Or we are creating a new rule from scratch
@@ -94,13 +98,15 @@ namespace Regular.Views
             InitializeComponent();
             _doc = doc;
             _app = app;
+
+            EditorOpeningType = EditorOpeningType.EditExistingRule;
             Title = $"Editing Rule: {regexRule.RuleName}";
             //Depending on the OpeningType we either need to edit and existing rule
             //In which case we need to take it as an argument and fill out the UI boxes
             //Or we are creating a new rule from scratch
             //In which case we instantiate the new DataObject once the form is filled out and closed
             RegexRule = regexRule;
-            RulePartsListBox.ItemsSource = selectedRegexRuleParts;
+            RulePartsListBox.ItemsSource = regexRule.RegexRuleParts;
 
             Categories categories = Regular.RuleManager._doc.Settings.Categories;
             List<string> categoryNames = new List<string>();
@@ -174,7 +180,7 @@ namespace Regular.Views
             }
         }
 
-        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        private void ButtonOK_Click(object sender, RoutedEventArgs e)
         {
             string ruleName = TextblockInputRuleName.Text;
             string outputParameterName = TextblockOutputParameterName.Text;
@@ -212,19 +218,31 @@ namespace Regular.Views
             Close();
         }
 
-        private void DeleteRegexRulePartButton_Click(object sender, RoutedEventArgs e)
+        private void CommandBinding_Executed_RemoveAll(object sender, ExecutedRoutedEventArgs e)
         {
-            TaskDialog.Show("FOR DEMO", "This is a real button but it doesn't delete anything yet!");
+            RegexRulePart regexRulePart = (RegexRulePart)e.Parameter;
+            ObservableCollection<RegexRulePart> regexRuleParts = RulePartsListBox.ItemsSource as ObservableCollection<RegexRulePart>;
+            regexRuleParts.Remove(regexRulePart);
         }
 
-        private void ButtonOK_Click(object sender, RoutedEventArgs e)
+        private void DeleteRegexRulePartButton_Click(object sender, RoutedEventArgs e)
         {
 
         }
 
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
+            Close();
+        }
 
+        private void ReorderUpButton_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void ReorderDownButton_Click(object sender, RoutedEventArgs e)
+        {
+            
         }
     }
 }

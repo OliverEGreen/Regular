@@ -16,9 +16,6 @@
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Rvt2019|AnyCPU' ">
-    <OutputPath>bin\2019\</OutputPath>
-  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Rvt2019|x64' ">
     <OutputPath>bin\x64\2019\</OutputPath>
     <DefineConstants>TRACE;DEBUG;REVIT2019</DefineConstants>
@@ -48,6 +45,7 @@
   <ItemGroup>
     <Compile Include="BuildRegularRibbon.cs" />
     <Compile Include="ExtensibleStorage.cs" />
+    <Compile Include="Models\EditorOpeningType.cs" />
     <Compile Include="Models\RegexRule.cs" />
     <Compile Include="Models\RegexRulePart.cs" />
     <Compile Include="Models\RuleTypes.cs" />
