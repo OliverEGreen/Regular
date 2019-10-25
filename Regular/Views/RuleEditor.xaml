@@ -5,79 +5,84 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Regular.Views"
         mc:Ignorable="d"
-        Title=" Rule Editor" WindowStartupLocation="CenterScreen" Style="{DynamicResource StandardWindow}" Height="500" Width="400">
+        Title=" Rule Editor" WindowStartupLocation="CenterScreen" Style="{DynamicResource StandardWindow}" Width="440" Height="550">
     <Window.Resources>
         <ResourceDictionary Source="../Resources/RegularStyles.xaml"/>
     </Window.Resources>
-    <Grid>
+    <Grid Margin="20,20,20,10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="50"/>
             <RowDefinition />
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="35"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Label Content="Rule Name" Grid.Row="0"/>
-        <TextBox Name="TextblockInputRuleName" Text="Type Here..." Grid.Row="0" Grid.Column="1"/>
-        <Label Content="Target Category" Grid.Row="1" ></Label>
-        <ComboBox Name="ComboBoxInputCategory" Grid.Row="1" Grid.Column="1" SelectionChanged="ComboBoxInputCategory_SelectionChanged">
-            <ComboBoxItem>Doors</ComboBoxItem>
-            <ComboBoxItem>Floors</ComboBoxItem>
-            <ComboBoxItem>Windows</ComboBoxItem>
+        <Label Content="Name Your Rule" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="0" Padding="0"/>
+        <TextBox Name="TextblockInputRuleName" Style="{StaticResource StandardTextBox}" Text="Type Here..." Grid.Row="0" Grid.Column="1"/>
+        <Label Content="Target Category" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="1" ></Label>
+        <ComboBox Name="ComboBoxInputCategory" Text="Select Category" Style="{StaticResource StandardComboBox}" Grid.Row="1" Grid.Column="1" SelectionChanged="ComboBoxInputCategory_SelectionChanged">
         </ComboBox>
-        <Label Content="Parameter To Test" Grid.Row="2" ></Label>
-        <ComboBox Name="ComboBoxInputTargetParameter" Grid.Row="2" Grid.Column="1">
+        <Label Content="Parameter To Test" Style="{StaticResource StandardLabel}" Grid.Row="2" FontSize="13" ></Label>
+        <ComboBox Name="ComboBoxInputTargetParameter" Text="Select Parameter" Style="{StaticResource StandardComboBox}" Grid.Row="2" Grid.Column="1">
             <ComboBoxItem>Comments</ComboBoxItem>
             <ComboBoxItem>Mark</ComboBoxItem>
             <ComboBoxItem>Number</ComboBoxItem>
         </ComboBox>
-        <ComboBox Name="ComboBoxInputRulePartType" Grid.Row="4" Grid.Column="1" Width="142" HorizontalAlignment="Left" Margin="0.5,0,0,0"/>
-        <Label Content="Output Parameter Name" Grid.Row="3"/>
-        <TextBox Name="TextblockOutputParameterName" Text="Type Here..." Grid.Row="3" Grid.Column="1"/>
-        <Button Style="{StaticResource StandardButton}" Name="AddRulePartButton" Content="Add" Width="50" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Right" Click="AddRulePartButton_Click"/>
-        <Label Content="Edit Rule Parts" Grid.Row="4" ></Label>
-        <ScrollViewer Style="{StaticResource DefaultScrollerViewerStyle}" VerticalScrollBarVisibility="Visible" Grid.Row="5" Grid.ColumnSpan="2" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
-            <ListBox Name="RulePartsListBox">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Grid Width="350">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="26.5"/>
-                                <RowDefinition Height="30"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition Width="50"/>
-                            </Grid.ColumnDefinitions>
-                            <Rectangle HorizontalAlignment="Stretch" Fill="#EBEBEB" VerticalAlignment="Stretch" Grid.ColumnSpan="2" Grid.RowSpan="2" Margin="-4,-1,-5,-1"/>
-                            <TextBlock x:Name="RegexRulePartTypeTextBlock" Text="{Binding DisplayString}" FontSize="13" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Margin="4,8,4,0"/>
-                            <TextBox x:Name="RegexRulePartUserInputTextBlock" Text="{Binding RawUserInputValue}" HorizontalAlignment="Left" Width="100" FontSize="11" Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Margin="4,8,4,0">
-                                <TextBox.Style>
-                                    <Style TargetType="{x:Type TextBox}">
-                                        <Setter Property="Visibility" Value="Visible"/>
-                                        <Setter Property="IsReadOnly" Value="False"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Text, ElementName=RegexRulePartUserInputTextBlock}" Value="">
-                                                <Setter Property="Visibility" Value="Collapsed"/>
-                                                <Setter Property="IsReadOnly" Value="True"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBox.Style>
-                            </TextBox>
-                            <Button Name="DeleteRegexRulePartButton" Style="{StaticResource ImageButton}" Tag="../Resources/TrashCanIcon.png" HorizontalAlignment="Right" VerticalAlignment="Center" Width="20" Height="20" Content="Delete" Click="DeleteRegexRulePartButton_Click" Grid.Column="1"/>
-                        </Grid>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-        </ScrollViewer>
-        <Button Name="CloseButton" Style="{StaticResource StandardButton}" Click="CloseButton_Click" Content="OK" Grid.Row="6" Grid.Column="1"/>
+        <ComboBox Name="ComboBoxInputRulePartType" Style="{StaticResource StandardComboBox}" Height="24" Text="Select Rule Parts" Grid.Row="4" Width="260" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="90,0,0,10" Grid.ColumnSpan="2"/>
+        <Label Content="Output Parameter Name" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="3"/>
+        <TextBox Name="TextblockOutputParameterName" Style="{StaticResource StandardTextBox}" Text="Type Here..." Grid.Row="3" Grid.Column="1"/>
+        <Button Name="AddRulePartButton" Style="{StaticResource AddItemButton}" Height="24" Width="24" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,0,10" Click="AddRulePartButton_Click" />
+        <Label Content="Add Rule Parts" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="4" VerticalAlignment="Bottom" Margin="0,0,107,14" ></Label>
+        <Border BorderThickness="1" BorderBrush="{StaticResource TextBoxBorderColorDefault}"  Grid.Row="5" Grid.ColumnSpan="2">
+            <ScrollViewer Name="RulePartsScrollViewer" Style="{StaticResource DefaultScrollerViewerStyle}" VerticalScrollBarVisibility="Visible" Grid.Row="5" Grid.ColumnSpan="2" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
+                <ListBox Name="RulePartsListBox" Style="{StaticResource StandardListBox}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid HorizontalAlignment="Stretch">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="130"/>
+                                    <ColumnDefinition Width="25"/>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="25"/>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="25"/>
+                                    <ColumnDefinition Width="25"/>
+                                </Grid.ColumnDefinitions>
+                                <Rectangle HorizontalAlignment="Stretch" Fill="#EBEBEB" VerticalAlignment="Stretch" Height="30" Width="340" Stroke="#D9D9D9" StrokeThickness="1px" Grid.ColumnSpan="7" Margin="-2,0,0,0"/>
+                                <TextBlock x:Name="RegexRulePartTypeTextBlock" Text="{Binding DisplayString}" FontSize="13" Style="{StaticResource StandardText}" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,0,0"/>
+                                <TextBox x:Name="RegexRulePartUserInputTextBlock" Text="{Binding RawUserInputValue}" Foreground="{StaticResource FontColorDefault}" Background="{StaticResource WindowBackgroundColor}" TextAlignment="Center" Grid.Column="1" FontFamily="Segoe UI" FontWeight="Regular" FontSize="13px" BorderThickness="1" BorderBrush="{StaticResource TextBoxBorderColorDefault}" VerticalAlignment="Center" HorizontalAlignment="Left" Width="20" Height="18">
+                                    <TextBox.Style>
+                                        <Style TargetType="{x:Type TextBox}">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                            <Setter Property="IsReadOnly" Value="False"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Text, ElementName=RegexRulePartUserInputTextBlock}" Value="">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                    <Setter Property="IsReadOnly" Value="True"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBox.Style>
+                                </TextBox>
+                                <TextBlock Style="{StaticResource StandardText}" Text="Optional" Grid.Column="2" VerticalAlignment="Center"/>
+                                <CheckBox Name="CheckBoxRulePartOptional" IsChecked="{Binding IsOptional}" Grid.Column="3" HorizontalAlignment="Left" VerticalAlignment="Center" Background="{StaticResource WindowBackgroundColor}"/>
+                                <TextBlock Style="{StaticResource StandardText}" Text="Match Case" Grid.Column="4" VerticalAlignment="Center"/>
+                                <CheckBox Name="CheckBoxMatchCase" IsChecked="False" Grid.Column="5" HorizontalAlignment="Left" VerticalAlignment="Center" Background="{StaticResource WindowBackgroundColor}"/>
+                                <Button Name="DeleteRegexRulePartButton" Style="{StaticResource DeleteItemButton}" HorizontalAlignment="Right" VerticalAlignment="Center" Width="25" Height="30" Click="DeleteRegexRulePartButton_Click" Grid.Column="6"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </ScrollViewer>
+        </Border>
+        <Button Name="ButtonOK" Style="{StaticResource StandardButton}" Click="ButtonOK_Click" Content="OK" Height="25" Width="80" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="6" Grid.Column="1" Margin="0,10,0,0"/>
+        <Button Name="ButtonCancel" Style="{StaticResource StandardButton}" Click="ButtonCancel_Click" Content="Cancel" Height="25" Width="80" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="6" Grid.Column="1" Margin="0,10,85,0"/>
     </Grid>
 </Window>
 

@@ -2,6 +2,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <SolidColorBrush x:Key="ButtonBackgroundColorDefault" Color="#E0E0E0"/>
+    <SolidColorBrush x:Key="TextBoxBorderColorDefault" Color="#BFBFBF"/>
     <SolidColorBrush x:Key="ButtonBackgroundColorHighlight" Color="#F1F0F2"/>
     <SolidColorBrush x:Key="ButtonBackgroundColorLightGreen" Color="#DFF2DA"/>
     <SolidColorBrush x:Key="FontColorDefault" Color="#333333"/>
@@ -24,6 +25,50 @@
         <Setter Property="FontWeight" Value="Regular"/>
         <Setter Property="FontSize" Value="12px"/>
         <Setter Property="Foreground" Value="{StaticResource FontColorDefault}"/>
+    </Style>
+    <Style x:Key="StandardLabel" TargetType="{x:Type Label}">
+        <Setter Property="FontFamily" Value="Segoe UI"/>
+        <Setter Property="FontWeight" Value="Regular"/>
+        <Setter Property="FontSize" Value="12px"/>
+        <Setter Property="Padding" Value="0px"/>
+        <Setter Property="Foreground" Value="{StaticResource FontColorDefault}"/>
+    </Style>
+    <Style x:Key="StandardComboBox" TargetType="{x:Type ComboBox}">
+        <Setter Property="FontFamily" Value="Segoe UI"/>
+        <Setter Property="FontWeight" Value="Regular"/>
+        <Setter Property="FontSize" Value="12px"/>
+        <Setter Property="Padding" Value="0px"/>
+        <Setter Property="Foreground" Value="{StaticResource FontColorDefault}"/>
+        <Setter Property="Background" Value="DarkGray"/>
+        <Setter Property="Height" Value="22px"/>
+        <Setter Property="Margin" Value="0px"/>
+        <Setter Property="Padding" Value="3,0,0,0"/>
+        <Setter Property="BorderThickness" Value="1px"/>
+        <Setter Property="VerticalAlignment" Value="Top"/>
+        <Setter Property="IsEditable" Value="True"/>
+        <Setter Property="IsReadOnly" Value="True"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+    <Style x:Key="StandardTextBox" TargetType="TextBox">
+        <Setter Property="Background" Value="{StaticResource WindowBackgroundColor}"/>
+        <Setter Property="Foreground" Value="{StaticResource FontColorDefault}"/>
+        <Setter Property="FontFamily" Value="Segoe UI"/>
+        <Setter Property="FontWeight" Value="Regular"/>
+        <Setter Property="FontSize" Value="12px"/>
+        <Setter Property="Height" Value="22px"/>
+        <Setter Property="Margin" Value="0px"/>
+        <Setter Property="Padding" Value="3,0,0,0"/>
+        <Setter Property="BorderThickness" Value="1px"/>
+        <Setter Property="VerticalAlignment" Value="Top"/>
+        <Setter Property="BorderBrush" Value="{StaticResource TextBoxBorderColorDefault}"/>
+    </Style>
+    <Style x:Key="StandardListBox" TargetType="ListBox">
+        <Setter Property="Background" Value="{StaticResource WindowBackgroundColor}"/>
+        <Setter Property="Foreground" Value="{StaticResource FontColorDefault}"/>
+        <Setter Property="Margin" Value="0px"/>
+        <Setter Property="Padding" Value="0px"/>
+        <Setter Property="BorderThickness" Value="0px"/>
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
     </Style>
     <Style x:Key="LinkText" TargetType="TextBlock">
         <Setter Property="TextDecorations" Value="Underline"/>
@@ -79,6 +124,55 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style x:Key="AddItemButton" TargetType="Button">
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Canvas Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" ClipToBounds="True" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Rectangle x:Name="BackgroundRectangle" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Fill="#D9D9D9" Margin="0"/>
+                        <Line x:Name="VerticalLine" X1="12" Y1="8" X2="12" Y2="16" Stroke="#666666" StrokeThickness="1.5"/>
+                        <Line x:Name="HorizontalLine" Y1="12" X1="8" Y2="12" X2="16" Stroke="#666666" StrokeThickness="1.5"/>
+                        <Ellipse x:Name="AddRulePartButtonEllipse" StrokeThickness="1" Canvas.Left="5" Canvas.Top="5" Stroke="#666666" Width="14" Height="14" />
+                    </Canvas>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Rectangle.Fill" TargetName="BackgroundRectangle" Value="#999999"/>
+                            <Setter Property="Ellipse.Stroke" TargetName="AddRulePartButtonEllipse" Value="#FFFFFF"/>
+                            <Setter Property="Line.Stroke" TargetName="HorizontalLine" Value="#FFFFFF"/>
+                            <Setter Property="Line.Stroke" TargetName="VerticalLine" Value="#FFFFFF"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="DeleteItemButton" TargetType="Button">
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Canvas Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" ClipToBounds="True" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Rectangle x:Name="BackgroundRectangle" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Fill="#D9D9D9" Margin="0"/>
+                        <Line x:Name="VerticalLine" X1="9" Y1="12" X2="15" Y2="18" Stroke="#666666" StrokeThickness="1.5"/>
+                        <Line x:Name="HorizontalLine" Y1="18" X1="9" Y2="12" X2="15" Stroke="#666666" StrokeThickness="1.5"/>
+                        <Ellipse x:Name="DeleteRulePartButtonEllipse" StrokeThickness="1" Canvas.Left="5" Canvas.Top="7.5" Stroke="#666666" Width="14" Height="14" />
+                    </Canvas>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Rectangle.Fill" TargetName="BackgroundRectangle" Value="#D94141"/>
+                            <Setter Property="Ellipse.Stroke" TargetName="DeleteRulePartButtonEllipse" Value="#FFFFFF"/>
+                            <Setter Property="Line.Stroke" TargetName="HorizontalLine" Value="#FFFFFF"/>
+                            <Setter Property="Line.Stroke" TargetName="VerticalLine" Value="#FFFFFF"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style x:Key="ImageButton" TargetType="Button">
         <Setter Property="Template">
             <Setter.Value>
@@ -89,7 +183,7 @@
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Opacity" TargetName="ForegroundRectangle" Value="0.2"/>
+                            <Setter Property="Opacity" TargetName="ForegroundRectangle" Value="0.4"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -125,7 +219,7 @@
         </Setter>
     </Style>
     <Style x:Key="DefaultScrollerViewerStyle" TargetType="ScrollViewer">
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="Padding"  Value="3"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="BorderThickness" Value="0px"/>
     </Style>
 </ResourceDictionary>

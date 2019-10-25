@@ -138,40 +138,38 @@ namespace Regular.Views
 
         private void AddRulePartButton_Click(object sender, RoutedEventArgs e)
         {
-            string prefix = selectedRegexRuleParts.Count > 0 ? "Followed by: " : "";
             RuleTypes selectedRuleType = (RuleTypes)ComboBoxInputRulePartType.SelectedItem;
 
             RegexRulePart newRegexRulePart = new RegexRulePart("'.' (Full Stop)", (RuleTypes)ComboBoxInputRulePartType.SelectedItem, false);
-            newRegexRulePart.DisplayString = prefix;
-
+            
             if (selectedRuleType == RuleTypes.AnyLetter | selectedRuleType == RuleTypes.AnyCharacter | selectedRuleType == RuleTypes.AnyNumber | selectedRuleType == RuleTypes.Anything)
             {
-                newRegexRulePart.DisplayString += "Any Digit (0-9)";
+                newRegexRulePart.DisplayString = "Any Digit";
                 newRegexRulePart.RawUserInputValue = "";
                 selectedRegexRuleParts.Add(newRegexRulePart);
             }
             else if(selectedRuleType == RuleTypes.Dot)
             {
-                newRegexRulePart.DisplayString += "'.' (Full Stop)";
+                newRegexRulePart.DisplayString = "Full Stop";
                 newRegexRulePart.RawUserInputValue = "";
                 selectedRegexRuleParts.Add(newRegexRulePart);
             }
             else if (selectedRuleType == RuleTypes.Hyphen)
             {
-                newRegexRulePart.DisplayString += "'-' (Hyphen)";
+                newRegexRulePart.DisplayString = "Hyphen";
                 newRegexRulePart.RawUserInputValue = "";
                 selectedRegexRuleParts.Add(newRegexRulePart);
             }
             else if (selectedRuleType == RuleTypes.Underscore)
             {
-                newRegexRulePart.DisplayString += "'_' (Underscore)";
+                newRegexRulePart.DisplayString = "Underscore";
                 newRegexRulePart.RawUserInputValue = "";
                 selectedRegexRuleParts.Add(newRegexRulePart);
             }
             else
             {
-                newRegexRulePart.DisplayString += "User-Defined Value";
-                newRegexRulePart.RawUserInputValue = "Type Value Here";
+                newRegexRulePart.DisplayString = "Specific Character";
+                newRegexRulePart.RawUserInputValue = " ";
                 selectedRegexRuleParts.Add(newRegexRulePart);
             }
         }
@@ -217,6 +215,16 @@ namespace Regular.Views
         private void DeleteRegexRulePartButton_Click(object sender, RoutedEventArgs e)
         {
             TaskDialog.Show("FOR DEMO", "This is a real button but it doesn't delete anything yet!");
+        }
+
+        private void ButtonOK_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ButtonCancel_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
