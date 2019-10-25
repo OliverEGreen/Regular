@@ -125,6 +125,50 @@
         </Setter>
     </Style>
 
+    <Style x:Key="ReorderUpButton" TargetType="Button">
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Canvas Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" ClipToBounds="True" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Rectangle x:Name="BackgroundRectangle" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Fill="#D9D9D9" Margin="0"/>
+                        <Line x:Name="Line1" X1="2" Y1="8.5" X2="6.5" Y2="3.5" Stroke="#666666" StrokeThickness="1.5"/>
+                        <Line x:Name="Line2" X1="10" Y1="8.5" X2="5.5" Y2="3.5" Stroke="#666666" StrokeThickness="1.5"/>
+                    </Canvas>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Rectangle.Fill" TargetName="BackgroundRectangle" Value="#999999"/>
+                            <Setter Property="Line.Stroke" TargetName="Line1" Value="#FFFFFF"/>
+                            <Setter Property="Line.Stroke" TargetName="Line2" Value="#FFFFFF"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ReorderDownButton" TargetType="Button">
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Canvas Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" ClipToBounds="True" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Rectangle x:Name="BackgroundRectangle" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Fill="#D9D9D9" Margin="0"/>
+                        <Line x:Name="Line1" X1="2" Y1="3.5" X2="6.5" Y2="9" Stroke="#666666" StrokeThickness="1.5"/>
+                        <Line x:Name="Line2" X1="10" Y1="3.5" X2="5.5" Y2="9" Stroke="#666666" StrokeThickness="1.5"/>
+                    </Canvas>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Rectangle.Fill" TargetName="BackgroundRectangle" Value="#999999"/>
+                            <Setter Property="Line.Stroke" TargetName="Line1" Value="#FFFFFF"/>
+                            <Setter Property="Line.Stroke" TargetName="Line2" Value="#FFFFFF"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style x:Key="AddItemButton" TargetType="Button">
         <Setter Property="OverridesDefaultStyle" Value="True"/>
         <Setter Property="Template">
