@@ -227,7 +227,8 @@ namespace Regular.Views
 
         private void DeleteRegexRulePartButton_Click(object sender, RoutedEventArgs e)
         {
-
+            Button button = sender as Button;
+            selectedRegexRuleParts.Remove((RegexRulePart)button.DataContext);
         }
 
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
@@ -237,12 +238,28 @@ namespace Regular.Views
 
         private void ReorderUpButton_Click(object sender, RoutedEventArgs e)
         {
-            
+            Button button = sender as Button;
+            RegexRulePart regexRulePart = (RegexRulePart)button.DataContext;
+            int index = selectedRegexRuleParts.IndexOf(regexRulePart);
+
+            if(index > 0)
+            {
+                selectedRegexRuleParts.RemoveAt(index);
+                selectedRegexRuleParts.Insert(index - 1, regexRulePart);
+            }            
         }
 
         private void ReorderDownButton_Click(object sender, RoutedEventArgs e)
         {
-            
+            Button button = sender as Button;
+            RegexRulePart regexRulePart = (RegexRulePart)button.DataContext;
+            int index = selectedRegexRuleParts.IndexOf(regexRulePart);
+
+            if (index < selectedRegexRuleParts.Count)
+            {
+                selectedRegexRuleParts.RemoveAt(index);
+                selectedRegexRuleParts.Insert(index + 1, regexRulePart);
+            }
         }
     }
 }
