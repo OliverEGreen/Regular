@@ -211,10 +211,9 @@ namespace Regular.Views
             transaction.Start();
             DataStorage dataStorage = DataStorage.Create(_doc);
             dataStorage.SetEntity(entity);
-            if (dataStorage != null) TaskDialog.Show("Test", "Datastorage object was created successfully");
-            else TaskDialog.Show("Test", "Datastorage object is null");
+            //if (dataStorage != null) TaskDialog.Show("Test", "Datastorage object was created successfully");
+            //else TaskDialog.Show("Test", "Datastorage object is null");
             transaction.Commit();
-
             Close();
         }
 

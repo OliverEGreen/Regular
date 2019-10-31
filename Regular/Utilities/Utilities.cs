@@ -64,7 +64,7 @@ namespace Regular
 
             transaction.Commit();
 
-            TaskDialog.Show("Regular", $"New Project Parameter {parameterName} has been created.");
+            //TaskDialog.Show("Regular", $"New Project Parameter {parameterName} has been created.");
             
             return null;
         }
@@ -122,7 +122,7 @@ namespace Regular
                 if (allSchemaNames.Contains("RegularSchema"))
                 {
                     regularSchema = allSchemas.Where(x => x.SchemaName == "RegularSchema").FirstOrDefault();
-                    TaskDialog.Show("Regular - DEMO", "An existing schema for Regular was found in this file. It has been loaded.");
+                    //TaskDialog.Show("Regular - DEMO", "An existing schema for Regular was found in this file. It has been loaded.");
                     //Now we've found there's our valid schema in the model, we'll need to gather the Entities
                     //That employ our schema and load each of them in to display the rule manager page
                     //We'll want to populate these as RegexRule objects into our IObservableCollection
@@ -131,41 +131,38 @@ namespace Regular
                 else
                 {
                     regularSchema = ConstructRegularSchema(_doc);
-                    TaskDialog.Show("Regular - DEMO", "No existing validation rules were found.\nA new Regular schema has been constructed.");
+                    //TaskDialog.Show("Regular - DEMO", "No existing validation rules were found.\nA new Regular schema has been constructed.");
                 }
             }
             //There are no schemas in this model, we'll need to build the Regular schema
             else
             {
                 regularSchema = ConstructRegularSchema(_doc);
-                TaskDialog.Show("Regular - DEMO", "No existing validation rules were found.\nA new Regular schema has been constructed.");
+                //TaskDialog.Show("Regular - DEMO", "No existing validation rules were found.\nA new Regular schema has been constructed.");
             }
             return regularSchema;
         }
-        public static List<DataStorage> FetchAllRegexRules(Document doc, Application app)
+        
+        public static ObservableCollection<RegexRule> ReturnExistingRegexRules(Document _doc, Application _app)
         {
-            List<Element> allDataStorageElements = new FilteredElementCollector(doc).OfClass(typeof(DataStorage)).ToList();
+            Schema _regularSchema = ReturnRegularSchema(_doc);
+
+            //Retrieving and testing all DataStorage objects in the document against our Regular schema.
+            List<Element> allDataStorageElements = new FilteredElementCollector(_doc).OfClass(typeof(DataStorage)).ToElements().ToList();
+            if (allDataStorageElements == null || allDataStorageElements.Count < 1) { return null; }
             List<DataStorage> allDataStorage = allDataStorageElements.Cast<DataStorage>().ToList();
 
-            Schema regularSchema = Utilities.ReturnRegularSchema(doc);
-            List<DataStorage> regularRulesDataStorage = new List<DataStorage>();
+            List<Entity> regexRuleEntities = new List<Entity>();
+
             foreach (DataStorage dataStorage in allDataStorage)
             {
-                if (dataStorage.GetEntity(regularSchema).IsValidObject) { regularRulesDataStorage.Add(dataStorage); }
+                Entity entity = dataStorage.GetEntity(_regularSchema);
+                if (entity.IsValid()) { regexRuleEntities.Add(entity); }
             }
-            return regularRulesDataStorage;
-        }
-        public List<RegexRule> BuildRegexRulesFromDataStorage(Document doc, Application app, List<DataStorage> dataStorageList)
-        {
-            List<RegexRule> regexRulesList = new List<RegexRule>();
-            foreach(DataStorage datastorage in dataStorageList)
-            {
-                Schema regularSchema = Utilities.ReturnRegularSchema(doc);
-                Entity entity = datastorage.GetEntity(regularSchema);
-                RegexRule regexRule = ConvertEntityToRegexRule(doc, entity);
-                regexRulesList.Add(regexRule);
-            }
-            return regexRulesList;
+
+            ObservableCollection<RegexRule> regexRules = new ObservableCollection<RegexRule>();
+            foreach (Entity entity in regexRuleEntities) { regexRules.Add(ConvertEntityToRegexRule(_doc, entity)); }
+            return regexRules;
         }
 
         public static void SaveRegexRuleToDataStorage(Document doc, Application app)
