@@ -13,7 +13,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
             <RowDefinition Height="300" />
-            <RowDefinition Height="40" />
+            <RowDefinition Height="50" />
         </Grid.RowDefinitions>
         <Label Content="Saved Rules" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="0" Padding="0" HorizontalAlignment="Left" Width="100" VerticalAlignment="Center"/>
         <Label Content="New Rule" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="0" Padding="0" HorizontalAlignment="Right" Margin="0,0,35,0" VerticalAlignment="Center"/>
@@ -34,7 +34,7 @@
                                 </Grid.ColumnDefinitions>
                                 <Rectangle HorizontalAlignment="Left" Fill="#EBEBEB" VerticalAlignment="Stretch" Height="45" Width="368" Stroke="#D9D9D9" StrokeThickness="1px" Grid.ColumnSpan="7" Margin="-4,-1,-2,-1"/>
                                 <TextBlock x:Name="RegexRuleNameTextBlock" Text="{Binding RuleName}" FontSize="13" Style="{StaticResource StandardText}" Grid.Column="0" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,0,0,0"/>
-                                <TextBlock x:Name="RegexRuleTargetCategoryTextBlock" Text="{Binding TargetCategory}" Style="{StaticResource FadedText}" Grid.Column="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="10,0,0,0"/>
+                                <TextBlock x:Name="RegexRuleTargetCategoryTextBlock" Text="{Binding Path=TargetCategory.Name}" Style="{StaticResource FadedText}" Grid.Column="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="10,0,0,0"/>
                                 <Button x:Name="DeleteRegexRulePartButton" Style="{StaticResource DeleteItemButton}" HorizontalAlignment="Right" VerticalAlignment="Top" Width="25" Height="25" Margin="0,0,-5,0" Click="DeleteRegexRulePartButton_Click" Grid.Row="0" Grid.Column="1"/>
                             </Grid>
                         </DataTemplate>

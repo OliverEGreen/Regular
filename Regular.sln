@@ -1,28 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27428.2043
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29418.71
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Regular", "Regular\Regular.csproj", "{12AED8E1-C380-49BE-B037-9E44AF606255}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
-		Debug|x64 = Debug|x64
-		Release|Any CPU = Release|Any CPU
-		Release|x64 = Release|x64
 		Rvt2019|Any CPU = Rvt2019|Any CPU
 		Rvt2019|x64 = Rvt2019|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{12AED8E1-C380-49BE-B037-9E44AF606255}.Debug|Any CPU.ActiveCfg = Rvt2019|x64
-		{12AED8E1-C380-49BE-B037-9E44AF606255}.Debug|Any CPU.Build.0 = Rvt2019|x64
-		{12AED8E1-C380-49BE-B037-9E44AF606255}.Debug|x64.ActiveCfg = Rvt2019|x64
-		{12AED8E1-C380-49BE-B037-9E44AF606255}.Debug|x64.Build.0 = Rvt2019|x64
-		{12AED8E1-C380-49BE-B037-9E44AF606255}.Release|Any CPU.ActiveCfg = Rvt2019|x64
-		{12AED8E1-C380-49BE-B037-9E44AF606255}.Release|Any CPU.Build.0 = Rvt2019|x64
-		{12AED8E1-C380-49BE-B037-9E44AF606255}.Release|x64.ActiveCfg = Rvt2019|x64
-		{12AED8E1-C380-49BE-B037-9E44AF606255}.Release|x64.Build.0 = Rvt2019|x64
 		{12AED8E1-C380-49BE-B037-9E44AF606255}.Rvt2019|Any CPU.ActiveCfg = Rvt2019|x64
 		{12AED8E1-C380-49BE-B037-9E44AF606255}.Rvt2019|x64.ActiveCfg = Rvt2019|x64
 		{12AED8E1-C380-49BE-B037-9E44AF606255}.Rvt2019|x64.Build.0 = Rvt2019|x64

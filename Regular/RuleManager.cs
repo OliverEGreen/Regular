@@ -25,41 +25,12 @@ namespace Regular
             UIDocument uidoc = uiapp.ActiveUIDocument;
             Document doc = uidoc.Document;
 
-            //Setting properties for forms to access document by
             _doc = doc;
             _app = app;
-
-            //Finds our regex rule entities saved as ExtensibleStorage. We'll need to parse these.
-            List<Entity> ReturnExistingRegexRules(Schema regularSchema)
-            {
-                //This is what we want to return
-                List<Entity> validRegexRules = new List<Entity>();
-
-                List<Element> allDataStorageElements = new FilteredElementCollector(doc).OfClass(typeof(DataStorage)).ToElements().ToList();
-                if (allDataStorageElements == null) { return null; }
-                List<DataStorage> allDataStorage = allDataStorageElements.Cast<DataStorage>().ToList();
-                foreach (DataStorage dataStorage in allDataStorage)
-                {
-                    Entity entity = dataStorage.GetEntity(regularSchema);
-                    if (entity.IsValid()) { validRegexRules.Add(entity); }
-                }
-                return validRegexRules;
-            }
-
+            
             try
             {
-                //We either find or create our schema
-                Schema regularSchema = Utilities.ReturnRegularSchema(doc);
-
-                //We return a list of RegexRule objects saved as Entities in our ExtensibleStorage; we'll need to parse these
-                List<Entity> regexRuleEntities = ReturnExistingRegexRules(regularSchema);
-
-                //Let's parse those Entities into RegexRules
-                ObservableCollection<RegexRule> regexRules = new ObservableCollection<RegexRule>();
-                foreach (Entity entity in regexRuleEntities) { regexRules.Add(Utilities.ConvertEntityToRegexRule(_doc, entity)); }
-
-                //The Rule Manager is a modal WPF Window with an IObservableCollection displaying any found RegexRules
-                Views.RuleManager ruleManager = new Views.RuleManager(regexRules, doc, app);
+                Views.RuleManager ruleManager = new Views.RuleManager(doc, app);
                 ruleManager.ShowDialog();
                 //We need to build the rule manager UI using IObservableCollection and Listbox. 
                 //Need to build the new rule button in order to have ability to create new rules
