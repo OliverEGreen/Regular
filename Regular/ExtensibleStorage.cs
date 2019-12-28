@@ -18,13 +18,8 @@ public class ExtensibleStorage : IExternalCommand
         UIDocument uidoc = uiapp.ActiveUIDocument;
         Document doc = uidoc.Document;
 
-        
-
-        
-
         try
         {
-
             //Since there were no schemas we'll load up the RuleManager with an empty list.
             //Now we've got the schema, we build the DataStorage object
             using (Transaction transaction = new Transaction(doc, "Regular Building Schema"))
@@ -38,7 +33,6 @@ public class ExtensibleStorage : IExternalCommand
             //Building an Entity of the Schema we defined. This needs to happen later on when the user
             //Is interacting with the rulemanager form, adding in new rules and all that stuff.
             //Entity regularEntity = new Entity(regularSchema);
-
 
             return Result.Succeeded;
         }
