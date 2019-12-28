@@ -7,11 +7,11 @@ namespace Regular
 {
     public class RegularRibbon
     {
-        public static Result BuildRegularRibbon(UIControlledApplication app)
+        public static Result BuildRegularRibbon(UIControlledApplication uiControlledApp)
         {
             const string tabName = "Regular";
-            app.CreateRibbonTab(tabName);
-            var ribbonPanelGeneral = app.CreateRibbonPanel(tabName, "Regular");
+            uiControlledApp.CreateRibbonTab(tabName);
+            var ribbonPanelGeneral = uiControlledApp.CreateRibbonPanel(tabName, "Regular");
             string thisAssemblyPath = Assembly.GetExecutingAssembly().Location;
 
             PushButtonData ruleManagerButtonData = new PushButtonData("Rule Manager", "Rule" + Environment.NewLine + "Manager", thisAssemblyPath, "Regular.RuleManager");

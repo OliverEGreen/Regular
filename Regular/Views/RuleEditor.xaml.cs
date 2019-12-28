@@ -198,7 +198,7 @@ namespace Regular.Views
             Entity entity = new Entity(Utilities.ReturnRegularSchema(_doc));
             entity.Set("ruleName", ruleName);
             entity.Set("categoryName", categoriesList.First().Name);
-            entity.Set("trackingParameterName", ComboBoxInputTargetParameter.SelectedItem.ToString());
+            entity.Set("trackingParameterName", ((ComboBoxItem)ComboBoxInputTargetParameter.SelectedItem).Content.ToString());
             entity.Set("outputParameterName", outputParameterName);
             entity.Set("regexString", RegexRule.RegexString);
             IList<string> regexRulePartList = new List<string>();

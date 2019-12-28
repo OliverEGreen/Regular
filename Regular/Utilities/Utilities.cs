@@ -23,10 +23,13 @@ namespace Regular
         //Useful for returning the Project Parameter we create as our output parameter
         public static Parameter FetchProjectParameterByName(Document doc, string parameterName)
         {
-            DefinitionBindingMapIterator iterator = doc.ParameterBindings.ForwardIterator();
-            while (iterator.MoveNext())
+            BindingMap map = doc.ParameterBindings;
+            DefinitionBindingMapIterator it = map.ForwardIterator();
+            it.Reset();
+            while (it.MoveNext())
             {
-                if (iterator.Key.Name == parameterName) return (Parameter)iterator.Current;
+                string currentParameterName = it.Key.Name;
+                if(currentParameterName == parameterName) { return (Parameter)it.Current; }
             }
             return null;
         }
