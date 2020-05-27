@@ -23,7 +23,7 @@ namespace Regular.Views
             InitializeComponent();
             _doc = doc;
             _app = app;
-            if (Utilities.ReturnExistingRegexRules(_doc, _app) != null) { AllRegexRules = Utilities.ReturnExistingRegexRules(_doc, _app); }
+            if (Utilities.LoadRegexRulesFromExtensibleStorage(_doc, _app) != null) { AllRegexRules = Utilities.LoadRegexRulesFromExtensibleStorage(_doc, _app); }
             else { AllRegexRules = new ObservableCollection<RegexRule>(); }
             RulesListBox.ItemsSource = AllRegexRules;
         }
@@ -38,7 +38,7 @@ namespace Regular.Views
         private void RuleEditor_Closed(object sender, System.EventArgs e)
         {
             AllRegexRules.Clear();
-            foreach(RegexRule regexRule in Utilities.ReturnExistingRegexRules(_doc, _app))
+            foreach(RegexRule regexRule in Utilities.LoadRegexRulesFromExtensibleStorage(_doc, _app))
             {
                 AllRegexRules.Add(regexRule);
             }

@@ -88,89 +88,53 @@ namespace Regular
             return categorySet;
         }
 
-        //Helper method to check a model for our schema; indicates whether we've saved anything or not
-        public static Schema ReturnRegularSchema(Document _doc)
+        public static Schema GetRegularSchema(Document document)
         {
-            Schema regularSchema = null;
+            //A method that handles all the faff of constructing the regularSchema
+            Schema ConstructRegularSchema(Document doc)
+            {   
+                //The schema doesn't exist; we need to define the schema for the first time
+                SchemaBuilder schemaBuilder = new SchemaBuilder(Guid.NewGuid());
+                schemaBuilder.SetSchemaName("RegularSchema");
+                schemaBuilder.SetReadAccessLevel(AccessLevel.Public);
+                schemaBuilder.SetWriteAccessLevel(AccessLevel.Public);
 
-            //A method that handles all the faff of constructing the regularschema
-            Schema ConstructRegularSchema(Document __doc)
-            {
-                //Check to see if the schema has already been defined in the document
-                if (regularSchema == null)
-                {
-                    //The schema doesn't exist; we need to define the schema for the first time
-                    SchemaBuilder schemaBuilder = new SchemaBuilder(Guid.NewGuid());
-                    schemaBuilder.SetSchemaName("RegularSchema");
-                    schemaBuilder.SetReadAccessLevel(AccessLevel.Public);
-                    schemaBuilder.SetWriteAccessLevel(AccessLevel.Public);
-
-                    //Constructing the scheme for rules
-                    schemaBuilder.AddSimpleField("ruleName", typeof(string));
-                    schemaBuilder.AddSimpleField("categoryName", typeof(string));
-                    schemaBuilder.AddSimpleField("trackingParameterName", typeof(string));
-                    schemaBuilder.AddSimpleField("outputParameterName", typeof(string));
-                    schemaBuilder.AddSimpleField("regexString", typeof(string));
-                    schemaBuilder.AddArrayField("regexRuleParts", typeof(string));
-
-                    regularSchema = schemaBuilder.Finish();
-                }
-                return regularSchema;
+                //Constructing the scheme for regexRules stored in ExtensibleStorage
+                schemaBuilder.AddSimpleField("GUID", typeof(Guid));
+                schemaBuilder.AddSimpleField("RuleName", typeof(string));
+                schemaBuilder.AddSimpleField("CategoryName", typeof(string));
+                schemaBuilder.AddSimpleField("TrackingParameterName", typeof(string));
+                schemaBuilder.AddSimpleField("OutputParameterName", typeof(string));
+                schemaBuilder.AddSimpleField("RegexString", typeof(string));
+                schemaBuilder.AddArrayField("RegexRuleParts", typeof(string));
+                return schemaBuilder.Finish();
             }
-
-            //Collecting all schemas in the model; we want to see if there's a Regular schema amongst them
+            
             IList<Schema> allSchemas = Schema.ListSchemas();
+            Schema regularSchema = allSchemas.Where(x => x.SchemaName == "RegularSchema").FirstOrDefault();
 
-            if (allSchemas != null)
-            {
-                List<string> allSchemaNames = allSchemas.Select(x => x.SchemaName).ToList();
-                if (allSchemaNames.Contains("RegularSchema"))
-                {
-                    regularSchema = allSchemas.Where(x => x.SchemaName == "RegularSchema").FirstOrDefault();
-                    //TaskDialog.Show("Regular - DEMO", "An existing schema for Regular was found in this file. It has been loaded.");
-                    //Now we've found there's our valid schema in the model, we'll need to gather the Entities
-                    //That employ our schema and load each of them in to display the rule manager page
-                    //We'll want to populate these as RegexRule objects into our IObservableCollection
-                }
-                //There's no regular Schema, we'll need to build it up from scratch.
-                else
-                {
-                    regularSchema = ConstructRegularSchema(_doc);
-                    //TaskDialog.Show("Regular - DEMO", "No existing validation rules were found.\nA new Regular schema has been constructed.");
-                }
-            }
-            //There are no schemas in this model, we'll need to build the Regular schema
-            else
-            {
-                regularSchema = ConstructRegularSchema(_doc);
-                //TaskDialog.Show("Regular - DEMO", "No existing validation rules were found.\nA new Regular schema has been constructed.");
-            }
-            return regularSchema;
+            //If it already exists, we return it. If not, we make a new one from scratch
+            if (regularSchema != null) return regularSchema;
+            return ConstructRegularSchema(document);
         }
         
-        public static ObservableCollection<RegexRule> ReturnExistingRegexRules(Document _doc, Application _app)
+        public static ObservableCollection<RegexRule> LoadRegexRulesFromExtensibleStorage(Document document, Application _app)
         {
-            Schema _regularSchema = ReturnRegularSchema(_doc);
+            Schema regularSchema = GetRegularSchema(document);
 
             //Retrieving and testing all DataStorage objects in the document against our Regular schema.
-            List<Element> allDataStorageElements = new FilteredElementCollector(_doc).OfClass(typeof(DataStorage)).ToElements().ToList();
-            if (allDataStorageElements == null || allDataStorageElements.Count < 1) { return null; }
-            List<DataStorage> allDataStorage = allDataStorageElements.Cast<DataStorage>().ToList();
+            List<DataStorage> allDataStorage = new FilteredElementCollector(document).OfClass(typeof(DataStorage)).OfType<DataStorage>().ToList();
+            if(allDataStorage == null || allDataStorage.Count < 1) { return null; }
 
-            List<Entity> regexRuleEntities = new List<Entity>();
-
-            foreach (DataStorage dataStorage in allDataStorage)
-            {
-                Entity entity = dataStorage.GetEntity(_regularSchema);
-                if (entity.IsValid()) { regexRuleEntities.Add(entity); }
-            }
+            //Returning any Entities which employ the RegularSchema 
+            List<Entity> regexRuleEntities = allDataStorage.Where(x => x.GetEntity(regularSchema) != null).Select(x => x.GetEntity(regularSchema)).ToList();
 
             ObservableCollection<RegexRule> regexRules = new ObservableCollection<RegexRule>();
-            foreach (Entity entity in regexRuleEntities) { regexRules.Add(ConvertEntityToRegexRule(_doc, entity)); }
+            foreach (Entity entity in regexRuleEntities) { regexRules.Add(ConvertEntityToRegexRule(document, entity)); }
             return regexRules;
         }
 
-        public static void SaveRegexRuleToDataStorage(Document doc, Application app)
+        public static void SaveRegexRuleToExtensibleStorage(Document doc, Application app)
         {
             return;
         }
