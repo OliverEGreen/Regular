@@ -182,8 +182,16 @@ namespace Regular.Views
 
         private void ButtonOK_Click(object sender, RoutedEventArgs e)
         {
+            //When they click OK we should run all initial validation
+            //To see whether or not the chosen inputs are actually valid and its
+            //worth our time creating objects
+            
             string ruleName = TextblockInputRuleName.Text;
             string outputParameterName = TextblockOutputParameterName.Text;
+
+            //This should be the only call we have to make. The rest of this should be moved
+            RegexRuleManager.CreateRegexRule();
+
             List<Category> categoriesList = new List<Category>();
             categoriesList.Add(Utilities.GetCategoryFromBuiltInCategory(Document, BuiltInCategory.OST_Doors)); //Placeholder; we need to read this from the form
             CategorySet categorySet = Utilities.CreateCategorySetFromListOfCategories(Document, Application, categoriesList);
@@ -194,26 +202,28 @@ namespace Regular.Views
             {
                 RegexRule.RegexString += GetRegexPartFromRuleType(regexRulePart); //Something!! We build the string as we close the editor 
             }
-            //Saving the rule to a Datastorage object of the RegularSchema
+            //MOVE ALL OF THIS
+            //Saving the rule to a Datastorage object of the RegularSchema. This should really happen in the RegexRuleManager
             Entity entity = new Entity(Utilities.GetRegularSchema(Document));
-            entity.Set("ruleName", ruleName);
-            entity.Set("categoryName", categoriesList.First().Name);
-            entity.Set("trackingParameterName", ((ComboBoxItem)ComboBoxInputTargetParameter.SelectedItem).Content.ToString());
-            entity.Set("outputParameterName", outputParameterName);
-            entity.Set("regexString", RegexRule.RegexString);
+            entity.Set("GUID", Guid.NewGuid());
+            entity.Set("RuleName", ruleName);
+            entity.Set("CategoryName", categoriesList.First().Name);
+            entity.Set("TrackingParameterName", ((ComboBoxItem)ComboBoxInputTargetParameter.SelectedItem).Content.ToString());
+            entity.Set("OutputParameterName", outputParameterName);
+            entity.Set("RegexString", RegexRule.RegexString);
             IList<string> regexRulePartList = new List<string>();
             foreach(RegexRulePart regexRulePart in selectedRegexRuleParts)
             {
                 regexRulePartList.Add($@"{regexRulePart.RawUserInputValue}:{regexRulePart.RuleType.ToString()}:{regexRulePart.IsOptional.ToString()}");
             }
             entity.Set<IList<string>>("regexRuleParts", regexRulePartList);
-            Transaction transaction = new Transaction(Document, "Saving RegexRule");
-            transaction.Start();
-            DataStorage dataStorage = DataStorage.Create(Document);
-            dataStorage.SetEntity(entity);
-            //if (dataStorage != null) TaskDialog.Show("Test", "Datastorage object was created successfully");
-            //else TaskDialog.Show("Test", "Datastorage object is null");
-            transaction.Commit();
+            using (Transaction transaction = new Transaction(Document, $"Saving RegexRule {ruleName}"))
+            {
+                transaction.Start();
+                DataStorage dataStorage = DataStorage.Create(Document);
+                dataStorage.SetEntity(entity);
+                transaction.Commit();
+            }
             Close();
         }
 
