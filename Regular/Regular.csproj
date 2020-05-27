@@ -76,6 +76,7 @@
     <Compile Include="Models\RegexRule.cs" />
     <Compile Include="Models\RegexRulePart.cs" />
     <Compile Include="Models\RuleTypes.cs" />
+    <Compile Include="RegexRuleManager.cs" />
     <Compile Include="RegularApp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RuleManager.cs" />

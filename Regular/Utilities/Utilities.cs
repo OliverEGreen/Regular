@@ -20,6 +20,8 @@ namespace Regular
             return null;
         }
 
+        public static string GetRevitDocumentGuid(Document document) { return document.ProjectInformation.UniqueId; }
+
         //Useful for returning the Project Parameter we create as our output parameter
         public static Parameter FetchProjectParameterByName(Document doc, string parameterName)
         {
