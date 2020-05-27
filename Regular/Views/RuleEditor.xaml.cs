@@ -10,13 +10,14 @@ using Autodesk.Revit.UI;
 using System;
 using System.Windows.Controls;
 using Autodesk.Revit.DB.ExtensibleStorage;
+using Application = Autodesk.Revit.ApplicationServices.Application;
 
 namespace Regular.Views
 {
     public partial class RuleEditor : Window
     {
-        public static Document _doc { get; set; }
-        public static Autodesk.Revit.ApplicationServices.Application _app { get; set; }
+        public static Document Document { get; set; }
+        public static Application Application { get; set; }
 
         //Helper method to build regex string
         public string GetRegexPartFromRuleType(RegexRulePart regexRulePart)
@@ -55,11 +56,11 @@ namespace Regular.Views
         public EditorOpeningType EditorOpeningType { get; set; }
 
         //Constructor for creating a new rule
-        public RuleEditor(Document doc, Autodesk.Revit.ApplicationServices.Application app)
+        public RuleEditor(Document doc, Application app)
         {
             InitializeComponent();
-            _doc = doc;
-            _app = app;
+            Document = doc;
+            Application = app;
 
             EditorOpeningType = EditorOpeningType.CreateNewRule;
             Title = "Creating New Rule";
@@ -93,11 +94,11 @@ namespace Regular.Views
         }
 
         //Constructor overload for editing existing rules
-        public RuleEditor(Document doc, Autodesk.Revit.ApplicationServices.Application app, RegexRule regexRule)
+        public RuleEditor(Document doc, Application app, RegexRule regexRule)
         {
             InitializeComponent();
-            _doc = doc;
-            _app = app;
+            Document = doc;
+            Application = app;
 
             EditorOpeningType = EditorOpeningType.EditExistingRule;
             Title = $"Editing Rule: {regexRule.RuleName}";
@@ -125,7 +126,6 @@ namespace Regular.Views
             //Binding ComboBox to our RuleType enumeration
             ComboBoxInputRulePartType.ItemsSource = Enum.GetValues(typeof(RuleTypes)).Cast<RuleTypes>();
         }
-
 
         private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
@@ -185,9 +185,9 @@ namespace Regular.Views
             string ruleName = TextblockInputRuleName.Text;
             string outputParameterName = TextblockOutputParameterName.Text;
             List<Category> categoriesList = new List<Category>();
-            categoriesList.Add(Utilities.GetCategoryFromBuiltInCategory(_doc, BuiltInCategory.OST_Doors)); //Placeholder; we need to read this from the form
-            CategorySet categorySet = Utilities.CreateCategorySetFromListOfCategories(_doc, _app, categoriesList);
-            Parameter outputParameter = Utilities.CreateProjectParameter(_doc, _app, outputParameterName, ParameterType.Text, categorySet, BuiltInParameterGroup.PG_AREA, true);
+            categoriesList.Add(Utilities.GetCategoryFromBuiltInCategory(Document, BuiltInCategory.OST_Doors)); //Placeholder; we need to read this from the form
+            CategorySet categorySet = Utilities.CreateCategorySetFromListOfCategories(Document, Application, categoriesList);
+            Parameter outputParameter = Utilities.CreateProjectParameter(Document, Application, outputParameterName, ParameterType.Text, categorySet, BuiltInParameterGroup.PG_AREA, true);
             //RegexRule.OutputParameterName = outputParameter.Definition.Name;
 
             foreach(RegexRulePart regexRulePart in selectedRegexRuleParts)
@@ -195,7 +195,7 @@ namespace Regular.Views
                 RegexRule.RegexString += GetRegexPartFromRuleType(regexRulePart); //Something!! We build the string as we close the editor 
             }
             //Saving the rule to a Datastorage object of the RegularSchema
-            Entity entity = new Entity(Utilities.ReturnRegularSchema(_doc));
+            Entity entity = new Entity(Utilities.GetRegularSchema(Document));
             entity.Set("ruleName", ruleName);
             entity.Set("categoryName", categoriesList.First().Name);
             entity.Set("trackingParameterName", ((ComboBoxItem)ComboBoxInputTargetParameter.SelectedItem).Content.ToString());
@@ -207,9 +207,9 @@ namespace Regular.Views
                 regexRulePartList.Add($@"{regexRulePart.RawUserInputValue}:{regexRulePart.RuleType.ToString()}:{regexRulePart.IsOptional.ToString()}");
             }
             entity.Set<IList<string>>("regexRuleParts", regexRulePartList);
-            Transaction transaction = new Transaction(_doc, "Saving RegexRule");
+            Transaction transaction = new Transaction(Document, "Saving RegexRule");
             transaction.Start();
-            DataStorage dataStorage = DataStorage.Create(_doc);
+            DataStorage dataStorage = DataStorage.Create(Document);
             dataStorage.SetEntity(entity);
             //if (dataStorage != null) TaskDialog.Show("Test", "Datastorage object was created successfully");
             //else TaskDialog.Show("Test", "Datastorage object is null");
@@ -217,24 +217,15 @@ namespace Regular.Views
             Close();
         }
 
-        private void CommandBinding_Executed_RemoveAll(object sender, ExecutedRoutedEventArgs e)
-        {
-            RegexRulePart regexRulePart = (RegexRulePart)e.Parameter;
-            ObservableCollection<RegexRulePart> regexRuleParts = RulePartsListBox.ItemsSource as ObservableCollection<RegexRulePart>;
-            regexRuleParts.Remove(regexRulePart);
-        }
-
         private void DeleteRegexRulePartButton_Click(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
             selectedRegexRuleParts.Remove((RegexRulePart)button.DataContext);
         }
-
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
             Close();
         }
-
         private void ReorderUpButton_Click(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
@@ -247,7 +238,6 @@ namespace Regular.Views
                 selectedRegexRuleParts.Insert(index - 1, regexRulePart);
             }            
         }
-
         private void ReorderDownButton_Click(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;

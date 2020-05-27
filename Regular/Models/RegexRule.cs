@@ -10,6 +10,7 @@ namespace Regular.Models
 {
     public class RegexRule
     {
+        public string Guid { get; }
         public string RuleName { get; set; }
         public Category TargetCategory { get; set; }
         public string TrackingParameterName { get; set; }
@@ -21,6 +22,7 @@ namespace Regular.Models
         //Constructor, when user creates a new rule we require (and set) the following information
         public RegexRule(string ruleName, Category targetCategory, string trackingParameterName, string outputParameterName)
         {
+            Guid = System.Guid.NewGuid().ToString();
             RuleName = ruleName;
             TargetCategory = targetCategory;
             TrackingParameterName = trackingParameterName;

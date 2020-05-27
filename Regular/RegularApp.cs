@@ -33,13 +33,15 @@ namespace Regular
             string documentId = Utilities.GetRevitDocumentGuid(document);
             
             //We retrieve any existing rules from ExtensibleStorage and save them to a static cache.
-            if (AllRegexRules.ContainsKey(documentId)) { Utilities.ReturnExistingRegexRules(document, document.Application); }
+            if (AllRegexRules.ContainsKey(documentId)) { Utilities.LoadRegexRulesFromExtensibleStorage(document, document.Application); }
             //If none are found, our static cache is an empty ObservableCollection
             else { AllRegexRules[documentId] = AllRegexRules[documentId] = new ObservableCollection<RegexRule>(); }
 
             ObservableCollection<RegexRule> documentRegexRules = AllRegexRules[documentId];
-            //If there are no saved RegexRules for this document we return
+            //If there are no saved rules we return
             if (documentRegexRules.Count < 1) { return; }
+            
+            /*
             foreach (RegexRule regexRule in AllRegexRules[documentId])
             {
                 RuleUpdater ruleUpdater = new RuleUpdater(document.Application.ActiveAddInId);
@@ -66,6 +68,7 @@ namespace Regular
                 List<Element> elements = new FilteredElementCollector(document).OfCategory(builtInCategory).ToElements().ToList();
                 TaskDialog.Show("Test", $"Found {elements.Count} elements of category {category.Name}");
             }            
+            */
         }
 
         public Result OnShutdown(UIControlledApplication uiControlledApp)
