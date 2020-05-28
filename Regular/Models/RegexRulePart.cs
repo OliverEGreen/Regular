@@ -12,14 +12,16 @@ namespace Regular.Models
         public RuleTypes RuleType { get; set; }
         public bool IsOptional { get; set; }
         public string DisplayString { get; set; }
+        public bool IsCaseSensitive { get; set; }
 
         // Our constructor with all the information we want when creating a RegexRulePart
-        public RegexRulePart(string rawUserInputValue, RuleTypes ruleType, bool isOptional)
+        public RegexRulePart(string rawUserInputValue, RuleTypes ruleType, bool isOptional, bool isCaseSensitive)
         {
             RawUserInputValue = rawUserInputValue;
             RuleType = ruleType;
             IsOptional = IsOptional;
             DisplayString = ruleType.ToString();
+            IsCaseSensitive = isCaseSensitive;
         }
     }
 }

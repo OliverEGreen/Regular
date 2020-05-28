@@ -1,19 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
-using Autodesk.Revit.UI.Events;
 using Autodesk.Revit.DB.Events;
 using Application = Autodesk.Revit.ApplicationServices.Application;
-using Autodesk.Revit.DB.Structure;
 using System.Collections.ObjectModel;
-using Regular;
 using Regular.Models;
 using Regular.Services;
-using System.Windows;
 
 namespace Regular
 {
@@ -36,19 +29,18 @@ namespace Regular
         private void ControlledApplication_DocumentOpened(object sender, DocumentOpenedEventArgs e)
         {
             Document document = e.Document;
-            RevitApplication = document.Application;
             string documentId = DocumentServices.GetRevitDocumentGuid(document);
+
+            // Setting a static, accessible reference to the Revit application just this once, for everything to use.
+            RevitApplication = document.Application;
+            
             // Creates an accessible, stable reference to the Revit document
             DocumentServices.RevitDocumentCache[documentId] = document;
-
-            // We retrieve any existing rules from ExtensibleStorage and save them to a static cache.
-            if (AllRegexRules.ContainsKey(documentId)) { Utilities.LoadRegexRulesFromExtensibleStorage(document, document.Application); }
-            // If none are found, our static cache is an empty ObservableCollection
-            else { AllRegexRules[documentId] = AllRegexRules[documentId] = new ObservableCollection<RegexRule>(); }
-
-            ObservableCollection<RegexRule> documentRegexRules = AllRegexRules[documentId];
-            // If there are no saved rules we return
-            if (documentRegexRules.Count < 1) { return; }
+            ObservableCollection<RegexRule> existingRegexRules = ExtensibleStorageServices.LoadRegexRulesFromExtensibleStorage(document);
+            AllRegexRules[documentId] = existingRegexRules == null ? new ObservableCollection<RegexRule>() : existingRegexRules;
+            
+            // If there are no saved rules we return, otherwise we establish the updaters
+            if (existingRegexRules != null && existingRegexRules.Count < 1) { return; }
             
             /*
             foreach (RegexRule regexRule in AllRegexRules[documentId])

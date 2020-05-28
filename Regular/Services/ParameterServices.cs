@@ -22,7 +22,7 @@ namespace Regular.Services
             //Creating the necessary categoryset to create the outputParameter
             Category category = CategoryServices.GetCategoryByName(categoryName, doc);
             List<Category> categoriesList = new List<Category>() { category };
-            CategorySet categorySet = CategoryServices.CreateCategorySetFromListOfCategories(doc, categoriesList);
+            CategorySet categorySet = CategoryServices.GetCategorySetFromList(doc, categoriesList);
             
             using (Transaction transaction = new Transaction(doc, $"Regular - Creating New Project Parameter {parameterName}")) 
             {
