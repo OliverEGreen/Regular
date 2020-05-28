@@ -5,11 +5,8 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
 using System.Linq;
-using System.Collections;
-using Autodesk.Revit.UI;
 using System;
 using System.Windows.Controls;
-using Autodesk.Revit.DB.ExtensibleStorage;
 using Application = Autodesk.Revit.ApplicationServices.Application;
 using Regular.Services;
 
@@ -18,7 +15,7 @@ namespace Regular.Views
     public partial class RuleEditor : Window
     {
         public static Document Document { get; set; }
-        public static Application Application { get; set; }
+        public static string DocumentGuid { get; set; }
 
         // Helper method to build regex string
         public string GetRegexPartFromRuleType(RegexRulePart regexRulePart)
@@ -57,14 +54,13 @@ namespace Regular.Views
         public EditorOpeningType EditorOpeningType { get; set; }
 
         // Constructor for creating a new rule
-        public RuleEditor(Document doc, Application app)
+        public RuleEditor(string documentGuid)
         {
             InitializeComponent();
-            Document = doc;
-            Application = app;
-
+            
             EditorOpeningType = EditorOpeningType.CreateNewRule;
             Title = "Creating New Rule";
+            DocumentGuid = documentGuid;
             
             // Depending on the OpeningType we either need to edit and existing rule
             // In which case we need to take it as an argument and fill out the UI boxes
@@ -76,7 +72,7 @@ namespace Regular.Views
             // We create a new RegexRule placeholder
             RegexRule = new RegexRule(null, null, null, null);
 
-            Categories categories = Regular.RuleManager._doc.Settings.Categories;
+            Categories categories = Regular.RuleManager.Document.Settings.Categories;
             List<string> categoryNames = new List<string>();
 
             foreach (Category category in categories)
@@ -95,14 +91,13 @@ namespace Regular.Views
         }
 
         // Constructor overload for editing existing rules
-        public RuleEditor(Document doc, Application app, RegexRule regexRule)
+        public RuleEditor(RegexRule regexRule, string documentGuid)
         {
             InitializeComponent();
-            Document = doc;
-            Application = app;
 
             EditorOpeningType = EditorOpeningType.EditExistingRule;
             Title = $"Editing Rule: {regexRule.RuleName}";
+            DocumentGuid = documentGuid;
             // Depending on the OpeningType we either need to edit and existing rule
             // In which case we need to take it as an argument and fill out the UI boxes
             // Or we are creating a new rule from scratch
@@ -110,7 +105,7 @@ namespace Regular.Views
             RegexRule = regexRule;
             RulePartsListBox.ItemsSource = regexRule.RegexRuleParts;
 
-            Categories categories = Regular.RuleManager._doc.Settings.Categories;
+            Categories categories = Regular.RuleManager.Document.Settings.Categories;
             List<string> categoryNames = new List<string>();
 
             foreach(Category category in categories)
@@ -135,9 +130,9 @@ namespace Regular.Views
             e.Handled = true;
         }
 
-        private void ComboBoxInputCategory_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private void ComboBoxInputCategory_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Document doc = Regular.RuleManager._doc;
+            Document doc = Regular.RuleManager.Document;
             string selectedCategoryName = ComboBoxInputCategory.SelectedValue.ToString();
             
             // We need the ability to fetch parameters that are bound to the selected category. WIP
@@ -186,13 +181,15 @@ namespace Regular.Views
             string ruleNameInput = TextblockInputRuleName.Text;
             string outputParameterNameInput = TextblockOutputParameterName.Text;
             string targetCategoryNameInput = ComboBoxInputCategory.Text;
-            string trackingParameterName = ComboBoxInputTargetParameter.Text;  
+            string trackingParameterNameInput = ComboBoxInputTargetParameter.Text;  
 
             // Initial check to see whether all inputs are valid; these will need to be reflected in the UI as well
             // We can probably have this check validation every time a user changes input, will need to be via event handler
-            if (InputValidation.ValidateInputs(ruleNameInput, targetCategoryNameInput, trackingParameterName, outputParameterNameInput))
+            if (InputValidation.ValidateInputs(ruleNameInput, targetCategoryNameInput, trackingParameterNameInput, outputParameterNameInput))
             {
-                RegexRuleManager.CreateRegexRule();
+                RegexRule regexRule = RegexRuleManager.CreateRegexRule(ruleNameInput, targetCategoryNameInput, trackingParameterNameInput, outputParameterNameInput);
+                ParameterServices.CreateProjectParameter(Document, outputParameterNameInput, ParameterType.Text, targetCategoryNameInput, BuiltInParameterGroup.PG_IDENTITY_DATA, true);
+                ExtensibleStorageServices.SaveRegexRuleToExtensibleStorage(DocumentGuid, regexRule);
             }
             Close();
         }

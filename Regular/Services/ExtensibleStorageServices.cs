@@ -1,98 +1,20 @@
-﻿using Autodesk.Revit.ApplicationServices;
-using Autodesk.Revit.DB;
+﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.ExtensibleStorage;
-using Autodesk.Revit.UI;
 using Regular.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
 
-namespace Regular
+namespace Regular.Services
 {
-    public class Utilities
+    public static class ExtensibleStorageServices
     {
-        public static Category FetchCategoryByName(string categoryName, Document doc)
-        {
-            Categories categoriesList = doc.Settings.Categories;
-            foreach (Category category in categoriesList) { if (category.Name == categoryName) return category; }
-            return null;
-        }
-
-        
-
-        // Useful for returning the Project Parameter we create as our output parameter
-        public static Parameter FetchProjectParameterByName(Document doc, string parameterName)
-        {
-            BindingMap map = doc.ParameterBindings;
-            DefinitionBindingMapIterator it = map.ForwardIterator();
-            it.Reset();
-            while (it.MoveNext())
-            {
-                string currentParameterName = it.Key.Name;
-                if(currentParameterName == parameterName) { return (Parameter)it.Current; }
-            }
-            return null;
-        }
-
-        // This one's the tricky one
-        public static Parameter FetchParametersOfCategory(Document doc, Category category)
-        {
-            return null;
-        }
-
-        // Spiderinnet's hacky method to create a project parameter, despite the Revit API's limitations on this
-        // From https:// spiderinnet.typepad.com/blog/2011/05/parameter-of-revit-api-31-create-project-parameter.html
-        // This creates a temporary shared parameters file, a temporary shared parameter
-        // It then binds this back to the model as an InstanceBinding and deletes the temporary stuff
-        public static Parameter CreateProjectParameter(Document doc, Application app, string parameterName, ParameterType parameterType, CategorySet categorySet, BuiltInParameterGroup builtInParameterGroup, bool isInstanceParameter)
-        {
-            Transaction transaction = new Transaction(doc, "Regular - Creating New Project Parameter");
-            transaction.Start();
-            
-            string oriFile = app.SharedParametersFilename;
-            string tempFile = Path.GetTempFileName() + ".txt";
-            using (File.Create(tempFile)) { }
-            app.SharedParametersFilename = tempFile;
-            ExternalDefinitionCreationOptions externalDefinitionCreationOptions = new ExternalDefinitionCreationOptions(parameterName, parameterType);
-            ExternalDefinition def = app.OpenSharedParameterFile().Groups.Create("TemporaryDefintionGroup").Definitions.Create(externalDefinitionCreationOptions) as ExternalDefinition;
-
-            app.SharedParametersFilename = oriFile;
-            File.Delete(tempFile);
-
-            Binding binding = app.Create.NewTypeBinding(categorySet);
-            if (isInstanceParameter) binding = app.Create.NewInstanceBinding(categorySet);
-
-            BindingMap bindingMap = (new UIApplication(app)).ActiveUIDocument.Document.ParameterBindings;
-            bindingMap.Insert(def, binding, builtInParameterGroup);
-
-            transaction.Commit();
-
-            // TaskDialog.Show("Regular", $"New Project Parameter {parameterName} has been created.");
-            
-            return null;
-        }
-
-        public static Category GetCategoryFromBuiltInCategory(Document doc, BuiltInCategory builtInCategory)
-        {
-            Category category = doc.Settings.Categories.get_Item(builtInCategory);
-            if (category != null) return category;
-            return null;
-        }
-
-        public static CategorySet CreateCategorySetFromListOfCategories(Document doc, Application app, List<Category> categories)
-        {
-            CategorySet categorySet = app.Create.NewCategorySet();
-            for(int i = 0; i < categories.Count; i++) { categorySet.Insert(categories[i]); }
-            return categorySet;
-        }
-
         public static Schema GetRegularSchema(Document document)
         {
             // A method that handles all the faff of constructing the regularSchema
             Schema ConstructRegularSchema(Document doc)
-            {   
+            {
                 // The schema doesn't exist; we need to define the schema for the first time
                 SchemaBuilder schemaBuilder = new SchemaBuilder(Guid.NewGuid());
                 schemaBuilder.SetSchemaName("RegularSchema");
@@ -109,7 +31,7 @@ namespace Regular
                 schemaBuilder.AddArrayField("RegexRuleParts", typeof(string));
                 return schemaBuilder.Finish();
             }
-            
+
             IList<Schema> allSchemas = Schema.ListSchemas();
             Schema regularSchema = allSchemas.Where(x => x.SchemaName == "RegularSchema").FirstOrDefault();
 
@@ -117,14 +39,40 @@ namespace Regular
             if (regularSchema != null) return regularSchema;
             return ConstructRegularSchema(document);
         }
-        
-        public static ObservableCollection<RegexRule> LoadRegexRulesFromExtensibleStorage(Document document, Application _app)
+
+        public static void SaveRegexRuleToExtensibleStorage(string documentGuid, RegexRule regexRule)
+        {
+            Document document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
+            //This needs to be turned into a method taking a RegexRule and saving to ExtensibleStorage
+            Entity entity = new Entity(GetRegularSchema(document));
+            entity.Set("GUID", Guid.NewGuid());
+            entity.Set("RuleName", regexRule.RuleName);
+            entity.Set("CategoryName", regexRule.TargetCategoryName);
+            entity.Set("TrackingParameterName", ((ComboBoxItem)ComboBoxInputTargetParameter.SelectedItem).Content.ToString());
+            entity.Set("OutputParameterName", regexRule.OutputParameterName);
+            entity.Set("RegexString", regexRule.RegexString);
+            IList<string> regexRulePartList = new List<string>();
+            foreach (RegexRulePart regexRulePart in selectedRegexRuleParts)
+            {
+                regexRulePartList.Add($@"{regexRulePart.RawUserInputValue}:{regexRulePart.RuleType.ToString()}:{regexRulePart.IsOptional.ToString()}");
+            }
+            entity.Set<IList<string>>("regexRuleParts", regexRulePartList);
+            using (Transaction transaction = new Transaction(document, $"Saving RegexRule {regexRule.RuleName}"))
+            {
+                transaction.Start();
+                DataStorage dataStorage = DataStorage.Create(document);
+                dataStorage.SetEntity(entity);
+                transaction.Commit();
+            }
+        }
+
+        public static ObservableCollection<RegexRule> LoadRegexRulesFromExtensibleStorage(Document document)
         {
             Schema regularSchema = GetRegularSchema(document);
 
             // Retrieving and testing all DataStorage objects in the document against our Regular schema.
             List<DataStorage> allDataStorage = new FilteredElementCollector(document).OfClass(typeof(DataStorage)).OfType<DataStorage>().ToList();
-            if(allDataStorage == null || allDataStorage.Count < 1) { return null; }
+            if (allDataStorage == null || allDataStorage.Count < 1) { return null; }
 
             // Returning any Entities which employ the RegularSchema 
             List<Entity> regexRuleEntities = allDataStorage.Where(x => x.GetEntity(regularSchema) != null).Select(x => x.GetEntity(regularSchema)).ToList();
@@ -134,17 +82,11 @@ namespace Regular
             return regexRules;
         }
 
-        public static void SaveRegexRuleToExtensibleStorage(Document doc, Application app)
-        {
-            return;
-        }
-
         // Helper method to take Entities returned from Storage and convert them to RegexRules (including their RegexRuleParts)
         public static RegexRule ConvertEntityToRegexRule(Document doc, Entity entity)
         {
             string name = entity.Get<string>("ruleName");
             string categoryName = entity.Get<string>("categoryName");
-            Category category = FetchCategoryByName(categoryName, doc);
             string trackingParameterName = entity.Get<string>("trackingParameterName");
             // This is tricky. We need to first filter for all parameters that match the category
             // After which we can match them up by the name given by the user in the ComboBox.
@@ -156,7 +98,7 @@ namespace Regular
             string regexString = entity.Get<string>("regexString");
             List<string> regexRulePartsString = entity.Get<IList<string>>("regexRuleParts").ToList<string>();
 
-            RegexRule regexRule = new RegexRule(name, category, trackingParameterName, outputParameterName);
+            RegexRule regexRule = new RegexRule(name, categoryName, trackingParameterName, outputParameterName);
 
             // Helper method to deserialize our smushed-down regex rule parts
             ObservableCollection<RegexRulePart> DeserializeRegexRuleParts(List<string> _regexRulePartsString)
@@ -222,7 +164,5 @@ namespace Regular
             regexRule.RegexRuleParts = regexRuleParts;
             return regexRule;
         }
-
-
     }
 }

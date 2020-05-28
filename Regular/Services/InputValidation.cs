@@ -17,25 +17,26 @@ namespace Regular.Services
                     ValidateTargetParameterName(targetParameterName) &&
                     ValidateOutputParameterName(outputParameterNameInput);
         }
+        public static List<string> IllegalRevitCharacters = new List<string>() { "/", ":", "{", "}", "[", "]", "|", ";", ">", "<", "?", "`", "~", Environment.NewLine };
         private static bool ValidateRuleName(string input)
         {
-            // Logic goes here
-            return false;
+            if (input == null || input.Length < 1) return false;
+            return true;
         }
         private static bool ValidateOutputParameterName(string input)
         {
-            // Logic goes here does a parameter with this name exist already?
-            return false;
+            if (input == null || input.Length < 1 || IllegalRevitCharacters.Any(x => input.Contains(x))) return false;
+            return true;
         }
         private static bool ValidateTargetCategoryName(string input)
         {
-            // Logic goes here does this category exist
-            return false;
+            if (input == null || input.Length < 1) return false;
+            return true;
         }
         private static bool ValidateTargetParameterName(string input)
         {
-            // Logic goes here does this parameter exist?
-            return false;
+            if (input == null || input.Length < 1) return false;
+            return true;
         }
 
     }

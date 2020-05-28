@@ -71,7 +71,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BuildRegularRibbon.cs" />
-    <Compile Include="ExtensibleStorage.cs" />
     <Compile Include="Models\EditorOpeningType.cs" />
     <Compile Include="Models\RegexRule.cs" />
     <Compile Include="Models\RegexRulePart.cs" />
@@ -80,8 +79,10 @@
     <Compile Include="RegularApp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RuleManager.cs" />
+    <Compile Include="Services\CategoryServices.cs" />
     <Compile Include="Services\DocumentServices.cs" />
-    <Compile Include="Services\Services.cs" />
+    <Compile Include="Services\ExtensibleStorageServices.cs" />
+    <Compile Include="Services\ParameterServices.cs" />
     <Compile Include="Services\InputValidation.cs" />
     <Compile Include="Views\RuleEditor.xaml.cs">
       <DependentUpon>RuleEditor.xaml</DependentUpon>
