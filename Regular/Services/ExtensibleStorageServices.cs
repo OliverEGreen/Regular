@@ -48,15 +48,10 @@ namespace Regular.Services
             entity.Set("GUID", Guid.NewGuid());
             entity.Set("RuleName", regexRule.RuleName);
             entity.Set("CategoryName", regexRule.TargetCategoryName);
-            entity.Set("TrackingParameterName", ((ComboBoxItem)ComboBoxInputTargetParameter.SelectedItem).Content.ToString());
+            entity.Set("TrackingParameterName", regexRule.TrackingParameterName);
             entity.Set("OutputParameterName", regexRule.OutputParameterName);
             entity.Set("RegexString", regexRule.RegexString);
-            IList<string> regexRulePartList = new List<string>();
-            foreach (RegexRulePart regexRulePart in selectedRegexRuleParts)
-            {
-                regexRulePartList.Add($@"{regexRulePart.RawUserInputValue}:{regexRulePart.RuleType.ToString()}:{regexRulePart.IsOptional.ToString()}");
-            }
-            entity.Set<IList<string>>("regexRuleParts", regexRulePartList);
+            entity.Set<IList<string>>("RegexRuleParts", SerializationServices.SerializeRegexRuleParts(regexRule.RegexRuleParts));
             using (Transaction transaction = new Transaction(document, $"Saving RegexRule {regexRule.RuleName}"))
             {
                 transaction.Start();
@@ -68,6 +63,20 @@ namespace Regular.Services
 
         public static ObservableCollection<RegexRule> LoadRegexRulesFromExtensibleStorage(Document document)
         {
+            // Helper method to take Entities returned from Storage and convert them to RegexRules (including their RegexRuleParts)
+            RegexRule ConvertEntityToRegexRule(Document doc, Entity entity)
+            {
+                string guid = entity.Get<Guid>("GUID").ToString();
+                string name = entity.Get<string>("RuleName");
+                string categoryName = entity.Get<string>("CategoryName");
+                string trackingParameterName = entity.Get<string>("TrackingParameterName");
+                string outputParameterName = entity.Get<string>("OutputParameterName");
+                string regexString = entity.Get<string>("RegexString");
+                List<string> regexRulePartsString = entity.Get<IList<string>>("RegexRuleParts").ToList<string>();
+                ObservableCollection<RegexRulePart> regexRuleParts = DeserializationServices.DeserializeRegexRuleParts(regexRulePartsString);
+
+                return new RegexRule(guid, name, categoryName, trackingParameterName, outputParameterName, regexString, regexRuleParts);
+            }
             Schema regularSchema = GetRegularSchema(document);
 
             // Retrieving and testing all DataStorage objects in the document against our Regular schema.
@@ -81,88 +90,34 @@ namespace Regular.Services
             foreach (Entity entity in regexRuleEntities) { regexRules.Add(ConvertEntityToRegexRule(document, entity)); }
             return regexRules;
         }
-
-        // Helper method to take Entities returned from Storage and convert them to RegexRules (including their RegexRuleParts)
-        public static RegexRule ConvertEntityToRegexRule(Document doc, Entity entity)
+        
+        public static void DeleteRegexRuleFromExtensibleStorage(string documentGuid, string regexRuleGuid)
         {
-            string name = entity.Get<string>("ruleName");
-            string categoryName = entity.Get<string>("categoryName");
-            string trackingParameterName = entity.Get<string>("trackingParameterName");
-            // This is tricky. We need to first filter for all parameters that match the category
-            // After which we can match them up by the name given by the user in the ComboBox.
-            // Unless.... we don't retrieve the parameters themselves and always retrieve strings.
-            // Then we just use element.LookupParameter("theName") to read its value when validating?
-            // Parameter trackingParameter = FetchProjectParameterByName(doc, trackingParameterName);
-            string outputParameterName = entity.Get<string>("outputParameterName");
-            // Parameter outputParameter = FetchProjectParameterByName(doc, outputParameterName);
-            string regexString = entity.Get<string>("regexString");
-            List<string> regexRulePartsString = entity.Get<IList<string>>("regexRuleParts").ToList<string>();
+            Document document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
+            Schema regularSchema = GetRegularSchema(document);
 
-            RegexRule regexRule = new RegexRule(name, categoryName, trackingParameterName, outputParameterName);
+            // Retrieving and testing all DataStorage objects in the document against our Regular schema.
+            List<DataStorage> allDataStorage = new FilteredElementCollector(document).OfClass(typeof(DataStorage)).OfType<DataStorage>().ToList();
+            if (allDataStorage == null || allDataStorage.Count < 1) { return; }
 
-            // Helper method to deserialize our smushed-down regex rule parts
-            ObservableCollection<RegexRulePart> DeserializeRegexRuleParts(List<string> _regexRulePartsString)
+            // Returning any Entities which employ the RegularSchema 
+            List<DataStorage> regexRuleDataStorage = allDataStorage.Where(x => x.GetEntity(regularSchema) != null).ToList();
+            foreach(DataStorage dataStorage in regexRuleDataStorage)
             {
-                ObservableCollection<RegexRulePart> _regexRuleParts = new ObservableCollection<RegexRulePart>();
-
-                // Converting RuleParts from serialized strings to real RegexRuleParts
-                foreach (string serializedString in regexRulePartsString)
+                Entity regexRuleEntity = dataStorage.GetEntity(regularSchema);
+                if(regexRuleEntity.Get<Guid>("GUID").ToString() == regexRuleGuid)
                 {
-                    List<string> serializedStringParts = serializedString.Split(':').ToList();
-                    string rawUserInputValue = serializedStringParts[0];
-                    string regexRuleTypeString = serializedStringParts[1];
-                    string isOptionalString = serializedStringParts[2];
-                    RuleTypes ruleType = RuleTypes.None;
-                    switch (regexRuleTypeString)
+                    string ruleName = regexRuleEntity.Get<string>("RuleName");
+                    using(Transaction transaction = new Transaction(document, $"Regular - Deleting Rule {ruleName}"))
                     {
-                        case "AnyLetter":
-                            ruleType = RuleTypes.AnyLetter;
-                            break;
-                        case "SpecificLetter":
-                            ruleType = RuleTypes.SpecificLetter;
-                            break;
-                        case "AnyNumber":
-                            ruleType = RuleTypes.AnyNumber;
-                            break;
-                        case "SpecificNumber":
-                            ruleType = RuleTypes.SpecificNumber;
-                            break;
-                        case "AnyCharacter":
-                            ruleType = RuleTypes.AnyCharacter;
-                            break;
-                        case "SpecificCharacter":
-                            ruleType = RuleTypes.SpecificCharacter;
-                            break;
-                        case "AnyFromSet":
-                            ruleType = RuleTypes.AnyFromSet;
-                            break;
-                        case "Anything":
-                            ruleType = RuleTypes.Anything;
-                            break;
-                        case "Dot":
-                            ruleType = RuleTypes.Dot;
-                            break;
-                        case "Hyphen":
-                            ruleType = RuleTypes.Hyphen;
-                            break;
-                        case "Underscore":
-                            ruleType = RuleTypes.Underscore;
-                            break;
+                        transaction.Start();
+                        List<ElementId> dataStorageToDelete = new List<ElementId>() { dataStorage.Id };
+                        document.Delete(dataStorageToDelete);
+                        transaction.Commit();
                     }
-
-                    bool isRulePartOptional = false;
-                    if (isOptionalString == "True") { isRulePartOptional = true; }
-
-                    // Finally, we create the rule part and add to the outgoing list of RegexRuleParts
-                    RegexRulePart regexRulePart = new RegexRulePart(rawUserInputValue, ruleType, isRulePartOptional);
-                    _regexRuleParts.Add(regexRulePart);
+                    break;
                 }
-                return _regexRuleParts;
             }
-
-            ObservableCollection<RegexRulePart> regexRuleParts = DeserializeRegexRuleParts(regexRulePartsString);
-            regexRule.RegexRuleParts = regexRuleParts;
-            return regexRule;
         }
     }
 }

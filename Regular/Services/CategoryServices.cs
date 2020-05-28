@@ -1,9 +1,5 @@
 ﻿using Autodesk.Revit.DB;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Regular.Services
 {
@@ -13,26 +9,29 @@ namespace Regular.Services
         {
             return null;
         }
-
         public static Category GetCategoryByName(string categoryName, Document doc)
         {
             Categories categoriesList = doc.Settings.Categories;
             foreach (Category category in categoriesList) { if (category.Name == categoryName) return category; }
             return null;
         }
-
-        public static Category GetCategoryFromBuiltInCategory(Document doc, BuiltInCategory builtInCategory)
+        public static List<Category> GetListFromCategorySet(Categories categories)
         {
-            Category category = doc.Settings.Categories.get_Item(builtInCategory);
-            if (category != null) return category;
-            return null;
+            List<Category> categoryList = new List<Category>();
+            foreach(Category category in categories) { categoryList.Add(category); }
+            return categoryList;
         }
-
-        public static CategorySet CreateCategorySetFromListOfCategories(Document doc, List<Category> categories)
+        public static CategorySet GetCategorySetFromList(Document doc, List<Category> categories)
         {
             CategorySet categorySet = RegularApp.RevitApplication.Create.NewCategorySet();
             for (int i = 0; i < categories.Count; i++) { categorySet.Insert(categories[i]); }
             return categorySet;
         }
+        public static Category GetCategoryFromBuiltInCategory(Document doc, BuiltInCategory builtInCategory)
+        {
+            Category category = doc.Settings.Categories.get_Item(builtInCategory);
+            if (category != null) return category;
+            return null;
+        }        
     }
 }

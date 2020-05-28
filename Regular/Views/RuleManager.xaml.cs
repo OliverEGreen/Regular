@@ -1,34 +1,25 @@
-﻿using System.Collections.Generic;
-using System.Windows;
+﻿using System.Windows;
+using Autodesk.Revit.DB;
+using System.Windows.Controls;
+using Regular.Services;
 using System.Collections.ObjectModel;
 using Regular.Models;
-using Autodesk.Revit.DB;
-using Autodesk.Revit.ApplicationServices;
-using Autodesk.Revit.DB.ExtensibleStorage;
-using System.Windows.Controls;
-using System.Linq;
-using Autodesk.Revit.UI;
-using Regular.Services;
-using Application = Autodesk.Revit.ApplicationServices.Application;
 
 namespace Regular.Views
 {
     public partial class RuleManager : Window
     {
         public static Document Document { get; set; }
-        public static Application Application { get; set; }
+        public static string DocumentGuid { get; set; }
 
-        ObservableCollection<RegexRule> AllRegexRules = new ObservableCollection<RegexRule>();
-
-        public RuleManager(Document document)
+        public RuleManager(string documentGuid)
         {
             InitializeComponent();
-            Application = RegularApp.RevitApplication;
-            Document = document;
-            
-            if (Utilities.LoadRegexRulesFromExtensibleStorage(Document, Application) != null) { AllRegexRules = Utilities.LoadRegexRulesFromExtensibleStorage(Document, Application); }
-            else { AllRegexRules = new ObservableCollection<RegexRule>(); }
-            RulesListBox.ItemsSource = AllRegexRules;
+            DocumentGuid = documentGuid;
+            Document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
+
+            // All rules found in ExtensibleStorage are loaded on the DocumentOpened event
+            RulesListBox.ItemsSource = RegularApp.AllRegexRules[documentGuid];
         }
 
         private void ButtonAddNewRule_Click(object sender, RoutedEventArgs e)
@@ -38,41 +29,32 @@ namespace Regular.Views
             ruleEditor.ShowDialog();
         }
 
-        private void RuleEditor_Closed(object sender, System.EventArgs e)
-        {
-            AllRegexRules.Clear();
-            foreach(RegexRule regexRule in Utilities.LoadRegexRulesFromExtensibleStorage(Document, Application))
-            {
-                AllRegexRules.Add(regexRule);
-            }
-            RulesListBox.Items.Refresh();
-            Activate();
-        }
-
-        private void CloseButton_Click(object sender, RoutedEventArgs e) => Close();
+        // Brings the Rule Manager window back to the front when the Rule Editor window closes
+        private void RuleEditor_Closed(object sender, System.EventArgs e) => Activate();
 
         private void ButtonEditRule_Click(object sender, RoutedEventArgs e)
         {
-            RegexRule testRegexRule = new RegexRule("Test Rule", "Doors", null, null);
             RuleEditor ruleEditor = new RuleEditor(DocumentServices.GetRevitDocumentGuid(Document));
             ruleEditor.ShowDialog();
         }
 
-        private void DeleteRegexRulePartButton_Click(object sender, RoutedEventArgs e)
+        // Completely removes a RegexRule from the document
+        private void DeleteRegexRuleButton_Click(object sender, RoutedEventArgs e)
         {
+            // TODO: Add in confirmation button before rule gets deleted forever
+            Button button = sender as Button;
+            string regexRuleGuid = ((RegexRule)button.DataContext).Guid;
 
+            // When deleting a rule we must delete both the cached RegexRule and the ES DataStorage object
+            RegexRuleManager.DeleteRegexRule(DocumentGuid, regexRuleGuid);
+            ExtensibleStorageServices.DeleteRegexRuleFromExtensibleStorage(DocumentGuid, regexRuleGuid);
         }
-
         private void RegexRulesScrollViewer_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
         {
             ScrollViewer scv = (ScrollViewer)sender;
             scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
             e.Handled = true;
         }
-
-        private void ButtonClose_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
+        private void ButtonClose_Click(object sender, RoutedEventArgs e) => Close();        
     }
 }
