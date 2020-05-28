@@ -19,7 +19,7 @@ namespace Regular.Models
         public ObservableCollection<RegexRulePart> RegexRuleParts { get; set; }
         public bool IsCaseSensitive { get; set; }
 
-        //Constructor, when user creates a new rule we require (and set) the following information
+        // Constructor, when user creates a new rule we require (and set) the following information
         public RegexRule(string ruleName, Category targetCategory, string trackingParameterName, string outputParameterName)
         {
             Guid = System.Guid.NewGuid().ToString();
