@@ -32,13 +32,13 @@ namespace Regular
             {
                 Views.RuleManager ruleManager = new Views.RuleManager(doc, app);
                 ruleManager.ShowDialog();
-                //We need to build the rule manager UI using IObservableCollection and Listbox. 
-                //Need to build the new rule button in order to have ability to create new rules
-                //This will involve building a parsing function to parse a new, sort of empty RegexRule into ExtensibleStorage
-                //This will involve Entity and DataStorage object stuff, the reverse of before.
+                // We need to build the rule manager UI using IObservableCollection and Listbox. 
+                // Need to build the new rule button in order to have ability to create new rules
+                // This will involve building a parsing function to parse a new, sort of empty RegexRule into ExtensibleStorage
+                // This will involve Entity and DataStorage object stuff, the reverse of before.
 
-                //When the dialog closes we can run all rules in order
-                //After rules have run this External Command is over.
+                // When the dialog closes we can run all rules in order
+                // After rules have run this External Command is over.
                 return Result.Succeeded;
             }
             catch (Exception ex)

@@ -11,6 +11,7 @@ using System;
 using System.Windows.Controls;
 using Autodesk.Revit.DB.ExtensibleStorage;
 using Application = Autodesk.Revit.ApplicationServices.Application;
+using Regular.Services;
 
 namespace Regular.Views
 {
@@ -19,7 +20,7 @@ namespace Regular.Views
         public static Document Document { get; set; }
         public static Application Application { get; set; }
 
-        //Helper method to build regex string
+        // Helper method to build regex string
         public string GetRegexPartFromRuleType(RegexRulePart regexRulePart)
         {
             switch (regexRulePart.RuleType)
@@ -27,7 +28,7 @@ namespace Regular.Views
                 case RuleTypes.AnyCharacter:
                     return @"\w";
                 case RuleTypes.AnyFromSet:
-                    //We'll need to break these up somehow
+                    // We'll need to break these up somehow
                     return "Test";
                 case RuleTypes.AnyLetter:
                     return @"[a-zA-Z]";
@@ -55,7 +56,7 @@ namespace Regular.Views
         public RegexRule RegexRule { get; set; }
         public EditorOpeningType EditorOpeningType { get; set; }
 
-        //Constructor for creating a new rule
+        // Constructor for creating a new rule
         public RuleEditor(Document doc, Application app)
         {
             InitializeComponent();
@@ -65,14 +66,14 @@ namespace Regular.Views
             EditorOpeningType = EditorOpeningType.CreateNewRule;
             Title = "Creating New Rule";
             
-            //Depending on the OpeningType we either need to edit and existing rule
-            //In which case we need to take it as an argument and fill out the UI boxes
-            //Or we are creating a new rule from scratch
-            //In which case we instantiate the new DataObject once the form is filled out and closed
+            // Depending on the OpeningType we either need to edit and existing rule
+            // In which case we need to take it as an argument and fill out the UI boxes
+            // Or we are creating a new rule from scratch
+            // In which case we instantiate the new DataObject once the form is filled out and closed
             selectedRegexRuleParts.Clear();
             RulePartsListBox.ItemsSource = selectedRegexRuleParts;
 
-            //We create a new RegexRule placeholder
+            // We create a new RegexRule placeholder
             RegexRule = new RegexRule(null, null, null, null);
 
             Categories categories = Regular.RuleManager._doc.Settings.Categories;
@@ -89,11 +90,11 @@ namespace Regular.Views
             ComboBoxInputCategory.Items.Clear();
             ComboBoxInputCategory.ItemsSource = categoryNames;
 
-            //Binding ComboBox to our RuleType enumeration
+            // Binding ComboBox to our RuleType enumeration
             ComboBoxInputRulePartType.ItemsSource = Enum.GetValues(typeof(RuleTypes)).Cast<RuleTypes>();
         }
 
-        //Constructor overload for editing existing rules
+        // Constructor overload for editing existing rules
         public RuleEditor(Document doc, Application app, RegexRule regexRule)
         {
             InitializeComponent();
@@ -102,10 +103,10 @@ namespace Regular.Views
 
             EditorOpeningType = EditorOpeningType.EditExistingRule;
             Title = $"Editing Rule: {regexRule.RuleName}";
-            //Depending on the OpeningType we either need to edit and existing rule
-            //In which case we need to take it as an argument and fill out the UI boxes
-            //Or we are creating a new rule from scratch
-            //In which case we instantiate the new DataObject once the form is filled out and closed
+            // Depending on the OpeningType we either need to edit and existing rule
+            // In which case we need to take it as an argument and fill out the UI boxes
+            // Or we are creating a new rule from scratch
+            // In which case we instantiate the new DataObject once the form is filled out and closed
             RegexRule = regexRule;
             RulePartsListBox.ItemsSource = regexRule.RegexRuleParts;
 
@@ -123,7 +124,7 @@ namespace Regular.Views
             ComboBoxInputCategory.Items.Clear();
             ComboBoxInputCategory.ItemsSource = categoryNames;
 
-            //Binding ComboBox to our RuleType enumeration
+            // Binding ComboBox to our RuleType enumeration
             ComboBoxInputRulePartType.ItemsSource = Enum.GetValues(typeof(RuleTypes)).Cast<RuleTypes>();
         }
 
@@ -139,7 +140,7 @@ namespace Regular.Views
             Document doc = Regular.RuleManager._doc;
             string selectedCategoryName = ComboBoxInputCategory.SelectedValue.ToString();
             
-            //We need the ability to fetch parameters that are bound to the selected category. WIP
+            // We need the ability to fetch parameters that are bound to the selected category. WIP
         }
 
         private void AddRulePartButton_Click(object sender, RoutedEventArgs e)
@@ -182,47 +183,16 @@ namespace Regular.Views
 
         private void ButtonOK_Click(object sender, RoutedEventArgs e)
         {
-            //When they click OK we should run all initial validation
-            //To see whether or not the chosen inputs are actually valid and its
-            //worth our time creating objects
-            
-            string ruleName = TextblockInputRuleName.Text;
-            string outputParameterName = TextblockOutputParameterName.Text;
+            string ruleNameInput = TextblockInputRuleName.Text;
+            string outputParameterNameInput = TextblockOutputParameterName.Text;
+            string targetCategoryNameInput = ComboBoxInputCategory.Text;
+            string trackingParameterName = ComboBoxInputTargetParameter.Text;  
 
-            //This should be the only call we have to make. The rest of this should be moved
-            RegexRuleManager.CreateRegexRule();
-
-            List<Category> categoriesList = new List<Category>();
-            categoriesList.Add(Utilities.GetCategoryFromBuiltInCategory(Document, BuiltInCategory.OST_Doors)); //Placeholder; we need to read this from the form
-            CategorySet categorySet = Utilities.CreateCategorySetFromListOfCategories(Document, Application, categoriesList);
-            Parameter outputParameter = Utilities.CreateProjectParameter(Document, Application, outputParameterName, ParameterType.Text, categorySet, BuiltInParameterGroup.PG_AREA, true);
-            //RegexRule.OutputParameterName = outputParameter.Definition.Name;
-
-            foreach(RegexRulePart regexRulePart in selectedRegexRuleParts)
+            // Initial check to see whether all inputs are valid; these will need to be reflected in the UI as well
+            // We can probably have this check validation every time a user changes input, will need to be via event handler
+            if (InputValidation.ValidateInputs(ruleNameInput, targetCategoryNameInput, trackingParameterName, outputParameterNameInput))
             {
-                RegexRule.RegexString += GetRegexPartFromRuleType(regexRulePart); //Something!! We build the string as we close the editor 
-            }
-            //MOVE ALL OF THIS
-            //Saving the rule to a Datastorage object of the RegularSchema. This should really happen in the RegexRuleManager
-            Entity entity = new Entity(Utilities.GetRegularSchema(Document));
-            entity.Set("GUID", Guid.NewGuid());
-            entity.Set("RuleName", ruleName);
-            entity.Set("CategoryName", categoriesList.First().Name);
-            entity.Set("TrackingParameterName", ((ComboBoxItem)ComboBoxInputTargetParameter.SelectedItem).Content.ToString());
-            entity.Set("OutputParameterName", outputParameterName);
-            entity.Set("RegexString", RegexRule.RegexString);
-            IList<string> regexRulePartList = new List<string>();
-            foreach(RegexRulePart regexRulePart in selectedRegexRuleParts)
-            {
-                regexRulePartList.Add($@"{regexRulePart.RawUserInputValue}:{regexRulePart.RuleType.ToString()}:{regexRulePart.IsOptional.ToString()}");
-            }
-            entity.Set<IList<string>>("regexRuleParts", regexRulePartList);
-            using (Transaction transaction = new Transaction(Document, $"Saving RegexRule {ruleName}"))
-            {
-                transaction.Start();
-                DataStorage dataStorage = DataStorage.Create(Document);
-                dataStorage.SetEntity(entity);
-                transaction.Commit();
+                RegexRuleManager.CreateRegexRule();
             }
             Close();
         }
