@@ -72,7 +72,7 @@ namespace Regular.Services
                     Parameter outputParameter = element.LookupParameter(regexRule.OutputParameterName);
                     if (trackingParameter == null || outputParameter == null) { continue; }
                     Regex regex = new Regex(regexRule.RegexString);
-                    if (regex.IsMatch(trackingParameter.ToString())) { outputParameter.Set("Valid"); }
+                    if (regex.IsMatch(trackingParameter.AsString())) { outputParameter.Set("Valid"); }
                     else { outputParameter.Set("Invalid"); }
                 }
             }
@@ -96,7 +96,6 @@ namespace Regular.Services
             if (targetParameter == null) return;
             UpdaterRegistry.AddTrigger(ruleUpdater.GetUpdaterId(), elementCategoryFilter, Element.GetChangeTypeParameter(targetParameter.Id));
             List<Element> elements = new FilteredElementCollector(document).OfCategory(builtInCategory).ToElements().ToList();
-            TaskDialog.Show("Test", $"Found {elements.Count} elements of category {regexRule.TargetCategoryName}");
         }
     }
 }
