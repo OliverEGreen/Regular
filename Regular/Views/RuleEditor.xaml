@@ -26,7 +26,7 @@
         <Label Content="Name Your Rule" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="0" Padding="0"/>
         <TextBox Name="TextblockInputRuleName" Style="{StaticResource StandardTextBox}" Text="Type Here..." Grid.Row="0" Grid.Column="1"/>
         <Label Content="Target Category" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="1" ></Label>
-        <ComboBox Name="ComboBoxInputCategory" Text="Select Category" Style="{StaticResource StandardComboBox}" Grid.Row="1" Grid.Column="1" SelectionChanged="ComboBoxInputCategory_SelectionChanged">
+        <ComboBox Name="ComboBoxInputCategory" Text="Select Category" Style="{StaticResource StandardComboBox}" Grid.Row="1" Grid.Column="1">
         </ComboBox>
         <Label Content="Parameter To Test" Style="{StaticResource StandardLabel}" Grid.Row="2" FontSize="13" ></Label>
         <ComboBox Name="ComboBoxInputTargetParameter" Text="Select Parameter" Style="{StaticResource StandardComboBox}" Grid.Row="2" Grid.Column="1">
