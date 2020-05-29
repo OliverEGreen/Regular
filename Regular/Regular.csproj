@@ -81,6 +81,7 @@
     <Compile Include="Services\CategoryServices.cs" />
     <Compile Include="Services\DeserializationServices.cs" />
     <Compile Include="Services\DocumentServices.cs" />
+    <Compile Include="Services\DynamicModelUpdateServices.cs" />
     <Compile Include="Services\ExtensibleStorageServices.cs" />
     <Compile Include="Services\ParameterServices.cs" />
     <Compile Include="Services\InputValidation.cs" />

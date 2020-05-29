@@ -1,4 +1,5 @@
 ﻿using Autodesk.Revit.DB;
+using System;
 using System.Collections.Generic;
 
 namespace Regular.Services
@@ -9,9 +10,9 @@ namespace Regular.Services
         {
             return null;
         }
-        public static Category GetCategoryByName(string categoryName, Document doc)
+        public static Category GetCategoryByName(Document document, string categoryName)
         {
-            Categories categoriesList = doc.Settings.Categories;
+            Categories categoriesList = document.Settings.Categories;
             foreach (Category category in categoriesList) { if (category.Name == categoryName) return category; }
             return null;
         }
@@ -33,5 +34,9 @@ namespace Regular.Services
             if (category != null) return category;
             return null;
         }        
+        public static BuiltInCategory GetBuiltInCategoryFromCategory(Category category)
+        {
+            return (BuiltInCategory)Enum.Parse(typeof(BuiltInCategory), category.Id.ToString());
+        }
     }
 }
