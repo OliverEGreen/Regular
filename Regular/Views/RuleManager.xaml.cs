@@ -2,7 +2,6 @@
 using Autodesk.Revit.DB;
 using System.Windows.Controls;
 using Regular.Services;
-using System.Collections.ObjectModel;
 using Regular.Models;
 
 namespace Regular.Views
@@ -55,6 +54,14 @@ namespace Regular.Views
             scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
             e.Handled = true;
         }
-        private void ButtonClose_Click(object sender, RoutedEventArgs e) => Close();        
+        private void ButtonClose_Click(object sender, RoutedEventArgs e) => Close();
+
+        private void EditRegexRuleButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+            string regexRuleGuid = ((RegexRule)button.DataContext).Guid;
+            RuleEditor ruleEditor = new RuleEditor(DocumentServices.GetRevitDocumentGuid(Document), regexRuleGuid);
+            ruleEditor.ShowDialog();
+        }
     }
 }
