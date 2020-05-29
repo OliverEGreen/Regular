@@ -160,7 +160,7 @@ namespace Regular.Views
                 // If a new rule, a project parameter needs to be created.
                 RegexRule regexRule = RegexRuleManager.AddRegexRule(DocumentGuid, ruleNameInput, targetCategoryNameInput, trackingParameterNameInput, outputParameterNameInput, regexStringInput, SelectedRegexRuleParts);
                 ParameterServices.CreateProjectParameter(Document, outputParameterNameInput, ParameterType.Text, targetCategoryNameInput, BuiltInParameterGroup.PG_IDENTITY_DATA, true);
-                ExtensibleStorageServices.SaveRegexRuleToExtensibleStorage(DocumentGuid, regexRule);
+                ExtensibleStorageServices.AddRegexRuleToExtensibleStorage(DocumentGuid, regexRule);
             }
             else
             {
