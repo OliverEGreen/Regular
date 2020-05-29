@@ -3,13 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Regular.Services
 {
-    public static class InputValidation
+    public static class InputValidationServices
     {
+        //TODO: We need methods by which to test inputs given to individual RegexRuleParts
         public static bool ValidateInputs(string ruleNameInput, string targetCategoryName, string targetParameterName, string outputParameterNameInput, string regexStringInput, ObservableCollection<RegexRulePart> regexRuleParts)
         {
             // Public method to return the outputs of all individual tests

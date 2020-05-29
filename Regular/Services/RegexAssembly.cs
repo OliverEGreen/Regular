@@ -26,6 +26,13 @@ namespace Regular.Services
         };
         private static string GetRegexPartFromRuleType(RegexRulePart regexRulePart)
         {
+            // TODO: We need to change these
+            // Anything From Set
+            // Specific Word
+            // Specific Character
+            // Any Digit (0-9)
+            // Any Letter (A-Z)
+            // Any Character
             switch (regexRulePart.RuleType)
             {
                 case RuleTypes.AnyCharacter:

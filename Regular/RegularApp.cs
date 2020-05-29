@@ -49,7 +49,6 @@ namespace Regular
 
             // If there are no saved rules we return, otherwise we establish the updaters
             if (existingRegexRules != null && existingRegexRules.Count < 1) { return; }
-
             foreach(RegexRule regexRule in existingRegexRules) { DynamicModelUpdateServices.RegisterRegexRule(documentGuid, regexRule.Guid); }
         }
 
