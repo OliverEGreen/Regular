@@ -84,7 +84,7 @@
     <Compile Include="Services\DynamicModelUpdateServices.cs" />
     <Compile Include="Services\ExtensibleStorageServices.cs" />
     <Compile Include="Services\ParameterServices.cs" />
-    <Compile Include="Services\InputValidation.cs" />
+    <Compile Include="Services\InputValidationServices.cs" />
     <Compile Include="Services\RegexAssembly.cs" />
     <Compile Include="Services\SerializationServices.cs" />
     <Compile Include="Views\RuleEditor.xaml.cs">
