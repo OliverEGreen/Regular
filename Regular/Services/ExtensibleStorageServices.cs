@@ -45,7 +45,7 @@ namespace Regular.Services
             Document document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
             //This needs to be turned into a method taking a RegexRule and saving to ExtensibleStorage
             Entity entity = new Entity(GetRegularSchema(document));
-            entity.Set("GUID", Guid.NewGuid());
+            entity.Set("GUID", new Guid(regexRule.Guid));
             entity.Set("RuleName", regexRule.RuleName);
             entity.Set("CategoryName", regexRule.TargetCategoryName);
             entity.Set("TrackingParameterName", regexRule.TrackingParameterName);
@@ -94,29 +94,17 @@ namespace Regular.Services
         public static void DeleteRegexRuleFromExtensibleStorage(string documentGuid, string regexRuleGuid)
         {
             Document document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
-            Schema regularSchema = GetRegularSchema(document);
+            KeyValuePair<DataStorage, Entity> ruleInExtensibleStorage = GetRegexRuleInExtensibleStorage(documentGuid, regexRuleGuid);
+            DataStorage dataStorage = ruleInExtensibleStorage.Key;
+            Entity regexRuleEntity = ruleInExtensibleStorage.Value;
 
-            // Retrieving and testing all DataStorage objects in the document against our Regular schema.
-            List<DataStorage> allDataStorage = new FilteredElementCollector(document).OfClass(typeof(DataStorage)).OfType<DataStorage>().ToList();
-            if (allDataStorage == null || allDataStorage.Count < 1) { return; }
-
-            // Returning any Entities which employ the RegularSchema 
-            List<DataStorage> regexRuleDataStorage = allDataStorage.Where(x => x.GetEntity(regularSchema) != null).ToList();
-            foreach(DataStorage dataStorage in regexRuleDataStorage)
+            string ruleName = regexRuleEntity.Get<string>("RuleName");
+            using (Transaction transaction = new Transaction(document, $"Regular - Deleting Rule {ruleName}"))
             {
-                Entity regexRuleEntity = dataStorage.GetEntity(regularSchema);
-                if(regexRuleEntity.Get<Guid>("GUID").ToString() == regexRuleGuid)
-                {
-                    string ruleName = regexRuleEntity.Get<string>("RuleName");
-                    using(Transaction transaction = new Transaction(document, $"Regular - Deleting Rule {ruleName}"))
-                    {
-                        transaction.Start();
-                        List<ElementId> dataStorageToDelete = new List<ElementId>() { dataStorage.Id };
-                        document.Delete(dataStorageToDelete);
-                        transaction.Commit();
-                    }
-                    break;
-                }
+                transaction.Start();
+                List<ElementId> dataStorageToDelete = new List<ElementId>() { dataStorage.Id };
+                document.Delete(dataStorageToDelete);
+                transaction.Commit();
             }
         }
 
@@ -134,6 +122,7 @@ namespace Regular.Services
             foreach (DataStorage dataStorage in regexRuleDataStorage)
             {
                 Entity regexRuleEntity = dataStorage.GetEntity(regularSchema);
+                string regexRuleEntityGuid = regexRuleEntity.Get<Guid>("GUID").ToString();
                 if (regexRuleEntity.Get<Guid>("GUID").ToString() == regexRuleGuid) return new KeyValuePair<DataStorage, Entity> (dataStorage, regexRuleEntity); 
             }
             return new KeyValuePair<DataStorage, Entity>(null, null);
