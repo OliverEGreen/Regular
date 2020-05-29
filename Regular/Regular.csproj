@@ -71,7 +71,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BuildRegularRibbon.cs" />
-    <Compile Include="Models\EditorOpeningType.cs" />
     <Compile Include="Models\RegexRule.cs" />
     <Compile Include="Models\RegexRulePart.cs" />
     <Compile Include="Models\RuleTypes.cs" />

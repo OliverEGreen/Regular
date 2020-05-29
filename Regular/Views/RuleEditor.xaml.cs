@@ -13,12 +13,13 @@ namespace Regular.Views
 {
     public partial class RuleEditor : Window
     {
-        public static Document Document { get; set; }
-        public static string DocumentGuid { get; set; }
-        public ObservableCollection<RegexRulePart> SelectedRegexRuleParts { get; set; }
+        private static Document Document { get; set; }
+        private static string DocumentGuid { get; set; }
+        private RegexRule RegexRule { get; set; }
+        private ObservableCollection<RegexRulePart> SelectedRegexRuleParts { get; set; }
 
         // Helper method to build regex string
-        public string GetRegexPartFromRuleType(RegexRulePart regexRulePart)
+        private string GetRegexPartFromRuleType(RegexRulePart regexRulePart)
         {
             switch (regexRulePart.RuleType)
             {
@@ -50,26 +51,43 @@ namespace Regular.Views
         }
 
         // Constructor for creating a new RegexRule
-        public RuleEditor(string documentGuid)
+        public RuleEditor(string documentGuid, string regexRuleGuid = null)
         {
             InitializeComponent();
-            Title = "Creating New Rule";
-            
+            RegexRule regexRule = RegexRuleManager.GetRegexRule(documentGuid, regexRuleGuid);
+                        
+            // If we're editing an existing rule, setting it as a static variable for accessibility
+            if (regexRule != null) { RegexRule = regexRule; }
+            Title = regexRule == null ? "Creating New Rule" : $"Editing Rule: {regexRule.RuleName}";
+            InitializeRuleEditor(documentGuid, regexRule);
+        }
+
+        private void InitializeRuleEditor(string documentGuid, RegexRule regexRule = null)
+        {
             DocumentGuid = documentGuid;
             Document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
-            
-            // Clearing and binding the RuleParts ListBox
+
+            // Clearing and Initializing the RegexRuleParts box
             SelectedRegexRuleParts = new ObservableCollection<RegexRulePart>();
             SelectedRegexRuleParts.Clear();
             RulePartsListBox.ItemsSource = SelectedRegexRuleParts;
+
+            // Binding ComboBox to our RuleType enumeration
+            ComboBoxInputRulePartType.ItemsSource = Enum.GetValues(typeof(RuleTypes)).Cast<RuleTypes>();
 
             // Populating ComboBox of user-visible Revit Categories
             List<string> userVisibleCategoryNames = CategoryServices.GetListFromCategorySet(Document.Settings.Categories).Where(x => x.AllowsBoundParameters).Select(i => i.Name).OrderBy(i => i).ToList();
             ComboBoxInputCategory.Items.Clear();
             ComboBoxInputCategory.ItemsSource = userVisibleCategoryNames;
-
-            // Binding ComboBox to our RuleType enumeration
-            ComboBoxInputRulePartType.ItemsSource = Enum.GetValues(typeof(RuleTypes)).Cast<RuleTypes>();
+            
+            if (regexRule != null)
+            {
+                TextblockInputRuleName.Text = regexRule.RuleName;
+                TextblockOutputParameterName.Text = regexRule.OutputParameterName;
+                ComboBoxInputTargetParameter.SelectedItem = regexRule.TrackingParameterName;
+                ComboBoxInputCategory.SelectedItem = regexRule.TargetCategoryName;
+                foreach(RegexRulePart regexRulePart in regexRule.RegexRuleParts) { SelectedRegexRuleParts.Add(regexRulePart); }
+            }
         }
 
         private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
@@ -134,13 +152,24 @@ namespace Regular.Views
 
             // Initial check to see whether all inputs are valid; these will need to be reflected in the UI as well
             // We can probably have this check validation every time a user changes input, will need to be via event handler
-            if (InputValidation.ValidateInputs(ruleNameInput, targetCategoryNameInput, trackingParameterNameInput, outputParameterNameInput, regexStringInput, SelectedRegexRuleParts))
+            if (!InputValidation.ValidateInputs(ruleNameInput, targetCategoryNameInput, trackingParameterNameInput, outputParameterNameInput, regexStringInput, SelectedRegexRuleParts)) return;
+
+            if (RegexRule == null)
             {
-                // Takes all information from the form and builds our RegexRule object. Needs to be saved in cache and in local storage.
+                // Takes all information from the form and builds a new RegexRule object. Needs to be saved in cache and in local storage.
                 // If a new rule, a project parameter needs to be created.
                 RegexRule regexRule = RegexRuleManager.AddRegexRule(DocumentGuid, ruleNameInput, targetCategoryNameInput, trackingParameterNameInput, outputParameterNameInput, regexStringInput, SelectedRegexRuleParts);
                 ParameterServices.CreateProjectParameter(Document, outputParameterNameInput, ParameterType.Text, targetCategoryNameInput, BuiltInParameterGroup.PG_IDENTITY_DATA, true);
                 ExtensibleStorageServices.SaveRegexRuleToExtensibleStorage(DocumentGuid, regexRule);
+            }
+            else
+            {
+                // The rule already exists and is being edited. We'll generate a new temporary rule from the inputs to use as we transfer values across.
+                // We don't need to create a project parameter, but we may need to update its name.
+                // We need to update both the static cache and the entity saved in ExtensibleStorage.
+                RegexRule newRegexRule = new RegexRule(ruleNameInput, targetCategoryNameInput, trackingParameterNameInput, outputParameterNameInput, regexStringInput, SelectedRegexRuleParts);
+                RegexRuleManager.UpdateRegexRule(DocumentGuid, RegexRule.Guid, newRegexRule);
+                ExtensibleStorageServices.UpdateRegexRuleInExtensibleStorage(DocumentGuid, RegexRule.Guid, newRegexRule);
             }
             Close();
         }

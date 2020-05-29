@@ -119,5 +119,47 @@ namespace Regular.Services
                 }
             }
         }
+
+        public static KeyValuePair<DataStorage, Entity> GetRegexRuleInExtensibleStorage(string documentGuid, string regexRuleGuid)
+        {
+            Document document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
+            Schema regularSchema = GetRegularSchema(document);
+
+            // Retrieving and testing all DataStorage objects in the document against our Regular schema.
+            List<DataStorage> allDataStorage = new FilteredElementCollector(document).OfClass(typeof(DataStorage)).OfType<DataStorage>().ToList();
+            if (allDataStorage == null || allDataStorage.Count < 1) { return new KeyValuePair<DataStorage, Entity>(null, null); }
+
+            // Returning any Entities which employ the RegularSchema 
+            List<DataStorage> regexRuleDataStorage = allDataStorage.Where(x => x.GetEntity(regularSchema) != null).ToList();
+            foreach (DataStorage dataStorage in regexRuleDataStorage)
+            {
+                Entity regexRuleEntity = dataStorage.GetEntity(regularSchema);
+                if (regexRuleEntity.Get<Guid>("GUID").ToString() == regexRuleGuid) return new KeyValuePair<DataStorage, Entity> (dataStorage, regexRuleEntity); 
+            }
+            return new KeyValuePair<DataStorage, Entity>(null, null);
+        }
+
+        public static void UpdateRegexRuleInExtensibleStorage(string documentGuid, string regexRuleGuid, RegexRule newRegexRule)
+        {
+            Document document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
+            KeyValuePair<DataStorage, Entity> ruleInExtensibleStorage = GetRegexRuleInExtensibleStorage(documentGuid, regexRuleGuid);
+            DataStorage dataStorage = ruleInExtensibleStorage.Key;
+            Entity regexRuleEntity = ruleInExtensibleStorage.Value;
+
+            string previousName = regexRuleEntity.Get<string>("RuleName");
+            
+            using (Transaction transaction = new Transaction(document, $"Regular - Modifying Rule {previousName}"))
+            {
+                transaction.Start();
+                regexRuleEntity.Set("RuleName", newRegexRule.RuleName);
+                regexRuleEntity.Set("CategoryName", newRegexRule.TargetCategoryName);
+                regexRuleEntity.Set("TrackingParameterName", newRegexRule.TrackingParameterName);
+                regexRuleEntity.Set("OutputParameterName", newRegexRule.OutputParameterName);
+                regexRuleEntity.Set("RegexString", newRegexRule.RegexString);
+                regexRuleEntity.Set<IList<string>>("RegexRuleParts", SerializationServices.SerializeRegexRuleParts(newRegexRule.RegexRuleParts));
+                dataStorage.SetEntity(regexRuleEntity);
+                transaction.Commit();
+            }
+        }
     }
 }
