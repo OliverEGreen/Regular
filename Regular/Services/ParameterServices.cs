@@ -12,7 +12,7 @@ namespace Regular.Services
 {
     public static class ParameterServices
     {
-        public static void CreateProjectParameter(Document doc, string parameterName, ParameterType parameterType, string categoryName, BuiltInParameterGroup builtInParameterGroup, bool isInstanceParameter)
+        public static void CreateProjectParameter(Document document, string parameterName, ParameterType parameterType, string categoryName, BuiltInParameterGroup builtInParameterGroup, bool isInstanceParameter)
         {
             // Spiderinnet's hacky method to create a project parameter, despite the Revit API's limitations on this
             // From https:// spiderinnet.typepad.com/blog/2011/05/parameter-of-revit-api-31-create-project-parameter.html
@@ -20,11 +20,11 @@ namespace Regular.Services
             // It then binds this back to the model as an InstanceBinding and deletes the temporary stuff
 
             //Creating the necessary categoryset to create the outputParameter
-            Category category = CategoryServices.GetCategoryByName(categoryName, doc);
+            Category category = CategoryServices.GetCategoryByName(document, categoryName);
             List<Category> categoriesList = new List<Category>() { category };
-            CategorySet categorySet = CategoryServices.GetCategorySetFromList(doc, categoriesList);
+            CategorySet categorySet = CategoryServices.GetCategorySetFromList(document, categoriesList);
             
-            using (Transaction transaction = new Transaction(doc, $"Regular - Creating New Project Parameter {parameterName}")) 
+            using (Transaction transaction = new Transaction(document, $"Regular - Creating New Project Parameter {parameterName}")) 
             {
                 transaction.Start();
 
@@ -49,9 +49,9 @@ namespace Regular.Services
                 transaction.Commit();
             }
         }
-        public static Parameter GetProjectParameterByName(Document doc, string parameterName)
+        public static Parameter GetProjectParameterByName(Document document, string parameterName)
         {
-            BindingMap map = doc.ParameterBindings;
+            BindingMap map = document.ParameterBindings;
             DefinitionBindingMapIterator it = map.ForwardIterator();
             it.Reset();
             while (it.MoveNext())
