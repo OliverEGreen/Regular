@@ -2,65 +2,48 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Regular.Services
 {
     public static class RegexAssembly
     {
-        private static Dictionary<RuleTypes, string> RulePartTranslations = new Dictionary<RuleTypes, string>()
-        {
-            { RuleTypes.AnyCharacter, "" },
-            { RuleTypes.AnyFromSet, "" },
-            { RuleTypes.AnyLetter, "" },
-            { RuleTypes.AnyNumber, "" },
-            { RuleTypes.Anything, "" },
-            { RuleTypes.Dot, "" },
-            { RuleTypes.Hyphen, "" },
-            { RuleTypes.SpecificCharacter, "" },
-            { RuleTypes.SpecificLetter, "" },
-            { RuleTypes.SpecificNumber, "" },
-            { RuleTypes.Underscore, "" },
-        };
+        private static List<string> SpecialCharacters = new List<string>() { @".", @"\", @"*", @"+", @"?", @"|", @"(", @")", @"[", @"]", @"^", @"{", @"}" };
         private static string GetRegexPartFromRuleType(RegexRulePart regexRulePart)
         {
-            // TODO: We need to change these
-            // Anything From Set
-            // Specific Word
-            // Specific Character
-            // Any Digit (0-9)
-            // Any Letter (A-Z)
-            // Any Character
             switch (regexRulePart.RuleType)
             {
                 case RuleTypes.AnyCharacter:
-                    return @"\w";
+                    return SanitizeCharacter(regexRulePart.RawUserInputValue);
                 case RuleTypes.AnyFromSet:
                     // We'll need to break these up somehow
                     return "Test";
                 case RuleTypes.AnyLetter:
+                    if (regexRulePart.IsCaseSensitive) { }
+                    // How do we handle case-sensitive?
                     return @"[a-zA-Z]";
-                case RuleTypes.AnyNumber:
+                case RuleTypes.AnyDigit:
                     return @"\d";
-                case RuleTypes.Anything:
-                    return @".";
-                case RuleTypes.Dot:
-                    return @"\.";
-                case RuleTypes.Hyphen:
-                    return @"\-";
                 case RuleTypes.SpecificCharacter:
                     return $@"[{regexRulePart.RawUserInputValue}]";
-                case RuleTypes.SpecificLetter:
-                    return $@"[{regexRulePart.RawUserInputValue}]";
-                case RuleTypes.SpecificNumber:
-                    return $@"[{regexRulePart.RawUserInputValue}]";
-                case RuleTypes.Underscore:
-                    return @"_";
+                case RuleTypes.SpecificWord:
+                    return SanitizeWord(regexRulePart.RawUserInputValue);
                 default:
                     return null;
             }
+        }
+        private static string SanitizeCharacter(string character)
+        {
+            if (SpecialCharacters.Contains(character)) return $@"\{character}";
+            return character;
+        }
+        private static string SanitizeWord(string word)
+        {
+            string outputString = "";
+            foreach(char character in word)
+            {
+                outputString += SanitizeCharacter(character.ToString());
+            }
+            return outputString;
         }
         public static string AssembleRegexString(ObservableCollection<RegexRulePart> regexRuleParts)
         {

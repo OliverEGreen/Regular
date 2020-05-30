@@ -1,10 +1,6 @@
 ﻿using Regular.Models;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Regular.Services
 {
@@ -15,7 +11,7 @@ namespace Regular.Services
             IList<string> regexRulePartList = new List<string>();
             foreach (RegexRulePart regexRulePart in regexRuleParts)
             {
-                regexRulePartList.Add($@"{regexRulePart.RawUserInputValue}`{regexRulePart.RuleType}`{regexRulePart.IsOptional}`{regexRulePart.IsCaseSensitive}");
+                regexRulePartList.Add($@"{regexRulePart.RuleType}`{regexRulePart.RawUserInputValue}`{regexRulePart.IsOptional}`{regexRulePart.IsCaseSensitive}`{regexRulePart.RequiresUserInput}");
             }
             return regexRulePartList;
         }

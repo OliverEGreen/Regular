@@ -3,6 +3,7 @@ using Autodesk.Revit.DB;
 using System.Windows.Controls;
 using Regular.Services;
 using Regular.Models;
+using System.Collections.ObjectModel;
 
 namespace Regular.Views
 {
@@ -26,7 +27,6 @@ namespace Regular.Views
             ruleEditor.Closed += RuleEditor_Closed;
             ruleEditor.ShowDialog();
         }
-        
         private void EditRegexRuleButton_Click(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
@@ -34,7 +34,6 @@ namespace Regular.Views
             RuleEditor ruleEditor = new RuleEditor(DocumentServices.GetRevitDocumentGuid(Document), regexRuleGuid);
             ruleEditor.ShowDialog();
         }
-        
         private void DeleteRegexRuleButton_Click(object sender, RoutedEventArgs e)
         {
             // TODO: Add in confirmation button before rule gets deleted forever
@@ -45,16 +44,39 @@ namespace Regular.Views
             RegexRuleManager.DeleteRegexRule(DocumentGuid, regexRuleGuid);
             ExtensibleStorageServices.DeleteRegexRuleFromExtensibleStorage(DocumentGuid, regexRuleGuid);
         }
-        
         private void RegexRulesScrollViewer_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
         {
             ScrollViewer scv = (ScrollViewer)sender;
             scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
             e.Handled = true;
         }
-        
         private void ButtonClose_Click(object sender, RoutedEventArgs e) => Close();
-        
         private void RuleEditor_Closed(object sender, System.EventArgs e) => Activate();
+        private void ReorderUpButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+            RegexRule regexRule = (RegexRule)button.DataContext;
+            ObservableCollection<RegexRule> RegexRules = RegularApp.AllRegexRules[DocumentGuid];
+            int index = RegexRules.IndexOf(regexRule);
+
+            if (index > 0)
+            {
+                RegexRules.RemoveAt(index);
+                RegexRules.Insert(index - 1, regexRule);
+            }
+        }
+        private void ReorderDownButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+            RegexRule regexRule = (RegexRule)button.DataContext;
+            ObservableCollection<RegexRule> RegexRules = RegularApp.AllRegexRules[DocumentGuid];
+            int index = RegexRules.IndexOf(regexRule);
+
+            if (index < RegularApp.AllRegexRules[DocumentGuid].Count)
+            {
+                RegexRules.RemoveAt(index);
+                RegexRules.Insert(index + 1, regexRule);
+            }
+        }
     }
 }

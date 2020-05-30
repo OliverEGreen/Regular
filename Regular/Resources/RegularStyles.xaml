@@ -217,6 +217,26 @@
         </Setter>
     </Style>
 
+    <Style x:Key="EditItemButton" TargetType="Button">
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Canvas Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" ClipToBounds="True" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Rectangle x:Name="BackgroundRectangle" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Fill="#D9D9D9" Margin="0"/>
+                        <Line x:Name="VerticalLine" X1="9" Y1="12" X2="15" Y2="18" Stroke="#666666" StrokeThickness="1.5"/>
+                    </Canvas>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Rectangle.Fill" TargetName="BackgroundRectangle" Value="#41A4D9"/>
+                            <Setter Property="Line.Stroke" TargetName="VerticalLine" Value="#FFFFFF"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style x:Key="ImageButton" TargetType="Button">
         <Setter Property="Template">
             <Setter.Value>

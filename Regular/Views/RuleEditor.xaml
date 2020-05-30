@@ -5,56 +5,56 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Regular.Views"
         mc:Ignorable="d"
-        Title=" Rule Editor" WindowStartupLocation="CenterScreen" Style="{DynamicResource StandardWindow}" Width="440" Height="550">
+        Title=" Rule Editor" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight" ResizeMode="CanResizeWithGrip" Style="{DynamicResource StandardWindow}" MinHeight="500" MaxHeight="700" MinWidth="418" MaxWidth="600">
     <Window.Resources>
         <ResourceDictionary Source="../Resources/RegularStyles.xaml"/>
     </Window.Resources>
-    <Grid Margin="20,20,20,10">
+    <Grid Margin="15">
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
-            <RowDefinition Height="50"/>
-            <RowDefinition />
-            <RowDefinition Height="25"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition/>
+            <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="170"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Label Content="Name Your Rule" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="0" Padding="0"/>
-        <TextBox Name="TextblockInputRuleName" Style="{StaticResource StandardTextBox}" Text="Type Here..." Grid.Row="0" Grid.Column="1"/>
-        <Label Content="Target Category" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="1" ></Label>
-        <ComboBox Name="ComboBoxInputCategory" Text="Select Category" Style="{StaticResource StandardComboBox}" Grid.Row="1" Grid.Column="1">
+        <Label Content="Name Your Rule" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="0" Margin="0,5" VerticalContentAlignment="Center"/>
+        <TextBox Name="TextblockInputRuleName" Style="{StaticResource StandardTextBox}" Text="Type Here..." Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+        <Label Content="Target Category" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="1" Margin="0,5" VerticalContentAlignment="Center"/>
+        <ComboBox Name="ComboBoxInputCategory" Text="Select Category" Style="{StaticResource StandardComboBox}" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center">
         </ComboBox>
-        <Label Content="Parameter To Test" Style="{StaticResource StandardLabel}" Grid.Row="2" FontSize="13" ></Label>
-        <ComboBox Name="ComboBoxInputTargetParameter" Text="Select Parameter" Style="{StaticResource StandardComboBox}" Grid.Row="2" Grid.Column="1">
+        <Label Content="Parameter To Test" Style="{StaticResource StandardLabel}" Grid.Row="2" FontSize="13" Margin="0,5" VerticalContentAlignment="Center"/>
+        <ComboBox Name="ComboBoxInputTargetParameter" Text="Select Parameter" Style="{StaticResource StandardComboBox}" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center">
             <ComboBoxItem>Comments</ComboBoxItem>
             <ComboBoxItem>Mark</ComboBoxItem>
             <ComboBoxItem>Number</ComboBoxItem>
         </ComboBox>
-        <ComboBox Name="ComboBoxInputRulePartType" Style="{StaticResource StandardComboBox}" Height="24" Text="Select Rule Parts" Grid.Row="4" Width="254" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="100,0,0,10" Grid.ColumnSpan="2"/>
-        <Label Content="Output Parameter Name" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="3"/>
-        <TextBox Name="TextblockOutputParameterName" Style="{StaticResource StandardTextBox}" Text="Type Here..." Grid.Row="3" Grid.Column="1"/>
-        <Button Name="AddRulePartButton" Style="{StaticResource AddItemButton}" Height="24" Width="24" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,0,10" Click="AddRulePartButton_Click" />
-        <Label Content="Add Rule Parts" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="4" VerticalAlignment="Bottom" Margin="0,0,0,14" ></Label>
-        <Border BorderThickness="1" BorderBrush="{StaticResource TextBoxBorderColorDefault}"  Grid.Row="5" Grid.ColumnSpan="2">
+        <Label Content="Output Parameter Name" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="3" Margin="0,5" VerticalContentAlignment="Center"/>
+        <TextBox Name="TextblockOutputParameterName" Style="{StaticResource StandardTextBox}" Text="Type Here..." Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+        <Label Content="Add Rule Parts" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="4" VerticalAlignment="Center" Margin="0,10" VerticalContentAlignment="Center"/>
+        <ComboBox Name="ComboBoxInputRulePartType" Style="{StaticResource StandardComboBox}" Height="24" SelectedIndex="0" Grid.Row="4" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="100,0,30,0" Grid.ColumnSpan="2"/>
+        <Button Name="AddRulePartButton" Style="{StaticResource AddItemButton}" Height="24" Width="24" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Click="AddRulePartButton_Click" />
+        <Border BorderThickness="1" BorderBrush="{StaticResource TextBoxBorderColorDefault}" Grid.Row="5" Grid.ColumnSpan="2">
             <ScrollViewer Name="RulePartsScrollViewer" Style="{StaticResource DefaultScrollerViewerStyle}" VerticalScrollBarVisibility="Visible" Grid.Row="5" Grid.ColumnSpan="2" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
-                <ListBox Name="RulePartsListBox" Style="{StaticResource StandardListBox}">
+                <ListBox Name="RulePartsListBox" Style="{StaticResource StandardListBox}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <Grid HorizontalAlignment="Stretch">
+                            <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="127"/>
-                                    <ColumnDefinition Width="35"/>
+                                    <ColumnDefinition Width="125"/>
+                                    <ColumnDefinition />
                                     <ColumnDefinition Width="50"/>
                                     <ColumnDefinition Width="25"/>
                                     <ColumnDefinition Width="70"/>
                                     <ColumnDefinition Width="20"/>
                                     <ColumnDefinition Width="25"/>
                                 </Grid.ColumnDefinitions>
-                                <Rectangle HorizontalAlignment="Left" Fill="#EBEBEB" VerticalAlignment="Stretch" Height="30" Width="368" Stroke="#D9D9D9" StrokeThickness="1px" Grid.ColumnSpan="7" Margin="-4,-1,-2,-1"/>
+                                <Rectangle Fill="#EBEBEB" Height="30" Stroke="#D9D9D9" StrokeThickness="1px" Grid.ColumnSpan="7" Margin="-4,-1,0,-1"/>
                                 <Button Name="ReorderUpButton" Style="{StaticResource ReorderUpButton}" Click="ReorderUpButton_Click" Height="12" Width="12" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="0" Margin="-4,0,0,0"/>
                                 <Button Name="ReorderDownButton" Style="{StaticResource ReorderDownButton}" Click="ReorderDownButton_Click" Height="12" Width="12" HorizontalAlignment="Left" VerticalAlignment="Bottom" Grid.Column="0" Grid.RowSpan="2" Margin="-4,0,0,0"/>
                                 <TextBlock x:Name="RegexRulePartTypeTextBlock" Text="{Binding DisplayString}" FontSize="13" Style="{StaticResource StandardText}" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,0,0"/>
@@ -76,15 +76,15 @@
                                 <CheckBox Name="CheckBoxRulePartOptional" IsChecked="{Binding IsOptional}" Grid.Column="3" HorizontalAlignment="Left" VerticalAlignment="Center" Background="{StaticResource WindowBackgroundColor}"/>
                                 <TextBlock Style="{StaticResource StandardText}" Text="Match Case" Grid.Column="4" VerticalAlignment="Center"/>
                                 <CheckBox Name="CheckBoxMatchCase" IsChecked="False" Grid.Column="5" HorizontalAlignment="Left" VerticalAlignment="Center" Background="{StaticResource WindowBackgroundColor}"/>
-                                <Button Name="DeleteRegexRulePartButton" Style="{StaticResource DeleteItemButton}" HorizontalAlignment="Right" VerticalAlignment="Center" Width="25" Height="30" Margin="0,0,-5,0" Click="DeleteRegexRulePartButton_Click" Grid.Column="6"/>
+                                <Button Name="DeleteRegexRulePartButton" Style="{StaticResource DeleteItemButton}" HorizontalAlignment="Right" VerticalAlignment="Center" Width="25" Height="30" Margin="0,0,-3,0" Click="DeleteRegexRulePartButton_Click" Grid.Column="6"/>
                             </Grid>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
             </ScrollViewer>
         </Border>
-        <Button Name="ButtonOK" Style="{StaticResource StandardButton}" Click="ButtonOK_Click" Content="OK" Height="25" Width="80" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="6" Grid.Column="1" Grid.RowSpan="2"/>
-        <Button Name="ButtonCancel" Style="{StaticResource StandardButton}" Click="ButtonCancel_Click" Content="Cancel" Height="25" Width="80" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="6" Grid.Column="1" Margin="0,0,85,0" Grid.RowSpan="2"/>
+        <Button Name="ButtonOK" Style="{StaticResource StandardButton}" Click="ButtonOK_Click" Content="OK" Height="25" Width="80" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="6" Grid.Column="1" Grid.RowSpan="2" Margin="0,10,0,0"/>
+        <Button Name="ButtonCancel" Style="{StaticResource StandardButton}" Click="ButtonCancel_Click" Content="Cancel" Height="25" Width="80" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="6" Grid.Column="1" Margin="0,10,85,0" Grid.RowSpan="2"/>
     </Grid>
 </Window>
 

@@ -62,42 +62,7 @@ namespace Regular.Views
         }
         private void AddRulePartButton_Click(object sender, RoutedEventArgs e)
         {
-            RuleTypes selectedRuleType = (RuleTypes)ComboBoxInputRulePartType.SelectedItem;
-            
-            // TODO: Change these paradigms to those outlined in the RegexAssemblyService
-            // In fact, move this code to the RegexAssemblyService classs
-            RegexRulePart newRegexRulePart = new RegexRulePart("'.' (Full Stop)", (RuleTypes)ComboBoxInputRulePartType.SelectedItem, false, false);
-            
-            if (selectedRuleType == RuleTypes.AnyLetter | selectedRuleType == RuleTypes.AnyCharacter | selectedRuleType == RuleTypes.AnyNumber | selectedRuleType == RuleTypes.Anything)
-            {
-                newRegexRulePart.DisplayString = "Any Digit";
-                newRegexRulePart.RawUserInputValue = "";
-                RegexRuleParts.Add(newRegexRulePart);
-            }
-            else if(selectedRuleType == RuleTypes.Dot)
-            {
-                newRegexRulePart.DisplayString = "Full Stop";
-                newRegexRulePart.RawUserInputValue = "";
-                RegexRuleParts.Add(newRegexRulePart);
-            }
-            else if (selectedRuleType == RuleTypes.Hyphen)
-            {
-                newRegexRulePart.DisplayString = "Hyphen";
-                newRegexRulePart.RawUserInputValue = "";
-                RegexRuleParts.Add(newRegexRulePart);
-            }
-            else if (selectedRuleType == RuleTypes.Underscore)
-            {
-                newRegexRulePart.DisplayString = "Underscore";
-                newRegexRulePart.RawUserInputValue = "";
-                RegexRuleParts.Add(newRegexRulePart);
-            }
-            else
-            {
-                newRegexRulePart.DisplayString = "Specific Character";
-                newRegexRulePart.RawUserInputValue = " ";
-                RegexRuleParts.Add(newRegexRulePart);
-            }
+            RegexRuleParts.Add(RulePartServices.CreateRegexRulePart((RuleTypes)ComboBoxInputRulePartType.SelectedItem));
         }
         private void ButtonOK_Click(object sender, RoutedEventArgs e)
         {

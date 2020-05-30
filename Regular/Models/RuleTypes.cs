@@ -1,24 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Regular.Models
+﻿namespace Regular.Models
 {
     public enum RuleTypes
     {
-        None,
         AnyLetter,
-        SpecificLetter,
-        AnyNumber,
-        SpecificNumber,
+        AnyDigit,
         AnyCharacter,
-        SpecificCharacter,
         AnyFromSet,
-        Anything,
-        Dot,
-        Hyphen,
-        Underscore
+        SpecificCharacter,
+        SpecificWord,
     }
 }
