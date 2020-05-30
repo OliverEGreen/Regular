@@ -121,7 +121,7 @@ namespace Regular.Services
                 string outputParameterName = entity.Get<string>("OutputParameterName");
                 string regexString = entity.Get<string>("RegexString");
                 List<string> regexRulePartsString = entity.Get<IList<string>>("RegexRuleParts").ToList<string>();
-                ObservableCollection<RegexRulePart> regexRuleParts = DeserializationServices.DeserializeRegexRuleParts(regexRulePartsString);
+                ObservableCollection<RegexRulePart> regexRuleParts = DeserializationServices.DeserializeRegexRulePartsInExtensibleStorage(regexRulePartsString);
 
                 return new RegexRule(guid, name, categoryName, trackingParameterName, outputParameterName, regexString, regexRuleParts);
             }
