@@ -4,9 +4,7 @@
     {
         AnyLetter,
         AnyDigit,
-        AnyCharacter,
-        AnyFromSet,
-        SpecificCharacter,
-        SpecificWord,
+        FreeText,
+        SelectionSet,
     }
 }

@@ -11,11 +11,12 @@
     </Window.Resources>
     <Grid Margin="15">
         <Grid.RowDefinitions>
+            <RowDefinition Height="10"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="50"/>
             <RowDefinition/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
@@ -23,24 +24,27 @@
             <ColumnDefinition Width="170"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Label Content="Name Your Rule" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="0" Margin="0,5" VerticalContentAlignment="Center"/>
-        <TextBox Name="TextblockInputRuleName" Style="{StaticResource StandardTextBox}" Text="Type Here..." Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
-        <Label Content="Target Category" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="1" Margin="0,5" VerticalContentAlignment="Center"/>
-        <ComboBox Name="ComboBoxInputCategory" Text="Select Category" Style="{StaticResource StandardComboBox}" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center">
+        <TextBox Name="UserFeedbackTextBox" Padding="12,4,10,3" BorderThickness="0" Text="User Feedback abcdefghijklmnopqrstuvwxyz" Style="{StaticResource WarningTextBox}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource BackgroundColorWarning}" Margin="-15,-15,-15,0" Height="25" VerticalAlignment="Top"/>
+        <Label Content="Name Your Rule" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="1" Margin="0,5" VerticalContentAlignment="Center"/>
+        <TextBox Name="TextblockInputRuleName" Style="{StaticResource StandardTextBox}" Text="Type Here..." Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+        <Label Content="Target Category" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="2" Margin="0,5" VerticalContentAlignment="Center"/>
+        <Ellipse Name="TextblockInputRuleNameEllipse" Width="7" Height="7" Fill="LightGray" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Margin="5,0"/>
+        <ComboBox Name="ComboBoxInputCategory" Text="Select Category" Style="{StaticResource StandardComboBox}" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center">
         </ComboBox>
-        <Label Content="Parameter To Test" Style="{StaticResource StandardLabel}" Grid.Row="2" FontSize="13" Margin="0,5" VerticalContentAlignment="Center"/>
-        <ComboBox Name="ComboBoxInputTargetParameter" Text="Select Parameter" Style="{StaticResource StandardComboBox}" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center">
+        <Label Content="Parameter To Test" Style="{StaticResource StandardLabel}" Grid.Row="3" FontSize="13" Margin="0,5" VerticalContentAlignment="Center"/>
+        <ComboBox Name="ComboBoxInputTargetParameter" Text="Select Parameter" Style="{StaticResource StandardComboBox}" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center">
             <ComboBoxItem>Comments</ComboBoxItem>
             <ComboBoxItem>Mark</ComboBoxItem>
             <ComboBoxItem>Number</ComboBoxItem>
         </ComboBox>
-        <Label Content="Output Parameter Name" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="3" Margin="0,5" VerticalContentAlignment="Center"/>
-        <TextBox Name="TextblockOutputParameterName" Style="{StaticResource StandardTextBox}" Text="Type Here..." Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
-        <Label Content="Add Rule Parts" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="4" VerticalAlignment="Center" Margin="0,10" VerticalContentAlignment="Center"/>
-        <ComboBox Name="ComboBoxInputRulePartType" Style="{StaticResource StandardComboBox}" Height="24" SelectedIndex="0" Grid.Row="4" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="100,0,30,0" Grid.ColumnSpan="2"/>
-        <Button Name="AddRulePartButton" Style="{StaticResource AddItemButton}" Height="24" Width="24" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Click="AddRulePartButton_Click" />
-        <Border BorderThickness="1" BorderBrush="{StaticResource TextBoxBorderColorDefault}" Grid.Row="5" Grid.ColumnSpan="2">
-            <ScrollViewer Name="RulePartsScrollViewer" Style="{StaticResource DefaultScrollerViewerStyle}" VerticalScrollBarVisibility="Visible" Grid.Row="5" Grid.ColumnSpan="2" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
+        <Label Content="Output Parameter Name" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="4" Margin="0,5" VerticalContentAlignment="Center"/>
+        <Ellipse Name="OutputParameterNameEllipse" Width="7" Height="7" Fill="LightGray" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Right" Margin="5,0" Panel.ZIndex="1"/>
+        <TextBox Name="TextblockOutputParameterName" Style="{StaticResource StandardTextBox}" Text="Type Here..." Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+        <Label Content="Add Rule Parts" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="5" VerticalAlignment="Bottom" Margin="0,5,0,13" VerticalContentAlignment="Bottom"/>
+        <ComboBox Name="ComboBoxInputRulePartType" Style="{StaticResource StandardComboBox}" Height="24" SelectedIndex="0" Grid.Row="5" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Grid.Column="1" Margin="0,15,30,10" SelectionChanged="ComboBoxInputRulePartType_SelectionChanged"/>
+        <Button Name="AddRulePartButton" Style="{StaticResource AddItemButton}" Height="24" Width="24" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,15,0,10" Click="AddRulePartButton_Click" />
+        <Border BorderThickness="1" BorderBrush="{StaticResource TextBoxBorderColorDefault}" Grid.Row="6" Grid.ColumnSpan="2">
+            <ScrollViewer Name="RulePartsScrollViewer" Style="{StaticResource DefaultScrollerViewerStyle}" VerticalScrollBarVisibility="Visible" Grid.Row="6" Grid.ColumnSpan="2" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
                 <ListBox Name="RulePartsListBox" Style="{StaticResource StandardListBox}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
@@ -83,8 +87,8 @@
                 </ListBox>
             </ScrollViewer>
         </Border>
-        <Button Name="ButtonOK" Style="{StaticResource StandardButton}" Click="ButtonOK_Click" Content="OK" Height="25" Width="80" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="6" Grid.Column="1" Grid.RowSpan="2" Margin="0,10,0,0"/>
-        <Button Name="ButtonCancel" Style="{StaticResource StandardButton}" Click="ButtonCancel_Click" Content="Cancel" Height="25" Width="80" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="6" Grid.Column="1" Margin="0,10,85,0" Grid.RowSpan="2"/>
+        <Button Name="ButtonOK" Style="{StaticResource StandardButton}" Click="ButtonOK_Click" Content="OK" Height="25" Width="80" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="7" Grid.Column="1" Grid.RowSpan="2" Margin="0,10,0,0"/>
+        <Button Name="ButtonCancel" Style="{StaticResource StandardButton}" Click="ButtonCancel_Click" Content="Cancel" Height="25" Width="80" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="7" Grid.Column="1" Margin="0,10,85,0" Grid.RowSpan="2"/>
     </Grid>
 </Window>
 

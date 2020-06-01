@@ -10,7 +10,7 @@
     <SolidColorBrush x:Key="FontColorWarning" Color="#E60000"/>
     <SolidColorBrush x:Key="FontColorFaded" Color="#808080"/>
     <SolidColorBrush x:Key="FontColorGreen" Color="#1A7800"/>
-    <SolidColorBrush x:Key="BackgroundColorWarning" Color="#FFEBE6"/>
+    <SolidColorBrush x:Key="BackgroundColorWarning" Color="#FDEAE4"/>
     <SolidColorBrush x:Key="UnderlineBlueColor" Color="#3CA6DA"/>
     <SolidColorBrush x:Key="WindowBackgroundColor" Color="#FAFAFA"/>
     <Style x:Key="StandardWindow" TargetType="Window">
@@ -25,6 +25,11 @@
         <Setter Property="FontWeight" Value="Regular"/>
         <Setter Property="FontSize" Value="12px"/>
         <Setter Property="Foreground" Value="{StaticResource FontColorDefault}"/>
+    </Style>
+    <Style x:Key="WarningTextBox" TargetType="TextBox">
+        <Setter Property="FontFamily" Value="Segoe UI"/>
+        <Setter Property="FontSize" Value="12px"/>
+        <Setter Property="Foreground" Value="{StaticResource FontColorWarning}"/>
     </Style>
     <Style x:Key="StandardLabel" TargetType="{x:Type Label}">
         <Setter Property="FontFamily" Value="Segoe UI"/>
