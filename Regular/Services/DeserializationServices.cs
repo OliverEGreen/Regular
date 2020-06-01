@@ -16,16 +16,12 @@ namespace Regular.Services
                     return RuleTypes.AnyLetter;
                 case "AnyDigit":
                     return RuleTypes.AnyDigit;
-                case "AnyCharacter":
-                    return RuleTypes.AnyCharacter;
-                case "AnyFromSet":
-                    return RuleTypes.AnyFromSet;
-                case "SpecificCharacter":
-                    return RuleTypes.SpecificCharacter;
-                case "SpecificWord":
-                    return RuleTypes.SpecificWord;
+                case "FreeText":
+                    return RuleTypes.FreeText;
+                case "SelectionSet":
+                    return RuleTypes.SelectionSet;
                 default:
-                    return RuleTypes.AnyCharacter;
+                    return RuleTypes.AnyLetter;
             }
         }
         public static ObservableCollection<RegexRulePart> DeserializeRegexRulePartsInExtensibleStorage(List<string> regexRulePartsString)

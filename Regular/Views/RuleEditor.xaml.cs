@@ -8,6 +8,7 @@ using System.Linq;
 using System;
 using System.Windows.Controls;
 using Regular.Services;
+using System.Windows.Media;
 
 namespace Regular.Views
 {
@@ -35,41 +36,51 @@ namespace Regular.Views
             // Clearing and Initializing the RegexRuleParts box
             RegexRuleParts = new ObservableCollection<RegexRulePart>();
             RegexRuleParts.Clear();
-            RulePartsListBox.ItemsSource = RegexRuleParts;
+            ListBoxRuleParts.ItemsSource = RegexRuleParts;
 
             // Binding ComboBox to our RuleType enumeration
-            ComboBoxInputRulePartType.ItemsSource = Enum.GetValues(typeof(RuleTypes)).Cast<RuleTypes>();
+            ComboBoxRulePartInput.ItemsSource = Enum.GetValues(typeof(RuleTypes)).Cast<RuleTypes>();
 
             // Populating ComboBox of user-visible Revit Categories
             List<string> userVisibleCategoryNames = CategoryServices.GetListFromCategorySet(Document.Settings.Categories).Where(x => x.AllowsBoundParameters).Select(i => i.Name).OrderBy(i => i).ToList();
-            ComboBoxInputCategory.Items.Clear();
-            ComboBoxInputCategory.ItemsSource = userVisibleCategoryNames;
+            ComboBoxCategoryInput.Items.Clear();
+            ComboBoxCategoryInput.ItemsSource = userVisibleCategoryNames;
             
             if (regexRule != null)
             {
-                TextblockInputRuleName.Text = regexRule.RuleName;
-                TextblockOutputParameterName.Text = regexRule.OutputParameterName;
-                ComboBoxInputTargetParameter.SelectedItem = regexRule.TrackingParameterName;
-                ComboBoxInputCategory.SelectedItem = regexRule.TargetCategoryName;
+                TextBoxNameYourRuleInput.Text = regexRule.RuleName;
+                TextBoxOutputParameterNameInput.Text = regexRule.OutputParameterName;
+                ComboBoxTrackingParameterInput.SelectedItem = regexRule.TrackingParameterName;
+                ComboBoxCategoryInput.SelectedItem = regexRule.TargetCategoryName;
                 foreach(RegexRulePart regexRulePart in regexRule.RegexRuleParts) { RegexRuleParts.Add(regexRulePart); }
             }
+
+            EllipseNameYourRuleInput.Fill = (SolidColorBrush)this.Resources["EllipseColorGray"];
+            EllipseOutputParameterNameInput.Fill = (SolidColorBrush)this.Resources["EllipseColorGray"];
+
+            TextBoxNameYourRuleInput.TextChanged += TextBoxNameYourRuleInput_TextChanged;
+            TextBoxNameYourRuleInput.TextChanged += DisplayUserFeedback;
+            TextBoxOutputParameterNameInput.TextChanged += TextBoxOutputParameterNameInput_TextChanged;
+            TextBoxOutputParameterNameInput.TextChanged += DisplayUserFeedback;
+
+            TextBoxUserFeedback.Visibility = System.Windows.Visibility.Hidden;
         }
-        private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        private void ScrollViewerRuleParts_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
             ScrollViewer scv = (ScrollViewer)sender;
             scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
             e.Handled = true;
         }
-        private void AddRulePartButton_Click(object sender, RoutedEventArgs e)
+        private void ButtonAddRulePart_Click(object sender, RoutedEventArgs e)
         {
-            RegexRuleParts.Add(RulePartServices.CreateRegexRulePart((RuleTypes)ComboBoxInputRulePartType.SelectedItem));
+            RegexRuleParts.Add(RulePartServices.CreateRegexRulePart((RuleTypes)ComboBoxRulePartInput.SelectedItem));
         }
         private void ButtonOK_Click(object sender, RoutedEventArgs e)
         {
-            string ruleNameInput = TextblockInputRuleName.Text;
-            string outputParameterNameInput = TextblockOutputParameterName.Text;
-            string targetCategoryNameInput = ComboBoxInputCategory.Text;
-            string trackingParameterNameInput = ComboBoxInputTargetParameter.Text;
+            string ruleNameInput = TextBoxNameYourRuleInput.Text;
+            string outputParameterNameInput = TextBoxOutputParameterNameInput.Text;
+            string targetCategoryNameInput = ComboBoxCategoryInput.Text;
+            string trackingParameterNameInput = ComboBoxTrackingParameterInput.Text;
             string regexStringInput = RegexAssembly.AssembleRegexString(RegexRuleParts);
             
             // Initial check to see whether all inputs are valid; these will need to be reflected in the UI as well
@@ -129,6 +140,42 @@ namespace Regular.Views
                 RegexRuleParts.RemoveAt(index);
                 RegexRuleParts.Insert(index + 1, regexRulePart);
             }
+        }
+
+        private void DisplayUserFeedback(object sender, RoutedEventArgs e)
+        {
+            string userFeedback = InputValidationServices.ReturnUserFeedback(TextBoxNameYourRuleInput.Text, TextBoxOutputParameterNameInput.Text, RegexRuleParts);
+            if (userFeedback == null)
+            {
+                TextBoxUserFeedback.Visibility = System.Windows.Visibility.Hidden;
+                return;
+            }
+            TextBoxUserFeedback.Visibility = System.Windows.Visibility.Visible;
+            TextBoxUserFeedback.Text = userFeedback;
+        }
+               
+        private void TextBoxOutputParameterNameInput_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+            if (textBox.Text.Length < 1)
+            {
+                EllipseOutputParameterNameInput.Fill = (SolidColorBrush)this.Resources["EllipseColorGray"];
+                return;
+            }
+            bool ruleNameInputValid = InputValidationServices.ValidateOutputParameterName(textBox.Text);
+            EllipseOutputParameterNameInput.Fill = ruleNameInputValid ? (SolidColorBrush)this.Resources["EllipseColorGreen"] : (SolidColorBrush)this.Resources["EllipseColorRed"];
+        }
+
+        private void TextBoxNameYourRuleInput_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+            if (textBox.Text.Length < 1)
+            {
+                EllipseNameYourRuleInput.Fill = (SolidColorBrush)this.Resources["EllipseColorGray"];
+                return;
+            }
+            bool ruleNameInputValid = InputValidationServices.ValidateRuleName(textBox.Text);
+            EllipseNameYourRuleInput.Fill = ruleNameInputValid ? (SolidColorBrush)this.Resources["EllipseColorGreen"] : (SolidColorBrush)this.Resources["EllipseColorRed"];
         }
     }
 }
