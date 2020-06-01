@@ -7,14 +7,17 @@ namespace Regular.Services
 {
     public static class RegexAssembly
     {
-        private static List<string> SpecialCharacters = new List<string>() { @".", @"\", @"*", @"+", @"?", @"|", @"(", @")", @"[", @"]", @"^", @"{", @"}" };
+        private static readonly List<string> SpecialCharacters = new List<string>() { @".", @"\", @"*", @"+", @"?", @"|", @"(", @")", @"[", @"]", @"^", @"{", @"}" };
         private static string GetRegexPartFromRuleType(RegexRulePart regexRulePart)
         {
+            // TODO: Need to handle case sensitive and optional booleans.
+            // For optional we can append ? to each returned string.
+            // For non case-sensitive (i.e. case match) we can append the (?i) modifier after the string
             switch (regexRulePart.RuleType)
             {
-                case RuleTypes.AnyCharacter:
-                    return SanitizeCharacter(regexRulePart.RawUserInputValue);
-                case RuleTypes.AnyFromSet:
+                case RuleTypes.FreeText:
+                    return SanitizeWord(regexRulePart.RawUserInputValue);
+                case RuleTypes.SelectionSet:
                     // We'll need to break these up somehow
                     return "Test";
                 case RuleTypes.AnyLetter:
@@ -23,10 +26,6 @@ namespace Regular.Services
                     return @"[a-zA-Z]";
                 case RuleTypes.AnyDigit:
                     return @"\d";
-                case RuleTypes.SpecificCharacter:
-                    return $@"[{regexRulePart.RawUserInputValue}]";
-                case RuleTypes.SpecificWord:
-                    return SanitizeWord(regexRulePart.RawUserInputValue);
                 default:
                     return null;
             }
@@ -49,7 +48,9 @@ namespace Regular.Services
         {
             string regexString = "";
             foreach(RegexRulePart regexRulePart in regexRuleParts) { regexString += GetRegexPartFromRuleType(regexRulePart); }
-            return regexString.Replace(@"\\", @"\");
+            // TODO: We need to finalize the regex string. 
+            // Are we using a re.match or a re.search? contain $ or ^? Or we could dynamically switch out the method
+            return regexString;
         }
     }
 }
