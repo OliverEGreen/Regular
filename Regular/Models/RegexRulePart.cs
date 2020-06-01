@@ -13,7 +13,7 @@
         public RegexRulePart(RuleTypes ruleType)
         {
             RuleType = ruleType;
-            RequiresUserInput = RuleType == RuleTypes.SpecificCharacter ? true : false;
+            RequiresUserInput = RuleType == RuleTypes.FreeText || RuleType == RuleTypes.SelectionSet ? true : false;
         }
         // Our detailed constructor for recreating stored RegexRuleParts that were loaded from ExtensibleStorage
         public RegexRulePart(RuleTypes ruleType, bool isOptional, bool isCaseSensitive, bool requiresUserInput, string rawUserInputValue)

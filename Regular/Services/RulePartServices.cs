@@ -9,26 +9,19 @@ namespace Regular.Services
             RegexRulePart regexRulePart = new RegexRulePart(ruleType);
             switch (ruleType)
             {
-                case RuleTypes.AnyCharacter:
-                    regexRulePart.RuleTypeDisplayString = "Any Character";
-                    break;
                 case RuleTypes.AnyDigit:
-                    regexRulePart.RuleTypeDisplayString = "Any Digit(0-9)";
+                    regexRulePart.RuleTypeDisplayString = "Any Digit";
                     break;
                 case RuleTypes.AnyLetter:
-                    regexRulePart.RuleTypeDisplayString = "Any Letter (A-Z)";
+                    regexRulePart.RuleTypeDisplayString = "Any Letter";
                     break;
-                case RuleTypes.AnyFromSet:
+                case RuleTypes.FreeText:
                     regexRulePart.RequiresUserInput = true;
-                    regexRulePart.RuleTypeDisplayString = "Any From Set";
+                    regexRulePart.RuleTypeDisplayString = "Free Text";
                     break;
-                case RuleTypes.SpecificCharacter:
+                case RuleTypes.SelectionSet:
                     regexRulePart.RequiresUserInput = true;
-                    regexRulePart.RuleTypeDisplayString = "Specific Character";
-                    break;
-                case RuleTypes.SpecificWord:
-                    regexRulePart.RequiresUserInput = true;
-                    regexRulePart.RuleTypeDisplayString = "Specific Word";
+                    regexRulePart.RuleTypeDisplayString = "Selection Set";
                     break;
             }
             return regexRulePart;

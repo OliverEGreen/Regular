@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Regular.Services
 {
@@ -20,33 +21,42 @@ namespace Regular.Services
                     ValidateRegexString(regexStringInput) &&
                     ValidateRegexRuleParts(regexRuleParts);
         }
-        public static List<string> IllegalRevitCharacters = new List<string>() { "/", ":", "{", "}", "[", "]", "|", ";", ">", "<", "?", "`", "~", Environment.NewLine };
-        private static bool ValidateRuleName(string input)
+
+        public static string ReturnUserFeedback(string ruleNameInput, string outputParameterNameInput, ObservableCollection<RegexRulePart> regexRuleParts)
         {
-            if (input == null || input.Length < 1) return false;
+            if (ValidateRuleName(ruleNameInput) == false) return "Rule Name cannot exceed 50 characters";
+            else if (ValidateOutputParameterName(outputParameterNameInput) == false) return @"Output Parameter cannot contain  / : { } [ ] | ; > < ? ` ~";
+            else if (regexRuleParts.Count < 1) return "Rules require at least 1 rule part";
+            else return null;
+        }
+
+        public static List<string> IllegalRevitCharacters = new List<string>() { "/", ":", "{", "}", "[", "]", "|", ";", ">", "<", "?", "`", "~", Environment.NewLine };
+        public static bool ValidateRuleName(string input)
+        {
+            if (input == null || input.Length < 1 || input.Length > 50) return false;
             return true;
         }
-        private static bool ValidateOutputParameterName(string input)
+        public static bool ValidateOutputParameterName(string input)
         {
             if (input == null || input.Length < 1 || IllegalRevitCharacters.Any(x => input.Contains(x))) return false;
             return true;
         }
-        private static bool ValidateTargetCategoryName(string input)
+        public static bool ValidateTargetCategoryName(string input)
         {
             if (input == null || input.Length < 1) return false;
             return true;
         }
-        private static bool ValidateTargetParameterName(string input)
+        public static bool ValidateTargetParameterName(string input)
         {
             if (input == null || input.Length < 1) return false;
             return true;
         }
-        private static bool ValidateRegexString(string input)
+        public static bool ValidateRegexString(string input)
         {
             if (input == null || input.Length < 1) return false;
             return true;
         }
-        private static bool ValidateRegexRuleParts(ObservableCollection<RegexRulePart> regexRuleParts)
+        public static bool ValidateRegexRuleParts(ObservableCollection<RegexRulePart> regexRuleParts)
         {
             if (regexRuleParts.Count < 1) return false;
             return true;
