@@ -34,8 +34,8 @@ namespace Regular
             existingRegexRule.OutputParameterName = newRegexRule.OutputParameterName;
             existingRegexRule.RegexRuleParts = newRegexRule.RegexRuleParts;
             existingRegexRule.RegexString = newRegexRule.RegexString;
-            existingRegexRule.RuleName = newRegexRule.RuleName;
-            existingRegexRule.TargetCategoryName = newRegexRule.TargetCategoryName;
+            existingRegexRule.Name = newRegexRule.Name;
+            existingRegexRule.TargetCategoryNames = newRegexRule.TargetCategoryNames;
             existingRegexRule.TrackingParameterName = newRegexRule.TrackingParameterName;
         }
         public static void DeleteRegexRule(string documentGuid, string regexRuleGuid)
