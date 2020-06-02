@@ -60,9 +60,9 @@ namespace Regular.Services
             foreach (RegexRule regexRule in regexRules)
             {
                 // If the regexRule applies to an irrelevant Category, we pass over it
-                if (!modifiedCategoryNames.Contains(regexRule.TargetCategoryName)) continue;
+                if (!modifiedCategoryNames.Contains(regexRule.TargetCategoryNames)) continue;
 
-                ElementCategoryFilter elementCategoryFilter = new ElementCategoryFilter(CategoryServices.GetBuiltInCategoryFromCategory(CategoryServices.GetCategoryByName(document, regexRule.TargetCategoryName)));
+                ElementCategoryFilter elementCategoryFilter = new ElementCategoryFilter(CategoryServices.GetBuiltInCategoryFromCategory(CategoryServices.GetCategoryByName(document, regexRule.TargetCategoryNames)));
                 List<Element> elementsOfTargetCategory = new FilteredElementCollector(document).WherePasses(elementCategoryFilter).WhereElementIsNotElementType().ToList();
                 
                 if (elementsOfTargetCategory == null || elementsOfTargetCategory.Count < 1) { continue; }
@@ -87,7 +87,7 @@ namespace Regular.Services
             catch (Exception ex) { TaskDialog.Show("Regular", ex.Message); }
 
             RegexRule regexRule = RegexRuleManager.GetRegexRule(documentGuid, regexRuleGuid);
-            BuiltInCategory builtInCategory = CategoryServices.GetBuiltInCategoryFromCategory(CategoryServices.GetCategoryByName(document, regexRule.TargetCategoryName));
+            BuiltInCategory builtInCategory = CategoryServices.GetBuiltInCategoryFromCategory(CategoryServices.GetCategoryByName(document, regexRule.TargetCategoryNames));
             ElementCategoryFilter elementCategoryFilter = new ElementCategoryFilter(builtInCategory);
             // A bit of a fudge - can't figure out how to get the Mark parameter without an element yet...
             Element element = new FilteredElementCollector(document).WherePasses(elementCategoryFilter).WhereElementIsNotElementType().ToElements().ToList().FirstOrDefault();

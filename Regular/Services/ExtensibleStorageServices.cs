@@ -95,13 +95,13 @@ namespace Regular.Services
             //This needs to be turned into a method taking a RegexRule and saving to ExtensibleStorage
             Entity entity = new Entity(GetRegularSchema(document));
             entity.Set("GUID", new Guid(regexRule.Guid));
-            entity.Set("RuleName", regexRule.RuleName);
-            entity.Set("CategoryName", regexRule.TargetCategoryName);
+            entity.Set("RuleName", regexRule.Name);
+            entity.Set("CategoryName", regexRule.TargetCategoryNames);
             entity.Set("TrackingParameterName", regexRule.TrackingParameterName);
             entity.Set("OutputParameterName", regexRule.OutputParameterName);
             entity.Set("RegexString", regexRule.RegexString);
             entity.Set<IList<string>>("RegexRuleParts", SerializationServices.SerializeRegexRuleParts(regexRule.RegexRuleParts));
-            using (Transaction transaction = new Transaction(document, $"Saving RegexRule {regexRule.RuleName}"))
+            using (Transaction transaction = new Transaction(document, $"Saving RegexRule {regexRule.Name}"))
             {
                 transaction.Start();
                 DataStorage dataStorage = DataStorage.Create(document);
@@ -150,8 +150,8 @@ namespace Regular.Services
             using (Transaction transaction = new Transaction(document, $"Regular - Modifying Rule {previousName}"))
             {
                 transaction.Start();
-                regexRuleEntity.Set("RuleName", newRegexRule.RuleName);
-                regexRuleEntity.Set("CategoryName", newRegexRule.TargetCategoryName);
+                regexRuleEntity.Set("RuleName", newRegexRule.Name);
+                regexRuleEntity.Set("CategoryName", newRegexRule.TargetCategoryNames);
                 regexRuleEntity.Set("TrackingParameterName", newRegexRule.TrackingParameterName);
                 regexRuleEntity.Set("OutputParameterName", newRegexRule.OutputParameterName);
                 regexRuleEntity.Set("RegexString", newRegexRule.RegexString);

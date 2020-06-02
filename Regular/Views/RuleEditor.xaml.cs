@@ -25,7 +25,7 @@ namespace Regular.Views
                         
             // If we're editing an existing rule, it gets set to a static variable for accessibility
             if (regexRule != null) { RegexRule = regexRule; }
-            Title = regexRule == null ? "Creating New Rule" : $"Editing Rule: {regexRule.RuleName}";
+            Title = regexRule == null ? "Creating New Rule" : $"Editing Rule: {regexRule.Name}";
             InitializeRuleEditor(documentGuid, regexRule);
         }
         void InitializeRuleEditor(string documentGuid, RegexRule regexRule = null)
@@ -48,10 +48,10 @@ namespace Regular.Views
             
             if (regexRule != null)
             {
-                TextBoxNameYourRuleInput.Text = regexRule.RuleName;
+                TextBoxNameYourRuleInput.Text = regexRule.Name;
                 TextBoxOutputParameterNameInput.Text = regexRule.OutputParameterName;
                 ComboBoxTrackingParameterInput.SelectedItem = regexRule.TrackingParameterName;
-                ComboBoxCategoryInput.SelectedItem = regexRule.TargetCategoryName;
+                ComboBoxCategoryInput.SelectedItem = regexRule.TargetCategoryNames;
                 foreach(RegexRulePart regexRulePart in regexRule.RegexRuleParts) { RegexRuleParts.Add(regexRulePart); }
             }
 
