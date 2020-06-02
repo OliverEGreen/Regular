@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Regular.Views"
         mc:Ignorable="d"
-        Title=" Rule Editor" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight" ResizeMode="CanResizeWithGrip" Style="{DynamicResource StandardWindow}" MinHeight="500" MaxHeight="700" MinWidth="418" MaxWidth="600">
+        Title=" Rule Editor" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight" ResizeMode="CanResizeWithGrip" Style="{DynamicResource StandardWindow}" MinHeight="500" MaxHeight="700" MinWidth="440" MaxWidth="600">
     <Window.Resources>
         <ResourceDictionary Source="../Resources/RegularStyles.xaml"/>
     </Window.Resources>
@@ -56,23 +56,25 @@
         <Border BorderThickness="1" BorderBrush="{StaticResource TextBoxBorderColorDefault}" Grid.Row="6" Grid.ColumnSpan="2">
             <ScrollViewer Name="ScrollViewerRuleParts" Style="{StaticResource DefaultScrollerViewerStyle}" VerticalScrollBarVisibility="Visible" Grid.Row="6" Grid.ColumnSpan="2" PreviewMouseWheel="ScrollViewerRuleParts_PreviewMouseWheel">
                 <ListBox Name="ListBoxRuleParts" Style="{StaticResource StandardListBox}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                    
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="125"/>
+                                    <ColumnDefinition Width="110"/>
                                     <ColumnDefinition />
-                                    <ColumnDefinition Width="50"/>
-                                    <ColumnDefinition Width="25"/>
-                                    <ColumnDefinition Width="70"/>
-                                    <ColumnDefinition Width="20"/>
-                                    <ColumnDefinition Width="25"/>
+                                    <ColumnDefinition Width="90"/>
+                                    <ColumnDefinition Width="15"/>
+                                    <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition Width="15"/>
+                                    <ColumnDefinition Width="30"/>
                                 </Grid.ColumnDefinitions>
                                 <Rectangle Fill="#EBEBEB" Height="30" Stroke="#D9D9D9" StrokeThickness="1px" Grid.ColumnSpan="7" Margin="-4,-1,0,-1"/>
-                                <Button Name="ReorderUpButton" Style="{StaticResource ReorderUpButton}" Click="ReorderUpButton_Click" Height="12" Width="12" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="0" Margin="-4,0,0,0"/>
-                                <Button Name="ReorderDownButton" Style="{StaticResource ReorderDownButton}" Click="ReorderDownButton_Click" Height="12" Width="12" HorizontalAlignment="Left" VerticalAlignment="Bottom" Grid.Column="0" Grid.RowSpan="2" Margin="-4,0,0,0"/>
+                                <Button Name="ReorderUpButton" Style="{StaticResource ReorderUpButton}" Click="ReorderUpButton_Click" Height="12" Width="13" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="0" Margin="-4,0,0,0"/>
+                                <Button Name="ReorderDownButton" Style="{StaticResource ReorderDownButton}" Click="ReorderDownButton_Click" Height="12" Width="13" HorizontalAlignment="Left" VerticalAlignment="Bottom" Grid.Column="0" Grid.RowSpan="2" Margin="-4,0,0,0"/>
                                 <TextBlock x:Name="RegexRulePartTypeTextBlock" Text="{Binding RuleTypeDisplayString}" FontSize="13" Style="{StaticResource StandardText}" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,0,0"/>
-                                <TextBlock Text="Match Case" Grid.Column="2" VerticalAlignment="Center">
+                                <Button Name="ButtonEditRulePart" Grid.Column="1" Content="A-Z" Width="40" Height="15" HorizontalAlignment="Left" Style="{StaticResource EditRulePartButton}" Click="ButtonEditRulePart_Click"/>
+                                <TextBlock Text="Match Case" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,0,0" FontFamily="SegoeUI" FontSize="12">
                                     <TextBlock.Style>
                                         <Style TargetType="{x:Type TextBlock}">
                                             <Setter Property="Visibility" Value="Visible"/>
@@ -88,7 +90,7 @@
                                     </TextBlock.Style>
                                 </TextBlock>
                                 <CheckBox Name="CheckBoxMatchCase" IsChecked="False" Grid.Column="3" HorizontalAlignment="Left" VerticalAlignment="Center" Background="{StaticResource WindowBackgroundColor}"/>
-                                <TextBlock Text="Optional" Style="{StaticResource StandardText}" Grid.Column="4" VerticalAlignment="Center"/>
+                                <TextBlock Text="Optional" Style="{StaticResource StandardText}" Grid.Column="4" VerticalAlignment="Center" Margin="10,0,0,0"/>
                                 <CheckBox Name="CheckBoxRulePartOptional" IsChecked="{Binding IsOptional}" Grid.Column="5" HorizontalAlignment="Left" VerticalAlignment="Center" Background="{StaticResource WindowBackgroundColor}"/>
                                 <Button Name="DeleteRegexRulePartButton" Style="{StaticResource DeleteItemButton}" HorizontalAlignment="Right" VerticalAlignment="Center" Width="25" Height="30" Margin="0,0,-3,0" Click="DeleteRegexRulePartButton_Click" Grid.Column="6"/>
                             </Grid>

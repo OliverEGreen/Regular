@@ -141,7 +141,6 @@ namespace Regular.Views
                 RegexRuleParts.Insert(index + 1, regexRulePart);
             }
         }
-
         private void DisplayUserFeedback(object sender, RoutedEventArgs e)
         {
             string userFeedback = InputValidationServices.ReturnUserFeedback(TextBoxNameYourRuleInput.Text, TextBoxOutputParameterNameInput.Text, RegexRuleParts);
@@ -153,7 +152,6 @@ namespace Regular.Views
             TextBoxUserFeedback.Visibility = System.Windows.Visibility.Visible;
             TextBoxUserFeedback.Text = userFeedback;
         }
-               
         private void TextBoxOutputParameterNameInput_TextChanged(object sender, TextChangedEventArgs e)
         {
             TextBox textBox = (TextBox)sender;
@@ -165,7 +163,6 @@ namespace Regular.Views
             bool ruleNameInputValid = InputValidationServices.ValidateOutputParameterName(textBox.Text);
             EllipseOutputParameterNameInput.Fill = ruleNameInputValid ? (SolidColorBrush)this.Resources["EllipseColorGreen"] : (SolidColorBrush)this.Resources["EllipseColorRed"];
         }
-
         private void TextBoxNameYourRuleInput_TextChanged(object sender, TextChangedEventArgs e)
         {
             TextBox textBox = (TextBox)sender;
@@ -176,6 +173,10 @@ namespace Regular.Views
             }
             bool ruleNameInputValid = InputValidationServices.ValidateRuleName(textBox.Text);
             EllipseNameYourRuleInput.Fill = ruleNameInputValid ? (SolidColorBrush)this.Resources["EllipseColorGreen"] : (SolidColorBrush)this.Resources["EllipseColorRed"];
+        }
+        private void ButtonEditRulePart_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
