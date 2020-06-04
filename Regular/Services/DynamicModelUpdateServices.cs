@@ -27,9 +27,10 @@ namespace Regular.Services
             public void Execute(UpdaterData data)
             {
                 Document document = data.GetDocument();
+                TaskDialog.Show("Test", "DMU Executing");
                 string documentGuid = DocumentServices.GetRevitDocumentGuid(document);
                 List<ElementId> modifiedElementIds = data.GetModifiedElementIds().ToList();
-                RunAllRegexRules(documentGuid, modifiedElementIds);                
+                //RunAllRegexRules(documentGuid, modifiedElementIds);                
             }
 
             public string GetAdditionalInformation() { return "Regular: Reads any Regex Rules in the open document"; }
@@ -39,6 +40,7 @@ namespace Regular.Services
         }
         public static void RunAllRegexRules(string documentGuid, List<ElementId> modifiedElementIds)
         {
+            TaskDialog.Show("Test", "Running All Regex Rules");
             Document document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
             List<RegexRule> regexRules = RegexRuleManager.GetDocumentRegexRules(documentGuid).ToList();
 
@@ -83,16 +85,17 @@ namespace Regular.Services
             RuleUpdater ruleUpdater = new RuleUpdater(RevitApplication.ActiveAddInId);
 
             Document document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
-            try { UpdaterRegistry.RegisterUpdater(ruleUpdater, document); }
+            try { UpdaterRegistry.RegisterUpdater(ruleUpdater, document, true); }
             catch (Exception ex) { TaskDialog.Show("Regular", ex.Message); }
 
             RegexRule regexRule = RegexRuleManager.GetRegexRule(documentGuid, regexRuleGuid);
-            BuiltInCategory builtInCategory = CategoryServices.GetBuiltInCategoryFromCategory(CategoryServices.GetCategoryByName(document, regexRule.TargetCategoryNames.FirstOrDefault()));
+            BuiltInCategory builtInCategory = BuiltInCategory.OST_Doors;
+            //BuiltInCategory builtInCategory = CategoryServices.GetBuiltInCategoryFromCategory(CategoryServices.GetCategoryByName(document, regexRule.TargetCategoryNames.FirstOrDefault()));
             ElementCategoryFilter elementCategoryFilter = new ElementCategoryFilter(builtInCategory);
             // A bit of a fudge - can't figure out how to get the Mark parameter without an element yet...
             Element element = new FilteredElementCollector(document).WherePasses(elementCategoryFilter).WhereElementIsNotElementType().ToElements().ToList().FirstOrDefault();
             if (element == null) return;
-            Parameter targetParameter = element.LookupParameter(regexRule.TrackingParameterName);
+            Parameter targetParameter = element.LookupParameter("Mark");
             if (targetParameter == null) return;
             UpdaterRegistry.AddTrigger(ruleUpdater.GetUpdaterId(), elementCategoryFilter, Element.GetChangeTypeParameter(targetParameter.Id));
             List<Element> elements = new FilteredElementCollector(document).OfCategory(builtInCategory).ToElements().ToList();

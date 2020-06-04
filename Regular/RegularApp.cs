@@ -50,6 +50,7 @@ namespace Regular
             // If there are no saved rules we return, otherwise we establish the updaters
             if (existingRegexRules != null && existingRegexRules.Count < 1) { return; }
             foreach(RegexRule regexRule in existingRegexRules) { DynamicModelUpdateServices.RegisterRegexRule(documentGuid, regexRule.Guid); }
+            TaskDialog.Show("Regular", $"{existingRegexRules.Count} rules registered to DMU upon opening.");
         }
 
         private void ControlledApplication_DocumentClosing(object sender, DocumentClosingEventArgs e)
