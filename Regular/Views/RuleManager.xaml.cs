@@ -3,6 +3,7 @@ using Autodesk.Revit.DB;
 using System.Windows.Controls;
 using Regular.Services;
 using Regular.Models;
+using Regular;
 using System.Collections.ObjectModel;
 
 namespace Regular.Views
@@ -11,16 +12,15 @@ namespace Regular.Views
     {
         public static Document Document { get; set; }
         public static string DocumentGuid { get; set; }
+        
         public RuleManager(string documentGuid)
         {
             InitializeComponent();
             DocumentGuid = documentGuid;
+            ListBoxRegexRules.ItemsSource = RegexRules.AllRegexRules[documentGuid];
             Document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
-
-            // All rules found in ExtensibleStorage are loaded on the DocumentOpened event
-            RulesListBox.ItemsSource = RegularApp.AllRegexRules[documentGuid];
         }
-        
+
         private void ButtonAddNewRule_Click(object sender, RoutedEventArgs e)
         {
             RuleEditor ruleEditor = new RuleEditor(DocumentServices.GetRevitDocumentGuid(Document));
@@ -56,7 +56,7 @@ namespace Regular.Views
         {
             Button button = sender as Button;
             RegexRule regexRule = (RegexRule)button.DataContext;
-            ObservableCollection<RegexRule> RegexRules = RegularApp.AllRegexRules[DocumentGuid];
+            ObservableCollection<RegexRule> RegexRules = Regular.RegexRules.AllRegexRules[DocumentGuid];
             int index = RegexRules.IndexOf(regexRule);
 
             if (index > 0)
@@ -69,10 +69,10 @@ namespace Regular.Views
         {
             Button button = sender as Button;
             RegexRule regexRule = (RegexRule)button.DataContext;
-            ObservableCollection<RegexRule> RegexRules = RegularApp.AllRegexRules[DocumentGuid];
+            ObservableCollection<RegexRule> RegexRules = Regular.RegexRules.AllRegexRules[DocumentGuid];
             int index = RegexRules.IndexOf(regexRule);
 
-            if (index < RegularApp.AllRegexRules[DocumentGuid].Count)
+            if (index < Regular.RegexRules.AllRegexRules[DocumentGuid].Count)
             {
                 RegexRules.RemoveAt(index);
                 RegexRules.Insert(index + 1, regexRule);

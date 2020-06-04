@@ -9,6 +9,8 @@ using System;
 using System.Windows.Controls;
 using Regular.Services;
 using System.Windows.Media;
+using Autodesk.Revit.UI;
+using TextBox = System.Windows.Controls.TextBox;
 
 namespace Regular.Views
 {
@@ -79,20 +81,21 @@ namespace Regular.Views
         {
             string ruleNameInput = TextBoxNameYourRuleInput.Text;
             string outputParameterNameInput = TextBoxOutputParameterNameInput.Text;
-            string targetCategoryNameInput = ComboBoxCategoryInput.Text;
+            List<string> targetCategoryNamesInput = new List<string>() { ComboBoxCategoryInput.Text };
             string trackingParameterNameInput = ComboBoxTrackingParameterInput.Text;
             string regexStringInput = RegexAssembly.AssembleRegexString(RegexRuleParts);
             
             // Initial check to see whether all inputs are valid; these will need to be reflected in the UI as well
             // We can probably have this check validation every time a user changes input, will need to be via event handler
-            if (!InputValidationServices.ValidateInputs(ruleNameInput, targetCategoryNameInput, trackingParameterNameInput, outputParameterNameInput, regexStringInput, RegexRuleParts)) return;
+            
+            //if (!InputValidationServices.ValidateInputs(ruleNameInput, targetCategoryNameInput, trackingParameterNameInput, outputParameterNameInput, regexStringInput, RegexRuleParts)) return;
 
             if (RegexRule == null)
             {
                 // Takes all information from the form and builds a new RegexRule object. Needs to be saved in cache and in local storage.
                 // If a new rule, a project parameter needs to be created.
-                RegexRule regexRule = RegexRuleManager.AddRegexRule(DocumentGuid, ruleNameInput, targetCategoryNameInput, trackingParameterNameInput, outputParameterNameInput, regexStringInput, RegexRuleParts);
-                ParameterServices.CreateProjectParameter(Document, outputParameterNameInput, ParameterType.Text, targetCategoryNameInput, BuiltInParameterGroup.PG_IDENTITY_DATA, true);
+                RegexRule regexRule = RegexRuleManager.AddRegexRule(DocumentGuid, ruleNameInput, targetCategoryNamesInput, trackingParameterNameInput, outputParameterNameInput, regexStringInput, RegexRuleParts);
+                ParameterServices.CreateProjectParameter(Document, outputParameterNameInput, ParameterType.Text, targetCategoryNamesInput, BuiltInParameterGroup.PG_IDENTITY_DATA, true);
                 ExtensibleStorageServices.AddRegexRuleToExtensibleStorage(DocumentGuid, regexRule);
                 DynamicModelUpdateServices.RegisterRegexRule(DocumentGuid, regexRule.Guid);
             }
@@ -101,7 +104,7 @@ namespace Regular.Views
                 // The rule already exists and is being edited. We'll generate a new temporary rule from the inputs to use as we transfer values across.
                 // We don't need to create a project parameter, but we may need to update its name.
                 // We need to update both the static cache and the entity saved in ExtensibleStorage.
-                RegexRule newRegexRule = new RegexRule(ruleNameInput, targetCategoryNameInput, trackingParameterNameInput, outputParameterNameInput, regexStringInput, RegexRuleParts);
+                RegexRule newRegexRule = new RegexRule(ruleNameInput, targetCategoryNamesInput, trackingParameterNameInput, outputParameterNameInput, regexStringInput, RegexRuleParts);
                 RegexRuleManager.UpdateRegexRule(DocumentGuid, RegexRule.Guid, newRegexRule);
                 ExtensibleStorageServices.UpdateRegexRuleInExtensibleStorage(DocumentGuid, RegexRule.Guid, newRegexRule);
                 DynamicModelUpdateServices.RegisterRegexRule(DocumentGuid, RegexRule.Guid);
@@ -176,7 +179,25 @@ namespace Regular.Views
         }
         private void ButtonEditRulePart_Click(object sender, RoutedEventArgs e)
         {
-
+            Button button = sender as Button;
+            RegexRulePart regexRulePart = button.DataContext as RegexRulePart;
+            switch (regexRulePart.RuleType)
+            {
+                case RuleTypes.AnyLetter:
+                    if (regexRulePart.CaseSensitiveDisplayString == "UPPER CASE") regexRulePart.CaseSensitiveDisplayString = "lower case";
+                    else if (regexRulePart.CaseSensitiveDisplayString == "lower case") regexRulePart.CaseSensitiveDisplayString = "Any Case";
+                    else { regexRulePart.CaseSensitiveDisplayString = "UPPER CASE"; }
+                    break;
+                case RuleTypes.AnyDigit:
+                    break;
+                case RuleTypes.FreeText:
+                    TaskDialog.Show("Test", "You are now editing free text");
+                    regexRulePart.RuleTypeDisplayText = "My example text";
+                    break;
+                case RuleTypes.SelectionSet:
+                    TaskDialog.Show("Test", "You are now editing selection set");
+                    break;
+            }
         }
     }
 }

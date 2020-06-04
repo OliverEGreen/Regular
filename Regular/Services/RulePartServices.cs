@@ -10,18 +10,28 @@ namespace Regular.Services
             switch (ruleType)
             {
                 case RuleTypes.AnyDigit:
-                    regexRulePart.RuleTypeDisplayString = "Any Digit";
+                    regexRulePart.RuleTypeDisplayText = "Any Digit";
+                    regexRulePart.IsCaseSensitive = false;
+                    regexRulePart.IsEditable = false;
+                    regexRulePart.EditButtonDisplayText = "0-9";
                     break;
                 case RuleTypes.AnyLetter:
-                    regexRulePart.RuleTypeDisplayString = "Any Letter";
+                    regexRulePart.RuleTypeDisplayText = "Any Letter";
+                    regexRulePart.IsCaseSensitive = true;
+                    regexRulePart.IsEditable = true;
+                    regexRulePart.EditButtonDisplayText = "A-Z";
                     break;
                 case RuleTypes.FreeText:
-                    regexRulePart.RequiresUserInput = true;
-                    regexRulePart.RuleTypeDisplayString = "Free Text";
+                    regexRulePart.RuleTypeDisplayText = "Free Text";
+                    regexRulePart.IsCaseSensitive = true;
+                    regexRulePart.IsEditable = true;
+                    regexRulePart.EditButtonDisplayText = "...";
                     break;
                 case RuleTypes.SelectionSet:
-                    regexRulePart.RequiresUserInput = true;
-                    regexRulePart.RuleTypeDisplayString = "Selection Set";
+                    regexRulePart.RuleTypeDisplayText = "Selection Set";
+                    regexRulePart.IsCaseSensitive = true;
+                    regexRulePart.IsEditable = true;
+                    regexRulePart.EditButtonDisplayText = "...";
                     break;
             }
             return regexRulePart;

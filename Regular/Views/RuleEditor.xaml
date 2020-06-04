@@ -55,8 +55,7 @@
         <Button Name="ButtonAddRulePart" Style="{StaticResource AddItemButton}" Height="24" Width="24" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,15,0,10" Click="ButtonAddRulePart_Click" />
         <Border BorderThickness="1" BorderBrush="{StaticResource TextBoxBorderColorDefault}" Grid.Row="6" Grid.ColumnSpan="2">
             <ScrollViewer Name="ScrollViewerRuleParts" Style="{StaticResource DefaultScrollerViewerStyle}" VerticalScrollBarVisibility="Visible" Grid.Row="6" Grid.ColumnSpan="2" PreviewMouseWheel="ScrollViewerRuleParts_PreviewMouseWheel">
-                <ListBox Name="ListBoxRuleParts" Style="{StaticResource StandardListBox}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
-                    
+                <ListBox Name="ListBoxRuleParts" Style="{StaticResource StandardListBox}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" ItemsSource="{Binding Rules, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Grid>
@@ -72,24 +71,10 @@
                                 <Rectangle Fill="#EBEBEB" Height="30" Stroke="#D9D9D9" StrokeThickness="1px" Grid.ColumnSpan="7" Margin="-4,-1,0,-1"/>
                                 <Button Name="ReorderUpButton" Style="{StaticResource ReorderUpButton}" Click="ReorderUpButton_Click" Height="12" Width="13" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="0" Margin="-4,0,0,0"/>
                                 <Button Name="ReorderDownButton" Style="{StaticResource ReorderDownButton}" Click="ReorderDownButton_Click" Height="12" Width="13" HorizontalAlignment="Left" VerticalAlignment="Bottom" Grid.Column="0" Grid.RowSpan="2" Margin="-4,0,0,0"/>
-                                <TextBlock x:Name="RegexRulePartTypeTextBlock" Text="{Binding RuleTypeDisplayString}" FontSize="13" Style="{StaticResource StandardText}" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,0,0"/>
-                                <Button Name="ButtonEditRulePart" Grid.Column="1" Content="A-Z" Width="40" Height="15" HorizontalAlignment="Left" Style="{StaticResource EditRulePartButton}" Click="ButtonEditRulePart_Click"/>
-                                <TextBlock Text="Match Case" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,0,0" FontFamily="SegoeUI" FontSize="12">
-                                    <TextBlock.Style>
-                                        <Style TargetType="{x:Type TextBlock}">
-                                            <Setter Property="Visibility" Value="Visible"/>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Text, ElementName=RegexRulePartTypeTextBlock}" Value="Any Digit">
-                                                    <Setter Property="Visibility" Value="Hidden"/>
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding Text, ElementName=RegexRulePartTypeTextBlock}" Value="Any Letter">
-                                                    <Setter Property="Text" Value="Upper Case"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
-                                <CheckBox Name="CheckBoxMatchCase" IsChecked="False" Grid.Column="3" HorizontalAlignment="Left" VerticalAlignment="Center" Background="{StaticResource WindowBackgroundColor}"/>
+                                <TextBlock x:Name="RegexRulePartTypeTextBlock" Text="{Binding RuleTypeDisplayText}" FontSize="13" Style="{StaticResource StandardText}" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,0,0"/>
+                                <Button Name="ButtonEditRulePart" Grid.Column="1" Content="{Binding EditButtonDisplayText}" Width="40" Height="15" HorizontalAlignment="Left" Style="{StaticResource EditRulePartButton}" Click="ButtonEditRulePart_Click"/>
+                                <TextBlock Text="Match Case" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,0,0" FontFamily="SegoeUI" FontSize="12" Visibility="{Binding CaseSensitiveVisibility}"/>
+                                <CheckBox Name="CheckBoxMatchCase" IsChecked="False" Grid.Column="3" HorizontalAlignment="Left" VerticalAlignment="Center" Background="{StaticResource WindowBackgroundColor}" Visibility="{Binding CaseSensitiveVisibility}"/>
                                 <TextBlock Text="Optional" Style="{StaticResource StandardText}" Grid.Column="4" VerticalAlignment="Center" Margin="10,0,0,0"/>
                                 <CheckBox Name="CheckBoxRulePartOptional" IsChecked="{Binding IsOptional}" Grid.Column="5" HorizontalAlignment="Left" VerticalAlignment="Center" Background="{StaticResource WindowBackgroundColor}"/>
                                 <Button Name="DeleteRegexRulePartButton" Style="{StaticResource DeleteItemButton}" HorizontalAlignment="Right" VerticalAlignment="Center" Width="25" Height="30" Margin="0,0,-3,0" Click="DeleteRegexRulePartButton_Click" Grid.Column="6"/>

@@ -4,12 +4,17 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Regular.Views"
+        xmlns:m="clr-namespace:Regular.Models"
+        xmlns:regular="clr-namespace:Regular"
         mc:Ignorable="d"
         Title=" Rule Manager" SizeToContent="WidthAndHeight" ResizeMode="CanResizeWithGrip" Style="{DynamicResource StandardWindow}" MinHeight="400" MaxHeight="700" MinWidth="418" MaxWidth="600">
     <Window.Resources>
         <ResourceDictionary Source="../Resources/RegularStyles.xaml"/>
     </Window.Resources>
     <Grid Margin="15">
+        <Grid.Resources>
+            <regular:RegexRules x:Key="RegularApp"/>
+        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
             <RowDefinition />
@@ -20,7 +25,7 @@
         <Button Name="ButtonAddNewRule" Style="{StaticResource AddItemButton}" VerticalAlignment="Center" Height="25" Width="25" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right" Click="ButtonAddNewRule_Click"/>
         <Border BorderThickness="1" BorderBrush="{StaticResource TextBoxBorderColorDefault}" Grid.Row="1" Margin="0,5,0,0">
             <ScrollViewer Name="RulesScrollViewer" Style="{StaticResource DefaultScrollerViewerStyle}" VerticalScrollBarVisibility="Visible" Grid.Row="5" Grid.ColumnSpan="2" PreviewMouseWheel="RegexRulesScrollViewer_PreviewMouseWheel">
-                <ListBox Name="RulesListBox" Style="{StaticResource StandardListBox}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                <ListBox Name="ListBoxRegexRules" Style="{StaticResource StandardListBox}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Grid>
@@ -36,7 +41,7 @@
                                 <Rectangle Fill="#EBEBEB" Height="30" Stroke="#D9D9D9" StrokeThickness="1px" Grid.ColumnSpan="7" Margin="-4,-1,-3,-1" ToolTip="{Binding ToolTipString}"/>
                                 <Button Name="ReorderUpButton" Style="{StaticResource ReorderUpButton}" Click="ReorderUpButton_Click" Height="12" Width="12" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="0" Margin="-4,0,0,0" ToolTip="Reorder Rule Up"/>
                                 <Button Name="ReorderDownButton" Style="{StaticResource ReorderDownButton}" Click="ReorderDownButton_Click" Height="12" Width="12" HorizontalAlignment="Left" VerticalAlignment="Bottom" Grid.Column="0" Grid.RowSpan="2" Margin="-4,0,0,0" ToolTip="Reorder Rule Down"/>
-                                <TextBlock x:Name="RegexRuleNameTextBlock" Text="{Binding Name}" FontSize="13" Style="{StaticResource StandardText}" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,0,0"/>
+                                <TextBlock x:Name="RegexRuleNameTextBlock" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" FontSize="13" Style="{StaticResource StandardText}" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,0,0"/>
                                 <Button x:Name="EditRegexRuleButton" Style="{StaticResource EditItemButton}" HorizontalAlignment="Right" Width="25" Height="30" Click="EditRegexRuleButton_Click" Grid.Row="0" Grid.Column="1" ToolTip="Edit Rule"/>
                                 <Button x:Name="DeleteRegexRuleButton" Style="{StaticResource DeleteItemButton}" HorizontalAlignment="Right" Width="25" Height="30" Click="DeleteRegexRuleButton_Click" Grid.Row="0" Grid.Column="2" Margin="0,0,-2,0" ToolTip="Delete Rule"/>
                             </Grid>
