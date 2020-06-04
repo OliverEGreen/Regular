@@ -39,10 +39,10 @@
         <TextBox Name="TextBoxNameYourRuleInput" Style="{StaticResource StandardTextBox}" Text="Type Here..." Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" VerticalContentAlignment="Center" ToolTip="Define a reference name for the rule you're creating."/>
         <Ellipse Name="EllipseNameYourRuleInput" Width="7" Height="7" Fill="LightGray" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Margin="5,0,6,0"/>
         <Label Content="Categories" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="2" Margin="0,5" VerticalContentAlignment="Center"/>
-        <ComboBox Name="ComboBoxCategoryInput" Text="Select Category" Style="{StaticResource StandardComboBox}" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center">
+        <ComboBox Name="ComboBoxCategoryInput" Text="Select Category" Style="{StaticResource StandardComboBox}" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" SelectedIndex="10">
         </ComboBox>
         <Label Content="Tracking Parameter" Style="{StaticResource StandardLabel}" Grid.Row="3" FontSize="13" Margin="0,5" VerticalContentAlignment="Center"/>
-        <ComboBox Name="ComboBoxTrackingParameterInput" Text="Select Parameter" Style="{StaticResource StandardComboBox}" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center">
+        <ComboBox Name="ComboBoxTrackingParameterInput" Text="Select Parameter" Style="{StaticResource StandardComboBox}" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" SelectedIndex="0">
             <ComboBoxItem>Comments</ComboBoxItem>
             <ComboBoxItem>Mark</ComboBoxItem>
             <ComboBoxItem>Number</ComboBoxItem>
