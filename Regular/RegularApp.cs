@@ -12,7 +12,7 @@ namespace Regular
 {
     public class RegularApp : IExternalApplication
     {
-        public static Dictionary<string, ObservableCollection<RegexRule>> AllRegexRules { get; set; }
+        //public static Dictionary<string, ObservableCollection<RegexRule>> AllRegexRules { get; set; }
         public static Dictionary<string, Document> RevitDocumentCache { get; set; }
         public static Application RevitApplication { get; set; }
         public Result OnStartup(UIControlledApplication uiControlledApp)
@@ -20,7 +20,7 @@ namespace Regular
             RegularRibbon.BuildRegularRibbon(uiControlledApp);
             
             // This keeps track of sets of rules per document, so is initialized as soon as possible
-            AllRegexRules = new Dictionary<string, ObservableCollection<RegexRule>>();
+            RegexRules.AllRegexRules = new Dictionary<string, ObservableCollection<RegexRule>>();
             RevitDocumentCache = new Dictionary<string, Document>();
             // Events which will add to or clean up the AllRegexRules cache
             uiControlledApp.ControlledApplication.DocumentOpened += ControlledApplication_DocumentOpened;
@@ -45,7 +45,7 @@ namespace Regular
             // Creates an accessible, stable reference to the Revit document
             RevitDocumentCache[documentGuid] = document;
             ObservableCollection<RegexRule> existingRegexRules = ExtensibleStorageServices.GetAllRegexRulesInExtensibleStorage(document);
-            AllRegexRules[documentGuid] = existingRegexRules == null ? new ObservableCollection<RegexRule>() : existingRegexRules;
+            RegexRules.AllRegexRules[documentGuid] = existingRegexRules == null ? new ObservableCollection<RegexRule>() : existingRegexRules;
 
             // If there are no saved rules we return, otherwise we establish the updaters
             if (existingRegexRules != null && existingRegexRules.Count < 1) { return; }
@@ -59,7 +59,7 @@ namespace Regular
             
             // Cleaning up the Revit Document and AllRegexRules Caches
             if (RevitDocumentCache.ContainsKey(documentId)) { RevitDocumentCache.Remove(documentId); }
-            if (AllRegexRules.ContainsKey(documentId)) { AllRegexRules.Remove(documentId); }
+            if (RegexRules.AllRegexRules.ContainsKey(documentId)) { RegexRules.AllRegexRules.Remove(documentId); }
         }
         public Result OnShutdown(UIControlledApplication uiControlledApp) { return Result.Succeeded; }
         

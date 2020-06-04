@@ -1,4 +1,5 @@
 ﻿using Regular.Models;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
@@ -7,10 +8,10 @@ namespace Regular
     public static class RegexRuleManager
     {
         // A central class with CRUD functionality to manage the document's RegexRules
-        public static RegexRule AddRegexRule(string documentGuid, string ruleName, string targetCategoryName, string trackingParameterName, string outputParameterName, string regexString, ObservableCollection<RegexRulePart> regexRuleParts)
+        public static RegexRule AddRegexRule(string documentGuid, string ruleName, List<string> targetCategoryNames, string trackingParameterName, string outputParameterName, string regexString, ObservableCollection<RegexRulePart> regexRuleParts)
         {
-            RegexRule regexRule = new RegexRule(ruleName, targetCategoryName, trackingParameterName, outputParameterName, regexString, regexRuleParts);
-            RegularApp.AllRegexRules[documentGuid].Add(regexRule);
+            RegexRule regexRule = new RegexRule(ruleName, targetCategoryNames, trackingParameterName, outputParameterName, regexString, regexRuleParts);
+            RegexRules.AllRegexRules[documentGuid].Add(regexRule);
             return regexRule;
         }
         public static RegexRule GetRegexRule(string documentGuid, string regexRuleGuid)
@@ -21,7 +22,7 @@ namespace Regular
         }
         public static ObservableCollection<RegexRule> GetDocumentRegexRules(string documentGuid)
         {
-            if (RegularApp.AllRegexRules.ContainsKey(documentGuid)) { return RegularApp.AllRegexRules[documentGuid]; }
+            if (RegexRules.AllRegexRules.ContainsKey(documentGuid)) { return RegexRules.AllRegexRules[documentGuid]; }
             return null;
         }
         public static void UpdateRegexRule(string documentGuid, string regexRuleGuid, RegexRule newRegexRule)
@@ -41,7 +42,7 @@ namespace Regular
         public static void DeleteRegexRule(string documentGuid, string regexRuleGuid)
         {
             // Deletes a RegexRule from the document's static cache
-            if (RegularApp.AllRegexRules.ContainsKey(documentGuid))
+            if (RegexRules.AllRegexRules.ContainsKey(documentGuid))
             {
                 ObservableCollection<RegexRule> documentRegexRules = GetDocumentRegexRules(documentGuid);
                 RegexRule regexRule = documentRegexRules.Where(x => x.Guid == regexRuleGuid).FirstOrDefault();
