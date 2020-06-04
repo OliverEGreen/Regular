@@ -1,6 +1,5 @@
 ﻿using Autodesk.Revit.DB;
 using Regular.Models;
-using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
@@ -19,26 +18,22 @@ namespace Regular.Views
         private static Document Document { get; set; }
         private static string DocumentGuid { get; set; }
         private RegexRule RegexRule { get; set; }
-        private ObservableCollection<RegexRulePart> RegexRuleParts { get; set; }
-        public RuleEditor(string documentGuid, string regexRuleGuid = null)
+        public RuleEditor(string documentGuid, RegexRule regexRule)
         {
             InitializeComponent();
-            RegexRule regexRule = RegexRuleManager.GetRegexRule(documentGuid, regexRuleGuid);
-                        
+            RegexRule = regexRule;
+            this.DataContext = RegexRule;
+
             // If we're editing an existing rule, it gets set to a static variable for accessibility
-            if (regexRule != null) { RegexRule = regexRule; }
-            Title = regexRule == null ? "Creating New Rule" : $"Editing Rule: {regexRule.Name}";
+            Title = RegexRuleManager.GetDocumentRegexRules(documentGuid).Contains(regexRule) ? $"Editing Rule: {regexRule.Name}" : "Creating New Rule";
             InitializeRuleEditor(documentGuid, regexRule);
         }
-        void InitializeRuleEditor(string documentGuid, RegexRule regexRule = null)
+        void InitializeRuleEditor(string documentGuid, RegexRule regexRule)
         {
             DocumentGuid = documentGuid;
             Document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
 
-            // Clearing and Initializing the RegexRuleParts box
-            RegexRuleParts = new ObservableCollection<RegexRulePart>();
-            RegexRuleParts.Clear();
-            ListBoxRuleParts.ItemsSource = RegexRuleParts;
+            ListBoxRuleParts.ItemsSource = regexRule.RegexRuleParts;
 
             // Binding ComboBox to our RuleType enumeration
             ComboBoxRulePartInput.ItemsSource = Enum.GetValues(typeof(RuleTypes)).Cast<RuleTypes>();
@@ -48,15 +43,6 @@ namespace Regular.Views
             ComboBoxCategoryInput.Items.Clear();
             ComboBoxCategoryInput.ItemsSource = userVisibleCategoryNames;
             
-            if (regexRule != null)
-            {
-                TextBoxNameYourRuleInput.Text = regexRule.Name;
-                TextBoxOutputParameterNameInput.Text = regexRule.OutputParameterName;
-                ComboBoxTrackingParameterInput.SelectedItem = regexRule.TrackingParameterName;
-                ComboBoxCategoryInput.SelectedItem = regexRule.TargetCategoryNames;
-                foreach(RegexRulePart regexRulePart in regexRule.RegexRuleParts) { RegexRuleParts.Add(regexRulePart); }
-            }
-
             EllipseNameYourRuleInput.Fill = (SolidColorBrush)this.Resources["EllipseColorGray"];
             EllipseOutputParameterNameInput.Fill = (SolidColorBrush)this.Resources["EllipseColorGray"];
 
@@ -75,28 +61,22 @@ namespace Regular.Views
         }
         private void ButtonAddRulePart_Click(object sender, RoutedEventArgs e)
         {
-            RegexRuleParts.Add(RulePartServices.CreateRegexRulePart((RuleTypes)ComboBoxRulePartInput.SelectedItem));
+            RegexRule.RegexRuleParts.Add(RulePartServices.CreateRegexRulePart((RuleTypes)ComboBoxRulePartInput.SelectedItem));
         }
         private void ButtonOK_Click(object sender, RoutedEventArgs e)
         {
-            string ruleNameInput = TextBoxNameYourRuleInput.Text;
-            string outputParameterNameInput = TextBoxOutputParameterNameInput.Text;
-            List<string> targetCategoryNamesInput = new List<string>() { ComboBoxCategoryInput.Text };
-            string trackingParameterNameInput = ComboBoxTrackingParameterInput.Text;
-            string regexStringInput = RegexAssembly.AssembleRegexString(RegexRuleParts);
-            
             // Initial check to see whether all inputs are valid; these will need to be reflected in the UI as well
             // We can probably have this check validation every time a user changes input, will need to be via event handler
             
             //if (!InputValidationServices.ValidateInputs(ruleNameInput, targetCategoryNameInput, trackingParameterNameInput, outputParameterNameInput, regexStringInput, RegexRuleParts)) return;
 
-            if (RegexRule == null)
+            if (!RegexRuleManager.GetDocumentRegexRules(DocumentGuid).Contains(RegexRule))
             {
-                // Takes all information from the form and builds a new RegexRule object. Needs to be saved in cache and in local storage.
                 // If a new rule, a project parameter needs to be created.
-                RegexRule regexRule = RegexRuleManager.AddRegexRule(DocumentGuid, ruleNameInput, targetCategoryNamesInput, trackingParameterNameInput, outputParameterNameInput, regexStringInput, RegexRuleParts);
-                ParameterServices.CreateProjectParameter(Document, outputParameterNameInput, ParameterType.Text, targetCategoryNamesInput, BuiltInParameterGroup.PG_IDENTITY_DATA, true);
-                ExtensibleStorageServices.AddRegexRuleToExtensibleStorage(DocumentGuid, regexRule);
+                ParameterServices.CreateProjectParameter(Document, RegexRule.OutputParameterName, ParameterType.Text, RegexRule.TargetCategoryNames, BuiltInParameterGroup.PG_IDENTITY_DATA, true);
+                
+                RegexRule regexRule = RegexRuleManager.SaveRegexRule(DocumentGuid, RegexRule.Name, RegexRule.TargetCategoryNames, RegexRule.TrackingParameterName, RegexRule.OutputParameterName, RegexRule.RegexString, RegexRule.RegexRuleParts);
+                ExtensibleStorageServices.SaveRegexRuleToExtensibleStorage(DocumentGuid, regexRule);
                 DynamicModelUpdateServices.RegisterRegexRule(DocumentGuid, regexRule.Guid);
             }
             else
@@ -104,7 +84,7 @@ namespace Regular.Views
                 // The rule already exists and is being edited. We'll generate a new temporary rule from the inputs to use as we transfer values across.
                 // We don't need to create a project parameter, but we may need to update its name.
                 // We need to update both the static cache and the entity saved in ExtensibleStorage.
-                RegexRule newRegexRule = new RegexRule(ruleNameInput, targetCategoryNamesInput, trackingParameterNameInput, outputParameterNameInput, regexStringInput, RegexRuleParts);
+                RegexRule newRegexRule = new RegexRule(RegexRule.Name, RegexRule.TargetCategoryNames, RegexRule.TrackingParameterName, RegexRule.OutputParameterName, RegexRule.RegexString, RegexRule.RegexRuleParts);
                 RegexRuleManager.UpdateRegexRule(DocumentGuid, RegexRule.Guid, newRegexRule);
                 ExtensibleStorageServices.UpdateRegexRuleInExtensibleStorage(DocumentGuid, RegexRule.Guid, newRegexRule);
                 DynamicModelUpdateServices.RegisterRegexRule(DocumentGuid, RegexRule.Guid);
@@ -114,7 +94,7 @@ namespace Regular.Views
         private void DeleteRegexRulePartButton_Click(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
-            RegexRuleParts.Remove((RegexRulePart)button.DataContext);
+            RegexRule.RegexRuleParts.Remove((RegexRulePart)button.DataContext);
         }
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
@@ -124,29 +104,29 @@ namespace Regular.Views
         {
             Button button = sender as Button;
             RegexRulePart regexRulePart = (RegexRulePart)button.DataContext;
-            int index = RegexRuleParts.IndexOf(regexRulePart);
+            int index = RegexRule.RegexRuleParts.IndexOf(regexRulePart);
 
             if(index > 0)
             {
-                RegexRuleParts.RemoveAt(index);
-                RegexRuleParts.Insert(index - 1, regexRulePart);
+                RegexRule.RegexRuleParts.RemoveAt(index);
+                RegexRule.RegexRuleParts.Insert(index - 1, regexRulePart);
             }            
         }
         private void ReorderDownButton_Click(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
             RegexRulePart regexRulePart = (RegexRulePart)button.DataContext;
-            int index = RegexRuleParts.IndexOf(regexRulePart);
+            int index = RegexRule.RegexRuleParts.IndexOf(regexRulePart);
 
-            if (index < RegexRuleParts.Count)
+            if (index < RegexRule.RegexRuleParts.Count)
             {
-                RegexRuleParts.RemoveAt(index);
-                RegexRuleParts.Insert(index + 1, regexRulePart);
+                RegexRule.RegexRuleParts.RemoveAt(index);
+                RegexRule.RegexRuleParts.Insert(index + 1, regexRulePart);
             }
         }
         private void DisplayUserFeedback(object sender, RoutedEventArgs e)
         {
-            string userFeedback = InputValidationServices.ReturnUserFeedback(TextBoxNameYourRuleInput.Text, TextBoxOutputParameterNameInput.Text, RegexRuleParts);
+            string userFeedback = InputValidationServices.ReturnUserFeedback(TextBoxNameYourRuleInput.Text, TextBoxOutputParameterNameInput.Text, RegexRule.RegexRuleParts);
             if (userFeedback == null)
             {
                 TextBoxUserFeedback.Visibility = System.Windows.Visibility.Hidden;

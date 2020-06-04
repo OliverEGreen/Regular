@@ -89,7 +89,7 @@ namespace Regular.Services
             if (regularSchema != null) return regularSchema;
             return ConstructRegularSchema(document);
         }
-        public static void AddRegexRuleToExtensibleStorage(string documentGuid, RegexRule regexRule)
+        public static void SaveRegexRuleToExtensibleStorage(string documentGuid, RegexRule regexRule)
         {
             Document document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
             //This needs to be turned into a method taking a RegexRule and saving to ExtensibleStorage
