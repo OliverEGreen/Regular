@@ -5,6 +5,7 @@ using Regular.Services;
 using Regular.Models;
 using Regular;
 using System.Collections.ObjectModel;
+using System.Collections.Generic;
 
 namespace Regular.Views
 {
@@ -23,15 +24,16 @@ namespace Regular.Views
 
         private void ButtonAddNewRule_Click(object sender, RoutedEventArgs e)
         {
-            RuleEditor ruleEditor = new RuleEditor(DocumentServices.GetRevitDocumentGuid(Document));
+            RegexRule regexRule = new RegexRule("", new List<string>() { }, "", "", "", new ObservableCollection<RegexRulePart>());
+            RuleEditor ruleEditor = new RuleEditor(DocumentServices.GetRevitDocumentGuid(Document), regexRule);
             ruleEditor.Closed += RuleEditor_Closed;
             ruleEditor.ShowDialog();
         }
         private void EditRegexRuleButton_Click(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
-            string regexRuleGuid = ((RegexRule)button.DataContext).Guid;
-            RuleEditor ruleEditor = new RuleEditor(DocumentServices.GetRevitDocumentGuid(Document), regexRuleGuid);
+            RegexRule regexRule = ((RegexRule)button.DataContext);
+            RuleEditor ruleEditor = new RuleEditor(DocumentServices.GetRevitDocumentGuid(Document), regexRule);
             ruleEditor.ShowDialog();
         }
         private void DeleteRegexRuleButton_Click(object sender, RoutedEventArgs e)

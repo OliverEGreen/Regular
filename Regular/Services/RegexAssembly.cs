@@ -37,6 +37,7 @@ namespace Regular.Services
         }
         private static string SanitizeWord(string word)
         {
+            if (String.IsNullOrEmpty(word)) return word;
             string outputString = "";
             foreach(char character in word)
             {

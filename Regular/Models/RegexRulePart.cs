@@ -1,26 +1,87 @@
 ﻿using System.ComponentModel;
-using System.Windows;
 
 namespace Regular.Models
 {
     public class RegexRulePart : INotifyPropertyChanged
     {
+        private string ruleTypeDisplayText;
+        private string editButtonDisplayText;
+        private bool isOptional;
+        private bool isCaseSensitive;
+        private string caseSensitiveDisplayString;
+        private bool isEditable;
+        private string rawUserInputValue;
+        
         public RuleTypes RuleType { get; }
-        public string RuleTypeDisplayText { get; set; } = "Rule";
-        public string EditButtonDisplayText { get; set; } = "...";
-        public bool IsOptional { get; set; } = false;
-        public bool IsCaseSensitive { get; set; } = true;
-        public string CaseSensitiveDisplayString { get; set; } = "Any Case";
-        public bool IsEditable { get; set; } = true;
-        public string RawUserInputValue { get; set; } = "";
-        Visibility CaseSensitiveVisibility { get; set; }
+        public string RuleTypeDisplayText
+        {
+            get { return ruleTypeDisplayText; }
+            set
+            {
+                ruleTypeDisplayText = value;
+                NotifyPropertyChanged("RuleTypeDisplayText");
+            }
+        }
+        public string EditButtonDisplayText
+        {
+            get { return editButtonDisplayText; }
+            set
+            {
+                editButtonDisplayText = value;
+                NotifyPropertyChanged("EditButtonDisplayText");
+            }
+        }
+        public bool IsOptional
+        {
+            get { return isOptional; }
+            set
+            {
+                isOptional = value;
+                NotifyPropertyChanged("IsOptional");
+            }
+        }
+        public bool IsCaseSensitive
+        {
+            get { return isCaseSensitive; }
+            set
+            {
+                isCaseSensitive = value;
+                NotifyPropertyChanged("IsCaseSensitive");
+            }
+        }
+        public string CaseSensitiveDisplayString
+        {
+            get { return caseSensitiveDisplayString; }
+            set
+            {
+                caseSensitiveDisplayString = value;
+                NotifyPropertyChanged("CaseSensitiveDisplayString");
+            }
+        }
+        public bool IsEditable
+        {
+            get { return isEditable; }
+            set
+            {
+                isEditable = value;
+                NotifyPropertyChanged("IsEditable");
+            }
+        }
+        public string RawUserInputValue
+        {
+            get { return rawUserInputValue; }
+            set
+            {
+                rawUserInputValue = value;
+                NotifyPropertyChanged("RawUserInputValue");
+            }
+        }
 
         // Our default constructor for newly-created RegexRuleParts
         public RegexRulePart(RuleTypes ruleType)
         {
             RuleType = ruleType;
             IsEditable = RuleType == RuleTypes.FreeText || RuleType == RuleTypes.SelectionSet ? true : false;
-            CaseSensitiveVisibility = RuleType == RuleTypes.AnyDigit ? Visibility.Visible : Visibility.Hidden;
         }
         // Our detailed constructor for recreating stored RegexRuleParts that were loaded from ExtensibleStorage
         public RegexRulePart(RuleTypes ruleType, bool isOptional, bool isCaseSensitive, bool requiresUserInput, string rawUserInputValue)
@@ -33,12 +94,9 @@ namespace Regular.Models
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged(PropertyChangedEventArgs e)
+        private void NotifyPropertyChanged(string propertyName)
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, e);
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
