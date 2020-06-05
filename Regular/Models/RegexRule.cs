@@ -10,6 +10,8 @@ namespace Regular.Models
         private string name;
         private List<string> targetCategoryNames;
         private ObservableCollection<RegexRulePart> regexRuleParts;
+        private string toolTipString;
+
         public string Name
         {
             get { return name; }
@@ -31,7 +33,25 @@ namespace Regular.Models
         }
         public string TrackingParameterName { get; set; }
         public string OutputParameterName { get; set; }
-        public string ToolTipString { get; set; }
+        public string ToolTip
+        {
+            get
+            {
+                return $"Rule Name: {Name}" + Environment.NewLine +
+                            $"Applies To: {String.Join(", ", TargetCategoryNames)}" + Environment.NewLine +
+                            $"Created By: {Environment.UserName}" + Environment.NewLine +
+                            $"Created At: {DateTime.Now.ToString("r")}" + Environment.NewLine +
+                            $"Regex String: {RegexString}";
+            }
+            set
+            {
+                toolTipString = ToolTip;
+                NotifyPropertyChanged("ToolTip");
+                NotifyPropertyChanged("Name");
+                NotifyPropertyChanged("TargetCategoryNames");
+                NotifyPropertyChanged("RegexString");
+            }
+        }
         public string RegexString { get; set; }
         public ObservableCollection<RegexRulePart> RegexRuleParts
         {
@@ -43,32 +63,10 @@ namespace Regular.Models
             }
         }
 
-        // Constructor, when user creates a new rule we require (and set) the following information
-        public RegexRule(string ruleName, List<string> targetCategoryNames, string trackingParameterName, string outputParameterName, string regexString, ObservableCollection<RegexRulePart> regexRuleParts)
+        // Constructor
+        public RegexRule()
         {
             Guid = System.Guid.NewGuid().ToString();
-            Name = ruleName;
-            TargetCategoryNames = targetCategoryNames;
-            TrackingParameterName = trackingParameterName;
-            OutputParameterName = outputParameterName;
-            RegexString = regexString;
-            RegexRuleParts = regexRuleParts;
-            ToolTipString = $"Rule Name: {Name}" + Environment.NewLine +
-                            $"Applies To: {String.Join(", ", TargetCategoryNames)}" + Environment.NewLine +
-                            $"Created By: {Environment.UserName}" + Environment.NewLine +
-                            $"Created At: {DateTime.Now.ToString("r")}" + Environment.NewLine +
-                            $"Regex String: {RegexString}";
-        }
-        // Constructor when recreating an existing rule from storage
-        public RegexRule(string guid, string ruleName, List<string> targetCategoryNames, string trackingParameterName, string outputParameterName, string regexString, ObservableCollection<RegexRulePart> regexRuleParts)
-        {
-            Guid = guid;
-            Name = ruleName;
-            //TargetCategoryNames = targetCategoryName;
-            TrackingParameterName = trackingParameterName;
-            OutputParameterName = outputParameterName;
-            RegexString = regexString;
-            RegexRuleParts = regexRuleParts;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

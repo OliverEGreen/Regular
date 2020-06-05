@@ -8,9 +8,8 @@ namespace Regular
     public static class RegexRuleManager
     {
         // A central class with CRUD functionality to manage the document's RegexRules
-        public static RegexRule SaveRegexRule(string documentGuid, string ruleName, List<string> targetCategoryNames, string trackingParameterName, string outputParameterName, string regexString, ObservableCollection<RegexRulePart> regexRuleParts)
+        public static RegexRule SaveRegexRule(string documentGuid, RegexRule regexRule)
         {
-            RegexRule regexRule = new RegexRule(ruleName, targetCategoryNames, trackingParameterName, outputParameterName, regexString, regexRuleParts);
             RegexRules.AllRegexRules[documentGuid].Add(regexRule);
             return regexRule;
         }
@@ -24,6 +23,10 @@ namespace Regular
         {
             if (RegexRules.AllRegexRules.ContainsKey(documentGuid)) { return RegexRules.AllRegexRules[documentGuid]; }
             return null;
+        }
+        public static List<string> GetDocumentRegexRuleGuids(string documentGuid)
+        {
+            return GetDocumentRegexRules(documentGuid).Select(x => x.Guid).ToList();
         }
         public static void UpdateRegexRule(string documentGuid, string regexRuleGuid, RegexRule newRegexRule)
         {

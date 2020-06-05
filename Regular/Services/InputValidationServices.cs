@@ -26,7 +26,7 @@ namespace Regular.Services
         {
             if (ValidateRuleName(ruleNameInput) == false) return "Rule Name cannot exceed 50 characters";
             else if (ValidateOutputParameterName(outputParameterNameInput) == false) return @"Output Parameter cannot contain  / : { } [ ] | ; > < ? ` ~";
-            else if (regexRuleParts.Count < 1) return "Rules require at least 1 rule part";
+            else if (regexRuleParts != null && regexRuleParts.Count < 1) return "Rules require at least 1 rule part";
             else return null;
         }
 

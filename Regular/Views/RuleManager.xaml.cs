@@ -24,7 +24,16 @@ namespace Regular.Views
 
         private void ButtonAddNewRule_Click(object sender, RoutedEventArgs e)
         {
-            RegexRule regexRule = new RegexRule("", new List<string>() { }, "", "", "", new ObservableCollection<RegexRulePart>());
+            RegexRule regexRule = new RegexRule()
+            {
+                Name = "Name",
+                OutputParameterName = "OutputParameterName",
+                RegexRuleParts = new ObservableCollection<RegexRulePart>(),
+                RegexString = "RegexString",
+                TargetCategoryNames = new List<string>(),
+                ToolTip = "ToolTip",
+                TrackingParameterName = "TrackingParameterName"
+            };
             RuleEditor ruleEditor = new RuleEditor(DocumentServices.GetRevitDocumentGuid(Document), regexRule);
             ruleEditor.Closed += RuleEditor_Closed;
             ruleEditor.ShowDialog();

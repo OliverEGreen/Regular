@@ -61,5 +61,12 @@ namespace Regular.Services
             }
             return null;
         }
+
+        public static List<Parameter> ConvertParameterSetToList(ParameterSet parameterSet)
+        {
+            List<Parameter> parameters = new List<Parameter>();
+            foreach (Parameter parameter in parameterSet) parameters.Add(parameter);
+            return parameters;
+        }
     }
 }
