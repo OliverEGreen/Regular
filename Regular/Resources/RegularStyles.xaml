@@ -47,14 +47,14 @@
         <Setter Property="FontSize" Value="12px"/>
         <Setter Property="Padding" Value="0px"/>
         <Setter Property="Foreground" Value="{StaticResource FontColorDefault}"/>
-        <Setter Property="Background" Value="DarkGray"/>
+        <Setter Property="Background" Value="White"/>
         <Setter Property="Height" Value="22px"/>
         <Setter Property="Margin" Value="0px"/>
-        <Setter Property="Padding" Value="3,0,0,0"/>
+        <Setter Property="Padding" Value="5,0,0,0"/>
         <Setter Property="BorderThickness" Value="1px"/>
         <Setter Property="VerticalAlignment" Value="Top"/>
-        <Setter Property="IsEditable" Value="True"/>
         <Setter Property="IsReadOnly" Value="True"/>
+        <Setter Property="IsEditable" Value="True"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
     </Style>
     <Style x:Key="StandardTextBox" TargetType="TextBox">

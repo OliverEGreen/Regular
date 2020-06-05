@@ -116,14 +116,23 @@ namespace Regular.Services
             {
                 string guid = entity.Get<Guid>("GUID").ToString();
                 string name = entity.Get<string>("RuleName");
-                List<string> categoryNames = entity.Get<IList<string>>("CategoryNames").ToList<string>();
+                List<string> targetCategoryNames = entity.Get<IList<string>>("CategoryNames").ToList<string>();
                 string trackingParameterName = entity.Get<string>("TrackingParameterName");
                 string outputParameterName = entity.Get<string>("OutputParameterName");
                 string regexString = entity.Get<string>("RegexString");
                 List<string> regexRulePartsString = entity.Get<IList<string>>("RegexRuleParts").ToList<string>();
                 ObservableCollection<RegexRulePart> regexRuleParts = SerializationServices.DeserializeRegexRulePartsInExtensibleStorage(regexRulePartsString);
 
-                return new RegexRule(guid, name, categoryNames, trackingParameterName, outputParameterName, regexString, regexRuleParts);
+                return new RegexRule()
+                {
+                    Guid = guid,
+                    Name = name,
+                    OutputParameterName = outputParameterName,
+                    RegexRuleParts = regexRuleParts,
+                    RegexString = regexString,
+                    TargetCategoryNames = targetCategoryNames,
+                    TrackingParameterName = trackingParameterName
+                };                
             }
             Schema regularSchema = GetRegularSchema(document);
 

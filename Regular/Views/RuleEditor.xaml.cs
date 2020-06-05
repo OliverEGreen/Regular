@@ -33,16 +33,19 @@ namespace Regular.Views
             DocumentGuid = documentGuid;
             Document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
 
-            ListBoxRuleParts.ItemsSource = regexRule.RegexRuleParts;
-
             // Binding ComboBox to our RuleType enumeration
             ComboBoxRulePartInput.ItemsSource = Enum.GetValues(typeof(RuleTypes)).Cast<RuleTypes>();
 
             // Populating ComboBox of user-visible Revit Categories
-            List<string> userVisibleCategoryNames = CategoryServices.GetListFromCategorySet(Document.Settings.Categories).Where(x => x.AllowsBoundParameters).Select(i => i.Name).OrderBy(i => i).ToList();
-            ComboBoxCategoryInput.Items.Clear();
-            ComboBoxCategoryInput.ItemsSource = userVisibleCategoryNames;
-            
+            ComboBoxCategoryInput.ItemsSource = CategoryServices.GetListFromCategorySet(Document.Settings.Categories).Where(x => x.AllowsBoundParameters).OrderBy(i => i.Name).ToList();
+
+            // Some random parameters for now - we need the ability to look up the parameters for a particular category
+            // Normally we can use a FilteredElementCollector to get these, however it's going to be tricky if we have no elements of that category
+            // A workaround may involve creating a schedule and reading the schedulable parameters
+            FamilyInstance door = new FilteredElementCollector(Document).OfCategory(BuiltInCategory.OST_Doors).WhereElementIsNotElementType().OfType<FamilyInstance>().ToList().FirstOrDefault();
+            List<Parameter> allProjectParameters = ParameterServices.ConvertParameterSetToList(door.Parameters).OrderBy(x => x.Definition.Name).ToList();
+            ComboBoxTrackingParameterInput.ItemsSource = allProjectParameters;
+
             EllipseNameYourRuleInput.Fill = (SolidColorBrush)this.Resources["EllipseColorGray"];
             EllipseOutputParameterNameInput.Fill = (SolidColorBrush)this.Resources["EllipseColorGray"];
 
@@ -65,26 +68,32 @@ namespace Regular.Views
         }
         private void ButtonOK_Click(object sender, RoutedEventArgs e)
         {
-            // Initial check to see whether all inputs are valid; these will need to be reflected in the UI as well
-            // We can probably have this check validation every time a user changes input, will need to be via event handler
-            
-            //if (!InputValidationServices.ValidateInputs(ruleNameInput, targetCategoryNameInput, trackingParameterNameInput, outputParameterNameInput, regexStringInput, RegexRuleParts)) return;
-
-            if (!RegexRuleManager.GetDocumentRegexRules(DocumentGuid).Contains(RegexRule))
+            // Testing to see whether the current rule's GUID exists
+            if (!RegexRuleManager.GetDocumentRegexRuleGuids(DocumentGuid).Contains(RegexRule.Guid))
             {
                 // If a new rule, a project parameter needs to be created.
                 ParameterServices.CreateProjectParameter(Document, RegexRule.OutputParameterName, ParameterType.Text, RegexRule.TargetCategoryNames, BuiltInParameterGroup.PG_IDENTITY_DATA, true);
-                
-                RegexRule regexRule = RegexRuleManager.SaveRegexRule(DocumentGuid, RegexRule.Name, RegexRule.TargetCategoryNames, RegexRule.TrackingParameterName, RegexRule.OutputParameterName, RegexRule.RegexString, RegexRule.RegexRuleParts);
-                ExtensibleStorageServices.SaveRegexRuleToExtensibleStorage(DocumentGuid, regexRule);
-                DynamicModelUpdateServices.RegisterRegexRule(DocumentGuid, regexRule.Guid);
+
+                // The static RegexRule should already have inputs set by the UI forms?
+                RegexRuleManager.SaveRegexRule(DocumentGuid, RegexRule);
+                ExtensibleStorageServices.SaveRegexRuleToExtensibleStorage(DocumentGuid, RegexRule);
+                DynamicModelUpdateServices.RegisterRegexRule(DocumentGuid, RegexRule.Guid);
             }
             else
             {
                 // The rule already exists and is being edited. We'll generate a new temporary rule from the inputs to use as we transfer values across.
                 // We don't need to create a project parameter, but we may need to update its name.
                 // We need to update both the static cache and the entity saved in ExtensibleStorage.
-                RegexRule newRegexRule = new RegexRule(RegexRule.Name, RegexRule.TargetCategoryNames, RegexRule.TrackingParameterName, RegexRule.OutputParameterName, RegexRule.RegexString, RegexRule.RegexRuleParts);
+                RegexRule newRegexRule = new RegexRule()
+                {
+                    Guid = RegexRule.Guid,
+                    Name = RegexRule.Name,
+                    TargetCategoryNames = RegexRule.TargetCategoryNames,
+                    TrackingParameterName = RegexRule.TrackingParameterName,
+                    OutputParameterName = RegexRule.OutputParameterName,
+                    RegexString = RegexRule.RegexString,
+                    RegexRuleParts = RegexRule.RegexRuleParts
+                };
                 RegexRuleManager.UpdateRegexRule(DocumentGuid, RegexRule.Guid, newRegexRule);
                 ExtensibleStorageServices.UpdateRegexRuleInExtensibleStorage(DocumentGuid, RegexRule.Guid, newRegexRule);
                 DynamicModelUpdateServices.RegisterRegexRule(DocumentGuid, RegexRule.Guid);
@@ -178,6 +187,21 @@ namespace Regular.Views
                     TaskDialog.Show("Test", "You are now editing selection set");
                     break;
             }
+        }
+
+        private void ComboBoxCategoryInput_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void CategoryCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void CategoryCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
