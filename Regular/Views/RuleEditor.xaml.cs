@@ -1,5 +1,5 @@
 ﻿using Autodesk.Revit.DB;
-using Regular.Models;
+using Regular.ViewModels;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
@@ -17,6 +17,7 @@ namespace Regular.Views
     {
         private static Document Document { get; set; }
         private static string DocumentGuid { get; set; }
+        private List<Category> UserVisibleCategories { get; set; }
         private RegexRule RegexRule { get; set; }
         public RuleEditor(string documentGuid, RegexRule regexRule)
         {
@@ -37,7 +38,8 @@ namespace Regular.Views
             ComboBoxRulePartInput.ItemsSource = Enum.GetValues(typeof(RuleTypes)).Cast<RuleTypes>();
 
             // Populating ComboBox of user-visible Revit Categories
-            ComboBoxCategoryInput.ItemsSource = CategoryServices.GetListFromCategorySet(Document.Settings.Categories).Where(x => x.AllowsBoundParameters).OrderBy(i => i.Name).ToList();
+            UserVisibleCategories = CategoryServices.GetListFromCategorySet(Document.Settings.Categories).Where(x => x.AllowsBoundParameters).OrderBy(i => i.Name).ToList();
+            ComboBoxCategoryInput.ItemsSource = UserVisibleCategories.Select(x => x.Name).ToList();
 
             // Some random parameters for now - we need the ability to look up the parameters for a particular category
             // Normally we can use a FilteredElementCollector to get these, however it's going to be tricky if we have no elements of that category
@@ -72,7 +74,7 @@ namespace Regular.Views
             if (!RegexRuleManager.GetDocumentRegexRuleGuids(DocumentGuid).Contains(RegexRule.Guid))
             {
                 // If a new rule, a project parameter needs to be created.
-                ParameterServices.CreateProjectParameter(Document, RegexRule.OutputParameterName, ParameterType.Text, RegexRule.TargetCategoryNames, BuiltInParameterGroup.PG_IDENTITY_DATA, true);
+                ParameterServices.CreateProjectParameter(Document, RegexRule.OutputParameterName, ParameterType.Text, RegexRule.TargetCategoryIds, BuiltInParameterGroup.PG_IDENTITY_DATA, true);
 
                 // The static RegexRule should already have inputs set by the UI forms?
                 RegexRuleManager.SaveRegexRule(DocumentGuid, RegexRule);
@@ -88,7 +90,7 @@ namespace Regular.Views
                 {
                     Guid = RegexRule.Guid,
                     Name = RegexRule.Name,
-                    TargetCategoryNames = RegexRule.TargetCategoryNames,
+                    TargetCategoryIds = RegexRule.TargetCategoryIds,
                     TrackingParameterName = RegexRule.TrackingParameterName,
                     OutputParameterName = RegexRule.OutputParameterName,
                     RegexString = RegexRule.RegexString,
@@ -189,19 +191,22 @@ namespace Regular.Views
             }
         }
 
-        private void ComboBoxCategoryInput_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
         private void CategoryCheckBox_Checked(object sender, RoutedEventArgs e)
         {
-
+            CheckBox checkBox = sender as CheckBox;
+            string categoryName = checkBox.DataContext.ToString();
+            Category category = UserVisibleCategories.Where(x => x.Name == categoryName).FirstOrDefault();
+            if (RegexRule.TargetCategoryIds.Contains(category.Id.ToString())) return;
+            RegexRule.TargetCategoryIds.Add(category.Id.ToString());
         }
 
         private void CategoryCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
-
+            CheckBox checkBox = sender as CheckBox;
+            string categoryName = checkBox.DataContext.ToString();
+            Category category = UserVisibleCategories.Where(x => x.Name == categoryName).FirstOrDefault();
+            if (!RegexRule.TargetCategoryIds.Contains(category.Id.ToString())) return;
+            RegexRule.TargetCategoryIds.Remove(category.Id.ToString());
         }
     }
 }

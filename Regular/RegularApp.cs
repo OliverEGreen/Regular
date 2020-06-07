@@ -5,8 +5,9 @@ using Autodesk.Revit.UI;
 using Autodesk.Revit.DB.Events;
 using Application = Autodesk.Revit.ApplicationServices.Application;
 using System.Collections.ObjectModel;
-using Regular.Models;
+using Regular.ViewModels;
 using Regular.Services;
+using Regular.ViewModels;
 
 namespace Regular
 {

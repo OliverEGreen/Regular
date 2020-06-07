@@ -12,7 +12,7 @@ namespace Regular.Services
 {
     public static class ParameterServices
     {
-        public static void CreateProjectParameter(Document document, string parameterName, ParameterType parameterType, List<string> categoryNames, BuiltInParameterGroup builtInParameterGroup, bool isInstanceParameter)
+        public static void CreateProjectParameter(Document document, string parameterName, ParameterType parameterType, List<string> targetCategoryIdStrings, BuiltInParameterGroup builtInParameterGroup, bool isInstanceParameter)
         {
             // Spiderinnet's hacky method to create a project parameter, despite the Revit API's limitations on this
             // From https:// spiderinnet.typepad.com/blog/2011/05/parameter-of-revit-api-31-create-project-parameter.html
@@ -20,10 +20,11 @@ namespace Regular.Services
             // It then binds this back to the model as an InstanceBinding and deletes the temporary stuff
 
             //Creating the necessary categoryset to create the outputParameter
-            Category category = CategoryServices.GetCategoryByName(document, categoryNames.FirstOrDefault());
-            List<Category> categoriesList = new List<Category>() { category };
-            CategorySet categorySet = CategoryServices.GetCategorySetFromList(document, categoriesList);
-            
+
+            List<ElementId> targetCategoryIds = targetCategoryIdStrings.Select(x => new ElementId(Convert.ToInt32(x))).ToList();
+            List<Category> categories = targetCategoryIds.Select(x => document.GetElement(x)).OfType<Category>().ToList();
+            CategorySet categorySet = CategoryServices.GetCategorySetFromList(document, categories);
+                        
             using (Transaction transaction = new Transaction(document, $"Regular - Creating New Project Parameter {parameterName}")) 
             {
                 transaction.Start();

@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
-namespace Regular.Models
+namespace Regular.ViewModels
 {
     public class RegexRule : INotifyPropertyChanged
     {
         private string name;
-        private List<string> targetCategoryNames;
+        private List<string> targetCategoryIds;
         private ObservableCollection<RegexRulePart> regexRuleParts;
         private string toolTipString;
 
@@ -22,13 +22,13 @@ namespace Regular.Models
             }
         }
         public string Guid { get; set; }
-        public List<string> TargetCategoryNames
+        public List<string> TargetCategoryIds
         {
-            get { return targetCategoryNames; }
+            get { return targetCategoryIds; }
             set
             {
-                targetCategoryNames = value;
-                NotifyPropertyChanged("TargetCategoryNames");
+                targetCategoryIds = value;
+                NotifyPropertyChanged("TargetCategoryIds");
             }
         }
         public string TrackingParameterName { get; set; }
@@ -38,17 +38,17 @@ namespace Regular.Models
             get
             {
                 return $"Rule Name: {Name}" + Environment.NewLine +
-                            $"Applies To: {String.Join(", ", TargetCategoryNames)}" + Environment.NewLine +
+                            $"Applies To: {String.Join(", ", TargetCategoryIds)}" + Environment.NewLine +
                             $"Created By: {Environment.UserName}" + Environment.NewLine +
                             $"Created At: {DateTime.Now.ToString("r")}" + Environment.NewLine +
                             $"Regex String: {RegexString}";
             }
             set
             {
-                toolTipString = ToolTip;
+                toolTipString = value;
                 NotifyPropertyChanged("ToolTip");
                 NotifyPropertyChanged("Name");
-                NotifyPropertyChanged("TargetCategoryNames");
+                NotifyPropertyChanged("TargetCategoryIds");
                 NotifyPropertyChanged("RegexString");
             }
         }

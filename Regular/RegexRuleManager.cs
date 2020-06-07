@@ -1,4 +1,4 @@
-﻿using Regular.Models;
+﻿using Regular.ViewModels;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -39,7 +39,7 @@ namespace Regular
             existingRegexRule.RegexRuleParts = newRegexRule.RegexRuleParts;
             existingRegexRule.RegexString = newRegexRule.RegexString;
             existingRegexRule.Name = newRegexRule.Name;
-            existingRegexRule.TargetCategoryNames = newRegexRule.TargetCategoryNames;
+            existingRegexRule.TargetCategoryIds = newRegexRule.TargetCategoryIds;
             existingRegexRule.TrackingParameterName = newRegexRule.TrackingParameterName;
         }
         public static void DeleteRegexRule(string documentGuid, string regexRuleGuid)

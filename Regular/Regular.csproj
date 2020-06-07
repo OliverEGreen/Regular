@@ -71,9 +71,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BuildRegularRibbon.cs" />
-    <Compile Include="Models\RegexRule.cs" />
-    <Compile Include="Models\RegexRulePart.cs" />
-    <Compile Include="Models\RuleTypes.cs" />
+    <Compile Include="ViewModels\ObservableObject.cs" />
+    <Compile Include="ViewModels\RegexRule.cs" />
+    <Compile Include="ViewModels\RegexRulePart.cs" />
+    <Compile Include="ViewModels\RuleTypes.cs" />
     <Compile Include="RegexRules.cs" />
     <Compile Include="RegexRuleManager.cs" />
     <Compile Include="RegularApp.cs" />
