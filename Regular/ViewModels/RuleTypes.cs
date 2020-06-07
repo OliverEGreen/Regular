@@ -1,4 +1,4 @@
-﻿namespace Regular.Models
+﻿namespace Regular.ViewModels
 {
     public enum RuleTypes
     {

@@ -2,7 +2,7 @@
 using Autodesk.Revit.DB;
 using System.Windows.Controls;
 using Regular.Services;
-using Regular.Models;
+using Regular.ViewModels;
 using Regular;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
@@ -30,7 +30,7 @@ namespace Regular.Views
                 OutputParameterName = "OutputParameterName",
                 RegexRuleParts = new ObservableCollection<RegexRulePart>(),
                 RegexString = "RegexString",
-                TargetCategoryNames = new List<string>(),
+                TargetCategoryIds = new List<string>(),
                 ToolTip = "ToolTip",
                 TrackingParameterName = "TrackingParameterName"
             };

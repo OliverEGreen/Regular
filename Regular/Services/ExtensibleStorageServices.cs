@@ -1,7 +1,7 @@
 ﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.ExtensibleStorage;
 using Autodesk.Revit.UI;
-using Regular.Models;
+using Regular.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -74,7 +74,7 @@ namespace Regular.Services
                 // Constructing the scheme for regexRules stored in ExtensibleStorage
                 schemaBuilder.AddSimpleField("GUID", typeof(Guid));
                 schemaBuilder.AddSimpleField("RuleName", typeof(string));
-                schemaBuilder.AddArrayField("CategoryNames", typeof(string));
+                schemaBuilder.AddArrayField("TargetCategoryIds", typeof(string));
                 schemaBuilder.AddSimpleField("TrackingParameterName", typeof(string));
                 schemaBuilder.AddSimpleField("OutputParameterName", typeof(string));
                 schemaBuilder.AddSimpleField("RegexString", typeof(string));
@@ -96,7 +96,7 @@ namespace Regular.Services
             Entity entity = new Entity(GetRegularSchema(document));
             entity.Set("GUID", new Guid(regexRule.Guid));
             entity.Set("RuleName", regexRule.Name);
-            entity.Set<IList<string>>("CategoryNames", SerializationServices.ConvertListToIList(regexRule.TargetCategoryNames));
+            entity.Set<IList<string>>("TargetCategoryIds", SerializationServices.ConvertListToIList(regexRule.TargetCategoryIds));
             entity.Set("TrackingParameterName", regexRule.TrackingParameterName);
             entity.Set("OutputParameterName", regexRule.OutputParameterName);
             entity.Set("RegexString", regexRule.RegexString);
@@ -116,7 +116,7 @@ namespace Regular.Services
             {
                 string guid = entity.Get<Guid>("GUID").ToString();
                 string name = entity.Get<string>("RuleName");
-                List<string> targetCategoryNames = entity.Get<IList<string>>("CategoryNames").ToList<string>();
+                List<string> targetTargetCategoryIds = entity.Get<IList<string>>("TargetCategoryIds").ToList<string>();
                 string trackingParameterName = entity.Get<string>("TrackingParameterName");
                 string outputParameterName = entity.Get<string>("OutputParameterName");
                 string regexString = entity.Get<string>("RegexString");
@@ -130,7 +130,7 @@ namespace Regular.Services
                     OutputParameterName = outputParameterName,
                     RegexRuleParts = regexRuleParts,
                     RegexString = regexString,
-                    TargetCategoryNames = targetCategoryNames,
+                    TargetCategoryIds = targetTargetCategoryIds,
                     TrackingParameterName = trackingParameterName
                 };                
             }
@@ -160,7 +160,7 @@ namespace Regular.Services
             {
                 transaction.Start();
                 regexRuleEntity.Set("RuleName", newRegexRule.Name);
-                regexRuleEntity.Set<IList<string>>("CategoryNames", SerializationServices.ConvertListToIList(newRegexRule.TargetCategoryNames));
+                regexRuleEntity.Set<IList<string>>("TargetCategoryIds", SerializationServices.ConvertListToIList(newRegexRule.TargetCategoryIds));
                 regexRuleEntity.Set("TrackingParameterName", newRegexRule.TrackingParameterName);
                 regexRuleEntity.Set("OutputParameterName", newRegexRule.OutputParameterName);
                 regexRuleEntity.Set("RegexString", newRegexRule.RegexString);

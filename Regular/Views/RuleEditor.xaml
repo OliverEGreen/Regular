@@ -39,12 +39,12 @@
         <TextBox Name="TextBoxNameYourRuleInput" Style="{StaticResource StandardTextBox}" Text="{Binding Name}" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" VerticalContentAlignment="Center" ToolTip="Define a reference name for the rule you're creating."/>
         <Ellipse Name="EllipseNameYourRuleInput" Width="7" Height="7" Fill="LightGray" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Margin="5,0,6,0"/>
         <Label Content="Categories" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="2" Margin="0,5" VerticalContentAlignment="Center"/>
-        <ComboBox Name="ComboBoxCategoryInput" ItemsSource="{Binding TargetCategoryNames}" Text="Select Category" Grid.Row="2" Grid.Column="1" Style="{StaticResource StandardComboBox}" VerticalAlignment="Center" SelectionChanged="ComboBoxCategoryInput_SelectionChanged" SelectedIndex="0">
+        <ComboBox Name="ComboBoxCategoryInput" Grid.Row="2" Grid.Column="1" Style="{StaticResource StandardComboBox}" VerticalAlignment="Center" >
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
                         <CheckBox x:Name="CategoryCheckBox" Width="20" VerticalAlignment="Center" Checked="CategoryCheckBox_Checked" Unchecked="CategoryCheckBox_Unchecked"/>
-                        <TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding .}" VerticalAlignment="Center"/>
                     </StackPanel>
                 </DataTemplate>
             </ComboBox.ItemTemplate>
