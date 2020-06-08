@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Regular.ViewModels
+namespace Regular.ViewModel
 {
     public class RegexRulePart : INotifyPropertyChanged
     {

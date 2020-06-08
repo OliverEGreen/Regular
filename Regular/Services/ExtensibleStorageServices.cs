@@ -1,7 +1,7 @@
 ﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.ExtensibleStorage;
 using Autodesk.Revit.UI;
-using Regular.ViewModels;
+using Regular.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

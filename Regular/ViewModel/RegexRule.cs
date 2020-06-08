@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
-namespace Regular.ViewModels
+namespace Regular.ViewModel
 {
     public class RegexRule : INotifyPropertyChanged
     {

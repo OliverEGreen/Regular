@@ -1,5 +1,5 @@
 ﻿using Autodesk.Revit.DB;
-using Regular.ViewModels;
+using Regular.ViewModel;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
@@ -11,7 +11,7 @@ using System.Windows.Media;
 using Autodesk.Revit.UI;
 using TextBox = System.Windows.Controls.TextBox;
 
-namespace Regular.Views
+namespace Regular.View
 {
     public partial class RuleEditor : Window
     {
@@ -38,8 +38,16 @@ namespace Regular.Views
             ComboBoxRulePartInput.ItemsSource = Enum.GetValues(typeof(RuleTypes)).Cast<RuleTypes>();
 
             // Populating ComboBox of user-visible Revit Categories
-            UserVisibleCategories = CategoryServices.GetListFromCategorySet(Document.Settings.Categories).Where(x => x.AllowsBoundParameters).OrderBy(i => i.Name).ToList();
-            ComboBoxCategoryInput.ItemsSource = UserVisibleCategories.Select(x => x.Name).ToList();
+            //UserVisibleCategories = CategoryServices.GetListFromCategorySet(Document.Settings.Categories).Where(x => x.AllowsBoundParameters).OrderBy(i => i.Name).ToList();
+            //var items = ComboBoxCategoryInput.Items;
+            //ComboBoxCategoryInput.ItemsSource = UserVisibleCategories.Select(x => x.Name).ToList();
+            //foreach(CheckBox checkBox in ComboBoxCategoryInput.Items.OfType<CheckBox>())
+            //{
+            //    Category category = checkBox.DataContext as Category;
+            //    if (RegexRule.TargetCategoryIds.Contains(category.Id.ToString())) { checkBox.IsChecked = true; }
+            //}
+
+
 
             // Some random parameters for now - we need the ability to look up the parameters for a particular category
             // Normally we can use a FilteredElementCollector to get these, however it's going to be tricky if we have no elements of that category
@@ -207,6 +215,11 @@ namespace Regular.Views
             Category category = UserVisibleCategories.Where(x => x.Name == categoryName).FirstOrDefault();
             if (!RegexRule.TargetCategoryIds.Contains(category.Id.ToString())) return;
             RegexRule.TargetCategoryIds.Remove(category.Id.ToString());
+        }
+
+        private void ButtonExpandCategories_Click(object sender, RoutedEventArgs e)
+        {
+            this.ColumnCategories.Width = this.ColumnCategories.Width == new GridLength(200) ? new GridLength(0) : new GridLength(200);
         }
     }
 }

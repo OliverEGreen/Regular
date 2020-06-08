@@ -2,12 +2,12 @@
 using Autodesk.Revit.DB;
 using System.Windows.Controls;
 using Regular.Services;
-using Regular.ViewModels;
-using Regular;
+using Regular.ViewModel;
+using Regular.Model;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 
-namespace Regular.Views
+namespace Regular.View
 {
     public partial class RuleManager : Window
     {
@@ -51,7 +51,7 @@ namespace Regular.Views
             Button button = sender as Button;
             string regexRuleGuid = ((RegexRule)button.DataContext).Guid;
 
-            // When deleting a rule we must delete both the cached RegexRule and the ES DataStorage object
+            // Deleting both the cached RegexRule and the associated DataStorage object
             RegexRuleManager.DeleteRegexRule(DocumentGuid, regexRuleGuid);
             ExtensibleStorageServices.DeleteRegexRuleFromExtensibleStorage(DocumentGuid, regexRuleGuid);
         }
@@ -67,7 +67,7 @@ namespace Regular.Views
         {
             Button button = sender as Button;
             RegexRule regexRule = (RegexRule)button.DataContext;
-            ObservableCollection<RegexRule> RegexRules = Regular.RegexRules.AllRegexRules[DocumentGuid];
+            ObservableCollection<RegexRule> RegexRules = Model.RegexRules.AllRegexRules[DocumentGuid];
             int index = RegexRules.IndexOf(regexRule);
 
             if (index > 0)
@@ -80,10 +80,10 @@ namespace Regular.Views
         {
             Button button = sender as Button;
             RegexRule regexRule = (RegexRule)button.DataContext;
-            ObservableCollection<RegexRule> RegexRules = Regular.RegexRules.AllRegexRules[DocumentGuid];
+            ObservableCollection<RegexRule> RegexRules = Model.RegexRules.AllRegexRules[DocumentGuid];
             int index = RegexRules.IndexOf(regexRule);
 
-            if (index < Regular.RegexRules.AllRegexRules[DocumentGuid].Count)
+            if (index < Model.RegexRules.AllRegexRules[DocumentGuid].Count)
             {
                 RegexRules.RemoveAt(index);
                 RegexRules.Insert(index + 1, regexRule);
