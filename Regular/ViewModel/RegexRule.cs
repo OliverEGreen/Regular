@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
@@ -8,7 +7,7 @@ namespace Regular.ViewModel
     public class RegexRule : INotifyPropertyChanged
     {
         private string name;
-        private List<string> targetCategoryIds;
+        private ObservableCollection<ObservableObject> targetCategoryIds;
         private ObservableCollection<RegexRulePart> regexRuleParts;
         private string toolTipString;
 
@@ -22,7 +21,7 @@ namespace Regular.ViewModel
             }
         }
         public string Guid { get; set; }
-        public List<string> TargetCategoryIds
+        public ObservableCollection<ObservableObject> TargetCategoryIds
         {
             get { return targetCategoryIds; }
             set

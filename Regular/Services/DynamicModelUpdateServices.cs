@@ -64,7 +64,7 @@ namespace Regular.Services
                 // If the regexRule applies to an irrelevant Category, we pass over it
                 //if (!modifiedCategoryNames.Contains(regexRule.TargetCategoryNames)) continue;
 
-                ElementCategoryFilter elementCategoryFilter = new ElementCategoryFilter(CategoryServices.GetBuiltInCategoryFromCategory(CategoryServices.GetCategoryByName(document, regexRule.TargetCategoryIds.FirstOrDefault())));
+                ElementCategoryFilter elementCategoryFilter = new ElementCategoryFilter(CategoryServices.GetBuiltInCategoryFromCategory(CategoryServices.GetCategoryByName(document, regexRule.TargetCategoryIds.Select(x => x.Id).FirstOrDefault())));
                 List<Element> elementsOfTargetCategory = new FilteredElementCollector(document).WherePasses(elementCategoryFilter).WhereElementIsNotElementType().ToList();
                 
                 if (elementsOfTargetCategory == null || elementsOfTargetCategory.Count < 1) { continue; }
