@@ -30,7 +30,7 @@ namespace Regular.View
                 OutputParameterName = "OutputParameterName",
                 RegexRuleParts = new ObservableCollection<RegexRulePart>(),
                 RegexString = "RegexString",
-                TargetCategoryIds = new List<string>(),
+                TargetCategoryIds = ObservableObject.GetInitialCategories(Document),
                 ToolTip = "ToolTip",
                 TrackingParameterName = "TrackingParameterName"
             };

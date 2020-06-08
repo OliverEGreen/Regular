@@ -17,7 +17,6 @@ namespace Regular.View
     {
         private static Document Document { get; set; }
         private static string DocumentGuid { get; set; }
-        private List<Category> UserVisibleCategories { get; set; }
         private RegexRule RegexRule { get; set; }
         public RuleEditor(string documentGuid, RegexRule regexRule)
         {
@@ -38,17 +37,8 @@ namespace Regular.View
             ComboBoxRulePartInput.ItemsSource = Enum.GetValues(typeof(RuleTypes)).Cast<RuleTypes>();
 
             // Populating ComboBox of user-visible Revit Categories
-            //UserVisibleCategories = CategoryServices.GetListFromCategorySet(Document.Settings.Categories).Where(x => x.AllowsBoundParameters).OrderBy(i => i.Name).ToList();
-            //var items = ComboBoxCategoryInput.Items;
-            //ComboBoxCategoryInput.ItemsSource = UserVisibleCategories.Select(x => x.Name).ToList();
-            //foreach(CheckBox checkBox in ComboBoxCategoryInput.Items.OfType<CheckBox>())
-            //{
-            //    Category category = checkBox.DataContext as Category;
-            //    if (RegexRule.TargetCategoryIds.Contains(category.Id.ToString())) { checkBox.IsChecked = true; }
-            //}
-
-
-
+            ListBoxCategoriesSelection.ItemsSource = RegexRule.TargetCategoryIds;
+            
             // Some random parameters for now - we need the ability to look up the parameters for a particular category
             // Normally we can use a FilteredElementCollector to get these, however it's going to be tricky if we have no elements of that category
             // A workaround may involve creating a schedule and reading the schedulable parameters
@@ -63,6 +53,7 @@ namespace Regular.View
             TextBoxNameYourRuleInput.TextChanged += DisplayUserFeedback;
             TextBoxOutputParameterNameInput.TextChanged += TextBoxOutputParameterNameInput_TextChanged;
             TextBoxOutputParameterNameInput.TextChanged += DisplayUserFeedback;
+            ButtonAddRulePart.Click += DisplayUserFeedback;
 
             TextBoxUserFeedback.Visibility = System.Windows.Visibility.Hidden;
         }
@@ -82,8 +73,9 @@ namespace Regular.View
             if (!RegexRuleManager.GetDocumentRegexRuleGuids(DocumentGuid).Contains(RegexRule.Guid))
             {
                 // If a new rule, a project parameter needs to be created.
-                ParameterServices.CreateProjectParameter(Document, RegexRule.OutputParameterName, ParameterType.Text, RegexRule.TargetCategoryIds, BuiltInParameterGroup.PG_IDENTITY_DATA, true);
+                // ParameterServices.CreateProjectParameter(Document, RegexRule.OutputParameterName, ParameterType.Text, RegexRule.TargetCategoryIds, BuiltInParameterGroup.PG_IDENTITY_DATA, true);
 
+                
                 // The static RegexRule should already have inputs set by the UI forms?
                 RegexRuleManager.SaveRegexRule(DocumentGuid, RegexRule);
                 ExtensibleStorageServices.SaveRegexRuleToExtensibleStorage(DocumentGuid, RegexRule);
@@ -198,28 +190,23 @@ namespace Regular.View
                     break;
             }
         }
-
-        private void CategoryCheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            CheckBox checkBox = sender as CheckBox;
-            string categoryName = checkBox.DataContext.ToString();
-            Category category = UserVisibleCategories.Where(x => x.Name == categoryName).FirstOrDefault();
-            if (RegexRule.TargetCategoryIds.Contains(category.Id.ToString())) return;
-            RegexRule.TargetCategoryIds.Add(category.Id.ToString());
-        }
-
-        private void CategoryCheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            CheckBox checkBox = sender as CheckBox;
-            string categoryName = checkBox.DataContext.ToString();
-            Category category = UserVisibleCategories.Where(x => x.Name == categoryName).FirstOrDefault();
-            if (!RegexRule.TargetCategoryIds.Contains(category.Id.ToString())) return;
-            RegexRule.TargetCategoryIds.Remove(category.Id.ToString());
-        }
-
         private void ButtonExpandCategories_Click(object sender, RoutedEventArgs e)
         {
-            this.ColumnCategories.Width = this.ColumnCategories.Width == new GridLength(200) ? new GridLength(0) : new GridLength(200);
+            this.ColumnCategories.Width = this.ColumnCategories.Width == new GridLength(250) ? new GridLength(0) : new GridLength(250);
+        }
+        private void ScrollViewerCategories_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            ScrollViewer scv = (ScrollViewer)sender;
+            scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
+            e.Handled = true;
+        }
+        private void ButtonSelectAll_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (CheckBox checkBox in ListBoxCategoriesSelection.Items) { checkBox.IsChecked = true; }
+        }
+        private void ButtonSelectNone_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (CheckBox checkBox in ListBoxCategoriesSelection.Items) { checkBox.IsChecked = false; }
         }
     }
 }

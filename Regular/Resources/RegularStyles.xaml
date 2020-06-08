@@ -4,6 +4,7 @@
     <SolidColorBrush x:Key="ButtonBackgroundColorDefault" Color="#E0E0E0"/>
     <SolidColorBrush x:Key="TextBoxBorderColorDefault" Color="#BFBFBF"/>
     <SolidColorBrush x:Key="ButtonBackgroundColorHighlight" Color="#F1F0F2"/>
+    <SolidColorBrush x:Key="ButtonBackgroundColorLowlight" Color="#B2B2B2"/>
     <SolidColorBrush x:Key="ButtonBackgroundColorLightGreen" Color="#DFF2DA"/>
     <SolidColorBrush x:Key="FontColorDefault" Color="#333333"/>
     <SolidColorBrush x:Key="RedColour" Color="LightSalmon"/>
@@ -113,19 +114,18 @@
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Grid Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" ClipToBounds="True">
                         <Rectangle x:Name="BackgroundRectangle" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Fill="{StaticResource ButtonBackgroundColorDefault}"/>
-                        <Rectangle x:Name="UnderlineRectangle" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="15" Height="2" Fill="{StaticResource UnderlineBlueColor}" Opacity="0" Margin="0,0,0,3" ></Rectangle>
                         <DockPanel Name="ContentPresenterDockPanel">
                             <ContentPresenter x:Name="ContentPresenter" Content="{TemplateBinding Content}" TextBlock.Foreground="{StaticResource FontColorDefault}" HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <ContentPresenter.Resources>
-                                    <Style TargetType="TextBlock" BasedOn="{StaticResource ResourceKey=StandardText}"/>
+                                    <Style x:Name="ButtonContent" TargetType="TextBlock" BasedOn="{StaticResource ResourceKey=StandardText}"/>
                                 </ContentPresenter.Resources>
                             </ContentPresenter>
                         </DockPanel>
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Rectangle.Fill" TargetName="BackgroundRectangle" Value="{StaticResource ButtonBackgroundColorHighlight}"/>
-                            <Setter Property="Rectangle.Opacity" TargetName="UnderlineRectangle" Value="100"/>
+                            <Setter Property="Rectangle.Fill" TargetName="BackgroundRectangle" Value="{StaticResource ButtonBackgroundColorLowlight}"/>
+                            <Setter Property="Foreground" Value="White"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
