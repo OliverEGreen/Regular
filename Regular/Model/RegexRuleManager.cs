@@ -1,8 +1,8 @@
-﻿using Regular.ViewModels;
+﻿using Regular.ViewModel;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-
+using Regular.Model;
 namespace Regular
 {
     public static class RegexRuleManager

@@ -22,7 +22,7 @@ namespace Regular.Services
             //Creating the necessary categoryset to create the outputParameter
 
             List<ElementId> targetCategoryIds = targetCategoryIdStrings.Select(x => new ElementId(Convert.ToInt32(x))).ToList();
-            List<Category> categories = targetCategoryIds.Select(x => document.GetElement(x)).OfType<Category>().ToList();
+            List<Category> categories = targetCategoryIds.Select(x => Category.GetCategory(document, x)).OfType<Category>().ToList();
             CategorySet categorySet = CategoryServices.GetCategorySetFromList(document, categories);
                         
             using (Transaction transaction = new Transaction(document, $"Regular - Creating New Project Parameter {parameterName}")) 

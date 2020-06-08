@@ -1,9 +1,9 @@
-﻿<Window x:Class="Regular.Views.RuleEditor"
+﻿<Window x:Class="Regular.View.RuleEditor"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Regular.Views"
+        xmlns:local="clr-namespace:Regular.View"
         mc:Ignorable="d"
         Title=" Rule Editor" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight" ResizeMode="CanResizeWithGrip" Style="{DynamicResource StandardWindow}" MinHeight="500" MaxHeight="700" MinWidth="440" MaxWidth="600">
     <Window.Resources>
@@ -23,6 +23,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="170"/>
             <ColumnDefinition/>
+            <ColumnDefinition Width="0" Name="ColumnCategories"/>
         </Grid.ColumnDefinitions>
         <TextBox Name="TextBoxUserFeedback"
                  Padding="12,4,10,3"
@@ -30,7 +31,7 @@
                  Style="{StaticResource WarningTextBox}"
                  Grid.Row="0"
                  Grid.Column="0"
-                 Grid.ColumnSpan="2"
+                 Grid.ColumnSpan="3"
                  Background="{StaticResource BackgroundColorWarning}"
                  Margin="-15,-15,-15,0"
                  Height="25"
@@ -39,7 +40,15 @@
         <TextBox Name="TextBoxNameYourRuleInput" Style="{StaticResource StandardTextBox}" Text="{Binding Name}" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" VerticalContentAlignment="Center" ToolTip="Define a reference name for the rule you're creating."/>
         <Ellipse Name="EllipseNameYourRuleInput" Width="7" Height="7" Fill="LightGray" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Margin="5,0,6,0"/>
         <Label Content="Categories" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="2" Margin="0,5" VerticalContentAlignment="Center"/>
-        <ComboBox Name="ComboBoxCategoryInput" Grid.Row="2" Grid.Column="1" Style="{StaticResource StandardComboBox}" VerticalAlignment="Center" >
+        <Button x:Name="ButtonExpandCategories" Height="20" Content="Choose Categories" Style="{StaticResource StandardButton}" Grid.Row="2" Grid.Column="1" Click="ButtonExpandCategories_Click"/>
+        <ListBox Grid.Row="1" Grid.RowSpan="6" Grid.Column="2">
+            <ListBoxItem>Boh</ListBoxItem>
+            <ListBoxItem>Boh</ListBoxItem>
+            <ListBoxItem>Boh</ListBoxItem>
+            <ListBoxItem>Boh</ListBoxItem>
+            <ListBoxItem>Boh</ListBoxItem>
+        </ListBox>
+        <!--<ComboBox Name="ComboBoxCategoryInput" Grid.Row="2" Grid.Column="1" Style="{StaticResource StandardComboBox}" VerticalAlignment="Center" >
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
@@ -48,7 +57,7 @@
                     </StackPanel>
                 </DataTemplate>
             </ComboBox.ItemTemplate>
-        </ComboBox>
+        </ComboBox>-->
         <Label Content="Tracking Parameter" Style="{StaticResource StandardLabel}" Grid.Row="3" FontSize="13" Margin="0,5" VerticalContentAlignment="Center"/>
         <ComboBox Name="ComboBoxTrackingParameterInput" DisplayMemberPath="Definition.Name" Style="{StaticResource StandardComboBox}" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" SelectedIndex="0"/>
         <Label Content="Output Parameter" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="4" Margin="0,5" VerticalContentAlignment="Center"/>
