@@ -1,6 +1,5 @@
 ﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.ExtensibleStorage;
-using Autodesk.Revit.UI;
 using Regular.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -12,7 +11,7 @@ namespace Regular.Services
     public static class ExtensibleStorageServices
     {
         // CRUD Services for managing Regular data stored using Revit's ExtensibleStorage API
-        private static Schema GetGuidSchema(Document document)
+        private static Schema GetDocumentGuidSchema(Document document)
         {
             Schema ConstructGuidSchema(Document doc)
             {
@@ -34,7 +33,7 @@ namespace Regular.Services
         }
         public static string RegisterDocumentGuidToExtensibleStorage(Document document)
         {
-            Entity entity = new Entity(GetGuidSchema(document));
+            Entity entity = new Entity(GetDocumentGuidSchema(document));
             string newGuidString = Guid.NewGuid().ToString();
             entity.Set("DocumentGUID", newGuidString);
             using (Transaction transaction = new Transaction(document, $"Saving Document Reference GUID"))
@@ -48,7 +47,7 @@ namespace Regular.Services
         }
         public static string GetDocumentGuidFromExtensibleStorage(Document document)
         {
-            Schema guidSchema = GetGuidSchema(document);
+            Schema guidSchema = GetDocumentGuidSchema(document);
             
             // Retrieving and testing all DataStorage objects in the document against our DocumentGuid schema.
             List<DataStorage> allDataStorage = new FilteredElementCollector(document).OfClass(typeof(DataStorage)).OfType<DataStorage>().ToList();
@@ -96,7 +95,8 @@ namespace Regular.Services
             Entity entity = new Entity(GetRegularSchema(document));
             entity.Set("GUID", new Guid(regexRule.Guid));
             entity.Set("RuleName", regexRule.Name);
-            entity.Set<IList<string>>("TargetCategoryIds", SerializationServices.ConvertListToIList(regexRule.TargetCategoryIds.Select(x => x.Id.ToString()).ToList()));
+            List<string> idsToSave = regexRule.TargetCategoryIds.Where(x => x.IsChecked).Select(x => x.Id.ToString()).ToList();
+            entity.Set<IList<string>>("TargetCategoryIds", SerializationServices.ConvertListToIList(regexRule.TargetCategoryIds.Where(x => x.IsChecked).Select(x => x.Id.ToString()).ToList()));
             entity.Set("TrackingParameterName", regexRule.TrackingParameterName);
             entity.Set("OutputParameterName", regexRule.OutputParameterName);
             entity.Set("RegexString", regexRule.RegexString);
@@ -126,7 +126,7 @@ namespace Regular.Services
                 ObservableCollection<ObservableObject> observableObjects = ObservableObject.GetInitialCategories(document);
                 foreach(ObservableObject observableObject in observableObjects)
                 {
-                    if (targetTargetCategoryIds.Contains(observableObject.Id.ToString())) { observableObject.IsChecked = true; }
+                    observableObject.IsChecked = targetTargetCategoryIds.Contains(observableObject.Id.ToString());
                 }
 
                 return new RegexRule()
@@ -166,7 +166,7 @@ namespace Regular.Services
             {
                 transaction.Start();
                 regexRuleEntity.Set("RuleName", newRegexRule.Name);
-                regexRuleEntity.Set<IList<string>>("TargetCategoryIds", SerializationServices.ConvertListToIList(newRegexRule.TargetCategoryIds.Select(x => x.Id.ToString()).ToList()));
+                regexRuleEntity.Set<IList<string>>("TargetCategoryIds", SerializationServices.ConvertListToIList(newRegexRule.TargetCategoryIds.Where(x => x.IsChecked).Select(x => x.Id.ToString()).ToList()));
                 regexRuleEntity.Set("TrackingParameterName", newRegexRule.TrackingParameterName);
                 regexRuleEntity.Set("OutputParameterName", newRegexRule.OutputParameterName);
                 regexRuleEntity.Set("RegexString", newRegexRule.RegexString);
