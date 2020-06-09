@@ -9,6 +9,10 @@ namespace Regular.ViewModel
 {
     public class ObservableObject : INotifyPropertyChanged
     {
+        // Using these to bind categories to a checkbox list
+        // Ids get stored in ExtensibleStorage, Names are displayed to the user 
+        // and IsChecked is used to save the checkbox state for each object
+        
         private string name;
         private string id;
         private bool isChecked;
@@ -22,7 +26,6 @@ namespace Regular.ViewModel
                 NotifyPropertyChanged("Name");
             }
         }
-
         public string Id
         {
             get { return id; }
@@ -32,8 +35,6 @@ namespace Regular.ViewModel
                 NotifyPropertyChanged("Id");
             }
         }
-
-
         public bool IsChecked
         {
             get { return isChecked; }
@@ -47,8 +48,14 @@ namespace Regular.ViewModel
         public static ObservableCollection<ObservableObject> GetInitialCategories(Document document)
         {
             ObservableCollection<ObservableObject> observableObjects = new ObservableCollection<ObservableObject>();
-            // We have to pass this to the regexrule as it's created somehow.
-            List<Category> userVisibleCategories = CategoryServices.GetListFromCategorySet(document.Settings.Categories).Where(x => x.AllowsBoundParameters == true).OfType<Category>().ToList();
+            
+            // Fetching all categories to create ObservableObjects
+            List<Category> userVisibleCategories = CategoryServices.GetListFromCategorySet(document.Settings.Categories)
+                .Where(x => x.AllowsBoundParameters == true)
+                .OfType<Category>()
+                .OrderBy(x => x.Name)
+                .ToList();
+            
             foreach(Category category in userVisibleCategories)
             {
                 observableObjects.Add(new ObservableObject() { Name = category.Name, Id = category.Id.ToString(), isChecked = false });
