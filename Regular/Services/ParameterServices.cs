@@ -50,6 +50,10 @@ namespace Regular.Services
                 transaction.Commit();
             }
         }
+        
+        // Does this help??
+        // https://thebuildingcoder.typepad.com/blog/2017/01/schedule-parameter-and-shared-parameter-guid.html#3
+
         public static Parameter GetProjectParameterByName(Document document, string parameterName)
         {
             BindingMap map = document.ParameterBindings;

@@ -5,7 +5,6 @@ using Regular.Services;
 using Regular.ViewModel;
 using Regular.Model;
 using System.Collections.ObjectModel;
-using System.Collections.Generic;
 
 namespace Regular.View
 {
