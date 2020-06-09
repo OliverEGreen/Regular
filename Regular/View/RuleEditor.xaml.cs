@@ -202,11 +202,11 @@ namespace Regular.View
         }
         private void ButtonSelectAll_Click(object sender, RoutedEventArgs e)
         {
-            foreach (CheckBox checkBox in ListBoxCategoriesSelection.Items) { checkBox.IsChecked = true; }
+            foreach (ObservableObject observableObject in RegexRule.TargetCategoryIds) { observableObject.IsChecked = true; }
         }
         private void ButtonSelectNone_Click(object sender, RoutedEventArgs e)
         {
-            foreach (CheckBox checkBox in ListBoxCategoriesSelection.Items) { checkBox.IsChecked = false; }
+            foreach (ObservableObject observableObject in RegexRule.TargetCategoryIds) { observableObject.IsChecked = false; }
         }
     }
 }
