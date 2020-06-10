@@ -1,15 +1,14 @@
 ﻿using System;
+using System.Windows;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.Attributes;
-using System.Windows;
-using Regular.View;
 using Regular.Services;
 
 namespace Regular
 {
     [Transaction(TransactionMode.Manual)]
-    public class RuleManager : IExternalCommand
+    public class LaunchRuleManager : IExternalCommand
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {

@@ -1,14 +1,15 @@
-﻿using Autodesk.Revit.DB;
-using Regular.ViewModel;
+﻿using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
 using System.Linq;
-using System;
-using System.Windows.Controls;
-using Regular.Services;
 using System.Windows.Media;
+using System.Windows.Controls;
+using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using Regular.ViewModel;
+using Regular.Model;
+using Regular.Services;
 using TextBox = System.Windows.Controls.TextBox;
 
 namespace Regular.View
@@ -38,7 +39,7 @@ namespace Regular.View
 
             // Populating ComboBox of user-visible Revit Categories
             ListBoxCategoriesSelection.ItemsSource = RegexRule.TargetCategoryIds;
-            
+
             // Some random parameters for now - we need the ability to look up the parameters for a particular category
             // Normally we can use a FilteredElementCollector to get these, however it's going to be tricky if we have no elements of that category
             // A workaround may involve creating a schedule and reading the schedulable parameters
@@ -75,7 +76,7 @@ namespace Regular.View
                 // If a new rule, a project parameter needs to be created.
                 // ParameterServices.CreateProjectParameter(Document, RegexRule.OutputParameterName, ParameterType.Text, RegexRule.TargetCategoryIds, BuiltInParameterGroup.PG_IDENTITY_DATA, true);
 
-                
+
                 // The static RegexRule should already have inputs set by the UI forms?
                 RegexRuleManager.SaveRegexRule(DocumentGuid, RegexRule);
                 ExtensibleStorageServices.SaveRegexRuleToExtensibleStorage(DocumentGuid, RegexRule);
@@ -117,11 +118,11 @@ namespace Regular.View
             RegexRulePart regexRulePart = (RegexRulePart)button.DataContext;
             int index = RegexRule.RegexRuleParts.IndexOf(regexRulePart);
 
-            if(index > 0)
+            if (index > 0)
             {
                 RegexRule.RegexRuleParts.RemoveAt(index);
                 RegexRule.RegexRuleParts.Insert(index - 1, regexRulePart);
-            }            
+            }
         }
         private void ReorderDownButton_Click(object sender, RoutedEventArgs e)
         {

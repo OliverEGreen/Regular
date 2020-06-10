@@ -1,9 +1,9 @@
-﻿using Regular.ViewModel;
+﻿using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using Regular.Model;
-namespace Regular
+using Regular.ViewModel;
+
+namespace Regular.Model
 {
     public static class RegexRuleManager
     {
