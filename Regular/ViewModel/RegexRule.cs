@@ -12,8 +12,8 @@ namespace Regular.ViewModel
         private readonly string createdBy;
         private ObservableCollection<ObservableObject> targetCategoryIds;
         private ObservableCollection<RegexRulePart> regexRuleParts;
-        private string trackingParameterName;
-        private string outputParameterName;
+        private string trackingParameterName; // Eventually, this should be some kind of ID
+        private string outputParameterName; // This should also be an ID
         private string toolTipString;
         private string regexString;
         

@@ -14,7 +14,7 @@ namespace Regular.Services
             var ribbonPanelGeneral = uiControlledApp.CreateRibbonPanel(tabName, "Regular");
             string thisAssemblyPath = Assembly.GetExecutingAssembly().Location;
 
-            PushButtonData ruleManagerButtonData = new PushButtonData("Rule Manager", "Rule" + Environment.NewLine + "Manager", thisAssemblyPath, "Regular.RuleManager");
+            PushButtonData ruleManagerButtonData = new PushButtonData("Rule Manager", "Rule" + Environment.NewLine + "Manager", thisAssemblyPath, "Regular.LaunchRuleManager");
             PushButton ruleManagerButton = ribbonPanelGeneral.AddItem(ruleManagerButtonData) as PushButton;
             ruleManagerButton.ToolTip = "Build simple data validation rules to test against parts of your model.";
             BitmapImage ruleManagerButtonIcon = new BitmapImage(new Uri("pack:// application:,,,/Regular;component/Resources/RegularIcon32px.png"));
