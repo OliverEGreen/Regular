@@ -46,7 +46,6 @@
         <Setter Property="FontFamily" Value="Segoe UI"/>
         <Setter Property="FontWeight" Value="Regular"/>
         <Setter Property="FontSize" Value="12px"/>
-        <Setter Property="Padding" Value="0px"/>
         <Setter Property="Foreground" Value="{StaticResource FontColorDefault}"/>
         <Setter Property="Background" Value="White"/>
         <Setter Property="Height" Value="22px"/>
@@ -117,7 +116,7 @@
                         <DockPanel Name="ContentPresenterDockPanel">
                             <ContentPresenter x:Name="ContentPresenter" Content="{TemplateBinding Content}" TextBlock.Foreground="{StaticResource FontColorDefault}" HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <ContentPresenter.Resources>
-                                    <Style x:Name="ButtonContent" TargetType="TextBlock" BasedOn="{StaticResource ResourceKey=StandardText}"/>
+                                    <Style TargetType="TextBlock" BasedOn="{StaticResource ResourceKey=StandardText}"/>
                                 </ContentPresenter.Resources>
                             </ContentPresenter>
                         </DockPanel>

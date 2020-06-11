@@ -19,7 +19,7 @@ namespace Regular.ViewModel
                         
         public string Name
         {
-            get { return name; }
+            get => name;
             set
             {
                 name = value;
@@ -28,7 +28,7 @@ namespace Regular.ViewModel
         }
         public string Id
         {
-            get { return id; }
+            get => id;
             set
             {
                 id = value;
@@ -37,7 +37,7 @@ namespace Regular.ViewModel
         }
         public bool IsChecked
         {
-            get { return isChecked; }
+            get => isChecked;
             set
             {
                 isChecked = value;
@@ -51,8 +51,7 @@ namespace Regular.ViewModel
             
             // Fetching all categories to create ObservableObjects
             List<Category> userVisibleCategories = CategoryServices.GetListFromCategorySet(document.Settings.Categories)
-                .Where(x => x.AllowsBoundParameters == true)
-                .OfType<Category>()
+                .Where(x => x.AllowsBoundParameters)
                 .OrderBy(x => x.Name)
                 .ToList();
             

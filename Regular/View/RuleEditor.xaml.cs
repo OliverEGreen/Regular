@@ -14,11 +14,11 @@ using TextBox = System.Windows.Controls.TextBox;
 
 namespace Regular.View
 {
-    public partial class RuleEditor : Window
+    public partial class RuleEditor
     {
         private static Document Document { get; set; }
         private static string DocumentGuid { get; set; }
-        private RegexRule RegexRule { get; set; }
+        private RegexRule RegexRule { get; }
         public RuleEditor(string documentGuid, RegexRule regexRule)
         {
             InitializeComponent();
@@ -27,9 +27,9 @@ namespace Regular.View
 
             // If we're editing an existing rule, it gets set to a static variable for accessibility
             Title = RegexRuleManager.GetDocumentRegexRules(documentGuid).Contains(regexRule) ? $"Editing Rule: {regexRule.Name}" : "Creating New Rule";
-            InitializeRuleEditor(documentGuid, regexRule);
+            InitializeRuleEditor(documentGuid);
         }
-        void InitializeRuleEditor(string documentGuid, RegexRule regexRule)
+        private void InitializeRuleEditor(string documentGuid)
         {
             DocumentGuid = documentGuid;
             Document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
@@ -44,8 +44,11 @@ namespace Regular.View
             // Normally we can use a FilteredElementCollector to get these, however it's going to be tricky if we have no elements of that category
             // A workaround may involve creating a schedule and reading the schedulable parameters
             FamilyInstance door = new FilteredElementCollector(Document).OfCategory(BuiltInCategory.OST_Doors).WhereElementIsNotElementType().OfType<FamilyInstance>().ToList().FirstOrDefault();
-            List<Parameter> allProjectParameters = ParameterServices.ConvertParameterSetToList(door.Parameters).OrderBy(x => x.Definition.Name).ToList();
-            ComboBoxTrackingParameterInput.ItemsSource = allProjectParameters;
+            if (door != null)
+            {
+                List<Parameter> allProjectParameters = ParameterServices.ConvertParameterSetToList(door.Parameters).OrderBy(x => x.Definition.Name).ToList();
+                ComboBoxTrackingParameterInput.ItemsSource = allProjectParameters;
+            }
 
             EllipseNameYourRuleInput.Fill = (SolidColorBrush)this.Resources["EllipseColorGray"];
             EllipseOutputParameterNameInput.Fill = (SolidColorBrush)this.Resources["EllipseColorGray"];

@@ -7,7 +7,6 @@ namespace Regular.ViewModel
     public class RegexRule : INotifyPropertyChanged
     {
         private string name;
-        private string guid;
         private readonly string dateTimeCreated;
         private readonly string createdBy;
         private ObservableCollection<ObservableObject> targetCategoryIds;
@@ -19,17 +18,21 @@ namespace Regular.ViewModel
         
         public string Name
         {
-            get { return name; }
+            get => name;
             set
             {
                 name = value;
                 NotifyPropertyChanged("Name");
             }
         }
-        public string Guid { get; set; }
+        public string Guid
+        {
+            get;
+            set;
+        }
         public ObservableCollection<ObservableObject> TargetCategoryIds
         {
-            get { return targetCategoryIds; }
+            get => targetCategoryIds;
             set
             {
                 targetCategoryIds = value;
@@ -38,7 +41,7 @@ namespace Regular.ViewModel
         }
         public string TrackingParameterName
         {
-            get { return trackingParameterName; }
+            get => trackingParameterName;
             set
             {
                 trackingParameterName = value;
@@ -47,7 +50,7 @@ namespace Regular.ViewModel
         }
         public string OutputParameterName
         {
-            get { return outputParameterName; }
+            get => outputParameterName;
             set
             {
                 outputParameterName = value;
@@ -80,7 +83,7 @@ namespace Regular.ViewModel
         }
         public string RegexString
         {
-            get { return regexString; }
+            get => regexString;
             set
             {
                 regexString = value;
@@ -89,7 +92,7 @@ namespace Regular.ViewModel
         }
         public ObservableCollection<RegexRulePart> RegexRuleParts
         {
-            get { return regexRuleParts; }
+            get => regexRuleParts;
             set
             {
                 regexRuleParts = value;

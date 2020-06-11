@@ -14,14 +14,11 @@ namespace Regular.Services
     {
         private class RuleUpdater : IUpdater
         {
-            public static bool modelUpdateActive = false;
-            AddInId addinID = null;
-            UpdaterId updaterID = null;
+            private readonly UpdaterId updaterId = null;
 
             public RuleUpdater(AddInId id)
             {
-                addinID = id;
-                updaterID = new UpdaterId(id, Guid.NewGuid());
+                updaterId = new UpdaterId(id, Guid.NewGuid());
             }
 
             public void Execute(UpdaterData data)
@@ -34,7 +31,7 @@ namespace Regular.Services
             }
             public string GetAdditionalInformation() { return "Regular: Reads any Regex Rules in the open document"; }
             public ChangePriority GetChangePriority() { return ChangePriority.Annotations; }
-            public UpdaterId GetUpdaterId() { return updaterID; }
+            public UpdaterId GetUpdaterId() { return updaterId; }
             public string GetUpdaterName() { return "Regular Updater"; }
         }
         public static void RunAllRegexRules(string documentGuid, List<ElementId> modifiedElementIds)
@@ -58,21 +55,20 @@ namespace Regular.Services
             {
                 List<ElementId> targetCategoryIds = regexRule.TargetCategoryIds.Select(x => new ElementId(Convert.ToInt32(x))).ToList();
                 List<Category> targetCategories = targetCategoryIds.Select(x => Category.GetCategory(document, x)).ToList();
-                List<BuiltInCategory> targetBuiltInCategories = targetCategories.Select(x => CategoryServices.GetBuiltInCategoryFromCategory(x)).ToList();
+                List<BuiltInCategory> targetBuiltInCategories = targetCategories.Select(CategoryServices.GetBuiltInCategoryFromCategory).ToList();
 
                 // Creating a MultiCategoryFilter to target the updater trigger
                 ElementMulticategoryFilter elementMulticategoryFilter = new ElementMulticategoryFilter(targetBuiltInCategories);
                 List<Element> elementsOfTargetCategory = new FilteredElementCollector(document).WherePasses(elementMulticategoryFilter).WhereElementIsNotElementType().ToList();
                 
-                if (elementsOfTargetCategory == null || elementsOfTargetCategory.Count < 1) { continue; }
+                if (elementsOfTargetCategory.Count < 1) { continue; }
                 foreach (Element element in elementsOfTargetCategory)
                 {
                     Parameter trackingParameter = element.LookupParameter(regexRule.TrackingParameterName);
                     Parameter outputParameter = element.LookupParameter(regexRule.OutputParameterName);
                     if (trackingParameter == null || outputParameter == null) { continue; }
                     Regex regex = new Regex(regexRule.RegexString);
-                    if (regex.IsMatch(trackingParameter.AsString())) { outputParameter.Set("Valid"); }
-                    else { outputParameter.Set("Invalid"); }
+                    outputParameter.Set(regex.IsMatch(trackingParameter.AsString()) ? "Valid" : "Invalid");
                 }
             }
         }
@@ -91,7 +87,7 @@ namespace Regular.Services
             // Converting the save string representations of the Target Category ElementIds to ElementIds. Maybe can save these as integers and skip the conversion.
             List<ElementId> targetCategoryIds = regexRule.TargetCategoryIds.Select(x => new ElementId(Convert.ToInt32(x))).ToList();
             List<Category> targetCategories = targetCategoryIds.Select(x => Category.GetCategory(document, x)).ToList();
-            List<BuiltInCategory> targetBuiltInCategories = targetCategories.Select(x => CategoryServices.GetBuiltInCategoryFromCategory(x)).ToList();
+            List<BuiltInCategory> targetBuiltInCategories = targetCategories.Select(CategoryServices.GetBuiltInCategoryFromCategory).ToList();
             
             // Creating a MultiCategoryFilter to target the updater trigger
             ElementMulticategoryFilter elementMulticategoryFilter = new ElementMulticategoryFilter(targetBuiltInCategories);

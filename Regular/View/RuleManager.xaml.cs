@@ -8,7 +8,7 @@ using Regular.ViewModel;
 
 namespace Regular.View
 {
-    public partial class RuleManager : Window
+    public partial class RuleManager
     {
         public static Document Document { get; set; }
         public static string DocumentGuid { get; set; }
@@ -39,7 +39,7 @@ namespace Regular.View
         }
         private void EditRegexRuleButton_Click(object sender, RoutedEventArgs e)
         {
-            Button button = sender as Button;
+            if (!(sender is Button button)) return;
             RegexRule regexRule = ((RegexRule)button.DataContext);
             RuleEditor ruleEditor = new RuleEditor(DocumentServices.GetRevitDocumentGuid(Document), regexRule);
             ruleEditor.ShowDialog();
@@ -64,29 +64,25 @@ namespace Regular.View
         private void RuleEditor_Closed(object sender, System.EventArgs e) => Activate();
         private void ReorderUpButton_Click(object sender, RoutedEventArgs e)
         {
-            Button button = sender as Button;
+            if (!(sender is Button button)) return;
             RegexRule regexRule = (RegexRule)button.DataContext;
-            ObservableCollection<RegexRule> RegexRules = Model.RegexRules.AllRegexRules[DocumentGuid];
-            int index = RegexRules.IndexOf(regexRule);
+            ObservableCollection<RegexRule> regexRules = RegexRules.AllRegexRules[DocumentGuid];
+            int index = regexRules.IndexOf(regexRule);
 
-            if (index > 0)
-            {
-                RegexRules.RemoveAt(index);
-                RegexRules.Insert(index - 1, regexRule);
-            }
+            if (index <= 0) return;
+            regexRules.RemoveAt(index);
+            regexRules.Insert(index - 1, regexRule);
         }
         private void ReorderDownButton_Click(object sender, RoutedEventArgs e)
         {
-            Button button = sender as Button;
+            if (!(sender is Button button)) return;
             RegexRule regexRule = (RegexRule)button.DataContext;
-            ObservableCollection<RegexRule> RegexRules = Model.RegexRules.AllRegexRules[DocumentGuid];
-            int index = RegexRules.IndexOf(regexRule);
+            ObservableCollection<RegexRule> regexRules = RegexRules.AllRegexRules[DocumentGuid];
+            int index = regexRules.IndexOf(regexRule);
 
-            if (index < Model.RegexRules.AllRegexRules[DocumentGuid].Count)
-            {
-                RegexRules.RemoveAt(index);
-                RegexRules.Insert(index + 1, regexRule);
-            }
+            if (index >= RegexRules.AllRegexRules[DocumentGuid].Count) return;
+            regexRules.RemoveAt(index);
+            regexRules.Insert(index + 1, regexRule);
         }
     }
 }
