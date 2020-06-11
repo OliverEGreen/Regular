@@ -53,5 +53,36 @@ namespace Regular.Services
             // Are we using a re.match or a re.search? contain $ or ^? Or we could dynamically switch out the method
             return regexString;
         }
+
+        public static char[] Letters = new[] {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l','m', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
+        public static int[] Numbers = new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+        public static string GenerateRandomExample(ObservableCollection<RegexRulePart> regexRuleParts)
+        {
+            Random random = new Random();
+            string randomExampleString = "Example: ";
+            foreach (RegexRulePart regexRulePart in regexRuleParts)
+            {
+                switch (regexRulePart.RuleType)
+                {
+                    case RuleTypes.AnyLetter:
+                        randomExampleString += Letters[random.Next(Letters.Length)];
+                        break;
+                    case RuleTypes.AnyDigit:
+                        randomExampleString += Numbers[random.Next(Numbers.Length)];
+                        break;
+                    case RuleTypes.FreeText:
+                        randomExampleString += regexRulePart.RawUserInputValue;
+                        break;
+                    case RuleTypes.SelectionSet:
+                        randomExampleString += regexRulePart.RawUserInputValue;
+                        break;
+                    default:
+                        randomExampleString += "";
+                        break;
+                }
+            }
+            return randomExampleString;
+        }
     }
 }
