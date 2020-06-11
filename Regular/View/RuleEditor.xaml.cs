@@ -148,7 +148,7 @@ namespace Regular.View
         private void DisplayUserFeedback(object sender, RoutedEventArgs e)
         {
             string userFeedback = InputValidationServices.ReturnUserFeedback(TextBoxNameYourRuleInput.Text, TextBoxOutputParameterNameInput.Text, RegexRule.RegexRuleParts);
-            if (userFeedback == null)
+            if (string.IsNullOrEmpty(userFeedback))
             {
                 TextBoxUserFeedback.Visibility = System.Windows.Visibility.Hidden;
                 return;
@@ -175,8 +175,7 @@ namespace Regular.View
                 EllipseNameYourRuleInput.Fill = (SolidColorBrush)this.Resources["EllipseColorGray"];
                 return;
             }
-            bool ruleNameInputValid = InputValidationServices.ValidateRuleName(textBox.Text);
-            EllipseNameYourRuleInput.Fill = ruleNameInputValid ? (SolidColorBrush)this.Resources["EllipseColorGreen"] : (SolidColorBrush)this.Resources["EllipseColorRed"];
+            EllipseNameYourRuleInput.Fill = string.IsNullOrEmpty(InputValidationServices.ValidateRuleName(textBox.Text)) ? (SolidColorBrush)this.Resources["EllipseColorGreen"] : (SolidColorBrush)this.Resources["EllipseColorRed"];
         }
         private void ButtonEditRulePart_Click(object sender, RoutedEventArgs e)
         {
@@ -217,6 +216,11 @@ namespace Regular.View
         private void ButtonSelectNone_Click(object sender, RoutedEventArgs e)
         {
             foreach (ObservableObject observableObject in RegexRule.TargetCategoryIds) { observableObject.IsChecked = false; }
+        }
+        private void ButtonTest_OnClick(object sender, RoutedEventArgs e)
+        {
+            if(this.RowExamples.Height != new GridLength(20)) this.RowExamples.Height = new GridLength(20);
+            TextBlockExample.Text = RegexAssembly.GenerateRandomExample(RegexRule.RegexRuleParts);
         }
     }
 }
