@@ -13,7 +13,7 @@ namespace Regular.Services
         // CRUD Services for managing Regular data stored using Revit's ExtensibleStorage API
         private static Schema GetDocumentGuidSchema(Document document)
         {
-            Schema ConstructGuidSchema(Document doc)
+            Schema ConstructGuidSchema()
             {
                 SchemaBuilder schemaBuilder = new SchemaBuilder(Guid.NewGuid());
                 schemaBuilder.SetSchemaName("DocumentGUIDSchema");
@@ -25,18 +25,17 @@ namespace Regular.Services
                 return schemaBuilder.Finish();
             }
             IList<Schema> allSchemas = Schema.ListSchemas();
-            Schema documentGuidSchema = allSchemas.Where(x => x.SchemaName == "DocumentGUIDSchema").FirstOrDefault();
+            Schema documentGuidSchema = allSchemas.FirstOrDefault(x => x.SchemaName == "DocumentGUIDSchema");
 
             // If it already exists, we return it. If not, we make a new one from scratch
-            if (documentGuidSchema != null) return documentGuidSchema;
-            return ConstructGuidSchema(document);
+            return documentGuidSchema ?? ConstructGuidSchema();
         }
         public static string RegisterDocumentGuidToExtensibleStorage(Document document)
         {
             Entity entity = new Entity(GetDocumentGuidSchema(document));
             string newGuidString = Guid.NewGuid().ToString();
             entity.Set("DocumentGUID", newGuidString);
-            using (Transaction transaction = new Transaction(document, $"Saving Document Reference GUID"))
+            using (Transaction transaction = new Transaction(document, "Saving Document Reference GUID"))
             {
                 transaction.Start();
                 DataStorage dataStorage = DataStorage.Create(document);
@@ -51,18 +50,17 @@ namespace Regular.Services
             
             // Retrieving and testing all DataStorage objects in the document against our DocumentGuid schema.
             List<DataStorage> allDataStorage = new FilteredElementCollector(document).OfClass(typeof(DataStorage)).OfType<DataStorage>().ToList();
-            if (allDataStorage == null || allDataStorage.Count < 1) return null;
+            if (allDataStorage.Count < 1) return null;
 
             // Returning the document Guid if the schema is employed, otherwise null
-            DataStorage documentGuidDataStorage = allDataStorage.Where(x => x.GetEntity(guidSchema).IsValid()).FirstOrDefault();
-            if (documentGuidDataStorage == null) return null;
-            Entity documentGuidEntity = documentGuidDataStorage.GetEntity(guidSchema);
-            return documentGuidEntity.Get<string>("DocumentGUID");
+            DataStorage documentGuidDataStorage = allDataStorage.FirstOrDefault(x => x.GetEntity(guidSchema).IsValid());
+            Entity documentGuidEntity = documentGuidDataStorage?.GetEntity(guidSchema);
+            return documentGuidEntity?.Get<string>("DocumentGUID");
         }
-        private static Schema GetRegularSchema(Document document)
+        private static Schema GetRegularSchema()
         {
             // A method that handles all the faff of constructing the regularSchema
-            Schema ConstructRegularSchema(Document doc)
+            Schema ConstructRegularSchema()
             {
                 // The schema doesn't exist; we need to define the schema for the first time
                 SchemaBuilder schemaBuilder = new SchemaBuilder(Guid.NewGuid());
@@ -82,25 +80,23 @@ namespace Regular.Services
             }
 
             IList<Schema> allSchemas = Schema.ListSchemas();
-            Schema regularSchema = allSchemas.Where(x => x.SchemaName == "RegularSchema").FirstOrDefault();
+            Schema regularSchema = allSchemas.FirstOrDefault(x => x.SchemaName == "RegularSchema");
 
             // If it already exists, we return it. If not, we make a new one from scratch
-            if (regularSchema != null) return regularSchema;
-            return ConstructRegularSchema(document);
+            return regularSchema ?? ConstructRegularSchema();
         }
         public static void SaveRegexRuleToExtensibleStorage(string documentGuid, RegexRule regexRule)
         {
             Document document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
             //This needs to be turned into a method taking a RegexRule and saving to ExtensibleStorage
-            Entity entity = new Entity(GetRegularSchema(document));
+            Entity entity = new Entity(GetRegularSchema());
             entity.Set("GUID", new Guid(regexRule.Guid));
             entity.Set("RuleName", regexRule.Name);
-            List<string> idsToSave = regexRule.TargetCategoryIds.Where(x => x.IsChecked).Select(x => x.Id.ToString()).ToList();
-            entity.Set<IList<string>>("TargetCategoryIds", SerializationServices.ConvertListToIList(regexRule.TargetCategoryIds.Where(x => x.IsChecked).Select(x => x.Id.ToString()).ToList()));
+            entity.Set("TargetCategoryIds", SerializationServices.ConvertListToIList(regexRule.TargetCategoryIds.Where(x => x.IsChecked).Select(x => x.Id.ToString()).ToList()));
             entity.Set("TrackingParameterName", regexRule.TrackingParameterName);
             entity.Set("OutputParameterName", regexRule.OutputParameterName);
             entity.Set("RegexString", regexRule.RegexString);
-            entity.Set<IList<string>>("RegexRuleParts", SerializationServices.SerializeRegexRuleParts(regexRule.RegexRuleParts));
+            entity.Set("RegexRuleParts", SerializationServices.SerializeRegexRuleParts(regexRule.RegexRuleParts));
             using (Transaction transaction = new Transaction(document, $"Saving RegexRule {regexRule.Name}"))
             {
                 transaction.Start();
@@ -112,21 +108,21 @@ namespace Regular.Services
         public static ObservableCollection<RegexRule> GetAllRegexRulesInExtensibleStorage(Document document)
         {
             // Helper method to take Entities returned from Storage and convert them to RegexRules (including their RegexRuleParts)
-            RegexRule ConvertEntityToRegexRule(Document doc, Entity entity)
+            RegexRule ConvertEntityToRegexRule(Entity entity)
             {
                 string guid = entity.Get<Guid>("GUID").ToString();
                 string name = entity.Get<string>("RuleName");
-                List<string> targetTargetCategoryIds = entity.Get<IList<string>>("TargetCategoryIds").ToList<string>();
+                List<string> targetTargetCategoryIds = entity.Get<IList<string>>("TargetCategoryIds").ToList();
                 string trackingParameterName = entity.Get<string>("TrackingParameterName");
                 string outputParameterName = entity.Get<string>("OutputParameterName");
                 string regexString = entity.Get<string>("RegexString");
-                List<string> regexRulePartsString = entity.Get<IList<string>>("RegexRuleParts").ToList<string>();
+                List<string> regexRulePartsString = entity.Get<IList<string>>("RegexRuleParts").ToList();
                 ObservableCollection<RegexRulePart> regexRuleParts = SerializationServices.DeserializeRegexRulePartsInExtensibleStorage(regexRulePartsString);
 
                 ObservableCollection<ObservableObject> observableObjects = ObservableObject.GetInitialCategories(document);
                 foreach(ObservableObject observableObject in observableObjects)
                 {
-                    observableObject.IsChecked = targetTargetCategoryIds.Contains(observableObject.Id.ToString());
+                    observableObject.IsChecked = targetTargetCategoryIds.Contains(observableObject.Id);
                 }
 
                 return new RegexRule()
@@ -140,17 +136,17 @@ namespace Regular.Services
                     TrackingParameterName = trackingParameterName
                 };                
             }
-            Schema regularSchema = GetRegularSchema(document);
+            Schema regularSchema = GetRegularSchema();
 
             // Retrieving and testing all DataStorage objects in the document against our Regular schema.
             List<DataStorage> allDataStorage = new FilteredElementCollector(document).OfClass(typeof(DataStorage)).OfType<DataStorage>().ToList();
-            if (allDataStorage == null || allDataStorage.Count < 1) { return null; }
+            if (allDataStorage.Count < 1) { return null; }
 
             // Returning any Entities which employ the RegularSchema 
             List<Entity> regexRuleEntities = allDataStorage.Where(x => x.GetEntity(regularSchema).IsValid()).Select(x => x.GetEntity(regularSchema)).ToList();
 
             ObservableCollection<RegexRule> regexRules = new ObservableCollection<RegexRule>();
-            foreach (Entity entity in regexRuleEntities) { regexRules.Add(ConvertEntityToRegexRule(document, entity)); }
+            foreach (Entity entity in regexRuleEntities) { regexRules.Add(ConvertEntityToRegexRule(entity)); }
             return regexRules;
         }
         public static void UpdateRegexRuleInExtensibleStorage(string documentGuid, string regexRuleGuid, RegexRule newRegexRule)
@@ -166,11 +162,11 @@ namespace Regular.Services
             {
                 transaction.Start();
                 regexRuleEntity.Set("RuleName", newRegexRule.Name);
-                regexRuleEntity.Set<IList<string>>("TargetCategoryIds", SerializationServices.ConvertListToIList(newRegexRule.TargetCategoryIds.Where(x => x.IsChecked).Select(x => x.Id.ToString()).ToList()));
+                regexRuleEntity.Set("TargetCategoryIds", SerializationServices.ConvertListToIList(newRegexRule.TargetCategoryIds.Where(x => x.IsChecked).Select(x => x.Id.ToString()).ToList()));
                 regexRuleEntity.Set("TrackingParameterName", newRegexRule.TrackingParameterName);
                 regexRuleEntity.Set("OutputParameterName", newRegexRule.OutputParameterName);
                 regexRuleEntity.Set("RegexString", newRegexRule.RegexString);
-                regexRuleEntity.Set<IList<string>>("RegexRuleParts", SerializationServices.SerializeRegexRuleParts(newRegexRule.RegexRuleParts));
+                regexRuleEntity.Set("RegexRuleParts", SerializationServices.SerializeRegexRuleParts(newRegexRule.RegexRuleParts));
                 dataStorage.SetEntity(regexRuleEntity);
                 transaction.Commit();
             }
@@ -194,18 +190,18 @@ namespace Regular.Services
         private static KeyValuePair<DataStorage, Entity> GetRegexRuleInExtensibleStorage(string documentGuid, string regexRuleGuid)
         {
             Document document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
-            Schema regularSchema = GetRegularSchema(document);
+            Schema regularSchema = GetRegularSchema();
 
             // Retrieving and testing all DataStorage objects in the document against our Regular schema.
             List<DataStorage> allDataStorage = new FilteredElementCollector(document).OfClass(typeof(DataStorage)).OfType<DataStorage>().ToList();
-            if (allDataStorage == null || allDataStorage.Count < 1) { return new KeyValuePair<DataStorage, Entity>(null, null); }
+            if (allDataStorage.Count < 1) { return new KeyValuePair<DataStorage, Entity>(null, null); }
 
             // Returning any Entities which employ the RegularSchema 
             List<DataStorage> regexRuleDataStorage = allDataStorage.Where(x => x.GetEntity(regularSchema).IsValid()).ToList();
             foreach (DataStorage dataStorage in regexRuleDataStorage)
             {
                 Entity regexRuleEntity = dataStorage.GetEntity(regularSchema);
-                string regexRuleEntityGuid = regexRuleEntity.Get<Guid>("GUID").ToString();
+                regexRuleEntity.Get<Guid>("GUID").ToString();
                 if (regexRuleEntity.Get<Guid>("GUID").ToString() == regexRuleGuid) return new KeyValuePair<DataStorage, Entity> (dataStorage, regexRuleEntity); 
             }
             return new KeyValuePair<DataStorage, Entity>(null, null);

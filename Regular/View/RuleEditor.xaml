@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Regular.View"
         mc:Ignorable="d"
         Title=" Rule Editor" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight" Style="{DynamicResource StandardWindow}" MinHeight="500" MaxHeight="700">
     <Window.Resources>
@@ -36,10 +35,10 @@
                  Margin="-15,-15,-15,0"
                  Height="25"
                  VerticalAlignment="Top"/>
-        <Label Content="Name Your Rule" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="1" Margin="0,5" VerticalContentAlignment="Center"/>
+        <Label Content="Name Your Rule" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="1" Grid.Column="0" Margin="0,5" VerticalContentAlignment="Center"/>
         <TextBox Name="TextBoxNameYourRuleInput" Style="{StaticResource StandardTextBox}" Text="{Binding Name}" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" VerticalContentAlignment="Center" ToolTip="Define a reference name for the rule you're creating."/>
         <Ellipse Name="EllipseNameYourRuleInput" Width="7" Height="7" Fill="LightGray" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Margin="5,0,6,0"/>
-        <Label Content="Categories" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="2" Margin="0,5" VerticalContentAlignment="Center"/>
+        <Label Content="Categories" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="2" Grid.Column="0" Margin="0,5" VerticalContentAlignment="Center"/>
         <Button x:Name="ButtonExpandCategories" Height="20" Content="Choose Categories" Style="{StaticResource StandardButton}" Grid.Row="2" Grid.Column="1" Click="ButtonExpandCategories_Click"/>
         <Border BorderThickness="1" Margin="15,3,0,0" BorderBrush="{StaticResource TextBoxBorderColorDefault}" Grid.Row="1" Grid.RowSpan="6" Grid.Column="2">
             <ScrollViewer x:Name="ScrollViewerCategories" Style="{StaticResource DefaultScrollerViewerStyle}" PreviewMouseWheel="ScrollViewerCategories_PreviewMouseWheel">
@@ -55,16 +54,16 @@
                 </ListBox>
             </ScrollViewer>
         </Border>
-        <Label Content="Tracking Parameter" Style="{StaticResource StandardLabel}" Grid.Row="3" FontSize="13" Margin="0,5" VerticalContentAlignment="Center"/>
+        <Label Content="Tracking Parameter" Style="{StaticResource StandardLabel}" Grid.Row="3" Grid.Column="0" FontSize="13" Margin="0,5" VerticalContentAlignment="Center"/>
         <ComboBox Name="ComboBoxTrackingParameterInput" DisplayMemberPath="Definition.Name" Style="{StaticResource StandardComboBox}" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" SelectedIndex="0"/>
-        <Label Content="Output Parameter" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="4" Margin="0,5" VerticalContentAlignment="Center"/>
+        <Label Content="Output Parameter" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="4" Grid.Column="0" Margin="0,5" VerticalContentAlignment="Center"/>
         <TextBox Name="TextBoxOutputParameterNameInput" Style="{StaticResource StandardTextBox}" Text="{Binding OutputParameterName}" Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" VerticalContentAlignment="Center" ToolTip="This is the project parameter Regular will auto-create and write its validation output to."/>
         <Ellipse Name="EllipseOutputParameterNameInput" Width="7" Height="7" Fill="LightGray" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Right" Margin="5,0,6,0" Panel.ZIndex="1"/>
-        <Label Content="Add Rule Parts" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="5" VerticalAlignment="Bottom" Margin="0,5,0,13" VerticalContentAlignment="Bottom"/>
+        <Label Content="Add Rule Parts" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="5" Grid.Column="0" VerticalAlignment="Bottom" Margin="0,5,0,13" VerticalContentAlignment="Bottom"/>
         <ComboBox Name="ComboBoxRulePartInput" Style="{StaticResource StandardComboBox}" Height="24" SelectedIndex="0" Grid.Row="5" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Grid.Column="1" Margin="0,15,30,10"/>
         <Button Name="ButtonAddRulePart" Style="{StaticResource AddItemButton}" Height="24" Width="24" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,15,0,10" Click="ButtonAddRulePart_Click" />
-        <Border BorderThickness="1" BorderBrush="{StaticResource TextBoxBorderColorDefault}" Grid.Row="6" Grid.ColumnSpan="2">
-            <ScrollViewer Name="ScrollViewerRuleParts" Style="{StaticResource DefaultScrollerViewerStyle}" VerticalScrollBarVisibility="Visible" Grid.Row="6" Grid.ColumnSpan="2" PreviewMouseWheel="ScrollViewerRuleParts_PreviewMouseWheel">
+        <Border BorderThickness="1" BorderBrush="{StaticResource TextBoxBorderColorDefault}" Grid.Row="6" Grid.ColumnSpan="2" Grid.Column="0">
+            <ScrollViewer Name="ScrollViewerRuleParts" Style="{StaticResource DefaultScrollerViewerStyle}" VerticalScrollBarVisibility="Visible" PreviewMouseWheel="ScrollViewerRuleParts_PreviewMouseWheel">
                 <ListBox Name="ListBoxRuleParts" ItemsSource="{Binding RegexRuleParts}" Style="{StaticResource StandardListBox}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" >
                     <ListBox.ItemTemplate>
                         <DataTemplate>
@@ -94,8 +93,8 @@
                 </ListBox>
             </ScrollViewer>
         </Border>
-        <Button Name="ButtonOK" Style="{StaticResource StandardButton}" Click="ButtonOK_Click" Content="OK" Height="25" Width="80" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="7" Grid.Column="1" Grid.RowSpan="2" Margin="0,10,0,0"/>
-        <Button Name="ButtonCancel" Style="{StaticResource StandardButton}" Click="ButtonCancel_Click" Content="Cancel" Height="25" Width="80" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="7" Grid.Column="1" Margin="0,10,85,0" Grid.RowSpan="2"/>
+        <Button Name="ButtonOk" Style="{StaticResource StandardButton}" Click="ButtonOK_Click" Content="OK" Height="25" Width="80" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="7" Grid.Column="1" Margin="0,10,0,0"/>
+        <Button Name="ButtonCancel" Style="{StaticResource StandardButton}" Click="ButtonCancel_Click" Content="Cancel" Height="25" Width="80" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="7" Grid.Column="1" Margin="0,10,85,0"/>
         <Button Content="Select All" Name="ButtonSelectAll" Grid.Row="7" Grid.Column="2" Style="{StaticResource StandardButton}" Click="ButtonSelectAll_Click" HorizontalAlignment="Right" Height="25" Width="85" Margin="0,0,90,0" VerticalAlignment="Bottom"/>
         <Button Content="Select None" Name="ButtonSelectNone" Grid.Row="7" Grid.Column="2" Style="{StaticResource StandardButton}" Click="ButtonSelectNone_Click" HorizontalAlignment="Right" Height="25" Width="85" Margin="0,10,0,0" VerticalAlignment="Bottom"/>
     </Grid>

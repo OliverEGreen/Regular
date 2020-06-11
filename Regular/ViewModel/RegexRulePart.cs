@@ -15,7 +15,7 @@ namespace Regular.ViewModel
         public RuleTypes RuleType { get; }
         public string RuleTypeDisplayText
         {
-            get { return ruleTypeDisplayText; }
+            get => ruleTypeDisplayText;
             set
             {
                 ruleTypeDisplayText = value;
@@ -24,7 +24,7 @@ namespace Regular.ViewModel
         }
         public string EditButtonDisplayText
         {
-            get { return editButtonDisplayText; }
+            get => editButtonDisplayText;
             set
             {
                 editButtonDisplayText = value;
@@ -33,7 +33,7 @@ namespace Regular.ViewModel
         }
         public bool IsOptional
         {
-            get { return isOptional; }
+            get => isOptional;
             set
             {
                 isOptional = value;
@@ -42,7 +42,7 @@ namespace Regular.ViewModel
         }
         public bool IsCaseSensitive
         {
-            get { return isCaseSensitive; }
+            get => isCaseSensitive;
             set
             {
                 isCaseSensitive = value;
@@ -51,7 +51,7 @@ namespace Regular.ViewModel
         }
         public string CaseSensitiveDisplayString
         {
-            get { return caseSensitiveDisplayString; }
+            get => caseSensitiveDisplayString;
             set
             {
                 caseSensitiveDisplayString = value;
@@ -60,7 +60,7 @@ namespace Regular.ViewModel
         }
         public bool IsEditable
         {
-            get { return isEditable; }
+            get => isEditable;
             set
             {
                 isEditable = value;
@@ -69,7 +69,7 @@ namespace Regular.ViewModel
         }
         public string RawUserInputValue
         {
-            get { return rawUserInputValue; }
+            get => rawUserInputValue;
             set
             {
                 rawUserInputValue = value;
@@ -81,7 +81,7 @@ namespace Regular.ViewModel
         public RegexRulePart(RuleTypes ruleType)
         {
             RuleType = ruleType;
-            IsEditable = RuleType == RuleTypes.FreeText || RuleType == RuleTypes.SelectionSet ? true : false;
+            IsEditable = RuleType == RuleTypes.FreeText || RuleType == RuleTypes.SelectionSet;
         }
         // Our detailed constructor for recreating stored RegexRuleParts that were loaded from ExtensibleStorage
         public RegexRulePart(RuleTypes ruleType, bool isOptional, bool isCaseSensitive, bool requiresUserInput, string rawUserInputValue)

@@ -16,13 +16,11 @@ namespace Regular.Model
         public static RegexRule GetRegexRule(string documentGuid, string regexRuleGuid)
         {
             ObservableCollection<RegexRule> documentRegexRules = GetDocumentRegexRules(documentGuid);
-            if (documentRegexRules == null) return null;
-            return documentRegexRules.Where(x => x.Guid == regexRuleGuid).FirstOrDefault();
+            return documentRegexRules?.FirstOrDefault(x => x.Guid == regexRuleGuid);
         }
         public static ObservableCollection<RegexRule> GetDocumentRegexRules(string documentGuid)
         {
-            if (RegexRules.AllRegexRules.ContainsKey(documentGuid)) { return RegexRules.AllRegexRules[documentGuid]; }
-            return null;
+            return RegexRules.AllRegexRules.ContainsKey(documentGuid) ? RegexRules.AllRegexRules[documentGuid] : null;
         }
         public static List<string> GetDocumentRegexRuleGuids(string documentGuid)
         {
@@ -45,12 +43,10 @@ namespace Regular.Model
         public static void DeleteRegexRule(string documentGuid, string regexRuleGuid)
         {
             // Deletes a RegexRule from the document's static cache
-            if (RegexRules.AllRegexRules.ContainsKey(documentGuid))
-            {
-                ObservableCollection<RegexRule> documentRegexRules = GetDocumentRegexRules(documentGuid);
-                RegexRule regexRule = documentRegexRules.Where(x => x.Guid == regexRuleGuid).FirstOrDefault();
-                if (regexRule != null) documentRegexRules.Remove(regexRule);
-            }
+            if (!RegexRules.AllRegexRules.ContainsKey(documentGuid)) return;
+            ObservableCollection<RegexRule> documentRegexRules = GetDocumentRegexRules(documentGuid);
+            RegexRule regexRule = documentRegexRules.FirstOrDefault(x => x.Guid == regexRuleGuid);
+            if (regexRule != null) documentRegexRules.Remove(regexRule);
         }
     }
 }

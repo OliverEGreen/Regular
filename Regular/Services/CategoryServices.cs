@@ -31,8 +31,7 @@ namespace Regular.Services
         public static Category GetCategoryFromBuiltInCategory(Document doc, BuiltInCategory builtInCategory)
         {
             Category category = doc.Settings.Categories.get_Item(builtInCategory);
-            if (category != null) return category;
-            return null;
+            return category;
         }        
         public static BuiltInCategory GetBuiltInCategoryFromCategory(Category category)
         {

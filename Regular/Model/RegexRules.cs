@@ -4,7 +4,7 @@ using Regular.ViewModel;
 
 namespace Regular.Model
 {
-    class RegexRules
+    internal class RegexRules
     {
         public static Dictionary<string, ObservableCollection<RegexRule>> AllRegexRules { get; set; }
     }
