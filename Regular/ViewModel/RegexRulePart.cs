@@ -81,8 +81,35 @@ namespace Regular.ViewModel
         public RegexRulePart(RuleTypes ruleType)
         {
             RuleType = ruleType;
-            IsEditable = RuleType == RuleTypes.FreeText || RuleType == RuleTypes.SelectionSet;
+            IsOptional = false;
+            IsCaseSensitive = false;
+            RawUserInputValue = "";
+
+            switch (RuleType)
+            {
+                case RuleTypes.AnyDigit:
+                    RuleTypeDisplayText = "Any Digit";
+                    IsEditable = false;
+                    EditButtonDisplayText = "0-9";
+                    break;
+                case RuleTypes.AnyLetter:
+                    RuleTypeDisplayText = "Any Letter";
+                    IsEditable = true;
+                    EditButtonDisplayText = "A-Z";
+                    break;
+                case RuleTypes.FreeText:
+                    RuleTypeDisplayText = "Free Text";
+                    IsEditable = true;
+                    EditButtonDisplayText = "...";
+                    break;
+                case RuleTypes.SelectionSet:
+                    RuleTypeDisplayText = "Selection Set";
+                    IsEditable = true;
+                    EditButtonDisplayText = "...";
+                    break;
+            }
         }
+
         // Our detailed constructor for recreating stored RegexRuleParts that were loaded from ExtensibleStorage
         public RegexRulePart(RuleTypes ruleType, bool isOptional, bool isCaseSensitive, bool requiresUserInput, string rawUserInputValue)
         {
@@ -91,7 +118,31 @@ namespace Regular.ViewModel
             IsCaseSensitive = isCaseSensitive;
             IsEditable = requiresUserInput;
             RawUserInputValue = rawUserInputValue;
-        }
+
+            switch (RuleType)
+            {
+                case RuleTypes.AnyDigit:
+                    RuleTypeDisplayText = "Any Digit";
+                    IsEditable = false;
+                    EditButtonDisplayText = "0-9";
+                    break;
+                case RuleTypes.AnyLetter:
+                    RuleTypeDisplayText = "Any Letter";
+                    IsEditable = true;
+                    EditButtonDisplayText = "A-Z";
+                    break;
+                case RuleTypes.FreeText:
+                    RuleTypeDisplayText = "Free Text";
+                    IsEditable = true;
+                    EditButtonDisplayText = "...";
+                    break;
+                case RuleTypes.SelectionSet:
+                    RuleTypeDisplayText = "Selection Set";
+                    IsEditable = true;
+                    EditButtonDisplayText = "...";
+                    break;
+            }
+        }   
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string propertyName)

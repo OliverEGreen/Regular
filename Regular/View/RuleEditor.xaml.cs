@@ -27,18 +27,22 @@ namespace Regular.View
 
             // If we're editing an existing rule, it gets set to a static variable for accessibility
             Title = RegexRuleManager.GetDocumentRegexRules(documentGuid).Contains(regexRule) ? $"Editing Rule: {regexRule.Name}" : "Creating New Rule";
+            TextBoxOutputParameterNameInput.IsEnabled = !RegexRules.AllRegexRules[documentGuid].Contains(regexRule);
             InitializeRuleEditor(documentGuid);
         }
         private void InitializeRuleEditor(string documentGuid)
         {
             DocumentGuid = documentGuid;
             Document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
-
+            
             // Binding ComboBox to our RuleType enumeration
             ComboBoxRulePartInput.ItemsSource = Enum.GetValues(typeof(RuleTypes)).Cast<RuleTypes>();
 
             // Populating ComboBox of user-visible Revit Categories
             ListBoxCategoriesSelection.ItemsSource = RegexRule.TargetCategoryIds;
+
+            TextBoxOutputParameterNameInput.MaxLength = InputValidationServices.MaxInputLength;
+            TextBoxNameYourRuleInput.MaxLength = InputValidationServices.MaxInputLength;
 
             // Some random parameters for now - we need the ability to look up the parameters for a particular category
             // Normally we can use a FilteredElementCollector to get these, however it's going to be tricky if we have no elements of that category
@@ -60,6 +64,8 @@ namespace Regular.View
             ButtonAddRulePart.Click += DisplayUserFeedback;
 
             TextBoxUserFeedback.Visibility = System.Windows.Visibility.Hidden;
+
+            TextBoxNameYourRuleInput.Focus();
         }
         private void ScrollViewerRuleParts_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
