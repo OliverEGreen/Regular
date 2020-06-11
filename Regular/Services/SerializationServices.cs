@@ -19,7 +19,11 @@ namespace Regular.Services
             IList<string> regexRulePartList = new List<string>();
             foreach (RegexRulePart regexRulePart in regexRuleParts)
             {
-                regexRulePartList.Add($@"{regexRulePart.RuleType}`{regexRulePart.RawUserInputValue}`{regexRulePart.IsOptional}`{regexRulePart.IsCaseSensitive}`{regexRulePart.IsEditable}");
+                regexRulePartList.Add($@"{regexRulePart.RuleType}`
+                                            {regexRulePart.RawUserInputValue}`
+                                            {regexRulePart.IsOptional}`
+                                            {regexRulePart.IsCaseSensitive}`
+                                            {regexRulePart.IsEditable}");
             }
             return regexRulePartList;
         }

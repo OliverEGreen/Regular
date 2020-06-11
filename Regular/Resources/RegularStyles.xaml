@@ -138,7 +138,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Grid Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" ClipToBounds="True">
-                        <Rectangle x:Name="BackgroundRectangle" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Fill="#D0D0CF" RadiusX="2" RadiusY="2"/>
+                        <Rectangle x:Name="BackgroundRectangle" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Fill="#D0D0CF" RadiusX="3" RadiusY="3"/>
                         <DockPanel Name="ContentPresenterDockPanel">
                             <ContentPresenter x:Name="ContentPresenter" Content="{TemplateBinding Content}" TextBlock.Foreground="{StaticResource FontColorDefault}" HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <ContentPresenter.Resources>

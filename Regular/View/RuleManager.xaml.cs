@@ -25,13 +25,13 @@ namespace Regular.View
         {
             RegexRule regexRule = new RegexRule()
             {
-                Name = "Name",
-                OutputParameterName = "OutputParameterName",
+                Name = "",
+                OutputParameterName = "",
                 RegexRuleParts = new ObservableCollection<RegexRulePart>(),
-                RegexString = "RegexString",
+                RegexString = "",
                 TargetCategoryIds = ObservableObject.GetInitialCategories(Document),
-                ToolTip = "ToolTip",
-                TrackingParameterName = "TrackingParameterName"
+                ToolTip = "",
+                TrackingParameterName = ""
             };
             RuleEditor ruleEditor = new RuleEditor(DocumentServices.GetRevitDocumentGuid(Document), regexRule);
             ruleEditor.Closed += RuleEditor_Closed;
