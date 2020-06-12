@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Input;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Media;
 using System.Windows.Controls;
+using System.Windows.Data;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Regular.ViewModel;
@@ -220,7 +224,13 @@ namespace Regular.View
         private void ButtonTest_OnClick(object sender, RoutedEventArgs e)
         {
             if(this.RowExamples.Height != new GridLength(20)) this.RowExamples.Height = new GridLength(20);
+            if (RegexRule.RegexRuleParts.Count <= 0)
+            {
+                TextBlockExample.Text = "Add rule parts to generate examples";
+                return;
+            }
             TextBlockExample.Text = RegexAssembly.GenerateRandomExample(RegexRule.RegexRuleParts);
         }
     }
 }
+ 

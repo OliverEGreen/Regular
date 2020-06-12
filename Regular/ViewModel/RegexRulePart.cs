@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using Regular.Model;
 
 namespace Regular.ViewModel
 {

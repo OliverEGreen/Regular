@@ -86,7 +86,13 @@
         </TextBlock>
         <Ellipse Name="EllipseOutputParameterNameInput" Width="7" Height="7" Fill="LightGray" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Right" Margin="5,0,6,0" Panel.ZIndex="1"/>
         <Label Content="Add Rule Parts" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="5" Grid.Column="0" VerticalAlignment="Bottom" Margin="0,5,0,13" VerticalContentAlignment="Bottom"/>
-        <ComboBox Name="ComboBoxRulePartInput" Style="{StaticResource StandardComboBox}" Height="24" SelectedIndex="0" Grid.Row="5" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Grid.Column="1" Margin="0,15,30,10"/>
+        <ComboBox Name="ComboBoxRulePartInput" Style="{StaticResource StandardComboBox}" SelectedItem="{Binding Path=DataContext, Converter={StaticResource EnumValueConverter}}" Height="24" SelectedIndex="0" Grid.Row="5" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Grid.Column="1" Margin="0,15,30,10">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Converter={StaticResource EnumValueConverter}}"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
         <Button Name="ButtonAddRulePart" Style="{StaticResource AddItemButton}" Height="24" Width="24" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,15,0,10" Click="ButtonAddRulePart_Click" />
         <Border BorderThickness="1" BorderBrush="{StaticResource TextBoxBorderColorDefault}" Grid.Row="6" Grid.ColumnSpan="2" Grid.Column="0">
             <ScrollViewer Name="ScrollViewerRuleParts" Style="{StaticResource DefaultScrollerViewerStyle}" VerticalScrollBarVisibility="Visible" PreviewMouseWheel="ScrollViewerRuleParts_PreviewMouseWheel">
