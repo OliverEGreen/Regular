@@ -1,4 +1,5 @@
-﻿using Regular.ViewModel;
+﻿using Regular.Model;
+using Regular.ViewModel;
 
 namespace Regular.Services
 {
