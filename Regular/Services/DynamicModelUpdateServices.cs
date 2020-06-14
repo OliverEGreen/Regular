@@ -5,7 +5,6 @@ using System.Text.RegularExpressions;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Regular.ViewModel;
-using Regular.Model;
 using static Regular.RegularApp;
 
 namespace Regular.Services
@@ -37,7 +36,7 @@ namespace Regular.Services
         public static void RunAllRegexRules(string documentGuid, List<ElementId> modifiedElementIds)
         {
             Document document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
-            List<RegexRule> regexRules = RegexRuleManager.GetDocumentRegexRules(documentGuid).ToList();
+            List<RegexRule> regexRules = RegexRule.GetDocumentRegexRules(documentGuid).ToList();
 
             List<Element> modifiedElements = modifiedElementIds.Select(x => document.GetElement(x)).ToList();
             List<string> modifiedCategoryIds = modifiedElements.Select(x => x.Category.Id.ToString()).Distinct().ToList();
@@ -82,10 +81,10 @@ namespace Regular.Services
             try { UpdaterRegistry.RegisterUpdater(ruleUpdater, document, true); }
             catch (Exception ex) { TaskDialog.Show("Regular", ex.Message); }
 
-            RegexRule regexRule = RegexRuleManager.GetRegexRule(documentGuid, regexRuleGuid);
+            RegexRule regexRule = RegexRule.GetRuleById(documentGuid, regexRuleGuid);
             
             // Converting the save string representations of the Target Category ElementIds to ElementIds. Maybe can save these as integers and skip the conversion.
-            List<ElementId> targetCategoryIds = regexRule.TargetCategoryIds.Select(x => new ElementId(Convert.ToInt32(x))).ToList();
+            List<ElementId> targetCategoryIds = regexRule.TargetCategoryIds.Select(x => new ElementId(Convert.ToInt32(x.Id))).ToList();
             List<Category> targetCategories = targetCategoryIds.Select(x => Category.GetCategory(document, x)).ToList();
             List<BuiltInCategory> targetBuiltInCategories = targetCategories.Select(CategoryServices.GetBuiltInCategoryFromCategory).ToList();
             
@@ -94,6 +93,7 @@ namespace Regular.Services
             
             // Adding the trigger to the updater registry
             Parameter trackingParameter = ParameterServices.GetProjectParameterByName(document, regexRule.TrackingParameterName);
+            if (trackingParameter == null) return;
             UpdaterRegistry.AddTrigger(ruleUpdater.GetUpdaterId(), elementMulticategoryFilter, Element.GetChangeTypeParameter(trackingParameter));
         }
     }

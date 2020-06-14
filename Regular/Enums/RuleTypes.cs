@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Regular.Model
+namespace Regular.Enums
 {
     public enum RuleTypes
     {
@@ -11,6 +11,6 @@ namespace Regular.Model
         [Description("Free Text")]
         FreeText,
         [Description("Selection Set")]
-        SelectionSet,
+        SelectionSet
     }
 }

@@ -41,7 +41,7 @@ namespace Regular
 
             // Creates an accessible, stable reference to the Revit document
             RevitDocumentCache[documentGuid] = document;
-            ObservableCollection<RegexRule> existingRegexRules = ExtensibleStorageServices.GetAllRegexRulesInExtensibleStorage(document);
+            ObservableCollection<RegexRule> existingRegexRules = ExtensibleStorageServices.GetAllRegexRulesInExtensibleStorage(documentGuid);
             RegexRules.AllRegexRules[documentGuid] = existingRegexRules ?? new ObservableCollection<RegexRule>();
 
             // If there are no saved rules we return, otherwise we establish the updaters

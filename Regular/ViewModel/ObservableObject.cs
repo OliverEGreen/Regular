@@ -45,10 +45,11 @@ namespace Regular.ViewModel
             }
         }
 
-        public static ObservableCollection<ObservableObject> GetInitialCategories(Document document)
+        public static ObservableCollection<ObservableObject> GetInitialCategories(string documentGuid)
         {
             ObservableCollection<ObservableObject> observableObjects = new ObservableCollection<ObservableObject>();
-            
+            Document document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
+
             // Fetching all categories to create ObservableObjects
             List<Category> userVisibleCategories = CategoryServices.GetListFromCategorySet(document.Settings.Categories)
                 .Where(x => x.AllowsBoundParameters)

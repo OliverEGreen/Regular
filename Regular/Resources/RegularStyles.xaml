@@ -1,7 +1,6 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:converters="clr-namespace:Regular.Converters">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <SolidColorBrush x:Key="ButtonBackgroundColorDefault" Color="#E0E0E0"/>
     <SolidColorBrush x:Key="TextBoxBorderColorDefault" Color="#BFBFBF"/>
     <SolidColorBrush x:Key="ButtonBackgroundColorHighlight" Color="#F1F0F2"/>
@@ -58,6 +57,7 @@
         <Setter Property="IsEditable" Value="True"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
     </Style>
+    
     <Style x:Key="StandardTextBox" TargetType="TextBox">
         <Setter Property="Background" Value="{StaticResource WindowBackgroundColor}"/>
         <Setter Property="Foreground" Value="{StaticResource FontColorDefault}"/>
@@ -320,5 +320,4 @@
         <Setter Property="Padding" Value="0"/>
         <Setter Property="BorderThickness" Value="0px"/>
     </Style>
-    <converters:EnumValueConverter x:Key="EnumValueConverter"/>
 </ResourceDictionary>
