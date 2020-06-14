@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.ExtensibleStorage;
+using Regular.Enums;
 using Regular.ViewModel;
 
 namespace Regular.Services
@@ -75,6 +76,7 @@ namespace Regular.Services
                 schemaBuilder.AddSimpleField("TrackingParameterName", typeof(string));
                 schemaBuilder.AddSimpleField("OutputParameterName", typeof(string));
                 schemaBuilder.AddSimpleField("RegexString", typeof(string));
+                schemaBuilder.AddSimpleField("MatchTypes", typeof(string));
                 schemaBuilder.AddArrayField("RegexRuleParts", typeof(string));
                 return schemaBuilder.Finish();
             }
@@ -96,6 +98,7 @@ namespace Regular.Services
             entity.Set("TrackingParameterName", regexRule.TrackingParameterName);
             entity.Set("OutputParameterName", regexRule.OutputParameterName);
             entity.Set("RegexString", regexRule.RegexString);
+            entity.Set("MatchTypes", regexRule.MatchTypes.ToString());
             entity.Set("RegexRuleParts", SerializationServices.SerializeRegexRuleParts(regexRule.RegexRuleParts));
             using (Transaction transaction = new Transaction(document, $"Saving RegexRule {regexRule.Name}"))
             {
@@ -117,6 +120,22 @@ namespace Regular.Services
                 regexRule.OutputParameterName = entity.Get<string>("OutputParameterName");
                 regexRule.RegexString = entity.Get<string>("RegexString");
                 
+                // Deserializing saved match type string to enum value
+                switch (entity.Get<string>("MatchTypes"))
+                {
+                    case "ExactMatch":
+                        regexRule.MatchTypes = MatchTypes.ExactMatch;
+                        break;
+                    case "MatchAtBeginning":
+                        regexRule.MatchTypes = MatchTypes.MatchAtBeginning;
+                        break;
+                    case "PartialMatch":
+                        regexRule.MatchTypes = MatchTypes.PartialMatch;
+                        break;
+                    default:
+                        break;
+                }
+
                 // Deserializing and creating each rule part from a saved list of strings
                 List<string> regexRulePartsString = entity.Get<IList<string>>("RegexRuleParts").ToList();
                 regexRule.RegexRuleParts = SerializationServices.DeserializeRegexRulePartsInExtensibleStorage(regexRulePartsString);
@@ -138,7 +157,15 @@ namespace Regular.Services
             List<Entity> regexRuleEntities = allDataStorage.Where(x => x.GetEntity(regularSchema).IsValid()).Select(x => x.GetEntity(regularSchema)).ToList();
 
             ObservableCollection<RegexRule> regexRules = new ObservableCollection<RegexRule>();
-            foreach (Entity entity in regexRuleEntities) { regexRules.Add(ConvertEntityToRegexRule(entity)); }
+            try
+            {
+                foreach (Entity entity in regexRuleEntities) { regexRules.Add(ConvertEntityToRegexRule(entity)); }
+            }
+            catch
+            {
+                // ignored
+            }
+
             return regexRules;
         }
         public static void UpdateRegexRuleInExtensibleStorage(string documentGuid, string regexRuleGuid, RegexRule newRegexRule)
@@ -159,6 +186,7 @@ namespace Regular.Services
                 regexRuleEntity.Set("OutputParameterName", newRegexRule.OutputParameterName);
                 regexRuleEntity.Set("RegexString", newRegexRule.RegexString);
                 regexRuleEntity.Set("RegexRuleParts", SerializationServices.SerializeRegexRuleParts(newRegexRule.RegexRuleParts));
+                regexRuleEntity.Set("MatchTypes", newRegexRule.MatchTypes);
                 dataStorage.SetEntity(regexRuleEntity);
                 transaction.Commit();
             }

@@ -17,7 +17,7 @@ namespace Regular.ViewModel
         private string outputParameterName; // This should also be an ID
         private string toolTipString;
         private string regexString;
-        private MatchType matchType;
+        private MatchTypes matchTypes;
         
         public string Name
         {
@@ -100,13 +100,13 @@ namespace Regular.ViewModel
                 NotifyPropertyChanged("RegexRuleParts");
             }
         }
-        public MatchType MatchType
+        public MatchTypes MatchTypes
         {
-            get => matchType;
+            get => matchTypes;
             set
             {
-                matchType = value;
-                NotifyPropertyChanged("MatchType");
+                matchTypes = value;
+                NotifyPropertyChanged("MatchTypes");
             }
         }
 

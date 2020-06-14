@@ -70,7 +70,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Enums\MatchType.cs" />
+    <Compile Include="Enums\MatchTypes.cs" />
     <Compile Include="Model\EnumValueConverter.cs" />
     <Compile Include="Services\AppRibbonServices.cs" />
     <Compile Include="ViewModel\ObservableObject.cs" />
