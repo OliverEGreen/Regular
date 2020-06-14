@@ -29,7 +29,7 @@ namespace Regular.View
             get => numberCategoriesSelected;
             set
             {
-                numberCategoriesSelected = value;
+                numberCategoriesSelected = ListBoxCategoriesSelection.SelectedItems.Count;
                 OnPropertyChanged("NumberCategoriesSelected");
             }
         }
