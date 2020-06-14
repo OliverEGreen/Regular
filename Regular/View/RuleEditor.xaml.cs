@@ -230,9 +230,21 @@ namespace Regular.View
             switch (regexRulePart.RuleType)
             {
                 case RuleTypes.AnyLetter:
-                    if (regexRulePart.CaseSensitiveDisplayString == "UPPER CASE") regexRulePart.CaseSensitiveDisplayString = "lower case";
-                    else if (regexRulePart.CaseSensitiveDisplayString == "lower case") regexRulePart.CaseSensitiveDisplayString = "Any Case";
-                    else { regexRulePart.CaseSensitiveDisplayString = "UPPER CASE"; }
+                    switch (regexRulePart.EditButtonDisplayText)
+                    {
+                        case "A-Z":
+                            regexRulePart.EditButtonDisplayText = "a-z";
+                            regexRulePart.CaseSensitiveDisplayString = "lower case";
+                            break;
+                        case "a-z":
+                            regexRulePart.EditButtonDisplayText = "A-z";
+                            regexRulePart.CaseSensitiveDisplayString = "Any Case";
+                            break;
+                        default:
+                            regexRulePart.EditButtonDisplayText = "A-Z";
+                            regexRulePart.CaseSensitiveDisplayString = "UPPER CASE";
+                            break;
+                    }
                     break;
                 case RuleTypes.AnyDigit:
                     break;
@@ -243,6 +255,8 @@ namespace Regular.View
                 case RuleTypes.SelectionSet:
                     TaskDialog.Show("Test", "You are now editing selection set");
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
         private void ButtonExpandCategories_Click(object sender, RoutedEventArgs e)
