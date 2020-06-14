@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Regular.Enums;
 using Regular.Model;
 using Regular.ViewModel;
 

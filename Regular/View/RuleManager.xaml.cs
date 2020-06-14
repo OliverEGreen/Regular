@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 using Autodesk.Revit.DB;
 using Regular.Model;
 using Regular.Services;
@@ -19,21 +20,14 @@ namespace Regular.View
             DocumentGuid = documentGuid;
             ListBoxRegexRules.ItemsSource = RegexRules.AllRegexRules[documentGuid];
             Document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
+
+            // Gives us the ability to close the window with the Esc kay
+            PreviewKeyDown += (s, e) => { if (e.Key == Key.Escape) Close(); };
         }
 
         private void ButtonAddNewRule_Click(object sender, RoutedEventArgs e)
         {
-            RegexRule regexRule = new RegexRule()
-            {
-                Name = "",
-                OutputParameterName = "",
-                RegexRuleParts = new ObservableCollection<RegexRulePart>(),
-                RegexString = "",
-                TargetCategoryIds = ObservableObject.GetInitialCategories(Document),
-                ToolTip = "",
-                TrackingParameterName = ""
-            };
-            RuleEditor ruleEditor = new RuleEditor(DocumentServices.GetRevitDocumentGuid(Document), regexRule);
+            RuleEditor ruleEditor = new RuleEditor(DocumentServices.GetRevitDocumentGuid(Document), RegexRule.Create(DocumentGuid));
             ruleEditor.Closed += RuleEditor_Closed;
             ruleEditor.ShowDialog();
         }
@@ -51,7 +45,7 @@ namespace Regular.View
             string regexRuleGuid = ((RegexRule)button.DataContext).Guid;
 
             // Deleting both the cached RegexRule and the associated DataStorage object
-            RegexRuleManager.DeleteRegexRule(DocumentGuid, regexRuleGuid);
+            RegexRule.Delete(DocumentGuid, regexRuleGuid);
             ExtensibleStorageServices.DeleteRegexRuleFromExtensibleStorage(DocumentGuid, regexRuleGuid);
         }
         private void RegexRulesScrollViewer_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)

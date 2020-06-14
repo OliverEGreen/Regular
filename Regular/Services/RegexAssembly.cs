@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Regular.Enums;
 using Regular.Model;
 using Regular.ViewModel;
 

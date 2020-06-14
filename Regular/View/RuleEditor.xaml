@@ -3,12 +3,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:model="clr-namespace:Regular.Model"
         mc:Ignorable="d"
-        Title=" Rule Editor" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight" Style="{DynamicResource StandardWindow}" Height="500" MinHeight="500" MaxHeight="700" MaxWidth="700">
+        Title=" Rule Editor" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight" Style="{DynamicResource StandardWindow}" Height="500" MinHeight="400" MaxHeight="600" MaxWidth="700">
     <Window.Resources>
         <ResourceDictionary Source="../Resources/RegularStyles.xaml"/>
     </Window.Resources>
     <Grid Margin="15">
+        <Grid.Resources>
+            <model:EnumConverter x:Key="EnumConverter"/>
+        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="10"/>
             <RowDefinition Height="30"/>
@@ -38,7 +42,7 @@
                  VerticalAlignment="Top"/>
         <Label Content="Name Your Rule" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="1" Grid.Column="0" Margin="0,5" VerticalContentAlignment="Center"/>
         <TextBox Name="TextBoxNameYourRuleInput" Style="{StaticResource StandardTextBox}" Text="{Binding Name}" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" VerticalContentAlignment="Center" ToolTip="Define a reference name for the rule you're creating."/>
-        <TextBlock Name="TextblockNameYourRuleWatermark" IsHitTestVisible="False" Padding="5" VerticalAlignment="Center" Text="Type Here..." Foreground="{StaticResource FontColorFaded}" FontSize="12" FontWeight="Regular" Grid.Row="1" Grid.Column="1" Panel.ZIndex="1">
+        <TextBlock Name="TextblockNameYourRuleWatermark" IsHitTestVisible="False" Padding="3,0,0,0" VerticalAlignment="Center" Text="Type Here..." Foreground="{StaticResource FontColorFaded}" FontSize="12" FontWeight="Regular" Grid.Row="1" Grid.Column="1" Panel.ZIndex="1">
             <TextBlock.Style>
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="Visibility" Value="Collapsed"/>
@@ -51,9 +55,9 @@
             </TextBlock.Style>
         </TextBlock>
         <Ellipse Name="EllipseNameYourRuleInput" Width="7" Height="7" Fill="LightGray" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Margin="5,0,6,0"/>
-        <Label Content="Categories" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="2" Grid.Column="0" Margin="0,5" VerticalContentAlignment="Center"/>
-        <Button x:Name="ButtonExpandCategories" Height="20" Content="Choose Categories" Style="{StaticResource StandardButton}" Grid.Row="2" Grid.Column="1" Click="ButtonExpandCategories_Click"/>
-        <Label Content="Select Categories:" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="1" Grid.Column="2" Margin="0,5" VerticalContentAlignment="Center"/>
+        <Label Name="LabelCategories" Content="{Binding NumberCategoriesSelected, UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="Categories ({0})}" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="2" Grid.Column="0" Margin="0,5" VerticalContentAlignment="Center"/>
+        <Button x:Name="ButtonExpandCategories" Height="20" Content="Select Categories" Style="{StaticResource StandardButton}" Grid.Row="2" Grid.Column="1" Click="ButtonExpandCategories_Click"/>
+        <Label Content="Select Categories:" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="1" Grid.Column="2" Margin="15,5,0,5" VerticalContentAlignment="Center"/>
         <Border BorderThickness="1" Margin="15,3,0,0" BorderBrush="{StaticResource TextBoxBorderColorDefault}" Grid.Row="2" Grid.RowSpan="5" Grid.Column="2">
             <ScrollViewer x:Name="ScrollViewerCategories" Style="{StaticResource DefaultScrollerViewerStyle}" PreviewMouseWheel="ScrollViewerCategories_PreviewMouseWheel">
                 <ListBox x:Name="ListBoxCategoriesSelection" BorderThickness="0" SelectionMode="Extended">
@@ -72,7 +76,7 @@
         <ComboBox Name="ComboBoxTrackingParameterInput" DisplayMemberPath="Definition.Name" Style="{StaticResource StandardComboBox}" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" SelectedIndex="0"/>
         <Label Content="Output Parameter" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="4" Grid.Column="0" Margin="0,5" VerticalContentAlignment="Center"/>
         <TextBox Name="TextBoxOutputParameterNameInput" Style="{StaticResource StandardTextBox}" Text="{Binding OutputParameterName}" Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" VerticalContentAlignment="Center" ToolTip="This is the project parameter Regular will auto-create and write its validation output to."/>
-        <TextBlock Name="TextblockOutputParameterWatermark" IsHitTestVisible="False" Padding="5" VerticalAlignment="Center" Text="Type Here..." Foreground="{StaticResource FontColorFaded}" FontSize="12" FontWeight="Regular" Grid.Row="4" Grid.Column="1" Panel.ZIndex="1">
+        <TextBlock Name="TextblockOutputParameterWatermark" IsHitTestVisible="False" Padding="3,0,0,0" VerticalAlignment="Center" Text="Type Here..." Foreground="{StaticResource FontColorFaded}" FontSize="12" FontWeight="Regular" Grid.Row="4" Grid.Column="1" Panel.ZIndex="1">
             <TextBlock.Style>
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="Visibility" Value="Collapsed"/>
@@ -86,17 +90,17 @@
         </TextBlock>
         <Ellipse Name="EllipseOutputParameterNameInput" Width="7" Height="7" Fill="LightGray" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Right" Margin="5,0,6,0" Panel.ZIndex="1"/>
         <Label Content="Add Rule Parts" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="5" Grid.Column="0" VerticalAlignment="Bottom" Margin="0,5,0,13" VerticalContentAlignment="Bottom"/>
-        <ComboBox Name="ComboBoxRulePartInput" Style="{StaticResource StandardComboBox}" SelectedItem="{Binding Path=DataContext, Converter={StaticResource EnumValueConverter}}" Height="24" SelectedIndex="0" Grid.Row="5" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Grid.Column="1" Margin="0,15,30,10">
+        <ComboBox Name="ComboBoxRulePartInput" Style="{StaticResource StandardComboBox}" SelectedItem="{Binding SelectedRuleTypes, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource EnumConverter}}" Height="24" Grid.Row="5" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Grid.Column="1" Margin="0,15,30,10">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Converter={StaticResource EnumValueConverter}}"/>
+                    <TextBlock Text="{Binding Converter={StaticResource EnumConverter}}"/>
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
         <Button Name="ButtonAddRulePart" Style="{StaticResource AddItemButton}" Height="24" Width="24" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,15,0,10" Click="ButtonAddRulePart_Click" />
         <Border BorderThickness="1" BorderBrush="{StaticResource TextBoxBorderColorDefault}" Grid.Row="6" Grid.ColumnSpan="2" Grid.Column="0">
             <ScrollViewer Name="ScrollViewerRuleParts" Style="{StaticResource DefaultScrollerViewerStyle}" VerticalScrollBarVisibility="Visible" PreviewMouseWheel="ScrollViewerRuleParts_PreviewMouseWheel">
-                <ListBox Name="ListBoxRuleParts" ItemsSource="{Binding RegexRuleParts}" Style="{StaticResource StandardListBox}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" >
+                <ListBox Name="ListBoxRuleParts" ItemsSource="{Binding RegexRuleParts}" Style="{StaticResource StandardListBox}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" SelectedIndex="0">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Grid>
@@ -118,7 +122,7 @@
                                 <CheckBox Name="CheckBoxMatchCase" IsChecked="False" Grid.Column="3" HorizontalAlignment="Left" VerticalAlignment="Center" Background="{StaticResource WindowBackgroundColor}" Visibility="{Binding CaseSensitiveVisibility}"/>
                                 <TextBlock Text="Optional" Style="{StaticResource StandardText}" Grid.Column="4" VerticalAlignment="Center" Margin="10,0,0,0"/>
                                 <CheckBox Name="CheckBoxRulePartOptional" IsChecked="{Binding IsOptional}" Grid.Column="5" HorizontalAlignment="Left" VerticalAlignment="Center" Background="{StaticResource WindowBackgroundColor}"/>
-                                <Button Name="DeleteRegexRulePartButton" Style="{StaticResource DeleteItemButton}" HorizontalAlignment="Right" VerticalAlignment="Center" Width="25" Height="30" Margin="0,0,-3,0" Click="DeleteRegexRulePartButton_Click" Grid.Column="6"/>
+                                <Button Name="ButtonDeleteRegexRulePart" Style="{StaticResource DeleteItemButton}" HorizontalAlignment="Right" VerticalAlignment="Center" Width="25" Height="30" Margin="0,0,-3,0" Click="ButtonDeleteRegexRulePart_OnClick" Grid.Column="6"/>
                             </Grid>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
@@ -126,7 +130,7 @@
             </ScrollViewer>
         </Border>
         <TextBlock Name="TextBlockExample" Style="{StaticResource StandardText}" Text="Example: " VerticalAlignment="Bottom" HorizontalAlignment="Left" Grid.Column="0" Grid.Row="7"/>
-        <Button Name="ButtonTest" Style="{StaticResource StandardButton}" Click="ButtonTest_OnClick" Content="Test" Height="25" Width="80" HorizontalAlignment="Left" VerticalAlignment="Bottom" Grid.Row="8" Grid.Column="0"/>
+        <Button Name="ButtonTest" Style="{StaticResource StandardButton}" Click="ButtonTest_OnClick" Content="Test" IsEnabled="False" Height="25" Width="80" HorizontalAlignment="Left" VerticalAlignment="Bottom" Grid.Row="8" Grid.Column="0" ToolTip="Press the button to generate random examples which are compliant with the rule parts you selected."/>
         <Button Name="ButtonCancel" Style="{StaticResource StandardButton}" Click="ButtonCancel_Click" Content="Cancel" Height="25" Width="80" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="8" Grid.Column="1" Margin="0,10,85,0"/>
         <Button Name="ButtonOk" Style="{StaticResource StandardButton}" Click="ButtonOK_Click" Content="OK" Height="25" Width="80" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="8" Grid.Column="1" Margin="0,10,0,0"/>
         <Button Content="Select All" Name="ButtonSelectAll" Grid.Row="8" Grid.Column="2" Style="{StaticResource StandardButton}" Click="ButtonSelectAll_Click" HorizontalAlignment="Right" Height="25" Width="85" Margin="0,0,90,0" VerticalAlignment="Bottom"/>

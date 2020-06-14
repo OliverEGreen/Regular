@@ -105,40 +105,32 @@ namespace Regular.Services
                 transaction.Commit();
             }
         }
-        public static ObservableCollection<RegexRule> GetAllRegexRulesInExtensibleStorage(Document document)
+        public static ObservableCollection<RegexRule> GetAllRegexRulesInExtensibleStorage(string documentGuid)
         {
             // Helper method to take Entities returned from Storage and convert them to RegexRules (including their RegexRuleParts)
             RegexRule ConvertEntityToRegexRule(Entity entity)
             {
-                string guid = entity.Get<Guid>("GUID").ToString();
-                string name = entity.Get<string>("RuleName");
+                RegexRule regexRule = RegexRule.Create(documentGuid, entity.Get<Guid>("GUID").ToString());
+                regexRule.Name = entity.Get<string>("RuleName");
                 List<string> targetTargetCategoryIds = entity.Get<IList<string>>("TargetCategoryIds").ToList();
-                string trackingParameterName = entity.Get<string>("TrackingParameterName");
-                string outputParameterName = entity.Get<string>("OutputParameterName");
-                string regexString = entity.Get<string>("RegexString");
+                regexRule.TrackingParameterName = entity.Get<string>("TrackingParameterName");
+                regexRule.OutputParameterName = entity.Get<string>("OutputParameterName");
+                regexRule.RegexString = entity.Get<string>("RegexString");
+                
+                // Deserializing and creating each rule part from a saved list of strings
                 List<string> regexRulePartsString = entity.Get<IList<string>>("RegexRuleParts").ToList();
-                ObservableCollection<RegexRulePart> regexRuleParts = SerializationServices.DeserializeRegexRulePartsInExtensibleStorage(regexRulePartsString);
-
-                ObservableCollection<ObservableObject> observableObjects = ObservableObject.GetInitialCategories(document);
-                foreach(ObservableObject observableObject in observableObjects)
-                {
-                    observableObject.IsChecked = targetTargetCategoryIds.Contains(observableObject.Id);
-                }
-
-                return new RegexRule()
-                {
-                    Guid = guid,
-                    Name = name,
-                    OutputParameterName = outputParameterName,
-                    RegexRuleParts = regexRuleParts,
-                    RegexString = regexString,
-                    TargetCategoryIds = observableObjects,
-                    TrackingParameterName = trackingParameterName
-                };                
+                regexRule.RegexRuleParts = SerializationServices.DeserializeRegexRulePartsInExtensibleStorage(regexRulePartsString);
+                
+                ObservableCollection<ObservableObject> observableObjects = ObservableObject.GetInitialCategories(documentGuid);
+                foreach(ObservableObject observableObject in observableObjects) { observableObject.IsChecked = targetTargetCategoryIds.Contains(observableObject.Id); }
+                regexRule.TargetCategoryIds = observableObjects;
+                
+                return regexRule;
             }
             Schema regularSchema = GetRegularSchema();
 
             // Retrieving and testing all DataStorage objects in the document against our Regular schema.
+            Document document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
             List<DataStorage> allDataStorage = new FilteredElementCollector(document).OfClass(typeof(DataStorage)).OfType<DataStorage>().ToList();
             if (allDataStorage.Count < 1) { return null; }
 

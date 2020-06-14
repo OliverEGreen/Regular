@@ -1,36 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Globalization;
 using System.Windows;
 using System.Windows.Input;
 using System.Linq;
-using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Windows.Media;
 using System.Windows.Controls;
-using System.Windows.Data;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using Regular.Enums;
 using Regular.ViewModel;
 using Regular.Model;
 using Regular.Services;
+using Button = System.Windows.Controls.Button;
 using TextBox = System.Windows.Controls.TextBox;
 
 namespace Regular.View
 {
-    public partial class RuleEditor
+    public partial class RuleEditor: INotifyPropertyChanged
     {
         private static Document Document { get; set; }
         private static string DocumentGuid { get; set; }
+        private int numberCategoriesSelected;
+        public int NumberCategoriesSelected
+        {
+            get => numberCategoriesSelected;
+            set
+            {
+                numberCategoriesSelected = ListBoxCategoriesSelection.SelectedItems.Count;
+                OnPropertyChanged("NumberCategoriesSelected");
+            }
+        }
         private RegexRule RegexRule { get; }
         public RuleEditor(string documentGuid, RegexRule regexRule)
         {
             InitializeComponent();
+            // Gives us the ability to close the window with the Esc kay
+            PreviewKeyDown += (s, e) => { if (e.Key == Key.Escape) Close(); };
             RegexRule = regexRule;
             this.DataContext = RegexRule;
 
             // If we're editing an existing rule, it gets set to a static variable for accessibility
-            Title = RegexRuleManager.GetDocumentRegexRules(documentGuid).Contains(regexRule) ? $"Editing Rule: {regexRule.Name}" : "Creating New Rule";
+            Title = RegexRule.GetDocumentRegexRules(documentGuid).Contains(regexRule) ? $"Editing Rule: {regexRule.Name}" : "Creating New Rule";
             TextBoxOutputParameterNameInput.IsEnabled = !RegexRules.AllRegexRules[documentGuid].Contains(regexRule);
             InitializeRuleEditor(documentGuid);
         }
@@ -41,7 +54,7 @@ namespace Regular.View
             
             // Binding ComboBox to our RuleType enumeration
             ComboBoxRulePartInput.ItemsSource = Enum.GetValues(typeof(RuleTypes)).Cast<RuleTypes>();
-
+            
             // Populating ComboBox of user-visible Revit Categories
             ListBoxCategoriesSelection.ItemsSource = RegexRule.TargetCategoryIds;
 
@@ -65,10 +78,14 @@ namespace Regular.View
             TextBoxNameYourRuleInput.TextChanged += DisplayUserFeedback;
             TextBoxOutputParameterNameInput.TextChanged += TextBoxOutputParameterNameInput_TextChanged;
             TextBoxOutputParameterNameInput.TextChanged += DisplayUserFeedback;
-            ButtonAddRulePart.Click += DisplayUserFeedback;
 
+            RegexRule.RegexRuleParts.CollectionChanged += UpdateExampleText;
+            RegexRule.RegexRuleParts.CollectionChanged += DisplayUserFeedback;
+            RegexRule.TargetCategoryIds.CollectionChanged += DisplayUserFeedback;
+            ButtonTest.Click += UpdateExampleText;
+            
             TextBoxUserFeedback.Visibility = System.Windows.Visibility.Hidden;
-
+            ButtonTest.IsEnabled = RegexRule.RegexRuleParts.Count > 0;
             TextBoxNameYourRuleInput.Focus();
         }
         private void ScrollViewerRuleParts_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
@@ -80,43 +97,39 @@ namespace Regular.View
         private void ButtonAddRulePart_Click(object sender, RoutedEventArgs e)
         {
             RegexRule.RegexRuleParts.Add(RulePartServices.CreateRegexRulePart((RuleTypes)ComboBoxRulePartInput.SelectedItem));
+            TextBlockExample.Text = RegexAssembly.GenerateRandomExample(RegexRule.RegexRuleParts);
         }
         private void ButtonOK_Click(object sender, RoutedEventArgs e)
         {
             // Testing to see whether the current rule's GUID exists
-            if (!RegexRuleManager.GetDocumentRegexRuleGuids(DocumentGuid).Contains(RegexRule.Guid))
+            if (!RegexRule.GetDocumentRegexRuleGuids(DocumentGuid).Contains(RegexRule.Guid))
             {
-                // If a new rule, a project parameter needs to be created.
-                // ParameterServices.CreateProjectParameter(Document, RegexRule.OutputParameterName, ParameterType.Text, RegexRule.TargetCategoryIds, BuiltInParameterGroup.PG_IDENTITY_DATA, true);
-
-
-                // The static RegexRule should already have inputs set by the UI forms?
-                RegexRuleManager.SaveRegexRule(DocumentGuid, RegexRule);
+                RegexRule.Save(DocumentGuid, RegexRule);
                 ExtensibleStorageServices.SaveRegexRuleToExtensibleStorage(DocumentGuid, RegexRule);
                 DynamicModelUpdateServices.RegisterRegexRule(DocumentGuid, RegexRule.Guid);
+                // If a new rule, a project parameter needs to be created.
+                // ParameterServices.CreateProjectParameter(Document, RegexRule.OutputParameterName, ParameterType.Text, RegexRule.TargetCategoryIds, BuiltInParameterGroup.PG_IDENTITY_DATA, true);
             }
             else
             {
                 // The rule already exists and is being edited. We'll generate a new temporary rule from the inputs to use as we transfer values across.
-                // We don't need to create a project parameter, but we may need to update its name.
-                // We need to update both the static cache and the entity saved in ExtensibleStorage.
-                RegexRule newRegexRule = new RegexRule()
+                RegexRule regexRule = RegexRule.Create(DocumentGuid, RegexRule.Guid);
                 {
-                    Guid = RegexRule.Guid,
-                    Name = RegexRule.Name,
-                    TargetCategoryIds = RegexRule.TargetCategoryIds,
-                    TrackingParameterName = RegexRule.TrackingParameterName,
-                    OutputParameterName = RegexRule.OutputParameterName,
-                    RegexString = RegexRule.RegexString,
-                    RegexRuleParts = RegexRule.RegexRuleParts
+                    regexRule.Name = RegexRule.Name;
+                    regexRule.TargetCategoryIds = RegexRule.TargetCategoryIds;
+                    regexRule.TrackingParameterName = RegexRule.TrackingParameterName;
+                    regexRule.OutputParameterName = RegexRule.OutputParameterName;
+                    regexRule.RegexString = RegexRule.RegexString;
+                    regexRule.RegexRuleParts = RegexRule.RegexRuleParts;
                 };
-                RegexRuleManager.UpdateRegexRule(DocumentGuid, RegexRule.Guid, newRegexRule);
-                ExtensibleStorageServices.UpdateRegexRuleInExtensibleStorage(DocumentGuid, RegexRule.Guid, newRegexRule);
+                // We update both the static cache and the entity saved in ExtensibleStorage.
+                RegexRule.Update(DocumentGuid, RegexRule.Guid, regexRule);
+                ExtensibleStorageServices.UpdateRegexRuleInExtensibleStorage(DocumentGuid, RegexRule.Guid, regexRule);
                 DynamicModelUpdateServices.RegisterRegexRule(DocumentGuid, RegexRule.Guid);
             }
             Close();
         }
-        private void DeleteRegexRulePartButton_Click(object sender, RoutedEventArgs e)
+        private void ButtonDeleteRegexRulePart_OnClick(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
             RegexRule.RegexRuleParts.Remove((RegexRulePart)button.DataContext);
@@ -160,6 +173,31 @@ namespace Regular.View
             TextBoxUserFeedback.Visibility = System.Windows.Visibility.Visible;
             TextBoxUserFeedback.Text = userFeedback;
         }
+        private void DisplayUserFeedback(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            string userFeedback = InputValidationServices.ReturnUserFeedback(TextBoxNameYourRuleInput.Text, TextBoxOutputParameterNameInput.Text, RegexRule.RegexRuleParts);
+            if (string.IsNullOrEmpty(userFeedback))
+            {
+                TextBoxUserFeedback.Visibility = System.Windows.Visibility.Hidden;
+                return;
+            }
+            TextBoxUserFeedback.Visibility = System.Windows.Visibility.Visible;
+            TextBoxUserFeedback.Text = userFeedback;
+        }
+        private void UpdateExampleText(object sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
+        {
+            if (RegexRule.RegexRuleParts.Count <= 0)
+            {
+                ButtonTest.IsEnabled = false;
+                return;
+            }
+            ButtonTest.IsEnabled = true;
+            TextBlockExample.Text = RegexAssembly.GenerateRandomExample(RegexRule.RegexRuleParts);
+        }
+        private void UpdateExampleText(object sender, RoutedEventArgs e)
+        {
+            TextBlockExample.Text = RegexAssembly.GenerateRandomExample(RegexRule.RegexRuleParts);
+        }
         private void TextBoxOutputParameterNameInput_TextChanged(object sender, TextChangedEventArgs e)
         {
             TextBox textBox = (TextBox)sender;
@@ -168,7 +206,7 @@ namespace Regular.View
                 EllipseOutputParameterNameInput.Fill = (SolidColorBrush)this.Resources["EllipseColorGray"];
                 return;
             }
-            bool ruleNameInputValid = InputValidationServices.ValidateOutputParameterName(textBox.Text);
+            bool ruleNameInputValid = string.IsNullOrEmpty(InputValidationServices.ValidateOutputParameterName(textBox.Text));
             EllipseOutputParameterNameInput.Fill = ruleNameInputValid ? (SolidColorBrush)this.Resources["EllipseColorGreen"] : (SolidColorBrush)this.Resources["EllipseColorRed"];
         }
         private void TextBoxNameYourRuleInput_TextChanged(object sender, TextChangedEventArgs e)
@@ -205,6 +243,8 @@ namespace Regular.View
         }
         private void ButtonExpandCategories_Click(object sender, RoutedEventArgs e)
         {
+            Button button = sender as Button;
+            button.Content = this.ColumnCategories.Width == new GridLength(250) ? "Select Categories" : "Hide Categories";
             this.ColumnCategories.Width = this.ColumnCategories.Width == new GridLength(250) ? new GridLength(0) : new GridLength(250);
         }
         private void ScrollViewerCategories_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
@@ -224,12 +264,12 @@ namespace Regular.View
         private void ButtonTest_OnClick(object sender, RoutedEventArgs e)
         {
             if(this.RowExamples.Height != new GridLength(20)) this.RowExamples.Height = new GridLength(20);
-            if (RegexRule.RegexRuleParts.Count <= 0)
-            {
-                TextBlockExample.Text = "Add rule parts to generate examples";
-                return;
-            }
-            TextBlockExample.Text = RegexAssembly.GenerateRandomExample(RegexRule.RegexRuleParts);
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
