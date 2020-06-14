@@ -124,6 +124,9 @@
                         </DockPanel>
                     </Grid>
                     <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Rectangle.Fill" TargetName="BackgroundRectangle" Value="{StaticResource ButtonBackgroundColorLowlight}"/>
+                        </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter TargetName="ContentPresenter" Property="TextBlock.Opacity" Value="0.5"/>
                         </Trigger>
