@@ -17,6 +17,7 @@
     <SolidColorBrush x:Key="BackgroundColorWarning" Color="#FDEAE4"/>
     <SolidColorBrush x:Key="UnderlineBlueColor" Color="#3CA6DA"/>
     <SolidColorBrush x:Key="WindowBackgroundColor" Color="#FAFAFA"/>
+    
     <Style x:Key="StandardWindow" TargetType="Window">
         <Setter Property="ResizeMode" Value="NoResize"/>
         <Setter Property="Topmost" Value="False"/>
@@ -115,7 +116,7 @@
                     <Grid Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" ClipToBounds="True">
                         <Rectangle x:Name="BackgroundRectangle" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Fill="{StaticResource ButtonBackgroundColorDefault}"/>
                         <DockPanel Name="ContentPresenterDockPanel">
-                            <ContentPresenter x:Name="ContentPresenter" Content="{TemplateBinding Content}" TextBlock.Foreground="{StaticResource FontColorDefault}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <ContentPresenter x:Name="ContentPresenter" Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <ContentPresenter.Resources>
                                     <Style TargetType="TextBlock" BasedOn="{StaticResource ResourceKey=StandardText}"/>
                                 </ContentPresenter.Resources>
@@ -123,9 +124,8 @@
                         </DockPanel>
                     </Grid>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Rectangle.Fill" TargetName="BackgroundRectangle" Value="{StaticResource ButtonBackgroundColorLowlight}"/>
-                            <Setter Property="Foreground" Value="White"/>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="ContentPresenter" Property="TextBlock.Opacity" Value="0.5"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

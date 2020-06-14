@@ -29,11 +29,11 @@ namespace Regular.View
             get => numberCategoriesSelected;
             set
             {
-                numberCategoriesSelected = ListBoxCategoriesSelection.SelectedItems.Count;
+                numberCategoriesSelected = value;
                 OnPropertyChanged("NumberCategoriesSelected");
             }
         }
-        private RegexRule RegexRule { get; }
+        RegexRule RegexRule { get; }
         public RuleEditor(string documentGuid, RegexRule regexRule)
         {
             InitializeComponent();
@@ -54,9 +54,13 @@ namespace Regular.View
             
             // Binding ComboBox to our RuleType enumeration
             ComboBoxRulePartInput.ItemsSource = Enum.GetValues(typeof(RuleTypes)).Cast<RuleTypes>();
-            
+            ComboBoxMatchTypeInput.ItemsSource = Enum.GetValues(typeof(MatchTypes)).Cast<MatchTypes>();
+
             // Populating ComboBox of user-visible Revit Categories
             ListBoxCategoriesSelection.ItemsSource = RegexRule.TargetCategoryIds;
+            NumberCategoriesSelected = ListBoxCategoriesSelection.SelectedItems.Count;
+
+            TextBlockCategories.DataContext = NumberCategoriesSelected;
 
             TextBoxOutputParameterNameInput.MaxLength = InputValidationServices.MaxInputLength;
             TextBoxNameYourRuleInput.MaxLength = InputValidationServices.MaxInputLength;
@@ -270,6 +274,15 @@ namespace Regular.View
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void CategoryCheckBox_OnChecked(object sender, RoutedEventArgs e)
+        {
+            NumberCategoriesSelected++;
+        }
+        private void ToggleButton_OnUnchecked(object sender, RoutedEventArgs e)
+        {
+            NumberCategoriesSelected--;
         }
     }
 }
