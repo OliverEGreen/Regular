@@ -2,7 +2,7 @@
 
 namespace Regular.Enums
 {
-    public enum RuleTypes
+    public enum RuleType
     {
         [Description("Any Letter (A-Z)")]
         AnyLetter,

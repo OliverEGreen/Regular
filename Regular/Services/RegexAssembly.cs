@@ -17,16 +17,16 @@ namespace Regular.Services
             // For non case-sensitive (i.e. case match) we can append the (?i) modifier after the string
             switch (regexRulePart.RuleType)
             {
-                case RuleTypes.FreeText:
+                case RuleType.FreeText:
                     return SanitizeWord(regexRulePart.RawUserInputValue);
-                case RuleTypes.SelectionSet:
+                case RuleType.SelectionSet:
                     // We'll need to break these up somehow
                     return "Test";
-                case RuleTypes.AnyLetter:
+                case RuleType.AnyLetter:
                     if (regexRulePart.IsCaseSensitive) { }
                     // How do we handle case-sensitive?
                     return @"[a-zA-Z]";
-                case RuleTypes.AnyDigit:
+                case RuleType.AnyDigit:
                     return @"\d";
                 default:
                     return null;
@@ -67,16 +67,16 @@ namespace Regular.Services
             {
                 switch (regexRulePart.RuleType)
                 {
-                    case RuleTypes.AnyLetter:
+                    case RuleType.AnyLetter:
                         randomExampleString += Letters[random.Next(Letters.Length)];
                         break;
-                    case RuleTypes.AnyDigit:
+                    case RuleType.AnyDigit:
                         randomExampleString += Numbers[random.Next(Numbers.Length)];
                         break;
-                    case RuleTypes.FreeText:
+                    case RuleType.FreeText:
                         randomExampleString += regexRulePart.RawUserInputValue;
                         break;
-                    case RuleTypes.SelectionSet:
+                    case RuleType.SelectionSet:
                         randomExampleString += regexRulePart.RawUserInputValue;
                         break;
                     default:

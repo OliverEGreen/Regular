@@ -2,7 +2,7 @@
 
 namespace Regular.Enums
 {
-    public enum MatchTypes
+    public enum MatchType
     {
         [Description("Exact Match")]
         ExactMatch,
