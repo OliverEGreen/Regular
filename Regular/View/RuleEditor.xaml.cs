@@ -16,6 +16,7 @@ using Regular.ViewModel;
 using Regular.Services;
 using Button = System.Windows.Controls.Button;
 using TextBox = System.Windows.Controls.TextBox;
+using Visibility = System.Windows.Visibility;
 
 namespace Regular.View
 {
@@ -34,13 +35,13 @@ namespace Regular.View
         private bool EditingExistingRule { get; set; }
         private string ExistingRuleGuid { get; set; }
 
-        public string Name
+        public string RuleName
         {
             get => name;
             set
             {
                 name = value;
-                NotifyPropertyChanged("Name");
+                NotifyPropertyChanged("RuleName");
             }
         }
         public ObservableCollection<ObservableObject> TargetCategoryIds
@@ -110,7 +111,7 @@ namespace Regular.View
             if(EditingExistingRule) ExistingRuleGuid = inputRegexRule.Guid;
 
             DocumentGuid = documentGuid;
-            Name = inputRegexRule.Name;
+            RuleName = inputRegexRule.Name;
             TargetCategoryIds = inputRegexRule.TargetCategoryIds;
             RegexRuleParts = inputRegexRule.RegexRuleParts;
             TrackingParameterName = inputRegexRule.TrackingParameterName;
@@ -153,7 +154,7 @@ namespace Regular.View
             PreviewKeyDown += (s, e) => { if (e.Key == Key.Escape) Close(); };
 
             ButtonTest.IsEnabled = RegexRuleParts.Count > 0;
-            TextBoxNameYourRuleInput.Focus();
+            if(!EditingExistingRule) TextBoxNameYourRuleInput.Focus();
         }
         private void ScrollViewerRuleParts_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
@@ -173,13 +174,14 @@ namespace Regular.View
             if (!EditingExistingRule)
             {
                 RegexRule regexRule = RegexRule.Create(DocumentGuid);
-                regexRule.Name = Name;
+                regexRule.Name = RuleName;
                 regexRule.TargetCategoryIds = TargetCategoryIds;
-                regexRule.RegexRuleParts = RegexRuleParts;
                 regexRule.TrackingParameterName = TrackingParameterName;
                 regexRule.OutputParameterName = OutputParameterName;
                 regexRule.MatchType = MatchType;
-                
+                regexRule.RegexRuleParts = RegexRuleParts;
+                regexRule.RegexString = RegexAssembly.AssembleRegexString(regexRule.RegexRuleParts);
+
                 RegexRule.Save(DocumentGuid, regexRule);
                 ExtensibleStorageServices.SaveRegexRuleToExtensibleStorage(DocumentGuid, regexRule);
                 DynamicModelUpdateServices.RegisterRegexRule(DocumentGuid, regexRule.Guid);
@@ -191,10 +193,11 @@ namespace Regular.View
             {
                 // The rule already exists and is being edited. We'll generate a new temporary rule from the inputs to use as we transfer values across.
                 RegexRule regexRule = RegexRule.Create(DocumentGuid, ExistingRuleGuid);
-                regexRule.Name = Name;
+                regexRule.Name = RuleName;
                 regexRule.TargetCategoryIds = TargetCategoryIds;
                 regexRule.TrackingParameterName = TrackingParameterName;
                 regexRule.OutputParameterName = OutputParameterName;
+                regexRule.MatchType = MatchType;
                 regexRule.RegexRuleParts = RegexRuleParts;
                 regexRule.RegexString = RegexAssembly.AssembleRegexString(regexRule.RegexRuleParts);
                 
@@ -239,10 +242,10 @@ namespace Regular.View
             string userFeedback = InputValidationServices.ReturnUserFeedback(TextBoxNameYourRuleInput.Text, TextBoxOutputParameterNameInput.Text, RegexRuleParts);
             if (string.IsNullOrEmpty(userFeedback))
             {
-                TextBoxUserFeedback.Visibility = System.Windows.Visibility.Hidden;
+                TextBoxUserFeedback.Visibility = Visibility.Hidden;
                 return;
             }
-            TextBoxUserFeedback.Visibility = System.Windows.Visibility.Visible;
+            TextBoxUserFeedback.Visibility = Visibility.Visible;
             TextBoxUserFeedback.Text = userFeedback;
         }
         private void DisplayUserFeedback(object sender, NotifyCollectionChangedEventArgs e)
@@ -261,13 +264,23 @@ namespace Regular.View
             if (RegexRuleParts.Count <= 0)
             {
                 ButtonTest.IsEnabled = false;
+                TextBlockExample.Visibility = Visibility.Collapsed;
                 return;
             }
             ButtonTest.IsEnabled = true;
+            TextBlockExample.Visibility = Visibility.Visible;
             TextBlockExample.Text = RegexAssembly.GenerateRandomExample(RegexRuleParts);
         }
         private void UpdateExampleText(object sender, RoutedEventArgs e)
         {
+            if (RegexRuleParts.Count <= 0)
+            {
+                ButtonTest.IsEnabled = false;
+                TextBlockExample.Visibility = Visibility.Collapsed;
+                return;
+            }
+            ButtonTest.IsEnabled = true;
+            TextBlockExample.Visibility = Visibility.Visible;
             TextBlockExample.Text = RegexAssembly.GenerateRandomExample(RegexRuleParts);
         }
         private void TextBoxOutputParameterNameInput_TextChanged(object sender, TextChangedEventArgs e)
@@ -356,6 +369,14 @@ namespace Regular.View
         protected virtual void NotifyPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        private void CategoryCheckBox_OnChecked(object sender, RoutedEventArgs e)
+        {
+            NumberCategoriesSelected++;
+        }
+        private void CategoryCheckBox_OnUnchecked(object sender, RoutedEventArgs e)
+        {
+            NumberCategoriesSelected--;
         }
     }
 }
