@@ -14,7 +14,7 @@ namespace Regular.ViewModel
         private bool isEditable;
         private string rawUserInputValue;
         
-        public RuleTypes RuleType { get; }
+        public RuleType RuleType { get; }
         public string RuleTypeDisplayText
         {
             get => ruleTypeDisplayText;
@@ -80,7 +80,7 @@ namespace Regular.ViewModel
         }
 
         // Our default constructor for newly-created RegexRuleParts
-        public RegexRulePart(RuleTypes ruleType)
+        public RegexRulePart(RuleType ruleType)
         {
             RuleType = ruleType;
             IsOptional = false;
@@ -89,22 +89,22 @@ namespace Regular.ViewModel
 
             switch (RuleType)
             {
-                case RuleTypes.AnyDigit:
+                case RuleType.AnyDigit:
                     RuleTypeDisplayText = "Any Digit";
                     IsEditable = false;
                     EditButtonDisplayText = "0-9";
                     break;
-                case RuleTypes.AnyLetter:
+                case RuleType.AnyLetter:
                     RuleTypeDisplayText = "Any Letter";
                     IsEditable = true;
                     EditButtonDisplayText = "A-Z";
                     break;
-                case RuleTypes.FreeText:
+                case RuleType.FreeText:
                     RuleTypeDisplayText = "Free Text";
                     IsEditable = true;
                     EditButtonDisplayText = "...";
                     break;
-                case RuleTypes.SelectionSet:
+                case RuleType.SelectionSet:
                     RuleTypeDisplayText = "Selection Set";
                     IsEditable = true;
                     EditButtonDisplayText = "...";
@@ -113,7 +113,7 @@ namespace Regular.ViewModel
         }
 
         // Our detailed constructor for recreating stored RegexRuleParts that were loaded from ExtensibleStorage
-        public RegexRulePart(RuleTypes ruleType, bool isOptional, bool isCaseSensitive, bool requiresUserInput, string rawUserInputValue)
+        public RegexRulePart(RuleType ruleType, bool isOptional, bool isCaseSensitive, bool requiresUserInput, string rawUserInputValue)
         {
             RuleType = ruleType;
             IsOptional = isOptional;
@@ -123,22 +123,22 @@ namespace Regular.ViewModel
 
             switch (RuleType)
             {
-                case RuleTypes.AnyDigit:
+                case RuleType.AnyDigit:
                     RuleTypeDisplayText = "Any Digit";
                     IsEditable = false;
                     EditButtonDisplayText = "0-9";
                     break;
-                case RuleTypes.AnyLetter:
+                case RuleType.AnyLetter:
                     RuleTypeDisplayText = "Any Letter";
                     IsEditable = true;
                     EditButtonDisplayText = "A-Z";
                     break;
-                case RuleTypes.FreeText:
+                case RuleType.FreeText:
                     RuleTypeDisplayText = "Free Text";
                     IsEditable = true;
                     EditButtonDisplayText = "...";
                     break;
-                case RuleTypes.SelectionSet:
+                case RuleType.SelectionSet:
                     RuleTypeDisplayText = "Selection Set";
                     IsEditable = true;
                     EditButtonDisplayText = "...";

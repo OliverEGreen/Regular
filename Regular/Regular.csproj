@@ -70,13 +70,13 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Enums\MatchTypes.cs" />
+    <Compile Include="Enums\MatchType.cs" />
     <Compile Include="Model\EnumValueConverter.cs" />
     <Compile Include="Services\AppRibbonServices.cs" />
     <Compile Include="ViewModel\ObservableObject.cs" />
     <Compile Include="ViewModel\RegexRule.cs" />
     <Compile Include="ViewModel\RegexRulePart.cs" />
-    <Compile Include="Enums\RuleTypes.cs" />
+    <Compile Include="Enums\RuleType.cs" />
     <Compile Include="Model\RegexRules.cs" />
     <Compile Include="RegularApp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

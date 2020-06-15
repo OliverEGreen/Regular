@@ -76,7 +76,7 @@ namespace Regular.Services
                 schemaBuilder.AddSimpleField("TrackingParameterName", typeof(string));
                 schemaBuilder.AddSimpleField("OutputParameterName", typeof(string));
                 schemaBuilder.AddSimpleField("RegexString", typeof(string));
-                schemaBuilder.AddSimpleField("MatchTypes", typeof(string));
+                schemaBuilder.AddSimpleField("MatchType", typeof(string));
                 schemaBuilder.AddArrayField("RegexRuleParts", typeof(string));
                 return schemaBuilder.Finish();
             }
@@ -98,7 +98,7 @@ namespace Regular.Services
             entity.Set("TrackingParameterName", regexRule.TrackingParameterName);
             entity.Set("OutputParameterName", regexRule.OutputParameterName);
             entity.Set("RegexString", regexRule.RegexString);
-            entity.Set("MatchTypes", regexRule.MatchTypes.ToString());
+            entity.Set("MatchType", regexRule.MatchType.ToString());
             entity.Set("RegexRuleParts", SerializationServices.SerializeRegexRuleParts(regexRule.RegexRuleParts));
             using (Transaction transaction = new Transaction(document, $"Saving RegexRule {regexRule.Name}"))
             {
@@ -121,16 +121,16 @@ namespace Regular.Services
                 regexRule.RegexString = entity.Get<string>("RegexString");
                 
                 // Deserializing saved match type string to enum value
-                switch (entity.Get<string>("MatchTypes"))
+                switch (entity.Get<string>("MatchType"))
                 {
                     case "ExactMatch":
-                        regexRule.MatchTypes = MatchTypes.ExactMatch;
+                        regexRule.MatchType = MatchType.ExactMatch;
                         break;
                     case "MatchAtBeginning":
-                        regexRule.MatchTypes = MatchTypes.MatchAtBeginning;
+                        regexRule.MatchType = MatchType.MatchAtBeginning;
                         break;
                     case "PartialMatch":
-                        regexRule.MatchTypes = MatchTypes.PartialMatch;
+                        regexRule.MatchType = MatchType.PartialMatch;
                         break;
                     default:
                         break;
@@ -186,7 +186,7 @@ namespace Regular.Services
                 regexRuleEntity.Set("OutputParameterName", newRegexRule.OutputParameterName);
                 regexRuleEntity.Set("RegexString", newRegexRule.RegexString);
                 regexRuleEntity.Set("RegexRuleParts", SerializationServices.SerializeRegexRuleParts(newRegexRule.RegexRuleParts));
-                regexRuleEntity.Set("MatchTypes", newRegexRule.MatchTypes);
+                regexRuleEntity.Set("MatchType", newRegexRule.MatchType);
                 dataStorage.SetEntity(regexRuleEntity);
                 transaction.Commit();
             }

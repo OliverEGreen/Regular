@@ -29,20 +29,20 @@ namespace Regular.Services
             }
             return regexRulePartList;
         }
-        private static RuleTypes GetRuleTypeFromString(string input)
+        private static RuleType GetRuleTypeFromString(string input)
         {
             switch (input)
             {
                 case "AnyLetter":
-                    return RuleTypes.AnyLetter;
+                    return RuleType.AnyLetter;
                 case "AnyDigit":
-                    return RuleTypes.AnyDigit;
+                    return RuleType.AnyDigit;
                 case "FreeText":
-                    return RuleTypes.FreeText;
+                    return RuleType.FreeText;
                 case "SelectionSet":
-                    return RuleTypes.SelectionSet;
+                    return RuleType.SelectionSet;
                 default:
-                    return RuleTypes.AnyLetter;
+                    return RuleType.AnyLetter;
             }
         }
         public static ObservableCollection<RegexRulePart> DeserializeRegexRulePartsInExtensibleStorage(List<string> regexRulePartsString)
@@ -53,7 +53,7 @@ namespace Regular.Services
             foreach (string serializedString in regexRulePartsString)
             {
                 List<string> serializedStringParts = serializedString.Split('`').ToList();
-                RuleTypes regexRuleType = GetRuleTypeFromString(serializedStringParts[0]);
+                RuleType regexRuleType = GetRuleTypeFromString(serializedStringParts[0]);
                 string rawUserInputValue = serializedStringParts[1];
                 bool isOptional = Convert.ToBoolean(serializedStringParts[2]);
                 bool isCaseSensitive = Convert.ToBoolean(serializedStringParts[3]);
