@@ -40,9 +40,10 @@
                  Background="{StaticResource BackgroundColorWarning}"
                  Margin="-15,-15,-15,0"
                  Height="25"
-                 VerticalAlignment="Top"/>
+                 VerticalAlignment="Top"
+                 Visibility="Hidden"/>
         <Label Content="Name Your Rule" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="1" Grid.Column="0" Margin="0,5" VerticalContentAlignment="Center"/>
-        <TextBox Name="TextBoxNameYourRuleInput" Style="{StaticResource StandardTextBox}" Text="{Binding Name}" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" VerticalContentAlignment="Center" ToolTip="Define a reference name for the rule you're creating." MaxLength="30"/>
+        <TextBox Name="TextBoxNameYourRuleInput" Style="{StaticResource StandardTextBox}" Text="{Binding RuleName}" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" VerticalContentAlignment="Center" ToolTip="Define a reference name for the rule you're creating." MaxLength="30"/>
         <TextBlock Name="TextblockNameYourRuleWatermark" IsHitTestVisible="False" Padding="7,3" VerticalAlignment="Center" Text="Type Here..." Foreground="{StaticResource FontColorFaded}" FontSize="12" FontWeight="Regular" Grid.Row="1" Grid.Column="1" Panel.ZIndex="1">
             <TextBlock.Style>
                 <Style TargetType="{x:Type TextBlock}">
@@ -65,7 +66,7 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <CheckBox x:Name="CategoryCheckBox" Width="20" VerticalAlignment="Center" IsChecked="{Binding IsChecked}"/>
+                                <CheckBox x:Name="CategoryCheckBox" Width="20" VerticalAlignment="Center" IsChecked="{Binding IsChecked}" Checked="CategoryCheckBox_OnChecked" Unchecked="CategoryCheckBox_OnUnchecked"/>
                                 <TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
                             </StackPanel>
                         </DataTemplate>
