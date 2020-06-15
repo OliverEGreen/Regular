@@ -68,7 +68,18 @@ namespace Regular.Services
                 switch (regexRulePart.RuleType)
                 {
                     case RuleType.AnyLetter:
-                        randomExampleString += Letters[random.Next(Letters.Length)];
+                        switch (regexRulePart.CaseSensitiveDisplayString)
+                        {
+                            case "UPPER CASE":
+                                randomExampleString += Letters[random.Next(Letters.Length)].ToString().ToUpper();
+                                break;
+                            case "lower case":
+                                randomExampleString += Letters[random.Next(Letters.Length)].ToString().ToLower();
+                                break;
+                            default:
+                                randomExampleString += Letters[random.Next(Letters.Length)].ToString().ToLower();
+                                break;
+                        }
                         break;
                     case RuleType.AnyDigit:
                         randomExampleString += Numbers[random.Next(Numbers.Length)];
