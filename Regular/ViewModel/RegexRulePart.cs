@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
+using System.Windows;
 using Regular.Enums;
-using Regular.Model;
 
 namespace Regular.ViewModel
 {
@@ -98,6 +98,7 @@ namespace Regular.ViewModel
                     RuleTypeDisplayText = "Any Letter";
                     IsEditable = true;
                     EditButtonDisplayText = "A-Z";
+                    CaseSensitiveDisplayString = "UPPER CASE";
                     break;
                 case RuleType.FreeText:
                     RuleTypeDisplayText = "Free Text";

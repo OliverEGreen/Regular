@@ -124,7 +124,9 @@ namespace Regular.View
 
             // Binding ComboBox to our RuleType enumeration
             ComboBoxRulePartInput.ItemsSource = Enum.GetValues(typeof(RuleType)).Cast<RuleType>();
+            ComboBoxRulePartInput.SelectedItem = RuleType.AnyDigit;
             ComboBoxMatchTypeInput.ItemsSource = Enum.GetValues(typeof(MatchType)).Cast<MatchType>();
+            ComboBoxMatchTypeInput.SelectedItem = MatchType.ExactMatch;
 
             // Some random parameters for now - we need the ability to look up the parameters for a particular category
             // Normally we can use a FilteredElementCollector to get these, however it's going to be tricky if we have no elements of that category
@@ -264,7 +266,7 @@ namespace Regular.View
             if (RegexRuleParts.Count <= 0)
             {
                 ButtonTest.IsEnabled = false;
-                TextBlockExample.Visibility = Visibility.Collapsed;
+                TextBlockExample.Text = "Add rule parts to generate examples.";
                 return;
             }
             ButtonTest.IsEnabled = true;
@@ -276,7 +278,7 @@ namespace Regular.View
             if (RegexRuleParts.Count <= 0)
             {
                 ButtonTest.IsEnabled = false;
-                TextBlockExample.Visibility = Visibility.Collapsed;
+                TextBlockExample.Text = "Add rule parts to generate examples.";
                 return;
             }
             ButtonTest.IsEnabled = true;
