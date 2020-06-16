@@ -17,6 +17,7 @@
     <SolidColorBrush x:Key="BackgroundColorWarning" Color="#FDEAE4"/>
     <SolidColorBrush x:Key="UnderlineBlueColor" Color="#3CA6DA"/>
     <SolidColorBrush x:Key="WindowBackgroundColor" Color="#FAFAFA"/>
+    <SolidColorBrush x:Key="RulePartBoxColor" Color="#EBEBEB"/>
     
     <Style x:Key="StandardWindow" TargetType="Window">
         <Setter Property="ResizeMode" Value="NoResize"/>
@@ -72,6 +73,24 @@
         <Setter Property="VerticalAlignment" Value="Top"/>
         <Setter Property="BorderBrush" Value="{StaticResource TextBoxBorderColorDefault}"/>
     </Style>
+
+    <Style x:Key="RulePartTextBox" TargetType="TextBox">
+        <Setter Property="Background" Value="{StaticResource RulePartBoxColor}"/>
+        <Setter Property="Foreground" Value="{StaticResource FontColorDefault}"/>
+        <Setter Property="FontFamily" Value="Segoe UI"/>
+        <Setter Property="FontWeight" Value="Regular"/>
+        <Setter Property="FontSize" Value="12px"/>
+        <Setter Property="Height" Value="22px"/>
+        <Setter Property="Margin" Value="0px"/>
+        <Setter Property="Padding" Value="-2,0,0,0"/>
+        <Setter Property="BorderThickness" Value="0px"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Width" Value="Auto"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="IsReadOnly" Value="True"/>
+    </Style>
+
     <Style x:Key="StandardListBox" TargetType="ListBox">
         <Setter Property="Background" Value="{StaticResource WindowBackgroundColor}"/>
         <Setter Property="Foreground" Value="{StaticResource FontColorDefault}"/>

@@ -15,6 +15,7 @@ using Regular.Enums;
 using Regular.ViewModel;
 using Regular.Services;
 using Button = System.Windows.Controls.Button;
+using Grid = System.Windows.Controls.Grid;
 using TextBox = System.Windows.Controls.TextBox;
 using Visibility = System.Windows.Visibility;
 
@@ -54,7 +55,6 @@ namespace Regular.View
                 NotifyPropertyChanged("TargetCategoryIds");
             }
         }
-        
         public List<string> PossibleTrackingParameters
         {
             get => possibleTrackingParameters;
@@ -64,7 +64,6 @@ namespace Regular.View
                 NotifyPropertyChanged("PossibleTrackingParameters");
             }
         }
-
         public string TrackingParameterName
         {
             get => trackingParameterName;
@@ -333,8 +332,26 @@ namespace Regular.View
                 case RuleType.AnyDigit:
                     break;
                 case RuleType.FreeText:
-                    TaskDialog.Show("Test", "You are now editing free text");
-                    regexRulePart.RuleTypeDisplayText = "My example text";
+                    Grid grid = VisualTreeHelper.GetParent(button) as Grid;
+                    UIElementCollection uiElementCollection = grid.Children;
+                    TextBox textBox = null;
+                    foreach (UIElement uiElement in uiElementCollection)
+                    {
+                        if (uiElement.GetType() == typeof(TextBox)) { textBox = uiElement as TextBox; }
+                    }
+                    PreviewKeyDown += (keySender, eventArgs) =>
+                    {
+                        if (eventArgs.Key == Key.Enter) Keyboard.ClearFocus();
+                        textBox.BorderThickness = new Thickness(0);
+                    };
+                    textBox.IsReadOnly = false;
+                    textBox.Focusable = true;
+                    textBox.Focus();
+                    if (textBox.Text == "Free Text")
+                    {
+                        textBox.Text = "Start Typing";
+                        textBox.Select(0, textBox.Text.Length);
+                    }
                     break;
                 case RuleType.SelectionSet:
                     TaskDialog.Show("Test", "You are now editing selection set");
@@ -382,6 +399,19 @@ namespace Regular.View
                 .Select(x => new ElementId(x))
                 .ToList();
             PossibleTrackingParameters = ParameterServices.GetParametersOfCategories(DocumentGuid, categoryIds);
+        }
+        private void RegexRulePartTypeTextBox_OnGotFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+            textBox.IsReadOnly = false;
+            textBox.BorderThickness = new Thickness(1);
+        }
+        private void RegexRulePartTypeTextBox_OnLostFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+            textBox.IsReadOnly = true;
+            textBox.Focusable = false;
+            textBox.BorderThickness = new Thickness(0);
         }
     }
 }

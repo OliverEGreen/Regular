@@ -18,7 +18,7 @@ namespace Regular.Services
             switch (regexRulePart.RuleType)
             {
                 case RuleType.FreeText:
-                    return SanitizeWord(regexRulePart.RawUserInputValue);
+                    return SanitizeWord(regexRulePart.DisplayText);
                 case RuleType.SelectionSet:
                     // We'll need to break these up somehow
                     return "Test";
@@ -65,6 +65,8 @@ namespace Regular.Services
             string randomExampleString = "Example: ";
             foreach (RegexRulePart regexRulePart in regexRuleParts)
             {
+                double randomDouble = random.NextDouble();
+                if (regexRulePart.IsOptional && randomDouble > 0.5) continue;
                 switch (regexRulePart.RuleType)
                 {
                     case RuleType.AnyLetter:
@@ -78,8 +80,8 @@ namespace Regular.Services
                                 break;
                             case "Any Case":
                                 // Randomly pick any letter of random case
-                                double randomDouble = random.NextDouble();
-                                randomExampleString += randomDouble >= 0.5
+                                double anyCaseRandom = random.NextDouble();
+                                randomExampleString += anyCaseRandom >= 0.5
                                     ? Letters[random.Next(Letters.Length)].ToString().ToLower()
                                     : Letters[random.Next(Letters.Length)].ToString().ToUpper();
                                 break;
@@ -91,10 +93,11 @@ namespace Regular.Services
                         randomExampleString += Numbers[random.Next(Numbers.Length)];
                         break;
                     case RuleType.FreeText:
-                        randomExampleString += regexRulePart.RawUserInputValue;
+                        if (regexRulePart.DisplayText == "Free Text") continue;
+                        randomExampleString += regexRulePart.DisplayText;
                         break;
                     case RuleType.SelectionSet:
-                        randomExampleString += regexRulePart.RawUserInputValue;
+                        randomExampleString += regexRulePart.DisplayText;
                         break;
                     default:
                         randomExampleString += "";
