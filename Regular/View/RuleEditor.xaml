@@ -30,10 +30,9 @@
             <ColumnDefinition MinWidth="230"/>
             <ColumnDefinition Width="0" Name="ColumnCategories"/>
         </Grid.ColumnDefinitions>
-        <TextBox Name="TextBoxUserFeedback"
+        <TextBlock Name="TextBoxUserFeedback"
                  Padding="12,4,10,3"
-                 BorderThickness="0"
-                 Style="{StaticResource WarningTextBox}"
+                 Style="{StaticResource WarningText}"
                  Grid.Row="0"
                  Grid.Column="0"
                  Grid.ColumnSpan="3"
@@ -123,10 +122,10 @@
                                     <ColumnDefinition Width="15"/>
                                     <ColumnDefinition Width="30"/>
                                 </Grid.ColumnDefinitions>
-                                <Rectangle Fill="#EBEBEB" Height="30" Stroke="#D9D9D9" StrokeThickness="1px" Grid.ColumnSpan="7" Margin="-4,-1,0,-1"/>
+                                <Rectangle Fill="{StaticResource RulePartBoxColor}" Height="30" Stroke="#D9D9D9" StrokeThickness="1px" Grid.ColumnSpan="7" Margin="-4,-1,0,-1"/>
                                 <Button Name="ReorderUpButton" Style="{StaticResource ReorderUpButton}" Click="ReorderUpButton_Click" Height="12" Width="13" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="0" Margin="-4,0,0,0"/>
                                 <Button Name="ReorderDownButton" Style="{StaticResource ReorderDownButton}" Click="ReorderDownButton_Click" Height="12" Width="13" HorizontalAlignment="Left" VerticalAlignment="Bottom" Grid.Column="0" Grid.RowSpan="2" Margin="-4,0,0,0"/>
-                                <TextBlock x:Name="RegexRulePartTypeTextBlock" Text="{Binding RuleTypeDisplayText}" FontSize="13" Style="{StaticResource StandardText}" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,0,0"/>
+                                <TextBox x:Name="RegexRulePartTypeTextBox" Text="{Binding DisplayText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="13" Style="{StaticResource RulePartTextBox}" Grid.Column="0" HorizontalAlignment="Left" Margin="20,0,0,0" GotFocus="RegexRulePartTypeTextBox_OnGotFocus" LostFocus="RegexRulePartTypeTextBox_OnLostFocus"/>
                                 <Button Name="ButtonEditRulePart" Grid.Column="1" Content="{Binding EditButtonDisplayText}" Width="35" Height="15" HorizontalAlignment="Left" Style="{StaticResource EditRulePartButton}" Click="ButtonEditRulePart_Click"/>
                                 <TextBlock Text="{Binding CaseSensitiveDisplayString}" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,0,0" FontFamily="SegoeUI" FontSize="12" Visibility="{Binding CaseSensitiveDisplayString}"/>
                                 <CheckBox Name="CheckBoxMatchCase" IsChecked="False" Grid.Column="3" HorizontalAlignment="Left" VerticalAlignment="Center" Background="{StaticResource WindowBackgroundColor}" Visibility="{Binding CaseSensitiveVisibility}"/>

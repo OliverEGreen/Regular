@@ -22,7 +22,6 @@ namespace Regular.Services
             foreach (RegexRulePart regexRulePart in regexRuleParts)
             {
                 regexRulePartList.Add($@"{regexRulePart.RuleType}`
-                                            {regexRulePart.RawUserInputValue}`
                                             {regexRulePart.IsOptional}`
                                             {regexRulePart.IsCaseSensitive}`
                                             {regexRulePart.IsEditable}");
@@ -54,12 +53,11 @@ namespace Regular.Services
             {
                 List<string> serializedStringParts = serializedString.Split('`').ToList();
                 RuleType regexRuleType = GetRuleTypeFromString(serializedStringParts[0]);
-                string rawUserInputValue = serializedStringParts[1];
-                bool isOptional = Convert.ToBoolean(serializedStringParts[2]);
-                bool isCaseSensitive = Convert.ToBoolean(serializedStringParts[3]);
-                bool requiresUserInput = Convert.ToBoolean(serializedStringParts[4]);
+                bool isOptional = Convert.ToBoolean(serializedStringParts[1]);
+                bool isCaseSensitive = Convert.ToBoolean(serializedStringParts[2]);
+                bool requiresUserInput = Convert.ToBoolean(serializedStringParts[3]);
 
-                regexRuleParts.Add(new RegexRulePart(regexRuleType, isOptional, isCaseSensitive, requiresUserInput, rawUserInputValue));
+                regexRuleParts.Add(new RegexRulePart(regexRuleType, isOptional, isCaseSensitive, requiresUserInput));
             }
             return regexRuleParts;
         }

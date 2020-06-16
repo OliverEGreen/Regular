@@ -9,7 +9,6 @@ namespace Regular.Services
         public static RegexRulePart CreateRegexRulePart(RuleType ruleType)
         {
             RegexRulePart regexRulePart = new RegexRulePart(ruleType);
-            
             return regexRulePart;
         }
     }

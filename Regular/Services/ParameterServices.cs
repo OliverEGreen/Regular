@@ -92,11 +92,13 @@ namespace Regular.Services
                     Element element = document.GetElement(parameterId);
                     if (element is ParameterElement parameterElement)
                     {
-                        string name = parameterElement.GetDefinition().Name;
+                        Definition definition = parameterElement.GetDefinition();
+                        if (definition.ParameterType != ParameterType.Text) continue;
+                        parameterNames.Add(parameterElement.GetDefinition().Name);
                     }
                     else
                     {
-                        int x = 0;
+                        // Then what
                     }
                 }
                 else
