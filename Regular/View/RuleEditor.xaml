@@ -66,7 +66,7 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <CheckBox x:Name="CategoryCheckBox" Width="20" VerticalAlignment="Center" IsChecked="{Binding IsChecked}" Checked="CategoryCheckBox_OnChecked" Unchecked="CategoryCheckBox_OnUnchecked"/>
+                                <CheckBox x:Name="CategoryCheckBox" Width="20" VerticalAlignment="Center" IsChecked="{Binding IsChecked}" Checked="UpdateCheckedBoxesCount" Unchecked="UpdateCheckedBoxesCount"/>
                                 <TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
                             </StackPanel>
                         </DataTemplate>
@@ -75,7 +75,7 @@
             </ScrollViewer>
         </Border>
         <Label Content="Tracking Parameter" Style="{StaticResource StandardLabel}" Grid.Row="3" Grid.Column="0" FontSize="13" Margin="0,5" VerticalContentAlignment="Center"/>
-        <ComboBox Name="ComboBoxTrackingParameterInput" DisplayMemberPath="Definition.Name" Style="{StaticResource StandardComboBox}" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" SelectedIndex="0"/>
+        <ComboBox Name="ComboBoxTrackingParameterInput" ItemsSource="{Binding PossibleTrackingParameters}" Style="{StaticResource StandardComboBox}" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" SelectedIndex="0"/>
         <Label Content="Output Parameter" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="4" Grid.Column="0" Margin="0,5" VerticalContentAlignment="Center"/>
         <TextBox Name="TextBoxOutputParameterNameInput" Style="{StaticResource StandardTextBox}" Text="{Binding OutputParameterName}" Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" VerticalContentAlignment="Center" ToolTip="This is the project parameter Regular will auto-create and write its validation output to." MaxLength="30"/>
         <TextBlock Name="TextblockOutputParameterWatermark" IsHitTestVisible="False" Padding="7,3" VerticalAlignment="Center" Text="Type Here..." Foreground="{StaticResource FontColorFaded}" FontSize="12" FontWeight="Regular" Grid.Row="4" Grid.Column="1" Panel.ZIndex="1">
