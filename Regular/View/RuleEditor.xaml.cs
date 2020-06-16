@@ -27,6 +27,7 @@ namespace Regular.View
 
         private string name;
         private ObservableCollection<ObservableObject> targetCategoryIds;
+        private List<string> possibleTrackingParameters;
         private ObservableCollection<RegexRulePart> regexRuleParts;
         private string trackingParameterName; // Eventually, this should be some kind of ID
         private string outputParameterName; // This should also be an ID
@@ -53,6 +54,17 @@ namespace Regular.View
                 NotifyPropertyChanged("TargetCategoryIds");
             }
         }
+        
+        public List<string> PossibleTrackingParameters
+        {
+            get => possibleTrackingParameters;
+            set
+            {
+                possibleTrackingParameters = value;
+                NotifyPropertyChanged("PossibleTrackingParameters");
+            }
+        }
+
         public string TrackingParameterName
         {
             get => trackingParameterName;
@@ -127,17 +139,6 @@ namespace Regular.View
             ComboBoxRulePartInput.SelectedItem = RuleType.AnyDigit;
             ComboBoxMatchTypeInput.ItemsSource = Enum.GetValues(typeof(MatchType)).Cast<MatchType>();
             ComboBoxMatchTypeInput.SelectedItem = MatchType.ExactMatch;
-
-            // Some random parameters for now - we need the ability to look up the parameters for a particular category
-            // Normally we can use a FilteredElementCollector to get these, however it's going to be tricky if we have no elements of that category
-            // A workaround may involve creating a schedule and reading the schedulable parameters
-            Document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
-            FamilyInstance door = new FilteredElementCollector(Document).OfCategory(BuiltInCategory.OST_Doors).WhereElementIsNotElementType().OfType<FamilyInstance>().ToList().FirstOrDefault();
-            if (door != null)
-            {
-                List<Parameter> allProjectParameters = ParameterServices.ConvertParameterSetToList(door.Parameters).OrderBy(x => x.Definition.Name).ToList();
-                ComboBoxTrackingParameterInput.ItemsSource = allProjectParameters;
-            }
 
             EllipseNameYourRuleInput.Fill = (SolidColorBrush)this.Resources["EllipseColorGray"];
             EllipseOutputParameterNameInput.Fill = (SolidColorBrush)this.Resources["EllipseColorGray"];
@@ -372,13 +373,15 @@ namespace Regular.View
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        private void CategoryCheckBox_OnChecked(object sender, RoutedEventArgs e)
+        private void UpdateCheckedBoxesCount(object sender, RoutedEventArgs e)
         {
-            NumberCategoriesSelected++;
-        }
-        private void CategoryCheckBox_OnUnchecked(object sender, RoutedEventArgs e)
-        {
-            NumberCategoriesSelected--;
+            NumberCategoriesSelected = TargetCategoryIds.Count(x => x.IsChecked);
+            List<ElementId> categoryIds = TargetCategoryIds
+                .Where(x => x.IsChecked)
+                .Select(x => Convert.ToInt32(x.Id))
+                .Select(x => new ElementId(x))
+                .ToList();
+            PossibleTrackingParameters = ParameterServices.GetParametersOfCategories(DocumentGuid, categoryIds);
         }
     }
 }

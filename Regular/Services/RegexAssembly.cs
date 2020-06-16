@@ -61,7 +61,7 @@ namespace Regular.Services
 
         public static string GenerateRandomExample(ObservableCollection<RegexRulePart> regexRuleParts)
         {
-            Random random = new Random();
+            Random random = new Random((int) DateTime.Now.Ticks & 0x0000FFFF);
             string randomExampleString = "Example: ";
             foreach (RegexRulePart regexRulePart in regexRuleParts)
             {
@@ -76,8 +76,14 @@ namespace Regular.Services
                             case "lower case":
                                 randomExampleString += Letters[random.Next(Letters.Length)].ToString().ToLower();
                                 break;
+                            case "Any Case":
+                                // Randomly pick any letter of random case
+                                double randomDouble = random.NextDouble();
+                                randomExampleString += randomDouble >= 0.5
+                                    ? Letters[random.Next(Letters.Length)].ToString().ToLower()
+                                    : Letters[random.Next(Letters.Length)].ToString().ToUpper();
+                                break;
                             default:
-                                randomExampleString += Letters[random.Next(Letters.Length)].ToString().ToLower();
                                 break;
                         }
                         break;

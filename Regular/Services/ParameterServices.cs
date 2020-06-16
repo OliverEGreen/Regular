@@ -65,6 +65,50 @@ namespace Regular.Services
             return null;
         }
 
+        public static Parameter GetParameterById(ElementId elementId)
+        {
+            // Impement this method
+            return null;
+        }
+
+        public static BuiltInParameter GetBuiltInParameterById(int value)
+        {
+            foreach (BuiltInParameter builtInParameter in Enum.GetValues(typeof(BuiltInParameter)))
+            {
+                if (value == (int)builtInParameter) { return builtInParameter; }
+            }
+            return BuiltInParameter.INVALID;
+        }
+
+        public static List<string> GetParametersOfCategories(string documentGuid, List<ElementId> categoryIds)
+        {
+            List<string> parameterNames = new List<string>();
+            Document document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
+            List<ElementId> parameterIds = ParameterFilterUtilities.GetFilterableParametersInCommon(document, categoryIds).ToList();
+            foreach (ElementId parameterId in parameterIds)
+            {
+                if (parameterId.IntegerValue > 0)
+                {
+                    Element element = document.GetElement(parameterId);
+                    if (element is ParameterElement parameterElement)
+                    {
+                        string name = parameterElement.GetDefinition().Name;
+                    }
+                    else
+                    {
+                        int x = 0;
+                    }
+                }
+                else
+                {
+                    BuiltInParameter builtInParameter = GetBuiltInParameterById(parameterId.IntegerValue);
+                    string parameterName = LabelUtils.GetLabelFor(builtInParameter);
+                    parameterNames.Add(parameterName);
+                }
+            }
+            return parameterNames;
+        }
+
         public static List<Parameter> ConvertParameterSetToList(ParameterSet parameterSet)
         {
             List<Parameter> parameters = new List<Parameter>();
