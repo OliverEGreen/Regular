@@ -9,6 +9,8 @@ namespace Regular.Enums
         [Description("Match Anywhere")]
         PartialMatch,
         [Description("Match Beginning")]
-        MatchAtBeginning
+        MatchAtBeginning,
+        [Description("Match Ending")]
+        MatchAtEnd
     }
 }

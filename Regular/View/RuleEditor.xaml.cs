@@ -182,7 +182,7 @@ namespace Regular.View
                 regexRule.OutputParameterName = OutputParameterName;
                 regexRule.MatchType = MatchType;
                 regexRule.RegexRuleParts = RegexRuleParts;
-                regexRule.RegexString = RegexAssembly.AssembleRegexString(regexRule.RegexRuleParts);
+                regexRule.RegexString = RegexAssembly.AssembleRegexString(regexRule);
 
                 RegexRule.Save(DocumentGuid, regexRule);
                 ExtensibleStorageServices.SaveRegexRuleToExtensibleStorage(DocumentGuid, regexRule);
@@ -201,7 +201,7 @@ namespace Regular.View
                 regexRule.OutputParameterName = OutputParameterName;
                 regexRule.MatchType = MatchType;
                 regexRule.RegexRuleParts = RegexRuleParts;
-                regexRule.RegexString = RegexAssembly.AssembleRegexString(regexRule.RegexRuleParts);
+                regexRule.RegexString = RegexAssembly.AssembleRegexString(regexRule);
                 
                 // We update both the static cache and the entity saved in ExtensibleStorage.
                 RegexRule.Update(DocumentGuid, ExistingRuleGuid, regexRule);

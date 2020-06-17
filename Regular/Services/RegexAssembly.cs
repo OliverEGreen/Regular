@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Autodesk.Revit.UI;
 using Regular.Enums;
 using Regular.Model;
 using Regular.ViewModel;
@@ -12,25 +13,40 @@ namespace Regular.Services
         private static readonly List<string> SpecialCharacters = new List<string>() { @".", @"\", @"*", @"+", @"?", @"|", @"(", @")", @"[", @"]", @"^", @"{", @"}" };
         private static string GetRegexPartFromRuleType(RegexRulePart regexRulePart)
         {
-            // TODO: Need to handle case sensitive and optional booleans.
-            // For optional we can append ? to each returned string.
-            // For non case-sensitive (i.e. case match) we can append the (?i) modifier after the string
+            string regexPartOutput = "";
+            string optionalModifier = regexRulePart.IsOptional ? "?" : "";
+            string caseSensitiveModifier = regexRulePart.IsCaseSensitive ? "(?i)" : "";
             switch (regexRulePart.RuleType)
             {
                 case RuleType.FreeText:
-                    return SanitizeWord(regexRulePart.DisplayText);
+                    regexPartOutput += SanitizeWord(regexRulePart.DisplayText) + caseSensitiveModifier;
+                    break;
                 case RuleType.SelectionSet:
-                    // We'll need to break these up somehow
-                    return "Test";
+                    regexPartOutput += "Test";
+                    break;
                 case RuleType.AnyLetter:
-                    if (regexRulePart.IsCaseSensitive) { }
-                    // How do we handle case-sensitive?
-                    return @"[a-zA-Z]";
+                    switch (regexRulePart.CaseSensitiveDisplayString)
+                    {
+                        case "UPPER CASE":
+                            regexPartOutput += "[A-Z]";
+                            break;
+                        case "lower case":
+                            regexPartOutput += "[a-z]";
+                            break;
+                        case "Any Case":
+                            regexPartOutput += "[A-Za-z]";
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
                 case RuleType.AnyDigit:
-                    return @"\d";
+                    regexPartOutput += @"\d";
+                    break;
                 default:
-                    return null;
+                    break;
             }
+            return regexPartOutput + optionalModifier;
         }
         private static string SanitizeCharacter(string character)
         {
@@ -47,13 +63,34 @@ namespace Regular.Services
             }
             return outputString;
         }
-        public static string AssembleRegexString(ObservableCollection<RegexRulePart> regexRuleParts)
+        public static string AssembleRegexString(RegexRule regexRule)
         {
             string regexString = "";
-            foreach(RegexRulePart regexRulePart in regexRuleParts) { regexString += GetRegexPartFromRuleType(regexRulePart); }
-            // TODO: We need to finalize the regex string. 
-            // Are we using a re.match or a re.search? contain $ or ^? Or we could dynamically switch out the method
-            return regexString;
+            foreach(RegexRulePart regexRulePart in regexRule.RegexRuleParts) { regexString += GetRegexPartFromRuleType(regexRulePart); }
+
+            string start = "";
+            string end = "";
+
+            switch (regexRule.MatchType)
+            {
+                case MatchType.ExactMatch:
+                    start = "^";
+                    end = "$";
+                    break;
+                case MatchType.PartialMatch:
+                    break;
+                case MatchType.MatchAtBeginning:
+                    start = "^";
+                    break;
+                case MatchType.MatchAtEnd:
+                    end = "$";
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            // We pad out the final sting to facilitate the MatchType specified by the user.
+            TaskDialog.Show("Test", $"{start + regexString + end}");
+            return start + regexString + end;
         }
 
         public static char[] Letters = new[] {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l','m', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
@@ -70,20 +107,21 @@ namespace Regular.Services
                 switch (regexRulePart.RuleType)
                 {
                     case RuleType.AnyLetter:
+                        string randomLetter = Letters[random.Next(Letters.Length)].ToString();
                         switch (regexRulePart.CaseSensitiveDisplayString)
                         {
                             case "UPPER CASE":
-                                randomExampleString += Letters[random.Next(Letters.Length)].ToString().ToUpper();
+                                randomExampleString += randomLetter.ToUpper();
                                 break;
                             case "lower case":
-                                randomExampleString += Letters[random.Next(Letters.Length)].ToString().ToLower();
+                                randomExampleString += randomLetter.ToLower();
                                 break;
                             case "Any Case":
                                 // Randomly pick any letter of random case
                                 double anyCaseRandom = random.NextDouble();
                                 randomExampleString += anyCaseRandom >= 0.5
-                                    ? Letters[random.Next(Letters.Length)].ToString().ToLower()
-                                    : Letters[random.Next(Letters.Length)].ToString().ToUpper();
+                                    ? randomLetter.ToLower()
+                                    : randomLetter.ToUpper();
                                 break;
                             default:
                                 break;
