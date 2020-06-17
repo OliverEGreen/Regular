@@ -180,20 +180,26 @@
         </Setter>
     </Style>
 
-
     <Style x:Key="ReorderUpButton" TargetType="Button">
         <Setter Property="OverridesDefaultStyle" Value="True"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Canvas Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" ClipToBounds="True" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <Rectangle x:Name="BackgroundRectangle" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Fill="#D9D9D9" Margin="0"/>
-                        <Line x:Name="Line1" X1="2.5" Y1="8" X2="6.5" Y2="4" Stroke="#7F7F7F" StrokeThickness="1.0"/>
-                        <Line x:Name="Line2" X1="10" Y1="8" X2="6" Y2="4" Stroke="#7F7F7F" StrokeThickness="1.0"/>
+                        <Rectangle x:Name="BackgroundRectangle" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Fill="#CCCBCB" Margin="0"/>
+                        <Line x:Name="Line1" X1="8.5" Y1="14" X2="12.5" Y2="9" Stroke="#666666" StrokeThickness="1.5"/>
+                        <Line x:Name="Line2" X1="11.5" Y1="9" X2="15.5" Y2="14" Stroke="#666666" StrokeThickness="1.5"/>
+                        <Ellipse x:Name="ReorderUpButtonEllipse" StrokeThickness="1" Canvas.Left="5" Canvas.Top="5" Stroke="#666666" Width="14" Height="14" />
                     </Canvas>
                     <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Line.Stroke" TargetName="Line1" Value="#A5A5A5"/>
+                            <Setter Property="Line.Stroke" TargetName="Line2" Value="#A5A5A5"/>
+                            <Setter Property="Ellipse.Stroke" TargetName="ReorderUpButtonEllipse" Value="#A5A5A5"/>
+                        </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Rectangle.Fill" TargetName="BackgroundRectangle" Value="#999999"/>
+                            <Setter Property="Ellipse.Stroke" TargetName="ReorderUpButtonEllipse" Value="#FFFFFF"/>
                             <Setter Property="Line.Stroke" TargetName="Line1" Value="#FFFFFF"/>
                             <Setter Property="Line.Stroke" TargetName="Line2" Value="#FFFFFF"/>
                         </Trigger>
@@ -209,13 +215,20 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Canvas Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" ClipToBounds="True" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <Rectangle x:Name="BackgroundRectangle" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Fill="#D9D9D9" Margin="0"/>
-                        <Line x:Name="Line1" X1="2.5" Y1="4" X2="6.5" Y2="8" Stroke="#7F7F7F" StrokeThickness="1.0"/>
-                        <Line x:Name="Line2" X1="10" Y1="4" X2="6" Y2="8" Stroke="#7F7F7F" StrokeThickness="1.0"/>
+                        <Rectangle x:Name="BackgroundRectangle" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Fill="#CCCBCB" Margin="0"/>
+                        <Line x:Name="Line1" X1="8.5" Y1="10" X2="12.5" Y2="15" Stroke="#666666" StrokeThickness="1.5"/>
+                        <Line x:Name="Line2" X1="11.5" Y1="15" X2="15.5" Y2="10" Stroke="#666666" StrokeThickness="1.5"/>
+                        <Ellipse x:Name="ReorderDownButtonEllipse" StrokeThickness="1" Canvas.Left="5" Canvas.Top="5" Stroke="#666666" Width="14" Height="14" />
                     </Canvas>
                     <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Line.Stroke" TargetName="Line1" Value="#A5A5A5"/>
+                            <Setter Property="Line.Stroke" TargetName="Line2" Value="#A5A5A5"/>
+                            <Setter Property="Ellipse.Stroke" TargetName="ReorderDownButtonEllipse" Value="#A5A5A5"/>
+                        </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Rectangle.Fill" TargetName="BackgroundRectangle" Value="#999999"/>
+                            <Setter Property="Ellipse.Stroke" TargetName="ReorderDownButtonEllipse" Value="#FFFFFF"/>
                             <Setter Property="Line.Stroke" TargetName="Line1" Value="#FFFFFF"/>
                             <Setter Property="Line.Stroke" TargetName="Line2" Value="#FFFFFF"/>
                         </Trigger>
@@ -231,7 +244,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Canvas Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" ClipToBounds="True" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <Rectangle x:Name="BackgroundRectangle" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Fill="#D9D9D9" Margin="0"/>
+                        <Rectangle x:Name="BackgroundRectangle" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Fill="#CCCBCB" Margin="0"/>
                         <Line x:Name="VerticalLine" X1="12" Y1="8" X2="12" Y2="16" Stroke="#666666" StrokeThickness="1.5"/>
                         <Line x:Name="HorizontalLine" Y1="12" X1="8" Y2="12" X2="16" Stroke="#666666" StrokeThickness="1.5"/>
                         <Ellipse x:Name="AddRulePartButtonEllipse" StrokeThickness="1" Canvas.Left="5" Canvas.Top="5" Stroke="#666666" Width="14" Height="14" />
