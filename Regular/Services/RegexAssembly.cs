@@ -68,8 +68,8 @@ namespace Regular.Services
             string regexString = "";
             foreach(RegexRulePart regexRulePart in regexRule.RegexRuleParts) { regexString += GetRegexPartFromRuleType(regexRulePart); }
 
-            string start = "";
-            string end = "";
+            string start = ".*";
+            string end = ".*";
 
             switch (regexRule.MatchType)
             {

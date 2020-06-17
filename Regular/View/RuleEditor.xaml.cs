@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -166,8 +167,10 @@ namespace Regular.View
         }
         private void ButtonAddRulePart_Click(object sender, RoutedEventArgs e)
         {
-            RegexRuleParts.Add(RulePartServices.CreateRegexRulePart((RuleType)ComboBoxRulePartInput.SelectedItem));
+            RegexRulePart regexRulePart = RulePartServices.CreateRegexRulePart((RuleType) ComboBoxRulePartInput.SelectedItem);
+            RegexRuleParts.Add(regexRulePart);
             TextBlockExample.Text = RegexAssembly.GenerateRandomExample(RegexRuleParts);
+            ListBoxRuleParts.SelectedItem = regexRulePart;
         }
         private void ButtonOK_Click(object sender, RoutedEventArgs e)
         {
@@ -221,23 +224,23 @@ namespace Regular.View
         }
         private void ReorderUpButton_Click(object sender, RoutedEventArgs e)
         {
-            Button button = sender as Button;
-            RegexRulePart regexRulePart = (RegexRulePart)button.DataContext;
+            RegexRulePart regexRulePart = ListBoxRuleParts.SelectedItem as RegexRulePart;
             int index = RegexRuleParts.IndexOf(regexRulePart);
-
             if (index <= 0) return;
             RegexRuleParts.RemoveAt(index);
             RegexRuleParts.Insert(index - 1, regexRulePart);
+            ListBoxRuleParts.Focus();
+            ListBoxRuleParts.SelectedItem = regexRulePart;
         }
         private void ReorderDownButton_Click(object sender, RoutedEventArgs e)
         {
-            Button button = sender as Button;
-            RegexRulePart regexRulePart = (RegexRulePart)button.DataContext;
+            RegexRulePart regexRulePart = ListBoxRuleParts.SelectedItem as RegexRulePart;
             int index = RegexRuleParts.IndexOf(regexRulePart);
-
             if (index >= RegexRuleParts.Count) return;
             RegexRuleParts.RemoveAt(index);
             RegexRuleParts.Insert(index + 1, regexRulePart);
+            ListBoxRuleParts.Focus();
+            ListBoxRuleParts.SelectedItem = regexRulePart;
         }
         private void DisplayUserFeedback(object sender, RoutedEventArgs e)
         {
@@ -363,8 +366,8 @@ namespace Regular.View
         private void ButtonExpandCategories_Click(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
-            button.Content = ColumnCategories.Width == new GridLength(250) ? "Select Categories" : "Hide Categories";
             ColumnCategories.Width = ColumnCategories.Width == new GridLength(250) ? new GridLength(0) : new GridLength(250);
+            button.Content = ColumnCategories.Width == new GridLength(250) ? "Hide Categories" : "Select Categories";
         }
         private void ScrollViewerCategories_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
@@ -412,6 +415,14 @@ namespace Regular.View
             textBox.IsReadOnly = true;
             textBox.Focusable = false;
             textBox.BorderThickness = new Thickness(0);
+        }
+        
+        private void ListBoxRuleParts_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            RegexRulePart regexRulePart = ((ListBox)sender).SelectedItem as RegexRulePart;
+            int index = RegexRuleParts.IndexOf(regexRulePart);
+            ButtonMoveRulePartUp.IsEnabled = index != 0;
+            ButtonMoveRulePartDown.IsEnabled = index != regexRuleParts.Count - 1;
         }
     }
 }
