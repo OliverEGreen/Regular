@@ -53,7 +53,7 @@ namespace Regular.Services
             List<DataStorage> allDataStorage = new FilteredElementCollector(document).OfClass(typeof(DataStorage)).OfType<DataStorage>().ToList();
             if (allDataStorage.Count < 1) return null;
 
-            // Returning the document Guid if the schema is employed, otherwise null
+            // Returning the document RuleGuid if the schema is employed, otherwise null
             DataStorage documentGuidDataStorage = allDataStorage.FirstOrDefault(x => x.GetEntity(guidSchema).IsValid());
             Entity documentGuidEntity = documentGuidDataStorage?.GetEntity(guidSchema);
             return documentGuidEntity?.Get<string>("DocumentGUID");
@@ -92,13 +92,15 @@ namespace Regular.Services
             Document document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
             //This needs to be turned into a method taking a RegexRule and saving to ExtensibleStorage
             Entity entity = new Entity(GetRegularSchema());
-            entity.Set("GUID", new Guid(regexRule.Guid));
+            entity.Set("GUID", new Guid(regexRule.RuleGuid));
             entity.Set("RuleName", regexRule.Name);
             entity.Set("TargetCategoryIds", SerializationServices.ConvertListToIList(regexRule.TargetCategoryIds.Where(x => x.IsChecked).Select(x => x.Id.ToString()).ToList()));
             entity.Set("TrackingParameterName", regexRule.TrackingParameterName);
             entity.Set("OutputParameterName", regexRule.OutputParameterName);
             entity.Set("RegexString", regexRule.RegexString);
-            entity.Set("MatchType", regexRule.MatchType.ToString());
+            MatchType matchType = regexRule.MatchType;
+            string matchTypeString = regexRule.MatchType.ToString();
+            entity.Set("MatchType", matchTypeString);
             entity.Set("RegexRuleParts", SerializationServices.SerializeRegexRuleParts(regexRule.RegexRuleParts));
             using (Transaction transaction = new Transaction(document, $"Saving RegexRule {regexRule.Name}"))
             {
@@ -186,7 +188,7 @@ namespace Regular.Services
                 regexRuleEntity.Set("OutputParameterName", newRegexRule.OutputParameterName);
                 regexRuleEntity.Set("RegexString", newRegexRule.RegexString);
                 regexRuleEntity.Set("RegexRuleParts", SerializationServices.SerializeRegexRuleParts(newRegexRule.RegexRuleParts));
-                regexRuleEntity.Set("MatchType", newRegexRule.MatchType);
+                regexRuleEntity.Set("MatchType", newRegexRule.MatchType.ToString());
                 dataStorage.SetEntity(regexRuleEntity);
                 transaction.Commit();
             }

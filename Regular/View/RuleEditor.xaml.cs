@@ -119,8 +119,8 @@ namespace Regular.View
         }
         private void InitializeRuleEditor(string documentGuid, RegexRule inputRegexRule)
         {
-            EditingExistingRule = RegexRule.GetDocumentRegexRuleGuids(documentGuid).Contains(inputRegexRule.Guid);
-            if(EditingExistingRule) ExistingRuleGuid = inputRegexRule.Guid;
+            EditingExistingRule = RegexRule.GetDocumentRegexRuleGuids(documentGuid).Contains(inputRegexRule.RuleGuid);
+            if(EditingExistingRule) ExistingRuleGuid = inputRegexRule.RuleGuid;
 
             DocumentGuid = documentGuid;
             RuleName = inputRegexRule.Name;
@@ -131,7 +131,7 @@ namespace Regular.View
             MatchType = inputRegexRule.MatchType;
             NumberCategoriesSelected = targetCategoryIds.Count(x => x.IsChecked);
             
-            Title = EditingExistingRule ? $"Editing Rule: {Name}" : "Creating New Rule";
+            Title = EditingExistingRule ? $"Editing Rule: {RuleName}" : "Creating New Rule";
             TextBoxOutputParameterNameInput.IsEnabled = ! EditingExistingRule;
 
             // Binding ComboBox to our RuleType enumeration
@@ -189,10 +189,10 @@ namespace Regular.View
 
                 RegexRule.Save(DocumentGuid, regexRule);
                 ExtensibleStorageServices.SaveRegexRuleToExtensibleStorage(DocumentGuid, regexRule);
-                DynamicModelUpdateServices.RegisterRegexRule(DocumentGuid, regexRule.Guid);
+                DynamicModelUpdateServices.RegisterRegexRule(DocumentGuid, regexRule.RuleGuid);
                 
                 // If a new rule, a new project parameter needs to be created.
-                ParameterServices.CreateProjectParameter(Document, regexRule.OutputParameterName, ParameterType.Text, regexRule.TargetCategoryIds.Select(x => x.Id).ToList(), BuiltInParameterGroup.PG_IDENTITY_DATA, true);
+                // ParameterServices.CreateProjectParameter(Document, regexRule.OutputParameterName, ParameterType.Text, regexRule.TargetCategoryIds.Select(x => x.Id).ToList(), BuiltInParameterGroup.PG_IDENTITY_DATA, true);
             }
             else
             {
@@ -416,7 +416,6 @@ namespace Regular.View
             textBox.Focusable = false;
             textBox.BorderThickness = new Thickness(0);
         }
-        
         private void ListBoxRuleParts_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             RegexRulePart regexRulePart = ((ListBox)sender).SelectedItem as RegexRulePart;
