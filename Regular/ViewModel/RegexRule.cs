@@ -133,6 +133,20 @@ namespace Regular.ViewModel
         {
             RegexRules.AllRegexRules[documentGuid].Add(regexRule);
         }
+
+        public static RegexRule Duplicate(string documentGuid, RegexRule regexRule)
+        {
+            // Returns a copy of an existing RegexRule, but with a new GUID
+            RegexRule duplicateRegexRule = Create(documentGuid);
+            duplicateRegexRule.OutputParameterName = regexRule.OutputParameterName;
+            duplicateRegexRule.RegexRuleParts = regexRule.RegexRuleParts;
+            duplicateRegexRule.RegexString = regexRule.RegexString;
+            duplicateRegexRule.Name = $"Copy of {regexRule.Name}";
+            duplicateRegexRule.TargetCategoryIds = regexRule.TargetCategoryIds;
+            duplicateRegexRule.TrackingParameterName = regexRule.TrackingParameterName;
+            duplicateRegexRule.MatchType = regexRule.MatchType;
+            return duplicateRegexRule;
+        }
         public static RegexRule GetRuleById(string documentGuid, string regexRuleGuid)
         {
             ObservableCollection<RegexRule> documentRegexRules = GetDocumentRegexRules(documentGuid);
@@ -159,6 +173,7 @@ namespace Regular.ViewModel
             existingRegexRule.Name = newRegexRule.Name;
             existingRegexRule.TargetCategoryIds = newRegexRule.TargetCategoryIds;
             existingRegexRule.TrackingParameterName = newRegexRule.TrackingParameterName;
+            existingRegexRule.MatchType = newRegexRule.MatchType;
         }
         public static void Delete(string documentGuid, string regexRuleGuid)
         {
