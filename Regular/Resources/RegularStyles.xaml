@@ -6,6 +6,10 @@
     <SolidColorBrush x:Key="ButtonBackgroundColorHighlight" Color="#F1F0F2"/>
     <SolidColorBrush x:Key="ButtonBackgroundColorLowlight" Color="#B2B2B2"/>
     <SolidColorBrush x:Key="ButtonBackgroundColorLightGreen" Color="#DFF2DA"/>
+    <SolidColorBrush x:Key="ButtonBackgroundGray" Color="#D9D9D9"/>
+    <SolidColorBrush x:Key="ButtonStrokeColorDefault" Color="#666666"/>
+    <SolidColorBrush x:Key="ButtonStrokeColorHighlight" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="ButtonStrokeColorDisabled" Color="#A5A5A5"/>
     <SolidColorBrush x:Key="FontColorDefault" Color="#333333"/>
     <SolidColorBrush x:Key="RedColour" Color="LightSalmon"/>
     <SolidColorBrush x:Key="FontColorWarning" Color="#E60000"/>
@@ -186,16 +190,16 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Canvas Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" ClipToBounds="True" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <Rectangle x:Name="BackgroundRectangle" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Fill="#CCCBCB" Margin="0"/>
-                        <Line x:Name="Line1" X1="8.5" Y1="14" X2="12.5" Y2="9" Stroke="#666666" StrokeThickness="1.5"/>
-                        <Line x:Name="Line2" X1="11.5" Y1="9" X2="15.5" Y2="14" Stroke="#666666" StrokeThickness="1.5"/>
-                        <Ellipse x:Name="ReorderUpButtonEllipse" StrokeThickness="1" Canvas.Left="5" Canvas.Top="5" Stroke="#666666" Width="14" Height="14" />
+                        <Rectangle x:Name="BackgroundRectangle" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Fill="{StaticResource ButtonBackgroundGray}" Margin="0"/>
+                        <Line x:Name="Line1" X1="8.5" Y1="14" X2="12.5" Y2="9" Stroke="{StaticResource ButtonStrokeColorDefault}" StrokeThickness="1.5"/>
+                        <Line x:Name="Line2" X1="11.5" Y1="9" X2="15.5" Y2="14" Stroke="{StaticResource ButtonStrokeColorDefault}" StrokeThickness="1.5"/>
+                        <Ellipse x:Name="ReorderUpButtonEllipse" StrokeThickness="1" Canvas.Left="5" Canvas.Top="5" Stroke="{StaticResource ButtonStrokeColorDefault}" Width="14" Height="14" />
                     </Canvas>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Line.Stroke" TargetName="Line1" Value="#A5A5A5"/>
-                            <Setter Property="Line.Stroke" TargetName="Line2" Value="#A5A5A5"/>
-                            <Setter Property="Ellipse.Stroke" TargetName="ReorderUpButtonEllipse" Value="#A5A5A5"/>
+                            <Setter Property="Line.Stroke" TargetName="Line1" Value="{StaticResource ButtonStrokeColorDisabled}"/>
+                            <Setter Property="Line.Stroke" TargetName="Line2" Value="{StaticResource ButtonStrokeColorDisabled}"/>
+                            <Setter Property="Ellipse.Stroke" TargetName="ReorderUpButtonEllipse" Value="{StaticResource ButtonStrokeColorDisabled}"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Rectangle.Fill" TargetName="BackgroundRectangle" Value="#999999"/>
@@ -215,16 +219,16 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Canvas Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" ClipToBounds="True" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <Rectangle x:Name="BackgroundRectangle" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Fill="#CCCBCB" Margin="0"/>
-                        <Line x:Name="Line1" X1="8.5" Y1="10" X2="12.5" Y2="15" Stroke="#666666" StrokeThickness="1.5"/>
-                        <Line x:Name="Line2" X1="11.5" Y1="15" X2="15.5" Y2="10" Stroke="#666666" StrokeThickness="1.5"/>
-                        <Ellipse x:Name="ReorderDownButtonEllipse" StrokeThickness="1" Canvas.Left="5" Canvas.Top="5" Stroke="#666666" Width="14" Height="14" />
+                        <Rectangle x:Name="BackgroundRectangle" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Fill="{StaticResource ButtonBackgroundGray}" Margin="0"/>
+                        <Line x:Name="Line1" X1="8.5" Y1="10" X2="12.5" Y2="15" Stroke="{StaticResource ButtonStrokeColorDefault}" StrokeThickness="1.5"/>
+                        <Line x:Name="Line2" X1="11.5" Y1="15" X2="15.5" Y2="10" Stroke="{StaticResource ButtonStrokeColorDefault}" StrokeThickness="1.5"/>
+                        <Ellipse x:Name="ReorderDownButtonEllipse" StrokeThickness="1" Canvas.Left="5" Canvas.Top="5" Stroke="{StaticResource ButtonStrokeColorDefault}" Width="14" Height="14" />
                     </Canvas>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Line.Stroke" TargetName="Line1" Value="#A5A5A5"/>
-                            <Setter Property="Line.Stroke" TargetName="Line2" Value="#A5A5A5"/>
-                            <Setter Property="Ellipse.Stroke" TargetName="ReorderDownButtonEllipse" Value="#A5A5A5"/>
+                            <Setter Property="Line.Stroke" TargetName="Line1" Value="{StaticResource ButtonStrokeColorDisabled}"/>
+                            <Setter Property="Line.Stroke" TargetName="Line2" Value="{StaticResource ButtonStrokeColorDisabled}"/>
+                            <Setter Property="Ellipse.Stroke" TargetName="ReorderDownButtonEllipse" Value="{StaticResource ButtonStrokeColorDisabled}"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Rectangle.Fill" TargetName="BackgroundRectangle" Value="#999999"/>
@@ -238,23 +242,55 @@
         </Setter>
     </Style>
 
+    <Style x:Key="DuplicateRuleButton" TargetType="Button">
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Canvas Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" ClipToBounds="True" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Rectangle x:Name="BackgroundRectangle" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Fill="{StaticResource ButtonBackgroundGray}" Margin="0"/>
+                        <Polygon x:Name="BackgroundSquare" Points="8,10 20,10 20,21, 8,21" Stroke="{StaticResource ButtonStrokeColorDefault}" StrokeThickness="1.25" Fill="{StaticResource ButtonBackgroundGray}"/>
+                        <Polygon x:Name="ForegroundSquare" Points="5,5 17,5 17,17, 5,17" Stroke="{StaticResource ButtonStrokeColorDefault}" StrokeThickness="1.25" Fill="{StaticResource ButtonBackgroundGray}"/>
+                        <Line x:Name="VerticalLine" X1="11" Y1="7.5" X2="11" Y2="14.5" StrokeThickness="1.25" Stroke="{StaticResource ButtonStrokeColorDefault}"/>
+                        <Line x:Name="HorizontalLine" X1="7.5" Y1="11" X2="14.5" Y2="11" StrokeThickness="1.25" Stroke="{StaticResource ButtonStrokeColorDefault}"/>
+                    </Canvas>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Line.Stroke" TargetName="BackgroundSquare" Value="{StaticResource ButtonStrokeColorDisabled}"/>
+                            <Setter Property="Line.Stroke" TargetName="ForegroundSquare" Value="{StaticResource ButtonStrokeColorDisabled}"/>
+                            <Setter Property="Line.Stroke" TargetName="HorizontalLine" Value="{StaticResource ButtonStrokeColorDisabled}"/>
+                            <Setter Property="Line.Stroke" TargetName="VerticalLine" Value="{StaticResource ButtonStrokeColorDisabled}"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Rectangle.Fill" TargetName="BackgroundRectangle" Value="#999999"/>
+                            <Setter Property="Line.Stroke" TargetName="BackgroundSquare" Value="{StaticResource ButtonStrokeColorHighlight}"/>
+                            <Setter Property="Line.Stroke" TargetName="ForegroundSquare" Value="{StaticResource ButtonStrokeColorHighlight}"/>
+                            <Setter Property="Line.Stroke" TargetName="HorizontalLine" Value="{StaticResource ButtonStrokeColorHighlight}"/>
+                            <Setter Property="Line.Stroke" TargetName="VerticalLine" Value="{StaticResource ButtonStrokeColorHighlight}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style x:Key="AddItemButton" TargetType="Button">
         <Setter Property="OverridesDefaultStyle" Value="True"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Canvas Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" ClipToBounds="True" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <Rectangle x:Name="BackgroundRectangle" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Fill="#CCCBCB" Margin="0"/>
-                        <Line x:Name="VerticalLine" X1="12" Y1="8" X2="12" Y2="16" Stroke="#666666" StrokeThickness="1.5"/>
-                        <Line x:Name="HorizontalLine" Y1="12" X1="8" Y2="12" X2="16" Stroke="#666666" StrokeThickness="1.5"/>
-                        <Ellipse x:Name="AddRulePartButtonEllipse" StrokeThickness="1" Canvas.Left="5" Canvas.Top="5" Stroke="#666666" Width="14" Height="14" />
+                        <Rectangle x:Name="BackgroundRectangle" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Fill="{StaticResource ButtonBackgroundGray}" Margin="0"/>
+                        <Line x:Name="VerticalLine" X1="12" Y1="8" X2="12" Y2="16" Stroke="{StaticResource ButtonStrokeColorDefault}" StrokeThickness="1.5"/>
+                        <Line x:Name="HorizontalLine" Y1="12" X1="8" Y2="12" X2="16" Stroke="{StaticResource ButtonStrokeColorDefault}" StrokeThickness="1.5"/>
+                        <Ellipse x:Name="AddRulePartButtonEllipse" StrokeThickness="1" Canvas.Left="5" Canvas.Top="5" Stroke="{StaticResource ButtonStrokeColorDefault}" Width="14" Height="14" />
                     </Canvas>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Rectangle.Fill" TargetName="BackgroundRectangle" Value="#999999"/>
-                            <Setter Property="Ellipse.Stroke" TargetName="AddRulePartButtonEllipse" Value="#FFFFFF"/>
-                            <Setter Property="Line.Stroke" TargetName="HorizontalLine" Value="#FFFFFF"/>
-                            <Setter Property="Line.Stroke" TargetName="VerticalLine" Value="#FFFFFF"/>
+                            <Setter Property="Ellipse.Stroke" TargetName="AddRulePartButtonEllipse" Value="{StaticResource ButtonStrokeColorHighlight}"/>
+                            <Setter Property="Line.Stroke" TargetName="HorizontalLine" Value="{StaticResource ButtonStrokeColorHighlight}"/>
+                            <Setter Property="Line.Stroke" TargetName="VerticalLine" Value="{StaticResource ButtonStrokeColorHighlight}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -268,9 +304,9 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Canvas Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" ClipToBounds="True" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <Rectangle x:Name="BackgroundRectangle" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Fill="#D9D9D9" Margin="0"/>
-                        <Line x:Name="VerticalLine" X1="9" Y1="12" X2="15" Y2="18" Stroke="#666666" StrokeThickness="1.5"/>
-                        <Line x:Name="HorizontalLine" Y1="18" X1="9" Y2="12" X2="15" Stroke="#666666" StrokeThickness="1.5"/>
+                        <Rectangle x:Name="BackgroundRectangle" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Fill="{StaticResource ButtonBackgroundGray}" Margin="0"/>
+                        <Line x:Name="VerticalLine" X1="9" Y1="12" X2="15" Y2="18" Stroke="{StaticResource ButtonStrokeColorDefault}" StrokeThickness="1.5"/>
+                        <Line x:Name="HorizontalLine" Y1="18" X1="9" Y2="12" X2="15" Stroke="{StaticResource ButtonStrokeColorDefault}" StrokeThickness="1.5"/>
                         <Ellipse x:Name="DeleteRulePartButtonEllipse" StrokeThickness="1" Canvas.Left="5" Canvas.Top="7.5" Stroke="#666666" Width="14" Height="14" />
                     </Canvas>
                     <ControlTemplate.Triggers>
@@ -292,13 +328,13 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Canvas Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" ClipToBounds="True" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <Rectangle x:Name="BackgroundRectangle" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Fill="#D9D9D9" Margin="0"/>
-                        <Line x:Name="VerticalLine" X1="9" Y1="12" X2="15" Y2="18" Stroke="#666666" StrokeThickness="1.5"/>
+                        <Rectangle x:Name="BackgroundRectangle" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Fill="{StaticResource ButtonBackgroundGray}" Margin="0"/>
+                        <Line x:Name="VerticalLine" X1="9" Y1="12" X2="15" Y2="18" Stroke="{StaticResource ButtonStrokeColorDefault}" StrokeThickness="1.5"/>
                     </Canvas>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Rectangle.Fill" TargetName="BackgroundRectangle" Value="#41A4D9"/>
-                            <Setter Property="Line.Stroke" TargetName="VerticalLine" Value="#FFFFFF"/>
+                            <Setter Property="Line.Stroke" TargetName="VerticalLine" Value="{StaticResource ButtonStrokeColorHighlight}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -306,23 +342,6 @@
         </Setter>
     </Style>
 
-    <Style x:Key="ImageButton" TargetType="Button">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Button}">
-                    <Grid Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" ClipToBounds="True">
-                        <Rectangle Name="ForegroundRectangle" Fill="DarkGray" Opacity="0"  Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Panel.ZIndex="1"/>
-                        <Image Source="{Binding Tag, RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type Button}}}" Panel.ZIndex="0" Stretch="Fill"/>
-                    </Grid>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Opacity" TargetName="ForegroundRectangle" Value="0.4"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
     <Style x:Key="DefaultTabControlStyle" TargetType="TabItem">
         <Setter Property="Margin" Value="0,0,3,0"/>
         <Setter Property="Template">
@@ -351,6 +370,7 @@
             </Setter.Value>
         </Setter>
     </Style>
+
     <Style x:Key="DefaultScrollerViewerStyle" TargetType="ScrollViewer">
         <Setter Property="Padding" Value="0"/>
         <Setter Property="BorderThickness" Value="0px"/>
