@@ -14,7 +14,11 @@
             <RowDefinition />
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
-        <Label Content="Saved Rules" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="0" Padding="0" HorizontalAlignment="Left" Width="100" VerticalAlignment="Center"/>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left">
+            <Button Name="ButtonMoveRulePartUp" Style="{StaticResource ReorderUpButton}" Height="25" Width="25" Margin="0,0,3,0" Click="ReorderUpButton_Click" IsEnabled="False" />
+            <Button Name="ButtonMoveRulePartDown" Style="{StaticResource ReorderDownButton}" Height="25" Width="25" Margin="0,0,3,0" Click="ReorderDownButton_Click" IsEnabled="False" />
+            <Button Name="ButtonDuplicateRule" Style="{StaticResource DuplicateRuleButton}" Width="25" Height="25" FontSize="13"/>
+        </StackPanel>
         <Label Content="New Rule" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="0" Padding="0" HorizontalAlignment="Right" Margin="0,0,35,0" VerticalAlignment="Center" ToolTip="Add A New Rule"/>
         <Button Name="ButtonAddNewRule" Style="{StaticResource AddItemButton}" VerticalAlignment="Center" Height="25" Width="25" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right" Click="ButtonAddNewRule_Click"/>
         <Border BorderThickness="1" BorderBrush="{StaticResource TextBoxBorderColorDefault}" Grid.Row="1" Margin="0,5,0,0">
