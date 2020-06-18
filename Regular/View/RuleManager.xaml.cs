@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Controls;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -42,7 +43,7 @@ namespace Regular.View
         {
             // TODO: Add in confirmation button before rule gets deleted forever
             Button button = sender as Button;
-            string regexRuleGuid = ((RegexRule)button.DataContext).Guid;
+            string regexRuleGuid = ((RegexRule)button.DataContext).RuleGuid;
 
             // Deleting both the cached RegexRule and the associated DataStorage object
             RegexRule.Delete(DocumentGuid, regexRuleGuid);
@@ -59,7 +60,8 @@ namespace Regular.View
         private void ReorderUpButton_Click(object sender, RoutedEventArgs e)
         {
             if (!(sender is Button button)) return;
-            RegexRule regexRule = (RegexRule)button.DataContext;
+            if (ListBoxRegexRules.Items.Count < 1) return;
+            RegexRule regexRule = ListBoxRegexRules.SelectedItem as RegexRule;
             ObservableCollection<RegexRule> regexRules = RegexRules.AllRegexRules[DocumentGuid];
             int index = regexRules.IndexOf(regexRule);
 
@@ -70,13 +72,28 @@ namespace Regular.View
         private void ReorderDownButton_Click(object sender, RoutedEventArgs e)
         {
             if (!(sender is Button button)) return;
-            RegexRule regexRule = (RegexRule)button.DataContext;
+            if (ListBoxRegexRules.Items.Count < 1) return;
+            RegexRule regexRule = ListBoxRegexRules.SelectedItem as RegexRule;
             ObservableCollection<RegexRule> regexRules = RegexRules.AllRegexRules[DocumentGuid];
             int index = regexRules.IndexOf(regexRule);
 
             if (index >= RegexRules.AllRegexRules[DocumentGuid].Count) return;
             regexRules.RemoveAt(index);
             regexRules.Insert(index + 1, regexRule);
+        }
+
+        private void ListBoxRegexRules_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            RegexRule regexRule = ((ListBox)sender).SelectedItem as RegexRule;
+            ObservableCollection<RegexRule> regexRules = RegexRules.AllRegexRules[DocumentGuid];
+            int index = regexRules.IndexOf(regexRule);
+            ButtonMoveRulePartUp.IsEnabled = index != 0;
+            ButtonMoveRulePartDown.IsEnabled = index != regexRules.Count - 1;
+        }
+
+        private void ListBoxRegexRules_OnLostFocus(object sender, RoutedEventArgs e)
+        {
+            
         }
     }
 }

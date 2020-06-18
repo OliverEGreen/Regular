@@ -30,7 +30,7 @@ namespace Regular.ViewModel
         }
         public string DateTimeCreated { get; private set; }
         public string CreatedBy { get; private set; }
-        public string Guid { get; private set; }
+        public string RuleGuid { get; private set; }
         public ObservableCollection<ObservableObject> TargetCategoryIds
         {
             get => targetCategoryIds;
@@ -116,7 +116,7 @@ namespace Regular.ViewModel
         {
             return new RegexRule()
             {
-                Guid = guid ?? new Guid().ToString(),
+                RuleGuid = guid ?? Guid.NewGuid().ToString(),
                 Name = "",
                 OutputParameterName = "",
                 RegexRuleParts = new ObservableCollection<RegexRulePart>(),
@@ -150,7 +150,7 @@ namespace Regular.ViewModel
         public static RegexRule GetRuleById(string documentGuid, string regexRuleGuid)
         {
             ObservableCollection<RegexRule> documentRegexRules = GetDocumentRegexRules(documentGuid);
-            return documentRegexRules?.FirstOrDefault(x => x.Guid == regexRuleGuid);
+            return documentRegexRules?.FirstOrDefault(x => x.RuleGuid == regexRuleGuid);
         }
         public static ObservableCollection<RegexRule> GetDocumentRegexRules(string documentGuid)
         {
@@ -158,7 +158,7 @@ namespace Regular.ViewModel
         }
         public static List<string> GetDocumentRegexRuleGuids(string documentGuid)
         {
-            return GetDocumentRegexRules(documentGuid).Select(x => x.Guid).ToList();
+            return GetDocumentRegexRules(documentGuid).Select(x => x.RuleGuid).ToList();
         }
         public static void Update(string documentGuid, string regexRuleGuid, RegexRule newRegexRule)
         {
@@ -180,7 +180,7 @@ namespace Regular.ViewModel
             // Deletes a RegexRule from the document's static cache
             if (!RegexRules.AllRegexRules.ContainsKey(documentGuid)) return;
             ObservableCollection<RegexRule> documentRegexRules = GetDocumentRegexRules(documentGuid);
-            RegexRule regexRule = documentRegexRules.FirstOrDefault(x => x.Guid == regexRuleGuid);
+            RegexRule regexRule = documentRegexRules.FirstOrDefault(x => x.RuleGuid == regexRuleGuid);
             if (regexRule != null) documentRegexRules.Remove(regexRule);
         }
         
