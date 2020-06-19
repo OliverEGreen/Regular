@@ -17,14 +17,14 @@
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left">
             <Button Name="ButtonMoveRulePartUp" Style="{StaticResource ReorderUpButton}" Height="25" Width="25" Margin="0,0,3,0" Click="ReorderUpButton_Click" IsEnabled="False" />
             <Button Name="ButtonMoveRulePartDown" Style="{StaticResource ReorderDownButton}" Height="25" Width="25" Margin="0,0,3,0" Click="ReorderDownButton_Click" IsEnabled="False" />
-            <Button Name="ButtonDuplicateRule" Style="{StaticResource DuplicateRuleButton}" Width="25" Height="25" Margin="0,0,3,0" FontSize="13" IsEnabled="False"/>
+            <Button Name="ButtonDuplicateRule" Style="{StaticResource DuplicateRuleButton}" Width="25" Height="25" Margin="0,0,3,0" FontSize="13" Click="ButtonDuplicateRule_OnClick" IsEnabled="False"/>
             <Button Name="ButtonStopStartRule" Style="{StaticResource StopStartRuleButton}" Width="25" Height="25" FontSize="13" IsEnabled="False"/>
         </StackPanel>
         <Label Content="New Rule" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="0" Padding="0" HorizontalAlignment="Right" Margin="0,0,35,0" VerticalAlignment="Center" ToolTip="Add A New Rule"/>
         <Button Name="ButtonAddNewRule" Style="{StaticResource AddItemButton}" VerticalAlignment="Center" Height="25" Width="25" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right" Click="ButtonAddNewRule_Click"/>
         <Border BorderThickness="1" BorderBrush="{StaticResource TextBoxBorderColorDefault}" Grid.Row="1" Margin="0,5,0,0">
             <ScrollViewer Name="RulesScrollViewer" Style="{StaticResource DefaultScrollerViewerStyle}" VerticalScrollBarVisibility="Visible" PreviewMouseWheel="RegexRulesScrollViewer_PreviewMouseWheel">
-                <ListBox Name="ListBoxRegexRules" Style="{StaticResource StandardListBox}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" SelectionChanged="ListBoxRegexRules_OnSelectionChanged" LostFocus="ListBoxRegexRules_OnLostFocus">
+                <ListBox Name="ListBoxRegexRules" Style="{StaticResource StandardListBox}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" MouseDown="ListBoxRegexRules_OnMouseDown"  SelectionChanged="ListBoxRegexRules_OnSelectionChanged">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Grid>
@@ -38,7 +38,7 @@
                                     <ColumnDefinition Width="25"/>
                                 </Grid.ColumnDefinitions>
                                 <Rectangle Fill="#EBEBEB" Height="30" Stroke="#D9D9D9" StrokeThickness="1px" Grid.ColumnSpan="7" Margin="-4,-1,-3,-1" ToolTip="{Binding ToolTip}"/>
-                                <TextBlock x:Name="RegexRuleNameTextBlock" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" FontSize="13" Style="{StaticResource StandardText}" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,0,0"/>
+                                <TextBlock x:Name="RegexRuleNameTextBlock" Text="{Binding RuleName, UpdateSourceTrigger=PropertyChanged}" FontSize="13" Style="{StaticResource StandardText}" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,0,0"/>
                                 <Button x:Name="EditRegexRuleButton" Style="{StaticResource EditItemButton}" HorizontalAlignment="Right" Width="25" Height="30" Click="EditRegexRuleButton_Click" Grid.Row="0" Grid.Column="1" ToolTip="Edit Rule"/>
                                 <Button x:Name="DeleteRegexRuleButton" Style="{StaticResource DeleteItemButton}" HorizontalAlignment="Right" Width="25" Height="30" Click="DeleteRegexRuleButton_Click" Grid.Row="0" Grid.Column="2" Margin="0,0,-2,0" ToolTip="Delete Rule"/>
                             </Grid>

@@ -123,7 +123,7 @@ namespace Regular.View
             if(EditingExistingRule) ExistingRuleGuid = inputRegexRule.RuleGuid;
 
             DocumentGuid = documentGuid;
-            RuleName = inputRegexRule.Name;
+            RuleName = inputRegexRule.RuleName;
             TargetCategoryIds = inputRegexRule.TargetCategoryIds;
             RegexRuleParts = inputRegexRule.RegexRuleParts;
             TrackingParameterName = inputRegexRule.TrackingParameterName;
@@ -176,10 +176,11 @@ namespace Regular.View
         {
             // TODO: Must run all validation before going beyond this point!
 
-            if (!EditingExistingRule)
+            if (EditingExistingRule)
             {
-                RegexRule regexRule = RegexRule.Create(DocumentGuid);
-                regexRule.Name = RuleName;
+                // The rule already exists and is being edited. We'll generate a new temporary rule from the inputs to use as we transfer values across.
+                RegexRule regexRule = RegexRule.Create(DocumentGuid, ExistingRuleGuid);
+                regexRule.RuleName = RuleName;
                 regexRule.TargetCategoryIds = TargetCategoryIds;
                 regexRule.TrackingParameterName = TrackingParameterName;
                 regexRule.OutputParameterName = OutputParameterName;
@@ -187,29 +188,22 @@ namespace Regular.View
                 regexRule.RegexRuleParts = RegexRuleParts;
                 regexRule.RegexString = RegexAssembly.AssembleRegexString(regexRule);
 
-                RegexRule.Save(DocumentGuid, regexRule);
-                ExtensibleStorageServices.SaveRegexRuleToExtensibleStorage(DocumentGuid, regexRule);
-                DynamicModelUpdateServices.RegisterRegexRule(DocumentGuid, regexRule.RuleGuid);
-                
-                // If a new rule, a new project parameter needs to be created.
-                // ParameterServices.CreateProjectParameter(Document, regexRule.OutputParameterName, ParameterType.Text, regexRule.TargetCategoryIds.Select(x => x.Id).ToList(), BuiltInParameterGroup.PG_IDENTITY_DATA, true);
+                // Updates both the static cache and the entity saved in ExtensibleStorage.
+                RegexRule.Update(DocumentGuid, ExistingRuleGuid, regexRule);
             }
             else
             {
-                // The rule already exists and is being edited. We'll generate a new temporary rule from the inputs to use as we transfer values across.
-                RegexRule regexRule = RegexRule.Create(DocumentGuid, ExistingRuleGuid);
-                regexRule.Name = RuleName;
+                RegexRule regexRule = RegexRule.Create(DocumentGuid);
+                regexRule.RuleName = RuleName;
                 regexRule.TargetCategoryIds = TargetCategoryIds;
                 regexRule.TrackingParameterName = TrackingParameterName;
                 regexRule.OutputParameterName = OutputParameterName;
                 regexRule.MatchType = MatchType;
                 regexRule.RegexRuleParts = RegexRuleParts;
                 regexRule.RegexString = RegexAssembly.AssembleRegexString(regexRule);
-                
-                // We update both the static cache and the entity saved in ExtensibleStorage.
-                RegexRule.Update(DocumentGuid, ExistingRuleGuid, regexRule);
-                ExtensibleStorageServices.UpdateRegexRuleInExtensibleStorage(DocumentGuid, ExistingRuleGuid, regexRule);
-                DynamicModelUpdateServices.RegisterRegexRule(DocumentGuid, ExistingRuleGuid);
+
+                // Saves rule to static cache and ExtensibleStorage
+                RegexRule.Save(DocumentGuid, regexRule);
             }
             Close();
         }

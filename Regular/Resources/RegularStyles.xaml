@@ -244,8 +244,8 @@
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Canvas Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" ClipToBounds="True" HorizontalAlignment="Center" VerticalAlignment="Center">
                         <Rectangle x:Name="BackgroundRectangle" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Fill="{StaticResource ButtonBackgroundGray}" Margin="0"/>
-                        <Polygon x:Name="BackgroundSquare" Points="8,10 20,10 20,21, 8,21" Stroke="{StaticResource ButtonStrokeColorDefault}" StrokeThickness="1" Fill="{StaticResource ButtonBackgroundGray}"/>
-                        <Polygon x:Name="ForegroundSquare" Points="5,5 17,5 17,17, 5,17" Stroke="{StaticResource ButtonStrokeColorDefault}" StrokeThickness="1 " Fill="{StaticResource ButtonBackgroundGray}"/>
+                        <Polygon x:Name="BackgroundSquare" Points="8,10 20,10 20,21, 8,21" Stroke="{StaticResource ButtonStrokeColorDefault}" StrokeThickness="1.25" Fill="{StaticResource ButtonBackgroundGray}"/>
+                        <Polygon x:Name="ForegroundSquare" Points="5,5 17,5 17,17, 5,17" Stroke="{StaticResource ButtonStrokeColorDefault}" StrokeThickness="1.25" Fill="{StaticResource ButtonBackgroundGray}"/>
                         <Line x:Name="VerticalLine" X1="11" Y1="7.5" X2="11" Y2="14.5" StrokeThickness="1.25" Stroke="{StaticResource ButtonStrokeColorDefault}"/>
                         <Line x:Name="HorizontalLine" X1="7.5" Y1="11" X2="14.5" Y2="11" StrokeThickness="1.25" Stroke="{StaticResource ButtonStrokeColorDefault}"/>
                     </Canvas>

@@ -23,7 +23,7 @@ namespace Regular.ViewModel
             set
             {
                 name = value;
-                NotifyPropertyChanged("Name");
+                NotifyPropertyChanged("RuleName");
             }
         }
         public string Id

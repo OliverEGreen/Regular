@@ -59,7 +59,6 @@ namespace Regular.View
         private void RuleEditor_Closed(object sender, System.EventArgs e) => Activate();
         private void ReorderUpButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!(sender is Button button)) return;
             if (ListBoxRegexRules.Items.Count < 1) return;
             RegexRule regexRule = ListBoxRegexRules.SelectedItem as RegexRule;
             ObservableCollection<RegexRule> regexRules = RegexRules.AllRegexRules[DocumentGuid];
@@ -68,10 +67,11 @@ namespace Regular.View
             if (index <= 0) return;
             regexRules.RemoveAt(index);
             regexRules.Insert(index - 1, regexRule);
+            ListBoxRegexRules.Focus();
+            ListBoxRegexRules.SelectedItem = regexRule;
         }
         private void ReorderDownButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!(sender is Button button)) return;
             if (ListBoxRegexRules.Items.Count < 1) return;
             RegexRule regexRule = ListBoxRegexRules.SelectedItem as RegexRule;
             ObservableCollection<RegexRule> regexRules = RegexRules.AllRegexRules[DocumentGuid];
@@ -80,8 +80,9 @@ namespace Regular.View
             if (index >= RegexRules.AllRegexRules[DocumentGuid].Count) return;
             regexRules.RemoveAt(index);
             regexRules.Insert(index + 1, regexRule);
+            ListBoxRegexRules.Focus();
+            ListBoxRegexRules.SelectedItem = regexRule;
         }
-
         private void ListBoxRegexRules_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             RegexRule regexRule = ((ListBox)sender).SelectedItem as RegexRule;
@@ -89,11 +90,21 @@ namespace Regular.View
             int index = regexRules.IndexOf(regexRule);
             ButtonMoveRulePartUp.IsEnabled = index != 0;
             ButtonMoveRulePartDown.IsEnabled = index != regexRules.Count - 1;
+            ButtonDuplicateRule.IsEnabled = true;
+            ButtonStopStartRule.IsEnabled = true;
         }
-
-        private void ListBoxRegexRules_OnLostFocus(object sender, RoutedEventArgs e)
+        private void ButtonDuplicateRule_OnClick(object sender, RoutedEventArgs e)
         {
-            
+            RegexRule regexRule = ListBoxRegexRules.SelectedItem as RegexRule;
+            RegexRule.Save(DocumentGuid, RegexRule.Duplicate(DocumentGuid, regexRule));
+        }
+        private void ListBoxRegexRules_OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Focus();
+            ButtonMoveRulePartUp.IsEnabled = false;
+            ButtonMoveRulePartDown.IsEnabled = false;
+            ButtonDuplicateRule.IsEnabled = false;
+            ButtonStopStartRule.IsEnabled = false;
         }
     }
 }
