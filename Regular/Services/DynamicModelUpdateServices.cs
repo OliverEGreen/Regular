@@ -72,16 +72,19 @@ namespace Regular.Services
             }
         }
 
-        public static void RegisterRegexRule(string documentGuid, string regexRuleGuid)
+        public static void RegisterRegexRuleUpdater(string documentGuid, string regexRuleGuid)
         {
-            RuleUpdater ruleUpdater = new RuleUpdater(RevitApplication.ActiveAddInId);
             Document document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
-            
+            RegexRule regexRule = RegexRule.GetRuleById(documentGuid, regexRuleGuid);
+
+            RuleUpdater ruleUpdater = new RuleUpdater(RevitApplication.ActiveAddInId);
+
+            // This is the only place that this gets set to the rule
+            regexRule.UpdaterId = ruleUpdater.GetUpdaterId();
+
             // Using the optional boolean flag so the updater doesn't pop up with a massive scary message on loading
             try { UpdaterRegistry.RegisterUpdater(ruleUpdater, document, true); }
             catch (Exception ex) { TaskDialog.Show("Regular", ex.Message); }
-
-            RegexRule regexRule = RegexRule.GetRuleById(documentGuid, regexRuleGuid);
             
             // Converting the save string representations of the Target Category ElementIds to ElementIds. Maybe can save these as integers and skip the conversion.
             List<ElementId> targetCategoryIds = regexRule.TargetCategoryIds.Select(x => new ElementId(Convert.ToInt32(x.Id))).ToList();
@@ -95,6 +98,25 @@ namespace Regular.Services
             Parameter trackingParameter = ParameterServices.GetProjectParameterByName(document, regexRule.TrackingParameterName);
             if (trackingParameter == null) return;
             UpdaterRegistry.AddTrigger(ruleUpdater.GetUpdaterId(), elementMulticategoryFilter, Element.GetChangeTypeParameter(trackingParameter));
+        }
+
+        public static void DeleteRegexRuleUpdater(string documentGuid, string regexRuleGuid)
+        {
+            RegexRule regexRule = RegexRule.GetRuleById(documentGuid, regexRuleGuid);
+            
+            // Double-checking that the updater was ever registered before attempting to remove
+            if (regexRule.UpdaterId == null) return;
+            UpdaterRegistry.UnregisterUpdater(regexRule.UpdaterId);
+        }
+
+        public static void UpdateRegexRuleUpdater(string documentGuid, string regexRuleGuid)
+        {
+            // We need to check whether this updater already exists.
+            Document document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
+            RegexRule regexRule = RegexRule.GetRuleById(documentGuid, regexRuleGuid);
+
+            if (regexRule.UpdaterId == null) return;
+            UpdaterRegistry.UnregisterUpdater(regexRule.UpdaterId);
         }
     }
 }

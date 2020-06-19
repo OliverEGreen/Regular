@@ -3,29 +3,34 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using Autodesk.Revit.DB;
 using Regular.Enums;
 using Regular.Model;
+using Regular.Services;
 
 namespace Regular.ViewModel
 {
     public class RegexRule : INotifyPropertyChanged
     {
-        private string name;
+        private string ruleName;
         private ObservableCollection<ObservableObject> targetCategoryIds;
         private ObservableCollection<RegexRulePart> regexRuleParts;
-        private string trackingParameterName; // Eventually, this should be some kind of ID
-        private string outputParameterName; // This should also be an ID
+        private string trackingParameterName;
+        private int trackingParameterId;
+        private string outputParameterName;
+        private int outputParameterId;
         private string toolTipString;
         private string regexString;
         private MatchType matchType;
         
-        public string Name
+        public string RuleName
         {
-            get => name;
+            get => ruleName;
             set
             {
-                name = value;
-                NotifyPropertyChanged("Name");
+                ruleName = value;
+                NotifyPropertyChanged("RuleName");
             }
         }
         public string DateTimeCreated { get; private set; }
@@ -49,6 +54,7 @@ namespace Regular.ViewModel
                 NotifyPropertyChanged("TrackingParameterName");
             }
         }
+        public int TrackingParameterId { get; private set; }
         public string OutputParameterName
         {
             get => outputParameterName;
@@ -58,11 +64,13 @@ namespace Regular.ViewModel
                 NotifyPropertyChanged("OutputParameterName");
             }
         }
+        public int OutputParameterId { get; private set; }
+        public UpdaterId UpdaterId { get; set; }
         public string ToolTip
         {
             get
             {
-                toolTipString = $"Rule Name: {name}" + Environment.NewLine +
+                toolTipString = $"Rule RuleName: {ruleName}" + Environment.NewLine +
                                 $"Applies To: {String.Join(", ", targetCategoryIds)}" + Environment.NewLine +
                                 $"Tracks Parameter : {trackingParameterName}" + Environment.NewLine +
                                 $"Regex String: {RegexString}" + Environment.NewLine +
@@ -74,7 +82,7 @@ namespace Regular.ViewModel
             set
             {
                 toolTipString = value;
-                NotifyPropertyChanged("Name");
+                NotifyPropertyChanged("RuleName");
                 NotifyPropertyChanged("TargetCategoryIds");
                 NotifyPropertyChanged("TrackingParameterName");
                 NotifyPropertyChanged("OutputParameterName");
@@ -117,13 +125,16 @@ namespace Regular.ViewModel
             return new RegexRule()
             {
                 RuleGuid = guid ?? Guid.NewGuid().ToString(),
-                Name = "",
+                RuleName = "",
                 OutputParameterName = "",
+                OutputParameterId = 0,
+                UpdaterId = null,
                 RegexRuleParts = new ObservableCollection<RegexRulePart>(),
                 RegexString = "",
                 TargetCategoryIds = ObservableObject.GetInitialCategories(documentGuid),
                 ToolTip = "",
                 TrackingParameterName = "",
+                TrackingParameterId = 0,
                 DateTimeCreated = DateTime.Now.ToString("r"),
                 CreatedBy = Environment.UserName
             };
@@ -132,19 +143,34 @@ namespace Regular.ViewModel
         public static void Save(string documentGuid, RegexRule regexRule)
         {
             RegexRules.AllRegexRules[documentGuid].Add(regexRule);
+            ExtensibleStorageServices.SaveRegexRuleToExtensibleStorage(documentGuid, regexRule);
+            DynamicModelUpdateServices.RegisterRegexRuleUpdater(documentGuid, regexRule.RuleGuid);
+            
+            // TODO: For a new rule, a new project parameter needs to be created.
+            // ParameterServices.CreateProjectParameter(Document, sourceRegexRule.OutputParameterName, ParameterType.Text, sourceRegexRule.TargetCategoryIds.Select(x => x.Id).ToList(), BuiltInParameterGroup.PG_IDENTITY_DATA, true);
         }
 
-        public static RegexRule Duplicate(string documentGuid, RegexRule regexRule)
+        public static RegexRule Duplicate(string documentGuid, RegexRule sourceRegexRule)
         {
+            string GenerateRegexRuleDuplicateName(string regexRuleName)
+            {
+                List<string> documentRegexRuleNames = GetDocumentRegexRules(documentGuid).Select(x => x.RuleName).ToList();
+                string copyName = $"{sourceRegexRule.RuleName} Copy";
+                return documentRegexRuleNames.Contains(copyName) ? $"{copyName} Copy" : copyName;
+            }
+            
             // Returns a copy of an existing RegexRule, but with a new GUID
             RegexRule duplicateRegexRule = Create(documentGuid);
-            duplicateRegexRule.OutputParameterName = regexRule.OutputParameterName;
-            duplicateRegexRule.RegexRuleParts = regexRule.RegexRuleParts;
-            duplicateRegexRule.RegexString = regexRule.RegexString;
-            duplicateRegexRule.Name = $"Copy of {regexRule.Name}";
-            duplicateRegexRule.TargetCategoryIds = regexRule.TargetCategoryIds;
-            duplicateRegexRule.TrackingParameterName = regexRule.TrackingParameterName;
-            duplicateRegexRule.MatchType = regexRule.MatchType;
+            duplicateRegexRule.RuleName = GenerateRegexRuleDuplicateName(sourceRegexRule.RuleName);
+            duplicateRegexRule.OutputParameterName = sourceRegexRule.OutputParameterName;
+            duplicateRegexRule.OutputParameterId = sourceRegexRule.OutputParameterId;
+            duplicateRegexRule.TargetCategoryIds = sourceRegexRule.TargetCategoryIds;
+            duplicateRegexRule.TrackingParameterName = sourceRegexRule.TrackingParameterName;
+            duplicateRegexRule.TrackingParameterId = sourceRegexRule.TrackingParameterId;
+            duplicateRegexRule.RegexRuleParts = sourceRegexRule.RegexRuleParts;
+            duplicateRegexRule.RegexString = sourceRegexRule.RegexString;
+            duplicateRegexRule.MatchType = sourceRegexRule.MatchType;
+            
             return duplicateRegexRule;
         }
         public static RegexRule GetRuleById(string documentGuid, string regexRuleGuid)
@@ -167,13 +193,20 @@ namespace Regular.ViewModel
             RegexRule existingRegexRule = GetRuleById(documentGuid, regexRuleGuid);
             if (existingRegexRule == null) return;
 
+            existingRegexRule.RuleName = newRegexRule.RuleName;
             existingRegexRule.OutputParameterName = newRegexRule.OutputParameterName;
-            existingRegexRule.RegexRuleParts = newRegexRule.RegexRuleParts;
-            existingRegexRule.RegexString = newRegexRule.RegexString;
-            existingRegexRule.Name = newRegexRule.Name;
+            existingRegexRule.OutputParameterId = newRegexRule.OutputParameterId;
             existingRegexRule.TargetCategoryIds = newRegexRule.TargetCategoryIds;
             existingRegexRule.TrackingParameterName = newRegexRule.TrackingParameterName;
+            existingRegexRule.TrackingParameterId = newRegexRule.TrackingParameterId;
+            existingRegexRule.RegexRuleParts = newRegexRule.RegexRuleParts;
+            existingRegexRule.RegexString = newRegexRule.RegexString;
             existingRegexRule.MatchType = newRegexRule.MatchType;
+
+            ExtensibleStorageServices.UpdateRegexRuleInExtensibleStorage(documentGuid, existingRegexRule.RuleGuid, newRegexRule);
+            
+            // TODO: Figure out how DMU really works and implement CRUD functionality
+            // DynamicModelUpdateServices.RegisterRegexRuleUpdater(documentGuid, existingRegexRule.RuleGuid);
         }
         public static void Delete(string documentGuid, string regexRuleGuid)
         {
@@ -182,6 +215,8 @@ namespace Regular.ViewModel
             ObservableCollection<RegexRule> documentRegexRules = GetDocumentRegexRules(documentGuid);
             RegexRule regexRule = documentRegexRules.FirstOrDefault(x => x.RuleGuid == regexRuleGuid);
             if (regexRule != null) documentRegexRules.Remove(regexRule);
+
+            // TODO: Need to remove any trigger associated with this rule from DMU
         }
         
         public event PropertyChangedEventHandler PropertyChanged;

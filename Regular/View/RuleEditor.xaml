@@ -31,7 +31,7 @@
             <ColumnDefinition Width="0" Name="ColumnCategories"/>
         </Grid.ColumnDefinitions>
         <TextBlock Name="TextBoxUserFeedback" Padding="12,4,10,3" Style="{StaticResource WarningText}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Background="{StaticResource BackgroundColorWarning}" Margin="-15,-15,-15,0" Height="25" VerticalAlignment="Top" Visibility="Hidden"/>
-        <Label Content="Name Your Rule" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="1" Grid.Column="0" Margin="0,5" VerticalContentAlignment="Center"/>
+        <Label Content="RuleName Your Rule" Style="{StaticResource StandardLabel}" FontSize="13" Grid.Row="1" Grid.Column="0" Margin="0,5" VerticalContentAlignment="Center"/>
         <TextBox Name="TextBoxNameYourRuleInput" Style="{StaticResource StandardTextBox}" Text="{Binding RuleName}" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" VerticalContentAlignment="Center" ToolTip="Define a reference name for the rule you're creating." MaxLength="30"/>
         <TextBlock Name="TextblockNameYourRuleWatermark" IsHitTestVisible="False" Padding="7,3" VerticalAlignment="Center" Text="Type Here..." Foreground="{StaticResource FontColorWatermarkGrey}" FontSize="12" FontWeight="Regular" Grid.Row="1" Grid.Column="1" Panel.ZIndex="1">
             <TextBlock.Style>

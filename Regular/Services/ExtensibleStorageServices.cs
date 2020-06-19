@@ -93,7 +93,7 @@ namespace Regular.Services
             //This needs to be turned into a method taking a RegexRule and saving to ExtensibleStorage
             Entity entity = new Entity(GetRegularSchema());
             entity.Set("GUID", new Guid(regexRule.RuleGuid));
-            entity.Set("RuleName", regexRule.Name);
+            entity.Set("RuleName", regexRule.RuleName);
             entity.Set("TargetCategoryIds", SerializationServices.ConvertListToIList(regexRule.TargetCategoryIds.Where(x => x.IsChecked).Select(x => x.Id.ToString()).ToList()));
             entity.Set("TrackingParameterName", regexRule.TrackingParameterName);
             entity.Set("OutputParameterName", regexRule.OutputParameterName);
@@ -102,7 +102,7 @@ namespace Regular.Services
             string matchTypeString = regexRule.MatchType.ToString();
             entity.Set("MatchType", matchTypeString);
             entity.Set("RegexRuleParts", SerializationServices.SerializeRegexRuleParts(regexRule.RegexRuleParts));
-            using (Transaction transaction = new Transaction(document, $"Saving RegexRule {regexRule.Name}"))
+            using (Transaction transaction = new Transaction(document, $"Saving RegexRule {regexRule.RuleName}"))
             {
                 transaction.Start();
                 DataStorage dataStorage = DataStorage.Create(document);
@@ -116,7 +116,7 @@ namespace Regular.Services
             RegexRule ConvertEntityToRegexRule(Entity entity)
             {
                 RegexRule regexRule = RegexRule.Create(documentGuid, entity.Get<Guid>("GUID").ToString());
-                regexRule.Name = entity.Get<string>("RuleName");
+                regexRule.RuleName = entity.Get<string>("RuleName");
                 List<string> targetTargetCategoryIds = entity.Get<IList<string>>("TargetCategoryIds").ToList();
                 regexRule.TrackingParameterName = entity.Get<string>("TrackingParameterName");
                 regexRule.OutputParameterName = entity.Get<string>("OutputParameterName");
@@ -182,7 +182,7 @@ namespace Regular.Services
             using (Transaction transaction = new Transaction(document, $"Regular - Modifying Rule {previousName}"))
             {
                 transaction.Start();
-                regexRuleEntity.Set("RuleName", newRegexRule.Name);
+                regexRuleEntity.Set("RuleName", newRegexRule.RuleName);
                 regexRuleEntity.Set("TargetCategoryIds", SerializationServices.ConvertListToIList(newRegexRule.TargetCategoryIds.Where(x => x.IsChecked).Select(x => x.Id.ToString()).ToList()));
                 regexRuleEntity.Set("TrackingParameterName", newRegexRule.TrackingParameterName);
                 regexRuleEntity.Set("OutputParameterName", newRegexRule.OutputParameterName);
