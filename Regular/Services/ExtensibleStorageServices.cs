@@ -12,6 +12,7 @@ namespace Regular.Services
     public static class ExtensibleStorageServices
     {
         // CRUD Services for managing Regular data stored using Revit's ExtensibleStorage API
+        #region All DocumentGUID Code
         private static Schema GetDocumentGuidSchema(Document document)
         {
             Schema ConstructGuidSchema()
@@ -58,6 +59,8 @@ namespace Regular.Services
             Entity documentGuidEntity = documentGuidDataStorage?.GetEntity(guidSchema);
             return documentGuidEntity?.Get<string>("DocumentGUID");
         }
+        #endregion
+
         private static Schema GetRegularSchema()
         {
             // A method that handles all the faff of constructing the regularSchema
@@ -66,18 +69,21 @@ namespace Regular.Services
                 // The schema doesn't exist; we need to define the schema for the first time
                 SchemaBuilder schemaBuilder = new SchemaBuilder(Guid.NewGuid());
                 schemaBuilder.SetSchemaName("RegularSchema");
-                schemaBuilder.SetReadAccessLevel(AccessLevel.Public);
-                schemaBuilder.SetWriteAccessLevel(AccessLevel.Public);
+                schemaBuilder.SetReadAccessLevel(AccessLevel.Application);
+                schemaBuilder.SetWriteAccessLevel(AccessLevel.Application);
 
                 // Constructing the scheme for regexRules stored in ExtensibleStorage
                 schemaBuilder.AddSimpleField("GUID", typeof(Guid));
                 schemaBuilder.AddSimpleField("RuleName", typeof(string));
                 schemaBuilder.AddArrayField("TargetCategoryIds", typeof(string));
                 schemaBuilder.AddSimpleField("TrackingParameterName", typeof(string));
+                schemaBuilder.AddSimpleField("TrackingParameterId", typeof(int));
                 schemaBuilder.AddSimpleField("OutputParameterName", typeof(string));
+                schemaBuilder.AddSimpleField("OutputParameterId", typeof(int));
                 schemaBuilder.AddSimpleField("RegexString", typeof(string));
-                schemaBuilder.AddSimpleField("MatchType", typeof(string));
                 schemaBuilder.AddArrayField("RegexRuleParts", typeof(string));
+                schemaBuilder.AddSimpleField("MatchType", typeof(string));
+                schemaBuilder.AddSimpleField("IsFrozen", typeof(bool));
                 return schemaBuilder.Finish();
             }
 
@@ -96,12 +102,14 @@ namespace Regular.Services
             entity.Set("RuleName", regexRule.RuleName);
             entity.Set("TargetCategoryIds", SerializationServices.ConvertListToIList(regexRule.TargetCategoryIds.Where(x => x.IsChecked).Select(x => x.Id.ToString()).ToList()));
             entity.Set("TrackingParameterName", regexRule.TrackingParameterName);
+            entity.Set("TrackingParameterId", regexRule.TrackingParameterId);
             entity.Set("OutputParameterName", regexRule.OutputParameterName);
+            entity.Set("OutputParameterId", regexRule.OutputParameterId);
             entity.Set("RegexString", regexRule.RegexString);
-            MatchType matchType = regexRule.MatchType;
+            entity.Set("RegexRuleParts", SerializationServices.SerializeRegexRuleParts(regexRule.RegexRuleParts));
             string matchTypeString = regexRule.MatchType.ToString();
             entity.Set("MatchType", matchTypeString);
-            entity.Set("RegexRuleParts", SerializationServices.SerializeRegexRuleParts(regexRule.RegexRuleParts));
+            entity.Set("IsFrozen", regexRule.IsFrozen);
             using (Transaction transaction = new Transaction(document, $"Saving RegexRule {regexRule.RuleName}"))
             {
                 transaction.Start();
@@ -118,10 +126,15 @@ namespace Regular.Services
                 RegexRule regexRule = RegexRule.Create(documentGuid, entity.Get<Guid>("GUID").ToString());
                 regexRule.RuleName = entity.Get<string>("RuleName");
                 List<string> targetTargetCategoryIds = entity.Get<IList<string>>("TargetCategoryIds").ToList();
+                ObservableCollection<ObservableObject> observableObjects = ObservableObject.GetInitialCategories(documentGuid);
+                foreach (ObservableObject observableObject in observableObjects) { observableObject.IsChecked = targetTargetCategoryIds.Contains(observableObject.Id); }
+                regexRule.TargetCategoryIds = observableObjects;
                 regexRule.TrackingParameterName = entity.Get<string>("TrackingParameterName");
+                regexRule.TrackingParameterId = entity.Get<int>("TrackingParameterId");
                 regexRule.OutputParameterName = entity.Get<string>("OutputParameterName");
+                regexRule.OutputParameterId = entity.Get<int>("OutputParameterId");
                 regexRule.RegexString = entity.Get<string>("RegexString");
-                
+                regexRule.RegexRuleParts = DeserializationServices.DeserializeRegexRulePartsInExtensibleStorage(entity.Get<IList<string>>("RegexRuleParts").ToList());
                 // Deserializing saved match type string to enum value
                 switch (entity.Get<string>("MatchType"))
                 {
@@ -137,14 +150,7 @@ namespace Regular.Services
                     default:
                         break;
                 }
-
-                // Deserializing and creating each rule part from a saved list of strings
-                List<string> regexRulePartsString = entity.Get<IList<string>>("RegexRuleParts").ToList();
-                regexRule.RegexRuleParts = SerializationServices.DeserializeRegexRulePartsInExtensibleStorage(regexRulePartsString);
-                
-                ObservableCollection<ObservableObject> observableObjects = ObservableObject.GetInitialCategories(documentGuid);
-                foreach(ObservableObject observableObject in observableObjects) { observableObject.IsChecked = targetTargetCategoryIds.Contains(observableObject.Id); }
-                regexRule.TargetCategoryIds = observableObjects;
+                regexRule.IsFrozen = entity.Get<bool>("IsFrozen");
                 
                 return regexRule;
             }
@@ -163,11 +169,7 @@ namespace Regular.Services
             {
                 foreach (Entity entity in regexRuleEntities) { regexRules.Add(ConvertEntityToRegexRule(entity)); }
             }
-            catch
-            {
-                // ignored
-            }
-
+            catch { }
             return regexRules;
         }
         public static void UpdateRegexRuleInExtensibleStorage(string documentGuid, string regexRuleGuid, RegexRule newRegexRule)
@@ -185,10 +187,13 @@ namespace Regular.Services
                 regexRuleEntity.Set("RuleName", newRegexRule.RuleName);
                 regexRuleEntity.Set("TargetCategoryIds", SerializationServices.ConvertListToIList(newRegexRule.TargetCategoryIds.Where(x => x.IsChecked).Select(x => x.Id.ToString()).ToList()));
                 regexRuleEntity.Set("TrackingParameterName", newRegexRule.TrackingParameterName);
+                regexRuleEntity.Set("TrackingParameterId", newRegexRule.TrackingParameterId);
                 regexRuleEntity.Set("OutputParameterName", newRegexRule.OutputParameterName);
+                regexRuleEntity.Set("OutputParameterId", newRegexRule.OutputParameterId);
                 regexRuleEntity.Set("RegexString", newRegexRule.RegexString);
                 regexRuleEntity.Set("RegexRuleParts", SerializationServices.SerializeRegexRuleParts(newRegexRule.RegexRuleParts));
                 regexRuleEntity.Set("MatchType", newRegexRule.MatchType.ToString());
+                regexRuleEntity.Set("IsFrozen", newRegexRule.IsFrozen);
                 dataStorage.SetEntity(regexRuleEntity);
                 transaction.Commit();
             }
@@ -204,7 +209,7 @@ namespace Regular.Services
             using (Transaction transaction = new Transaction(document, $"Regular - Deleting Rule {ruleName}"))
             {
                 transaction.Start();
-                List<ElementId> dataStorageToDelete = new List<ElementId>() { dataStorage.Id };
+                List<ElementId> dataStorageToDelete = new List<ElementId> { dataStorage.Id };
                 document.Delete(dataStorageToDelete);
                 transaction.Commit();
             }

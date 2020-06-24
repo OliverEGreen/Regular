@@ -75,6 +75,7 @@
     <Compile Include="Model\DMUpdaters.cs" />
     <Compile Include="Model\EnumValueConverter.cs" />
     <Compile Include="Services\AppRibbonServices.cs" />
+    <Compile Include="Services\DeserializationServices.cs" />
     <Compile Include="Services\DMTriggerServices.cs" />
     <Compile Include="ViewModel\ObservableObject.cs" />
     <Compile Include="ViewModel\RegexRule.cs" />

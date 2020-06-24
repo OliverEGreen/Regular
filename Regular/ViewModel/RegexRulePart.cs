@@ -97,7 +97,7 @@ namespace Regular.ViewModel
                 case RuleType.SelectionSet:
                     DisplayText = "Selection Set";
                     IsEditable = true;
-                    EditButtonDisplayText = "...";
+                    EditButtonDisplayText = "Edit";
                     break;
             }
         }
@@ -125,12 +125,12 @@ namespace Regular.ViewModel
                 case RuleType.FreeText:
                     DisplayText = "Free Text";
                     IsEditable = true;
-                    EditButtonDisplayText = "...";
+                    EditButtonDisplayText = "Edit";
                     break;
                 case RuleType.SelectionSet:
                     DisplayText = "Selection Set";
                     IsEditable = true;
-                    EditButtonDisplayText = "...";
+                    EditButtonDisplayText = "Edit";
                     break;
             }
         }   
