@@ -69,9 +69,12 @@ namespace Regular.Services
                 // The schema doesn't exist; we need to define the schema for the first time
                 SchemaBuilder schemaBuilder = new SchemaBuilder(Guid.NewGuid());
                 schemaBuilder.SetSchemaName("RegularSchema");
-                schemaBuilder.SetReadAccessLevel(AccessLevel.Application);
-                schemaBuilder.SetWriteAccessLevel(AccessLevel.Application);
-
+                schemaBuilder.SetReadAccessLevel(AccessLevel.Public);
+                schemaBuilder.SetWriteAccessLevel(AccessLevel.Public);
+                // TODO: Sort out these permissions
+                //schemaBuilder.SetReadAccessLevel(AccessLevel.Application);
+                //schemaBuilder.SetWriteAccessLevel(AccessLevel.Application);
+                //schemaBuilder.SetVendorId("OGRN");
                 // Constructing the scheme for regexRules stored in ExtensibleStorage
                 schemaBuilder.AddSimpleField("GUID", typeof(Guid));
                 schemaBuilder.AddSimpleField("RuleName", typeof(string));
@@ -126,8 +129,8 @@ namespace Regular.Services
                 RegexRule regexRule = RegexRule.Create(documentGuid, entity.Get<Guid>("GUID").ToString());
                 regexRule.RuleName = entity.Get<string>("RuleName");
                 List<string> targetTargetCategoryIds = entity.Get<IList<string>>("TargetCategoryIds").ToList();
-                ObservableCollection<ObservableObject> observableObjects = ObservableObject.GetInitialCategories(documentGuid);
-                foreach (ObservableObject observableObject in observableObjects) { observableObject.IsChecked = targetTargetCategoryIds.Contains(observableObject.Id); }
+                ObservableCollection<CategoryObject> observableObjects = CategoryObject.GetInitialCategories(documentGuid);
+                foreach (CategoryObject observableObject in observableObjects) { observableObject.IsChecked = targetTargetCategoryIds.Contains(observableObject.Id); }
                 regexRule.TargetCategoryIds = observableObjects;
                 regexRule.TrackingParameterName = entity.Get<string>("TrackingParameterName");
                 regexRule.TrackingParameterId = entity.Get<int>("TrackingParameterId");

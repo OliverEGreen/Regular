@@ -3,8 +3,10 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using Regular.ViewModel;
 
 namespace Regular.Services
 {
@@ -57,44 +59,22 @@ namespace Regular.Services
             return null;
         }
 
-        public static BuiltInParameter GetBuiltInParameterById(int value)
+        public static BuiltInParameter GetBuiltInParameterById(int value) => (BuiltInParameter)value;
+        
+        public static ObservableCollection<ParameterObject> GetDefinitionsOfCategories(string documentGuid, List<ElementId> categoryIds)
         {
-            foreach (BuiltInParameter builtInParameter in Enum.GetValues(typeof(BuiltInParameter)))
-            {
-                if (value == (int)builtInParameter) { return builtInParameter; }
-            }
-            return BuiltInParameter.INVALID;
-        }
-
-        public static List<string> GetParametersOfCategories(string documentGuid, List<ElementId> categoryIds)
-        {
-            List<string> parameterNames = new List<string>();
+            // TODO: This is a cop-out right now. We need both the IDs and the names. And for 
+            // Both built-in and internally-defined parameters. Only for text-type ones, though.
+            // That way we can best-populate the UI list and assign the right ID to the RegexRule's TrackingParameterId property.
+            
+            ObservableCollection<ParameterObject> parameterElements = new ObservableCollection<ParameterObject>();
             Document document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
             List<ElementId> parameterIds = ParameterFilterUtilities.GetFilterableParametersInCommon(document, categoryIds).ToList();
             foreach (ElementId parameterId in parameterIds)
             {
-                if (parameterId.IntegerValue > 0)
-                {
-                    Element element = document.GetElement(parameterId);
-                    if (element is ParameterElement parameterElement)
-                    {
-                        Definition definition = parameterElement.GetDefinition();
-                        if (definition.ParameterType != ParameterType.Text) continue;
-                        parameterNames.Add(parameterElement.GetDefinition().Name);
-                    }
-                    else
-                    {
-                        // Then what
-                    }
-                }
-                else
-                {
-                    BuiltInParameter builtInParameter = GetBuiltInParameterById(parameterId.IntegerValue);
-                    string parameterName = LabelUtils.GetLabelFor(builtInParameter);
-                    parameterNames.Add(parameterName);
-                }
+                //
             }
-            return parameterNames;
+            return parameterElements;
         }
 
         public static List<Parameter> ConvertParameterSetToList(ParameterSet parameterSet)

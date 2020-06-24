@@ -172,6 +172,8 @@
             Grid.Column="1"
             VerticalAlignment="Center"
             ItemsSource="{Binding PossibleTrackingParameters}"
+            DisplayMemberPath="Name"
+            SelectedValuePath="Id"
             SelectedIndex="0"
             Style="{StaticResource StandardComboBox}" />
         <Label

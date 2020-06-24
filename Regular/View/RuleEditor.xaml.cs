@@ -27,8 +27,8 @@ namespace Regular.View
         private static string DocumentGuid { get; set; }
 
         private string ruleName;
-        private ObservableCollection<ObservableObject> targetCategoryIds;
-        private List<string> possibleTrackingParameters;
+        private ObservableCollection<CategoryObject> targetCategoryIds;
+        private ObservableCollection<ParameterObject> possibleTrackingParameters;
         private ObservableCollection<RegexRulePart> regexRuleParts;
         private string trackingParameterName; // Eventually, this should be some kind of ID
         private string outputParameterName; // This should also be an ID
@@ -46,7 +46,7 @@ namespace Regular.View
                 NotifyPropertyChanged("RuleName");
             }
         }
-        public ObservableCollection<ObservableObject> TargetCategoryIds
+        public ObservableCollection<CategoryObject> TargetCategoryIds
         {
             get => targetCategoryIds;
             set
@@ -55,7 +55,7 @@ namespace Regular.View
                 NotifyPropertyChanged("TargetCategoryIds");
             }
         }
-        public List<string> PossibleTrackingParameters
+        public ObservableCollection<ParameterObject> PossibleTrackingParameters
         {
             get => possibleTrackingParameters;
             set
@@ -143,13 +143,9 @@ namespace Regular.View
             EllipseOutputParameterNameInput.Fill = (SolidColorBrush)this.Resources["EllipseColorGray"];
 
             TextBoxNameYourRuleInput.TextChanged += TextBoxNameYourRuleInput_TextChanged;
-            TextBoxNameYourRuleInput.TextChanged += DisplayUserFeedback;
             TextBoxOutputParameterNameInput.TextChanged += TextBoxOutputParameterNameInput_TextChanged;
-            TextBoxOutputParameterNameInput.TextChanged += DisplayUserFeedback;
 
             RegexRuleParts.CollectionChanged += UpdateExampleText;
-            RegexRuleParts.CollectionChanged += DisplayUserFeedback;
-            TargetCategoryIds.CollectionChanged += DisplayUserFeedback;
             ButtonTest.Click += UpdateExampleText;
 
             // Gives us the ability to close the window with the Esc kay
@@ -173,6 +169,17 @@ namespace Regular.View
         }
         private void ButtonOK_Click(object sender, RoutedEventArgs e)
         {
+            string userFeedback = InputValidationServices.ReturnUserFeedback(RuleName, OutputParameterName, RegexRuleParts);
+            if (!string.IsNullOrEmpty(userFeedback))
+            {
+                TextBoxUserFeedback.Visibility = Visibility.Visible;
+                TextBoxUserFeedback.Text = userFeedback;
+                return;
+            }
+            else
+            {
+                TextBoxUserFeedback.Visibility = Visibility.Hidden;
+            }
             // TODO: Must run all validation before going beyond this point!
 
             if (EditingExistingRule)
@@ -234,28 +241,6 @@ namespace Regular.View
             RegexRuleParts.Insert(index + 1, regexRulePart);
             ListBoxRuleParts.Focus();
             ListBoxRuleParts.SelectedItem = regexRulePart;
-        }
-        private void DisplayUserFeedback(object sender, RoutedEventArgs e)
-        {
-            string userFeedback = InputValidationServices.ReturnUserFeedback(TextBoxNameYourRuleInput.Text, TextBoxOutputParameterNameInput.Text, RegexRuleParts);
-            if (string.IsNullOrEmpty(userFeedback))
-            {
-                TextBoxUserFeedback.Visibility = Visibility.Hidden;
-                return;
-            }
-            TextBoxUserFeedback.Visibility = Visibility.Visible;
-            TextBoxUserFeedback.Text = userFeedback;
-        }
-        private void DisplayUserFeedback(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            string userFeedback = InputValidationServices.ReturnUserFeedback(TextBoxNameYourRuleInput.Text, TextBoxOutputParameterNameInput.Text, RegexRuleParts);
-            if (string.IsNullOrEmpty(userFeedback))
-            {
-                TextBoxUserFeedback.Visibility = System.Windows.Visibility.Hidden;
-                return;
-            }
-            TextBoxUserFeedback.Visibility = System.Windows.Visibility.Visible;
-            TextBoxUserFeedback.Text = userFeedback;
         }
         private void UpdateExampleText(object sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
         {
@@ -389,21 +374,15 @@ namespace Regular.View
         }
         private void ButtonSelectAll_Click(object sender, RoutedEventArgs e)
         {
-            foreach (ObservableObject observableObject in TargetCategoryIds) { observableObject.IsChecked = true; }
+            foreach (CategoryObject observableObject in TargetCategoryIds) { observableObject.IsChecked = true; }
         }
         private void ButtonSelectNone_Click(object sender, RoutedEventArgs e)
         {
-            foreach (ObservableObject observableObject in TargetCategoryIds) { observableObject.IsChecked = false; }
+            foreach (CategoryObject observableObject in TargetCategoryIds) { observableObject.IsChecked = false; }
         }
         private void ButtonTest_OnClick(object sender, RoutedEventArgs e)
         {
-            if(this.RowExamples.Height != new GridLength(20)) this.RowExamples.Height = new GridLength(20);
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void NotifyPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            if(RowExamples.Height != new GridLength(20)) RowExamples.Height = new GridLength(20);
         }
         private void UpdateCheckedBoxesCount(object sender, RoutedEventArgs e)
         {
@@ -413,7 +392,7 @@ namespace Regular.View
                 .Select(x => Convert.ToInt32(x.Id))
                 .Select(x => new ElementId(x))
                 .ToList();
-            PossibleTrackingParameters = ParameterServices.GetParametersOfCategories(DocumentGuid, categoryIds);
+            PossibleTrackingParameters = ParameterServices.GetDefinitionsOfCategories(DocumentGuid, categoryIds);
         }
         private void RegexRulePartTypeTextBox_OnGotFocus(object sender, RoutedEventArgs e)
         {
@@ -434,6 +413,11 @@ namespace Regular.View
             int index = RegexRuleParts.IndexOf(regexRulePart);
             ButtonMoveRulePartUp.IsEnabled = index != 0;
             ButtonMoveRulePartDown.IsEnabled = index != regexRuleParts.Count - 1;
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void NotifyPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

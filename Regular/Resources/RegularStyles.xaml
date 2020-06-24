@@ -435,14 +435,14 @@
                             <Setter TargetName="BackgroundRectangle" Property="Rectangle.Fill" Value="#999999" />
                             <Setter TargetName="Square" Property="Line.Stroke" Value="{StaticResource ButtonStrokeColorHighlight}" />
                         </Trigger>
-                        <Trigger Property="IsEnabled" Value="True">
+                        <!--<Trigger Property="{TemplateBinding IsEnabled}" Value="True">
                             <Setter TargetName="Square" Property="Visibility" Value="Hidden" />
                             <Setter TargetName="Triangle" Property="Visibility" Value="Visible" />
                         </Trigger>
-                        <Trigger Property="IsEnabled" Value="False">
+                        <Trigger Property="{TemplateBinding IsEnabled}" Value="False">
                             <Setter TargetName="Square" Property="Visibility" Value="Visible" />
                             <Setter TargetName="Triangle" Property="Visibility" Value="Hidden" />
-                        </Trigger>
+                        </Trigger>-->
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
