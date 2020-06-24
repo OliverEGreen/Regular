@@ -72,8 +72,10 @@
   <ItemGroup>
     <Compile Include="Enums\LetterMatchType.cs" />
     <Compile Include="Enums\MatchType.cs" />
+    <Compile Include="Model\DMUpdaters.cs" />
     <Compile Include="Model\EnumValueConverter.cs" />
     <Compile Include="Services\AppRibbonServices.cs" />
+    <Compile Include="Services\DMTriggerServices.cs" />
     <Compile Include="ViewModel\ObservableObject.cs" />
     <Compile Include="ViewModel\RegexRule.cs" />
     <Compile Include="ViewModel\RegexRulePart.cs" />
@@ -84,13 +86,14 @@
     <Compile Include="LaunchRuleManager.cs" />
     <Compile Include="Services\CategoryServices.cs" />
     <Compile Include="Services\DocumentServices.cs" />
-    <Compile Include="Services\DynamicModelUpdateServices.cs" />
+    <Compile Include="Services\DMUpdaterServices.cs" />
     <Compile Include="Services\ExtensibleStorageServices.cs" />
     <Compile Include="Services\ParameterServices.cs" />
     <Compile Include="Services\InputValidationServices.cs" />
     <Compile Include="Services\RegexAssembly.cs" />
     <Compile Include="Services\RulePartServices.cs" />
     <Compile Include="Services\SerializationServices.cs" />
+    <Compile Include="ViewModel\RegularUpdater.cs" />
     <Compile Include="View\RuleEditor.xaml.cs">
       <DependentUpon>RuleEditor.xaml</DependentUpon>
     </Compile>

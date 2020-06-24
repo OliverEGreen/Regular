@@ -24,10 +24,9 @@ namespace Regular.View
 {
     public partial class RuleEditor: INotifyPropertyChanged
     {
-        private static Document Document { get; set; }
         private static string DocumentGuid { get; set; }
 
-        private string name;
+        private string ruleName;
         private ObservableCollection<ObservableObject> targetCategoryIds;
         private List<string> possibleTrackingParameters;
         private ObservableCollection<RegexRulePart> regexRuleParts;
@@ -40,10 +39,10 @@ namespace Regular.View
 
         public string RuleName
         {
-            get => name;
+            get => ruleName;
             set
             {
-                name = value;
+                ruleName = value;
                 NotifyPropertyChanged("RuleName");
             }
         }
@@ -359,9 +358,9 @@ namespace Regular.View
         }
         private void ButtonExpandCategories_Click(object sender, RoutedEventArgs e)
         {
-            int categoriesPanelWidth = 250;
-            int minWindowWidth = 436;
-            int maxWindowWidth = 701;
+            const int categoriesPanelWidth = 250;
+            const int minWindowWidth = 436;
+            const int maxWindowWidth = 701;
             bool isCategoryPanelExpanded = ColumnCategories.Width == new GridLength(categoriesPanelWidth);
             
             Button button = sender as Button;

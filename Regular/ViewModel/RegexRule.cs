@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using Autodesk.Revit.DB;
 using Regular.Enums;
 using Regular.Model;
@@ -144,7 +143,7 @@ namespace Regular.ViewModel
         {
             RegexRules.AllRegexRules[documentGuid].Add(regexRule);
             ExtensibleStorageServices.SaveRegexRuleToExtensibleStorage(documentGuid, regexRule);
-            DynamicModelUpdateServices.RegisterRegularUpdaterToDocument(documentGuid, regexRule.RuleGuid);
+            DMTriggerServices.AddTrigger(documentGuid, regexRule);
             
             // TODO: For a new rule, a new project parameter needs to be created.
             // ParameterServices.CreateProjectParameter(Document, sourceRegexRule.OutputParameterName, ParameterType.Text, sourceRegexRule.TargetCategoryIds.Select(x => x.Id).ToList(), BuiltInParameterGroup.PG_IDENTITY_DATA, true);
@@ -204,9 +203,7 @@ namespace Regular.ViewModel
             existingRegexRule.MatchType = newRegexRule.MatchType;
 
             ExtensibleStorageServices.UpdateRegexRuleInExtensibleStorage(documentGuid, existingRegexRule.RuleGuid, newRegexRule);
-            
-            // TODO: Figure out how DMU really works and implement CRUD functionality
-            // DynamicModelUpdateServices.RegisterRegularUpdaterToDocument(documentGuid, existingRegexRule.RuleGuid);
+            DMTriggerServices.UpdateAllTriggers(documentGuid);
         }
         public static void Delete(string documentGuid, string regexRuleGuid)
         {
@@ -216,7 +213,7 @@ namespace Regular.ViewModel
             RegexRule regexRule = documentRegexRules.FirstOrDefault(x => x.RuleGuid == regexRuleGuid);
             if (regexRule != null) documentRegexRules.Remove(regexRule);
 
-            // TODO: Need to remove any trigger associated with this rule from DMU
+            DMTriggerServices.DeleteTrigger(documentGuid, regexRule);
         }
         
         public event PropertyChangedEventHandler PropertyChanged;
