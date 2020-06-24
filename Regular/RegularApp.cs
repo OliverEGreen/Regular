@@ -50,7 +50,7 @@ namespace Regular
             if (existingRegexRules == null) return;
             foreach (RegexRule regexRule in existingRegexRules)
             {
-                DynamicModelUpdateServices.RegisterRegexRuleUpdater(documentGuid, regexRule.RuleGuid);
+                DynamicModelUpdateServices.RegisterRegularUpdaterToDocument(documentGuid, regexRule.RuleGuid);
             }
 
             //TaskDialog.Show("Regular", $"{existingRegexRules.Count} rules registered to DMU upon opening.");

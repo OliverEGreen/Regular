@@ -144,7 +144,7 @@ namespace Regular.ViewModel
         {
             RegexRules.AllRegexRules[documentGuid].Add(regexRule);
             ExtensibleStorageServices.SaveRegexRuleToExtensibleStorage(documentGuid, regexRule);
-            DynamicModelUpdateServices.RegisterRegexRuleUpdater(documentGuid, regexRule.RuleGuid);
+            DynamicModelUpdateServices.RegisterRegularUpdaterToDocument(documentGuid, regexRule.RuleGuid);
             
             // TODO: For a new rule, a new project parameter needs to be created.
             // ParameterServices.CreateProjectParameter(Document, sourceRegexRule.OutputParameterName, ParameterType.Text, sourceRegexRule.TargetCategoryIds.Select(x => x.Id).ToList(), BuiltInParameterGroup.PG_IDENTITY_DATA, true);
@@ -206,7 +206,7 @@ namespace Regular.ViewModel
             ExtensibleStorageServices.UpdateRegexRuleInExtensibleStorage(documentGuid, existingRegexRule.RuleGuid, newRegexRule);
             
             // TODO: Figure out how DMU really works and implement CRUD functionality
-            // DynamicModelUpdateServices.RegisterRegexRuleUpdater(documentGuid, existingRegexRule.RuleGuid);
+            // DynamicModelUpdateServices.RegisterRegularUpdaterToDocument(documentGuid, existingRegexRule.RuleGuid);
         }
         public static void Delete(string documentGuid, string regexRuleGuid)
         {

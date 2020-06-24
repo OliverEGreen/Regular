@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
@@ -11,11 +11,11 @@ namespace Regular.Services
 {
     public static class DynamicModelUpdateServices
     {
-        private class RuleUpdater : IUpdater
+        private class RegularUpdater : IUpdater
         {
             private readonly UpdaterId updaterId = null;
 
-            public RuleUpdater(AddInId id)
+            public RegularUpdater(AddInId id)
             {
                 updaterId = new UpdaterId(id, Guid.NewGuid());
             }
@@ -33,6 +33,7 @@ namespace Regular.Services
             public UpdaterId GetUpdaterId() { return updaterId; }
             public string GetUpdaterName() { return "Regular Updater"; }
         }
+
         public static void RunAllRegexRules(string documentGuid, List<ElementId> modifiedElementIds)
         {
             Document document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
@@ -72,18 +73,27 @@ namespace Regular.Services
             }
         }
 
-        public static void RegisterRegexRuleUpdater(string documentGuid, string regexRuleGuid)
+        // Consider splitting the RegularUpdater functions from the Trigger functions.
+        // Might help to clarify what's going on. The Updater only really concerns the docment closing / opening events
+        // Since they are targeted to specific documents.
+        public static void RegisterRegularUpdaterToDocument(string documentGuid, string regexRuleGuid)
         {
+            // Registering our RegularUpdater (consider renaming) only needs to happen once, on DocumentOpened
+            // It's the adding and removing of TRIGGERS we need to handle any UI interactions, rules being paused, deleted etc.
+            // TODO: Need to check whether necessary parameters exists in the document
+            // This app is likely to be used in a workshared environment. Someone could delete the target paramter
+            // or the tracking parameter. We need to know whether we can retrieve it (A) by its saved ID or (B) by name.
+
             Document document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
             RegexRule regexRule = RegexRule.GetRuleById(documentGuid, regexRuleGuid);
 
-            RuleUpdater ruleUpdater = new RuleUpdater(RevitApplication.ActiveAddInId);
+            RegularUpdater regularUpdater = new RegularUpdater(RevitApplication.ActiveAddInId);
 
             // This is the only place that this gets set to the rule
-            regexRule.UpdaterId = ruleUpdater.GetUpdaterId();
+            regexRule.UpdaterId = regularUpdater.GetUpdaterId();
 
             // Using the optional boolean flag so the updater doesn't pop up with a massive scary message on loading
-            try { UpdaterRegistry.RegisterUpdater(ruleUpdater, document, true); }
+            try { UpdaterRegistry.RegisterUpdater(regularUpdater, document, true); }
             catch (Exception ex) { TaskDialog.Show("Regular", ex.Message); }
             
             // Converting the save string representations of the Target Category ElementIds to ElementIds. Maybe can save these as integers and skip the conversion.
@@ -97,26 +107,22 @@ namespace Regular.Services
             // Adding the trigger to the updater registry
             Parameter trackingParameter = ParameterServices.GetProjectParameterByName(document, regexRule.TrackingParameterName);
             if (trackingParameter == null) return;
-            UpdaterRegistry.AddTrigger(ruleUpdater.GetUpdaterId(), elementMulticategoryFilter, Element.GetChangeTypeParameter(trackingParameter));
+            UpdaterRegistry.AddTrigger(regularUpdater.GetUpdaterId(), elementMulticategoryFilter, Element.GetChangeTypeParameter(trackingParameter));
         }
 
-        public static void DeleteRegexRuleUpdater(string documentGuid, string regexRuleGuid)
+        public static void UnregisterRegularUpdaterFromDocument(string documentGuid)
         {
-            RegexRule regexRule = RegexRule.GetRuleById(documentGuid, regexRuleGuid);
-            
-            // Double-checking that the updater was ever registered before attempting to remove
-            if (regexRule.UpdaterId == null) return;
-            UpdaterRegistry.UnregisterUpdater(regexRule.UpdaterId);
+            Document document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
+            UpdaterRegistry.UnregisterUpdater(new RegularUpdater(RevitApplication.ActiveAddInId).GetUpdaterId(), document);
         }
 
-        public static void UpdateRegexRuleUpdater(string documentGuid, string regexRuleGuid)
+        // We need code for creating, updating, disabling, enabling and deleting a trigger.
+
+        public static void UpdateRegexRuleTrigger(string documentGuid, string regexRuleGuid)
         {
             // We need to check whether this updater already exists.
             Document document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
             RegexRule regexRule = RegexRule.GetRuleById(documentGuid, regexRuleGuid);
-
-            if (regexRule.UpdaterId == null) return;
-            UpdaterRegistry.UnregisterUpdater(regexRule.UpdaterId);
         }
     }
 }

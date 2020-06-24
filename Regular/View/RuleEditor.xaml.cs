@@ -359,9 +359,28 @@ namespace Regular.View
         }
         private void ButtonExpandCategories_Click(object sender, RoutedEventArgs e)
         {
+            int categoriesPanelWidth = 250;
+            int minWindowWidth = 436;
+            int maxWindowWidth = 701;
+            bool isCategoryPanelExpanded = ColumnCategories.Width == new GridLength(categoriesPanelWidth);
+            
             Button button = sender as Button;
-            ColumnCategories.Width = ColumnCategories.Width == new GridLength(250) ? new GridLength(0) : new GridLength(250);
-            button.Content = ColumnCategories.Width == new GridLength(250) ? "Hide Categories" : "Select Categories";
+            if (!isCategoryPanelExpanded)
+            {
+                ColumnCategories.Width = new GridLength(categoriesPanelWidth);
+                ColumnMargin.Width = new GridLength(15);
+                button.Content = "Hide Categories";
+                MinWidth = maxWindowWidth;
+                MaxWidth = maxWindowWidth;
+            }
+            else
+            {
+                ColumnCategories.Width = new GridLength(0);
+                ColumnMargin.Width = new GridLength(0);
+                button.Content = "Select Categories";
+                MinWidth = minWindowWidth;
+                MaxWidth = minWindowWidth;
+            }
         }
         private void ScrollViewerCategories_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
