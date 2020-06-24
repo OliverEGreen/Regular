@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -32,31 +31,6 @@ namespace Regular.View
             ruleEditor.Closed += RuleEditor_Closed;
             ruleEditor.ShowDialog();
         }
-        private void EditRegexRuleButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (!(sender is Button button)) return;
-            RegexRule regexRule = ((RegexRule)button.DataContext);
-            RuleEditor ruleEditor = new RuleEditor(DocumentServices.GetRevitDocumentGuid(Document), regexRule);
-            ruleEditor.ShowDialog();
-        }
-        private void DeleteRegexRuleButton_Click(object sender, RoutedEventArgs e)
-        {
-            // TODO: Add in confirmation button before rule gets deleted forever
-            Button button = sender as Button;
-            string regexRuleGuid = ((RegexRule)button.DataContext).RuleGuid;
-
-            // Deleting both the cached RegexRule and the associated DataStorage object
-            RegexRule.Delete(DocumentGuid, regexRuleGuid);
-            ExtensibleStorageServices.DeleteRegexRuleFromExtensibleStorage(DocumentGuid, regexRuleGuid);
-        }
-        private void RegexRulesScrollViewer_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
-        {
-            ScrollViewer scv = (ScrollViewer)sender;
-            scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
-            e.Handled = true;
-        }
-        private void ButtonClose_Click(object sender, RoutedEventArgs e) => Close();
-        private void RuleEditor_Closed(object sender, System.EventArgs e) => Activate();
         private void ReorderUpButton_Click(object sender, RoutedEventArgs e)
         {
             if (ListBoxRegexRules.Items.Count < 1) return;
@@ -83,6 +57,43 @@ namespace Regular.View
             ListBoxRegexRules.Focus();
             ListBoxRegexRules.SelectedItem = regexRule;
         }
+        private void ButtonDuplicateRule_OnClick(object sender, RoutedEventArgs e)
+        {
+            RegexRule regexRule = RegexRule.Duplicate(DocumentGuid, (RegexRule) ListBoxRegexRules.SelectedItem);
+            RuleEditor ruleEditor = new RuleEditor(DocumentGuid, regexRule);
+            ruleEditor.ShowDialog();
+        }
+        private void EditRegexRuleButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!(sender is Button button)) return;
+            RegexRule regexRule = ((RegexRule)button.DataContext);
+            RuleEditor ruleEditor = new RuleEditor(DocumentServices.GetRevitDocumentGuid(Document), regexRule);
+            ruleEditor.ShowDialog();
+        }
+        private void DeleteRegexRuleButton_Click(object sender, RoutedEventArgs e)
+        {
+            // TODO: Add in confirmation button before rule gets deleted forever
+            Button button = sender as Button;
+            string regexRuleGuid = ((RegexRule)button.DataContext).RuleGuid;
+
+            // Deleting both the cached RegexRule and the associated DataStorage object
+            RegexRule.Delete(DocumentGuid, regexRuleGuid);
+            ExtensibleStorageServices.DeleteRegexRuleFromExtensibleStorage(DocumentGuid, regexRuleGuid);
+        }
+        private void RegexRulesScrollViewer_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
+        {
+            ScrollViewer scv = (ScrollViewer)sender;
+            scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
+            e.Handled = true;
+        }
+        private void ListBoxRegexRules_OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Focus();
+            ButtonMoveRulePartUp.IsEnabled = false;
+            ButtonMoveRulePartDown.IsEnabled = false;
+            ButtonDuplicateRule.IsEnabled = false;
+            ButtonStopStartRule.IsEnabled = false;
+        }
         private void ListBoxRegexRules_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             RegexRule regexRule = ((ListBox)sender).SelectedItem as RegexRule;
@@ -93,18 +104,7 @@ namespace Regular.View
             ButtonDuplicateRule.IsEnabled = true;
             ButtonStopStartRule.IsEnabled = true;
         }
-        private void ButtonDuplicateRule_OnClick(object sender, RoutedEventArgs e)
-        {
-            RegexRule regexRule = ListBoxRegexRules.SelectedItem as RegexRule;
-            RegexRule.Save(DocumentGuid, RegexRule.Duplicate(DocumentGuid, regexRule));
-        }
-        private void ListBoxRegexRules_OnMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            Focus();
-            ButtonMoveRulePartUp.IsEnabled = false;
-            ButtonMoveRulePartDown.IsEnabled = false;
-            ButtonDuplicateRule.IsEnabled = false;
-            ButtonStopStartRule.IsEnabled = false;
-        }
+        private void RuleEditor_Closed(object sender, System.EventArgs e) => Activate();
+        private void ButtonClose_Click(object sender, RoutedEventArgs e) => Close();
     }
 }
