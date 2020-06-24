@@ -63,6 +63,14 @@ namespace Regular.View
             RuleEditor ruleEditor = new RuleEditor(DocumentGuid, regexRule);
             ruleEditor.ShowDialog();
         }
+        private void ButtonStopStartRule_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (ListBoxRegexRules.Items.Count < 1) return;
+            RegexRule regexRule = ListBoxRegexRules.SelectedItem as RegexRule;
+            regexRule.IsFrozen = !regexRule.IsFrozen;
+            ListBoxRegexRules.Focus();
+            ListBoxRegexRules.SelectedItem = regexRule;
+        }
         private void EditRegexRuleButton_Click(object sender, RoutedEventArgs e)
         {
             if (!(sender is Button button)) return;
@@ -80,7 +88,7 @@ namespace Regular.View
             RegexRule.Delete(DocumentGuid, regexRuleGuid);
             ExtensibleStorageServices.DeleteRegexRuleFromExtensibleStorage(DocumentGuid, regexRuleGuid);
         }
-        private void RegexRulesScrollViewer_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
+        private void RegexRulesScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
             ScrollViewer scv = (ScrollViewer)sender;
             scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
@@ -106,5 +114,6 @@ namespace Regular.View
         }
         private void RuleEditor_Closed(object sender, System.EventArgs e) => Activate();
         private void ButtonClose_Click(object sender, RoutedEventArgs e) => Close();
+
     }
 }

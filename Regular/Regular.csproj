@@ -77,7 +77,8 @@
     <Compile Include="Services\AppRibbonServices.cs" />
     <Compile Include="Services\DeserializationServices.cs" />
     <Compile Include="Services\DMTriggerServices.cs" />
-    <Compile Include="ViewModel\ObservableObject.cs" />
+    <Compile Include="ViewModel\CategoryObject.cs" />
+    <Compile Include="ViewModel\ParameterObject.cs" />
     <Compile Include="ViewModel\RegexRule.cs" />
     <Compile Include="ViewModel\RegexRulePart.cs" />
     <Compile Include="Enums\RuleType.cs" />

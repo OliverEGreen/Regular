@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Regular.ViewModel
 {
-    public class ObservableObject : INotifyPropertyChanged
+    public class CategoryObject : INotifyPropertyChanged
     {
         // Using these to bind categories to a checkbox list
         // Ids get stored in ExtensibleStorage, Names are displayed to the user 
@@ -45,9 +45,9 @@ namespace Regular.ViewModel
             }
         }
 
-        public static ObservableCollection<ObservableObject> GetInitialCategories(string documentGuid)
+        public static ObservableCollection<CategoryObject> GetInitialCategories(string documentGuid)
         {
-            ObservableCollection<ObservableObject> observableObjects = new ObservableCollection<ObservableObject>();
+            ObservableCollection<CategoryObject> observableObjects = new ObservableCollection<CategoryObject>();
             Document document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
 
             // Fetching all categories to create ObservableObjects
@@ -58,7 +58,7 @@ namespace Regular.ViewModel
             
             foreach(Category category in userVisibleCategories)
             {
-                observableObjects.Add(new ObservableObject() { Name = category.Name, Id = category.Id.ToString(), isChecked = false });
+                observableObjects.Add(new CategoryObject() { Name = category.Name, Id = category.Id.ToString(), isChecked = false });
             }
             return observableObjects;
         }

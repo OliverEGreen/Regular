@@ -12,7 +12,7 @@ namespace Regular.ViewModel
     public class RegexRule : INotifyPropertyChanged
     {
         private string ruleName;
-        private ObservableCollection<ObservableObject> targetCategoryIds;
+        private ObservableCollection<CategoryObject> targetCategoryIds;
         private ObservableCollection<RegexRulePart> regexRuleParts;
         private string trackingParameterName;
         private string outputParameterName;
@@ -33,7 +33,7 @@ namespace Regular.ViewModel
         public string DateTimeCreated { get; private set; }
         public string CreatedBy { get; private set; }
         public string RuleGuid { get; private set; }
-        public ObservableCollection<ObservableObject> TargetCategoryIds
+        public ObservableCollection<CategoryObject> TargetCategoryIds
         {
             get => targetCategoryIds;
             set
@@ -132,7 +132,7 @@ namespace Regular.ViewModel
                 // If given a GUID, a rule is being recreated, otherwise a new rule is being created
                 RuleGuid = guid ?? Guid.NewGuid().ToString(),
                 RuleName = "",
-                TargetCategoryIds = ObservableObject.GetInitialCategories(documentGuid),
+                TargetCategoryIds = CategoryObject.GetInitialCategories(documentGuid),
                 TrackingParameterName = "",
                 TrackingParameterId = -1,
                 OutputParameterName = "",
