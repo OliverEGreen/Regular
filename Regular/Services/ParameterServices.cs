@@ -10,14 +10,18 @@ namespace Regular.Services
 {
     public static class ParameterServices
     {
-        public static void CreateProjectParameter(Document document, string parameterName, ParameterType parameterType, List<string> targetCategoryIdStrings, BuiltInParameterGroup builtInParameterGroup, bool isInstanceParameter)
+        public static void CreateProjectParameter(string documentGuid, string parameterName, List<string> targetCategoryIdStrings)
         {
             // Spiderinnet's hacky method to create a project parameter, despite the Revit API's limitations on this
             // From https:// spiderinnet.typepad.com/blog/2011/05/parameter-of-revit-api-31-create-project-parameter.html
             // This creates a temporary shared parameters file, a temporary shared parameter
             // It then binds this back to the model as an InstanceBinding and deletes the temporary stuff
 
-            //Creating the necessary categoryset to create the outputParameter
+            Document document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
+            const BuiltInParameterGroup builtInParameterGroup = BuiltInParameterGroup.PG_IDENTITY_DATA;
+            const ParameterType parameterType = ParameterType.Text;
+
+            //Creating the necessary CategorySet to create the outputParameter
 
             List<ElementId> targetCategoryIds = targetCategoryIdStrings.Select(x => new ElementId(Convert.ToInt32(x))).ToList();
             List<Category> categories = targetCategoryIds.Select(x => Category.GetCategory(document, x)).ToList();
@@ -39,32 +43,14 @@ namespace Regular.Services
                 revitApplication.SharedParametersFilename = oriFile;
                 File.Delete(tempFile);
 
-                Binding binding = revitApplication.Create.NewTypeBinding(categorySet);
-                if (isInstanceParameter) binding = revitApplication.Create.NewInstanceBinding(categorySet);
-
-                BindingMap bindingMap = (new UIApplication(revitApplication)).ActiveUIDocument.Document.ParameterBindings;
+                Binding binding = revitApplication.Create.NewInstanceBinding(categorySet);
+                BindingMap bindingMap = new UIApplication(revitApplication).ActiveUIDocument.Document.ParameterBindings;
                 bindingMap.Insert(def, binding, builtInParameterGroup);
 
                 transaction.Commit();
             }
         }
         
-        // Does this help??
-        // https://thebuildingcoder.typepad.com/blog/2017/01/schedule-parameter-and-shared-parameter-guid.html#3
-
-        public static Parameter GetProjectParameterByName(Document document, string parameterName)
-        {
-            BindingMap map = document.ParameterBindings;
-            DefinitionBindingMapIterator it = map.ForwardIterator();
-            it.Reset();
-            while (it.MoveNext())
-            {
-                string currentParameterName = it.Key.Name;
-                if (currentParameterName == parameterName) { return (Parameter)it.Current; }
-            }
-            return null;
-        }
-
         public static Parameter GetParameterById(ElementId elementId)
         {
             // Impement this method
