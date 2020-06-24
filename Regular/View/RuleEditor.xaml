@@ -9,8 +9,8 @@
     Height="600"
     MinHeight="500"
     MaxHeight="700"
-    SizeToContent="WidthAndHeight"
     ResizeMode="CanResizeWithGrip"
+    SizeToContent="WidthAndHeight"
     Style="{DynamicResource StandardWindow}"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
@@ -68,7 +68,7 @@
             MaxLength="30"
             Style="{StaticResource StandardTextBox}"
             Text="{Binding RuleName}"
-            ToolTip="Define a reference name for the rule you're creating." />
+            ToolTip="Define a reference ruleName for the rule you're creating." />
         <TextBlock
             Name="TextblockNameYourRuleWatermark"
             Grid.Row="1"
@@ -264,7 +264,7 @@
             Orientation="Horizontal">
             <ComboBox
                 Name="ComboBoxRulePartInput"
-                Width="130"
+                Width="147"
                 Height="24"
                 Margin="0,0,0,10"
                 VerticalAlignment="Bottom"
