@@ -129,9 +129,9 @@ namespace Regular.Services
                 RegexRule regexRule = RegexRule.Create(documentGuid, entity.Get<Guid>("GUID").ToString());
                 regexRule.RuleName = entity.Get<string>("RuleName");
                 List<string> targetTargetCategoryIds = entity.Get<IList<string>>("TargetCategoryIds").ToList();
-                ObservableCollection<CategoryObject> observableObjects = CategoryObject.GetInitialCategories(documentGuid);
-                foreach (CategoryObject observableObject in observableObjects) { observableObject.IsChecked = targetTargetCategoryIds.Contains(observableObject.Id); }
-                regexRule.TargetCategoryIds = observableObjects;
+                ObservableCollection<CategoryObject> categoryObjects = CategoryObject.GetInitialCategories(documentGuid);
+                foreach (CategoryObject categoryObject in categoryObjects) { categoryObject.IsChecked = targetTargetCategoryIds.Contains(categoryObject.Id); }
+                regexRule.TargetCategoryIds = categoryObjects;
                 regexRule.TrackingParameterName = entity.Get<string>("TrackingParameterName");
                 regexRule.TrackingParameterId = entity.Get<int>("TrackingParameterId");
                 regexRule.OutputParameterName = entity.Get<string>("OutputParameterName");

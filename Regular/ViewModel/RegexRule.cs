@@ -153,8 +153,8 @@ namespace Regular.ViewModel
             ExtensibleStorageServices.SaveRegexRuleToExtensibleStorage(documentGuid, regexRule);
             DMTriggerServices.AddTrigger(documentGuid, regexRule);
             
-            // TODO: For a new rule, a new project parameter needs to be created.
-            ParameterServices.CreateProjectParameter(documentGuid, regexRule.OutputParameterName, regexRule.TargetCategoryIds.Select(x => x.Id).ToList());
+            // TODO: Check this rule is created as we want
+            ParameterServices.CreateProjectParameter(documentGuid, regexRule.OutputParameterName, regexRule.TargetCategoryIds);
         }
         public static RegexRule Duplicate(string documentGuid, RegexRule sourceRegexRule)
         {

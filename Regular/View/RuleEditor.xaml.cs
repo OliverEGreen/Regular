@@ -176,11 +176,7 @@ namespace Regular.View
                 TextBoxUserFeedback.Text = userFeedback;
                 return;
             }
-            else
-            {
-                TextBoxUserFeedback.Visibility = Visibility.Hidden;
-            }
-            // TODO: Must run all validation before going beyond this point!
+            else { TextBoxUserFeedback.Visibility = Visibility.Hidden; }
 
             if (EditingExistingRule)
             {
@@ -392,7 +388,7 @@ namespace Regular.View
                 .Select(x => Convert.ToInt32(x.Id))
                 .Select(x => new ElementId(x))
                 .ToList();
-            PossibleTrackingParameters = ParameterServices.GetDefinitionsOfCategories(DocumentGuid, categoryIds);
+            PossibleTrackingParameters = ParameterServices.GetParametersOfCategories(DocumentGuid, categoryIds);
         }
         private void RegexRulePartTypeTextBox_OnGotFocus(object sender, RoutedEventArgs e)
         {

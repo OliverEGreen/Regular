@@ -12,7 +12,7 @@ namespace Regular.Services
 {
     public static class ParameterServices
     {
-        public static void CreateProjectParameter(string documentGuid, string parameterName, List<string> targetCategoryIdStrings)
+        public static void CreateProjectParameter(string documentGuid, string parameterName, ObservableCollection<CategoryObject> targetCategoryObjects)
         {
             // Spiderinnet's hacky method to create a project parameter, despite the Revit API's limitations on this
             // From https:// spiderinnet.typepad.com/blog/2011/05/parameter-of-revit-api-31-create-project-parameter.html
@@ -21,11 +21,11 @@ namespace Regular.Services
 
             Document document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
             const BuiltInParameterGroup builtInParameterGroup = BuiltInParameterGroup.PG_IDENTITY_DATA;
-            const ParameterType parameterType = ParameterType.Text;
+            const ParameterType parameterType = ParameterType.YesNo;
 
             //Creating the necessary CategorySet to create the outputParameter
 
-            List<ElementId> targetCategoryIds = targetCategoryIdStrings.Select(x => new ElementId(Convert.ToInt32(x))).ToList();
+            List<ElementId> targetCategoryIds = targetCategoryObjects.Where(x => x.IsChecked).Select(x => new ElementId(Convert.ToInt32(x))).ToList();
             List<Category> categories = targetCategoryIds.Select(x => Category.GetCategory(document, x)).ToList();
             CategorySet categorySet = CategoryServices.GetCategorySetFromList(document, categories);
                         
@@ -53,28 +53,28 @@ namespace Regular.Services
             }
         }
         
-        public static Parameter GetParameterById(ElementId elementId)
+        public static string GetParameterName(Document document, ElementId parameterId)
         {
-            // Impement this method
-            return null;
+            if (parameterId.IntegerValue < 0) return LabelUtils.GetLabelFor((BuiltInParameter)parameterId.IntegerValue);
+            return ((ParameterElement)document.GetElement(parameterId)).GetDefinition().Name;
         }
 
-        public static BuiltInParameter GetBuiltInParameterById(int value) => (BuiltInParameter)value;
-        
-        public static ObservableCollection<ParameterObject> GetDefinitionsOfCategories(string documentGuid, List<ElementId> categoryIds)
+        public static ObservableCollection<ParameterObject> GetParametersOfCategories(string documentGuid, List<ElementId> categoryIds)
         {
+            ObservableCollection<ParameterObject> parameterObjects = new ObservableCollection<ParameterObject>();
             // TODO: This is a cop-out right now. We need both the IDs and the names. And for 
             // Both built-in and internally-defined parameters. Only for text-type ones, though.
             // That way we can best-populate the UI list and assign the right ID to the RegexRule's TrackingParameterId property.
             
-            ObservableCollection<ParameterObject> parameterElements = new ObservableCollection<ParameterObject>();
             Document document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
             List<ElementId> parameterIds = ParameterFilterUtilities.GetFilterableParametersInCommon(document, categoryIds).ToList();
+            
             foreach (ElementId parameterId in parameterIds)
             {
-                //
+                string parameterName = GetParameterName(document, parameterId);
+                parameterObjects.Add(new ParameterObject { Id = parameterId.IntegerValue, Name = parameterName });
             }
-            return parameterElements;
+            return new ObservableCollection<ParameterObject>(parameterObjects.OrderBy(x => x.Name));
         }
 
         public static List<Parameter> ConvertParameterSetToList(ParameterSet parameterSet)
