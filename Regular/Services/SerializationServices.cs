@@ -6,10 +6,10 @@ namespace Regular.Services
 {
     public static class SerializationServices
     {
-        public static IList<string> ConvertListToIList(List<string> inputList)
+        public static IList<T> ConvertListToIList<T>(List<T> inputList)
         {
-            IList<string> iList = new List<string>();
-            foreach(string inputString in inputList) { iList.Add(inputString); }
+            IList<T> iList = new List<T>();
+            foreach(T input in inputList) { iList.Add(input); }
             return iList;
         }
         public static IList<string> SerializeRegexRuleParts(ObservableCollection<RegexRulePart> regexRuleParts)

@@ -48,6 +48,7 @@
             Margin="-15,-15,-15,0"
             Padding="12,4,10,3"
             VerticalAlignment="Top"
+            Text="{Binding UserFeedbackText}"
             Background="{StaticResource BackgroundColorWarning}"
             Style="{StaticResource WarningText}"
             Visibility="Hidden" />
@@ -192,7 +193,7 @@
             VerticalContentAlignment="Center"
             MaxLength="30"
             Style="{StaticResource StandardTextBox}"
-            Text="{Binding OutputParameterName}"
+            Text="{Binding OutputParameterName, Mode=TwoWay}"
             ToolTip="This is the project parameter Regular will auto-create and write its validation output to." />
         <TextBlock
             Name="TextblockOutputParameterWatermark"

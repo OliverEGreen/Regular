@@ -25,18 +25,19 @@ namespace Regular.View
     public partial class RuleEditor: INotifyPropertyChanged
     {
         private static string DocumentGuid { get; set; }
-
         private string ruleName;
         private ObservableCollection<CategoryObject> targetCategoryIds;
         private ObservableCollection<ParameterObject> possibleTrackingParameters;
         private ObservableCollection<RegexRulePart> regexRuleParts;
-        private string trackingParameterName; // Eventually, this should be some kind of ID
-        private string outputParameterName; // This should also be an ID
+        private ParameterObject trackingParameterObject;
+        private ParameterObject outputParameterObject;
         private MatchType matchType;
         private int numberCategoriesSelected;
+        private string userFeedbackText;
+        private bool IsFrozen { get; set; }
         private bool EditingExistingRule { get; set; }
         private string ExistingRuleGuid { get; set; }
-
+        
         public string RuleName
         {
             get => ruleName;
@@ -64,22 +65,22 @@ namespace Regular.View
                 NotifyPropertyChanged("PossibleTrackingParameters");
             }
         }
-        public string TrackingParameterName
+        public ParameterObject TrackingParameterObject
         {
-            get => trackingParameterName;
+            get => trackingParameterObject;
             set
             {
-                trackingParameterName = value;
-                NotifyPropertyChanged("TrackingParameterName");
+                trackingParameterObject = value;
+                NotifyPropertyChanged("TrackingParameterObject");
             }
         }
-        public string OutputParameterName
+        public ParameterObject OutputParameterObject
         {
-            get => outputParameterName;
+            get => outputParameterObject;
             set
             {
-                outputParameterName = value;
-                NotifyPropertyChanged("OutputParameterName");
+                outputParameterObject = value;
+                NotifyPropertyChanged("OutputParameterObject");
             }
         }
         public ObservableCollection<RegexRulePart> RegexRuleParts
@@ -109,6 +110,15 @@ namespace Regular.View
                 NotifyPropertyChanged("NumberCategoriesSelected");
             }
         }
+        public string UserFeedbackText
+        {
+            get => userFeedbackText;
+            set
+            {
+                userFeedbackText = value;
+                NotifyPropertyChanged("UserFeedbackText");
+            }
+        }
        
         public RuleEditor(string documentGuid, RegexRule inputRegexRule)
         {
@@ -125,11 +135,12 @@ namespace Regular.View
             RuleName = inputRegexRule.RuleName;
             TargetCategoryIds = inputRegexRule.TargetCategoryIds;
             RegexRuleParts = inputRegexRule.RegexRuleParts;
-            TrackingParameterName = inputRegexRule.TrackingParameterName;
-            OutputParameterName = inputRegexRule.OutputParameterName;
+            TrackingParameterObject = inputRegexRule.TrackingParameterObject;
+            OutputParameterObject = inputRegexRule.OutputParameterObject;
             MatchType = inputRegexRule.MatchType;
             NumberCategoriesSelected = targetCategoryIds.Count(x => x.IsChecked);
-            
+            IsFrozen = inputRegexRule.IsFrozen;
+
             Title = EditingExistingRule ? $"Editing Rule: {RuleName}" : "Creating New Rule";
             TextBoxOutputParameterNameInput.IsEnabled = ! EditingExistingRule;
 
@@ -169,40 +180,53 @@ namespace Regular.View
         }
         private void ButtonOK_Click(object sender, RoutedEventArgs e)
         {
-            string userFeedback = InputValidationServices.ReturnUserFeedback(RuleName, OutputParameterName, RegexRuleParts);
-            if (!string.IsNullOrEmpty(userFeedback))
+            UserFeedbackText = InputValidationServices.ReturnUserFeedback(RuleName, OutputParameterObject.Name, RegexRuleParts);
+            TextBoxUserFeedback.Visibility = string.IsNullOrEmpty(UserFeedbackText) ? Visibility.Hidden : Visibility.Visible;
+            
+            // Helper method to read the static UI properties and turn them into a RegexRule
+            RegexRule CreateRegexRuleFromUserInputs(string DocumentGuid, string ExistingRuleGuid = null)
             {
-                TextBoxUserFeedback.Visibility = Visibility.Visible;
-                TextBoxUserFeedback.Text = userFeedback;
-                return;
+                if (EditingExistingRule)
+                {
+                    // The rule already exists and is being edited. We'll generate a new temporary rule from the inputs to use as we transfer values across.
+                    RegexRule regexRule = RegexRule.Create(DocumentGuid, ExistingRuleGuid);
+                    regexRule.RuleName = RuleName;
+                    regexRule.TargetCategoryIds = TargetCategoryIds;
+                    regexRule.TrackingParameterObject = TrackingParameterObject;
+                    regexRule.OutputParameterObject = OutputParameterObject;
+                    regexRule.RegexRuleParts = RegexRuleParts;
+                    regexRule.RegexString = RegexAssembly.AssembleRegexString(regexRule);
+                    regexRule.MatchType = MatchType;
+                    regexRule.IsFrozen = IsFrozen;
+                    return regexRule;
+                }
+                else
+                {
+                    RegexRule regexRule = RegexRule.Create(DocumentGuid);
+                    regexRule.RuleName = RuleName;
+                    regexRule.TargetCategoryIds = TargetCategoryIds;
+                    regexRule.TrackingParameterObject = TrackingParameterObject;
+                    regexRule.OutputParameterObject = OutputParameterObject;
+                    regexRule.RegexRuleParts = RegexRuleParts;
+                    regexRule.RegexString = RegexAssembly.AssembleRegexString(regexRule);
+                    regexRule.MatchType = MatchType;
+                    regexRule.IsFrozen = IsFrozen;
+                    return regexRule;
+                }
             }
-            else { TextBoxUserFeedback.Visibility = Visibility.Hidden; }
 
             if (EditingExistingRule)
             {
                 // The rule already exists and is being edited. We'll generate a new temporary rule from the inputs to use as we transfer values across.
-                RegexRule regexRule = RegexRule.Create(DocumentGuid, ExistingRuleGuid);
-                regexRule.RuleName = RuleName;
-                regexRule.TargetCategoryIds = TargetCategoryIds;
-                regexRule.TrackingParameterName = TrackingParameterName;
-                regexRule.OutputParameterName = OutputParameterName;
-                regexRule.MatchType = MatchType;
-                regexRule.RegexRuleParts = RegexRuleParts;
-                regexRule.RegexString = RegexAssembly.AssembleRegexString(regexRule);
-
-                // Updates both the static cache and the entity saved in ExtensibleStorage.
+                RegexRule regexRule = CreateRegexRuleFromUserInputs(DocumentGuid, ExistingRuleGuid);
+                
+                // Updates both the static cache and ExtensibleStorage.
                 RegexRule.Update(DocumentGuid, ExistingRuleGuid, regexRule);
             }
             else
             {
-                RegexRule regexRule = RegexRule.Create(DocumentGuid);
-                regexRule.RuleName = RuleName;
-                regexRule.TargetCategoryIds = TargetCategoryIds;
-                regexRule.TrackingParameterName = TrackingParameterName;
-                regexRule.OutputParameterName = OutputParameterName;
-                regexRule.MatchType = MatchType;
-                regexRule.RegexRuleParts = RegexRuleParts;
-                regexRule.RegexString = RegexAssembly.AssembleRegexString(regexRule);
+                // This is a new rule, so we'll create a new rule object based on the static user input values. This will get saved.
+                RegexRule regexRule = CreateRegexRuleFromUserInputs(DocumentGuid);
 
                 // Saves rule to static cache and ExtensibleStorage
                 RegexRule.Save(DocumentGuid, regexRule);
