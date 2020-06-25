@@ -5,7 +5,7 @@ namespace Regular.ViewModel
     public class ParameterObject : INotifyPropertyChanged
     {
         private string name;
-        private string id;
+        private int id;
 
         public string Name
         {
@@ -16,7 +16,7 @@ namespace Regular.ViewModel
                 NotifyPropertyChanged("RuleName");
             }
         }
-        public string Id
+        public int Id
         {
             get => id;
             set
