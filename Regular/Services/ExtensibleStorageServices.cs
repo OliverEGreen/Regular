@@ -78,7 +78,7 @@ namespace Regular.Services
                 // Constructing the scheme for regexRules stored in ExtensibleStorage
                 schemaBuilder.AddSimpleField("GUID", typeof(Guid));
                 schemaBuilder.AddSimpleField("RuleName", typeof(string));
-                schemaBuilder.AddArrayField("TargetCategoryIds", typeof(string));
+                schemaBuilder.AddArrayField("TargetCategoryIds", typeof(int));
                 schemaBuilder.AddSimpleField("TrackingParameterName", typeof(string));
                 schemaBuilder.AddSimpleField("TrackingParameterId", typeof(int));
                 schemaBuilder.AddSimpleField("OutputParameterName", typeof(string));
@@ -103,11 +103,18 @@ namespace Regular.Services
             Entity entity = new Entity(GetRegularSchema());
             entity.Set("GUID", new Guid(regexRule.RuleGuid));
             entity.Set("RuleName", regexRule.RuleName);
-            entity.Set("TargetCategoryIds", SerializationServices.ConvertListToIList(regexRule.TargetCategoryIds.Where(x => x.IsChecked).Select(x => x.Id.ToString()).ToList()));
-            entity.Set("TrackingParameterName", regexRule.TrackingParameterName);
-            entity.Set("TrackingParameterId", regexRule.TrackingParameterId);
-            entity.Set("OutputParameterName", regexRule.OutputParameterName);
-            entity.Set("OutputParameterId", regexRule.OutputParameterId);
+            IList<int> targetCategoryIds = SerializationServices.ConvertListToIList
+                (
+                regexRule.TargetCategoryIds
+                    .Where(x => x.IsChecked)
+                    .Select(x => x.Id)
+                    .ToList()
+                );
+            entity.Set("TargetCategoryIds", targetCategoryIds);
+            entity.Set("TrackingParameterName", regexRule.TrackingParameterObject.Name);
+            entity.Set("TrackingParameterId", regexRule.TrackingParameterObject.Id);
+            entity.Set("OutputParameterName", regexRule.OutputParameterObject.Name);
+            entity.Set("OutputParameterId", regexRule.OutputParameterObject.Id);
             entity.Set("RegexString", regexRule.RegexString);
             entity.Set("RegexRuleParts", SerializationServices.SerializeRegexRuleParts(regexRule.RegexRuleParts));
             string matchTypeString = regexRule.MatchType.ToString();
@@ -128,14 +135,20 @@ namespace Regular.Services
             {
                 RegexRule regexRule = RegexRule.Create(documentGuid, entity.Get<Guid>("GUID").ToString());
                 regexRule.RuleName = entity.Get<string>("RuleName");
-                List<string> targetTargetCategoryIds = entity.Get<IList<string>>("TargetCategoryIds").ToList();
+                List<int> targetTargetCategoryIds = entity.Get<IList<int>>("TargetCategoryIds").ToList();
                 ObservableCollection<CategoryObject> categoryObjects = CategoryObject.GetInitialCategories(documentGuid);
                 foreach (CategoryObject categoryObject in categoryObjects) { categoryObject.IsChecked = targetTargetCategoryIds.Contains(categoryObject.Id); }
                 regexRule.TargetCategoryIds = categoryObjects;
-                regexRule.TrackingParameterName = entity.Get<string>("TrackingParameterName");
-                regexRule.TrackingParameterId = entity.Get<int>("TrackingParameterId");
-                regexRule.OutputParameterName = entity.Get<string>("OutputParameterName");
-                regexRule.OutputParameterId = entity.Get<int>("OutputParameterId");
+                regexRule.TrackingParameterObject = new ParameterObject
+                {
+                    Id = entity.Get<int>("TrackingParameterId"),
+                    Name = entity.Get<string>("TrackingParameterName")
+                };
+                regexRule.OutputParameterObject = new ParameterObject
+                {
+                    Id = entity.Get<int>("OutputParameterId"),
+                    Name = entity.Get<string>("OutputParameterName")
+                };
                 regexRule.RegexString = entity.Get<string>("RegexString");
                 regexRule.RegexRuleParts = DeserializationServices.DeserializeRegexRulePartsInExtensibleStorage(entity.Get<IList<string>>("RegexRuleParts").ToList());
                 // Deserializing saved match type string to enum value
@@ -188,11 +201,18 @@ namespace Regular.Services
             {
                 transaction.Start();
                 regexRuleEntity.Set("RuleName", newRegexRule.RuleName);
-                regexRuleEntity.Set("TargetCategoryIds", SerializationServices.ConvertListToIList(newRegexRule.TargetCategoryIds.Where(x => x.IsChecked).Select(x => x.Id.ToString()).ToList()));
-                regexRuleEntity.Set("TrackingParameterName", newRegexRule.TrackingParameterName);
-                regexRuleEntity.Set("TrackingParameterId", newRegexRule.TrackingParameterId);
-                regexRuleEntity.Set("OutputParameterName", newRegexRule.OutputParameterName);
-                regexRuleEntity.Set("OutputParameterId", newRegexRule.OutputParameterId);
+                IList<int> targetCategoryIds = SerializationServices.ConvertListToIList
+                (
+                    newRegexRule.TargetCategoryIds
+                        .Where(x => x.IsChecked)
+                        .Select(x => x.Id)
+                        .ToList()
+                );
+                regexRuleEntity.Set("TargetCategoryIds", targetCategoryIds);
+                regexRuleEntity.Set("TrackingParameterName", newRegexRule.TrackingParameterObject.Name);
+                regexRuleEntity.Set("TrackingParameterId", newRegexRule.TrackingParameterObject.Id);
+                regexRuleEntity.Set("OutputParameterName", newRegexRule.OutputParameterObject.Name);
+                regexRuleEntity.Set("OutputParameterId", newRegexRule.OutputParameterObject.Id);
                 regexRuleEntity.Set("RegexString", newRegexRule.RegexString);
                 regexRuleEntity.Set("RegexRuleParts", SerializationServices.SerializeRegexRuleParts(newRegexRule.RegexRuleParts));
                 regexRuleEntity.Set("MatchType", newRegexRule.MatchType.ToString());

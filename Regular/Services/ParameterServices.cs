@@ -25,7 +25,7 @@ namespace Regular.Services
 
             //Creating the necessary CategorySet to create the outputParameter
 
-            List<ElementId> targetCategoryIds = targetCategoryObjects.Where(x => x.IsChecked).Select(x => new ElementId(Convert.ToInt32(x))).ToList();
+            List<ElementId> targetCategoryIds = targetCategoryObjects.Where(x => x.IsChecked).Select(x => new ElementId(x.Id)).ToList();
             List<Category> categories = targetCategoryIds.Select(x => Category.GetCategory(document, x)).ToList();
             CategorySet categorySet = CategoryServices.GetCategorySetFromList(document, categories);
                         

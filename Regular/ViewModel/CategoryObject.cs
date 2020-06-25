@@ -14,7 +14,7 @@ namespace Regular.ViewModel
         // and IsChecked is used to save the checkbox state for each object
         
         private string name;
-        private string id;
+        private int id;
         private bool isChecked;
                         
         public string Name
@@ -26,7 +26,7 @@ namespace Regular.ViewModel
                 NotifyPropertyChanged("RuleName");
             }
         }
-        public string Id
+        public int Id
         {
             get => id;
             set
@@ -58,7 +58,7 @@ namespace Regular.ViewModel
             
             foreach(Category category in userVisibleCategories)
             {
-                observableObjects.Add(new CategoryObject() { Name = category.Name, Id = category.Id.ToString(), isChecked = false });
+                observableObjects.Add(new CategoryObject() { Name = category.Name, Id = category.Id.IntegerValue, isChecked = false });
             }
             return observableObjects;
         }

@@ -26,7 +26,7 @@ namespace Regular.Services
             ElementMulticategoryFilter elementMulticategoryFilter = new ElementMulticategoryFilter(targetBuiltInCategories);
 
             UpdaterId updaterId = DMUpdaters.AllUpdaters[documentGuid].GetUpdaterId();
-            ElementId trackingParameterId = new ElementId(regexRule.TrackingParameterId);
+            ElementId trackingParameterId = new ElementId(regexRule.TrackingParameterObject.Id);
 
             UpdaterRegistry.AddTrigger(updaterId, document, elementMulticategoryFilter, Element.GetChangeTypeParameter(trackingParameterId));
         }
