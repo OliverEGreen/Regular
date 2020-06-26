@@ -13,26 +13,26 @@ namespace Regular.ViewModel
         // Ids get stored in ExtensibleStorage, Names are displayed to the user 
         // and IsChecked is used to save the checkbox state for each object
         
-        private string name;
-        private int id;
+        private string categoryObjectName;
+        private int categoryObjectId;
         private bool isChecked;
                         
-        public string Name
+        public string CategoryObjectName
         {
-            get => name;
+            get => categoryObjectName;
             set
             {
-                name = value;
+                categoryObjectName = value;
                 NotifyPropertyChanged("RuleName");
             }
         }
-        public int Id
+        public int CategoryObjectId
         {
-            get => id;
+            get => categoryObjectId;
             set
             {
-                id = value;
-                NotifyPropertyChanged("Id");
+                categoryObjectId = value;
+                NotifyPropertyChanged("CategoryObjectId");
             }
         }
         public bool IsChecked
@@ -58,7 +58,7 @@ namespace Regular.ViewModel
             
             foreach(Category category in userVisibleCategories)
             {
-                observableObjects.Add(new CategoryObject() { Name = category.Name, Id = category.Id.IntegerValue, isChecked = false });
+                observableObjects.Add(new CategoryObject() { CategoryObjectName = category.Name, CategoryObjectId = category.Id.IntegerValue, isChecked = false });
             }
             return observableObjects;
         }

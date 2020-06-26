@@ -4,25 +4,25 @@ namespace Regular.ViewModel
 {
     public class ParameterObject : INotifyPropertyChanged
     {
-        private string name;
-        private int id;
+        private string parameterObjectName;
+        private int parameterObjectId;
 
-        public string Name
+        public string ParameterObjectName
         {
-            get => name;
+            get => parameterObjectName;
             set
             {
-                name = value;
-                NotifyPropertyChanged("RuleName");
+                parameterObjectName = value;
+                NotifyPropertyChanged("ParameterObjectName");
             }
         }
-        public int Id
+        public int ParameterObjectId
         {
-            get => id;
+            get => parameterObjectId;
             set
             {
-                id = value;
-                NotifyPropertyChanged("Id");
+                parameterObjectId = value;
+                NotifyPropertyChanged("ParameterObjectId");
             }
         }
         

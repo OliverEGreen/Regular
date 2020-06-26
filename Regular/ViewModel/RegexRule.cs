@@ -66,7 +66,7 @@ namespace Regular.ViewModel
             get
             {
                 toolTipString = $"Rule RuleName: {RuleName}" + Environment.NewLine +
-                                $"Applies To: {String.Join(", ", TargetCategoryIds.Select(x => x.Id))}" + Environment.NewLine +
+                                $"Applies To: {String.Join(", ", TargetCategoryIds.Select(x => x.CategoryObjectId))}" + Environment.NewLine +
                                 $"Tracks Parameter : {TrackingParameterObject}" + Environment.NewLine +
                                 $"Regex String: {RegexString}" + Environment.NewLine +
                                 $"Writes To : {OutputParameterObject}" + Environment.NewLine +
@@ -131,8 +131,8 @@ namespace Regular.ViewModel
                 RuleGuid = guid ?? Guid.NewGuid().ToString(),
                 RuleName = "",
                 TargetCategoryIds = CategoryObject.GetInitialCategories(documentGuid),
-                TrackingParameterObject = new ParameterObject { Id = -1, Name = "" },
-                OutputParameterObject = new ParameterObject { Id = -1, Name = "" },
+                TrackingParameterObject = new ParameterObject { ParameterObjectId = -1, ParameterObjectName = "" },
+                OutputParameterObject = new ParameterObject { ParameterObjectId = -1, ParameterObjectName = "" },
                 MatchType = MatchType.ExactMatch,
                 RegexRuleParts = new ObservableCollection<RegexRulePart>(),
                 RegexString = "",
@@ -150,7 +150,7 @@ namespace Regular.ViewModel
             DMTriggerServices.AddTrigger(documentGuid, regexRule);
             
             // TODO: Check this rule is created as we want
-            ParameterServices.CreateProjectParameter(documentGuid, regexRule.OutputParameterObject.Name, regexRule.TargetCategoryIds);
+            ParameterServices.CreateProjectParameter(documentGuid, regexRule.OutputParameterObject.ParameterObjectName, regexRule.TargetCategoryIds);
         }
         public static RegexRule Duplicate(string documentGuid, RegexRule sourceRegexRule)
         {

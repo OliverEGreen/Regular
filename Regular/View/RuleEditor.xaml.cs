@@ -16,6 +16,7 @@ using Regular.Enums;
 using Regular.ViewModel;
 using Regular.Services;
 using Button = System.Windows.Controls.Button;
+using ComboBox = System.Windows.Controls.ComboBox;
 using Grid = System.Windows.Controls.Grid;
 using TextBox = System.Windows.Controls.TextBox;
 using Visibility = System.Windows.Visibility;
@@ -128,9 +129,6 @@ namespace Regular.View
         }
         private void InitializeRuleEditor(string documentGuid, RegexRule inputRegexRule)
         {
-            EditingExistingRule = RegexRule.GetDocumentRegexRuleGuids(documentGuid).Contains(inputRegexRule.RuleGuid);
-            if(EditingExistingRule) ExistingRuleGuid = inputRegexRule.RuleGuid;
-
             DocumentGuid = documentGuid;
             RuleName = inputRegexRule.RuleName;
             TargetCategoryIds = inputRegexRule.TargetCategoryIds;
@@ -143,6 +141,16 @@ namespace Regular.View
 
             Title = EditingExistingRule ? $"Editing Rule: {RuleName}" : "Creating New Rule";
             TextBoxOutputParameterNameInput.IsEnabled = ! EditingExistingRule;
+
+            EditingExistingRule = RegexRule.GetDocumentRegexRuleGuids(documentGuid).Contains(inputRegexRule.RuleGuid);
+            if (EditingExistingRule)
+            {
+                ExistingRuleGuid = inputRegexRule.RuleGuid;
+                PossibleTrackingParameters = ParameterServices.GetParametersOfCategories(DocumentGuid, TargetCategoryIds);
+                ComboBoxTrackingParameterInput.SelectedItem = PossibleTrackingParameters
+                    .FirstOrDefault(x =>
+                    x.ParameterObjectId == TrackingParameterObject.ParameterObjectId);
+            }
 
             // Binding ComboBox to our RuleType enumeration
             ComboBoxRulePartInput.ItemsSource = Enum.GetValues(typeof(RuleType)).Cast<RuleType>();
@@ -180,7 +188,7 @@ namespace Regular.View
         }
         private void ButtonOK_Click(object sender, RoutedEventArgs e)
         {
-            UserFeedbackText = InputValidationServices.ReturnUserFeedback(RuleName, OutputParameterObject.Name, RegexRuleParts);
+            UserFeedbackText = InputValidationServices.ReturnUserFeedback(RuleName, OutputParameterObject.ParameterObjectName, RegexRuleParts);
             TextBoxUserFeedback.Visibility = string.IsNullOrEmpty(UserFeedbackText) ? Visibility.Hidden : Visibility.Visible;
             
             // Helper method to read the static UI properties and turn them into a RegexRule
@@ -330,6 +338,23 @@ namespace Regular.View
                             break;
                     }
                     break;
+                case RuleType.AnyCharacter:
+                    switch (regexRulePart.EditButtonDisplayText)
+                    {
+                        case "AB1":
+                            regexRulePart.EditButtonDisplayText = "ab1";
+                            regexRulePart.CaseSensitiveDisplayString = "lower case";
+                            break;
+                        case "ab1":
+                            regexRulePart.EditButtonDisplayText = "Ab1";
+                            regexRulePart.CaseSensitiveDisplayString = "Any Case";
+                            break;
+                        default:
+                            regexRulePart.EditButtonDisplayText = "AB1";
+                            regexRulePart.CaseSensitiveDisplayString = "UPPER CASE";
+                            break;
+                    }
+                    break;
                 case RuleType.AnyDigit:
                     break;
                 case RuleType.FreeText:
@@ -404,15 +429,33 @@ namespace Regular.View
         {
             if(RowExamples.Height != new GridLength(20)) RowExamples.Height = new GridLength(20);
         }
-        private void UpdateCheckedBoxesCount(object sender, RoutedEventArgs e)
+        private void ListBoxCategorySelection_SelectionChanged(object sender, RoutedEventArgs e)
         {
-            NumberCategoriesSelected = TargetCategoryIds.Count(x => x.IsChecked);
-            List<ElementId> categoryIds = TargetCategoryIds
-                .Where(x => x.IsChecked)
-                .Select(x => Convert.ToInt32(x.Id))
-                .Select(x => new ElementId(x))
-                .ToList();
-            PossibleTrackingParameters = ParameterServices.GetParametersOfCategories(DocumentGuid, categoryIds);
+            void UpdateCheckedBoxesCount()
+            {
+                // Updates the UI Counter
+                NumberCategoriesSelected = TargetCategoryIds.Count(x => x.IsChecked);
+            }
+            void UpdateTrackingParameterSelectionComboBox()
+            {
+                ParameterObject currentParameterObject = ComboBoxTrackingParameterInput.SelectedItem as ParameterObject;
+                // Updates the ComboBox to let users select parameter
+                PossibleTrackingParameters = ParameterServices.GetParametersOfCategories(DocumentGuid, TargetCategoryIds);
+                if (PossibleTrackingParameters.Count > 0 && PossibleTrackingParameters.Contains(currentParameterObject)) return;
+                if (NumberCategoriesSelected == 0)
+                {
+                    ComboBoxTrackingParameterInput.Text = "Select Categories";
+                    return;
+                }
+                if (PossibleTrackingParameters.Count < 1)
+                {
+                    ComboBoxTrackingParameterInput.Text = "No Common Parameter(s)";
+                    return;
+                }
+                if (ComboBoxTrackingParameterInput.SelectedItem == null) ComboBoxTrackingParameterInput.SelectedIndex = 0;
+            }
+            UpdateCheckedBoxesCount();
+            UpdateTrackingParameterSelectionComboBox();
         }
         private void RegexRulePartTypeTextBox_OnGotFocus(object sender, RoutedEventArgs e)
         {
@@ -434,6 +477,7 @@ namespace Regular.View
             ButtonMoveRulePartUp.IsEnabled = index != 0;
             ButtonMoveRulePartDown.IsEnabled = index != regexRuleParts.Count - 1;
         }
+        
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void NotifyPropertyChanged([CallerMemberName] string propertyName = null)
         {

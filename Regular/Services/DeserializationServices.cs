@@ -17,6 +17,8 @@ namespace Regular.Services
                     return RuleType.AnyLetter;
                 case "AnyDigit":
                     return RuleType.AnyDigit;
+                case "AnyCharacter":
+                    return RuleType.AnyCharacter;
                 case "FreeText":
                     return RuleType.FreeText;
                 case "SelectionSet":

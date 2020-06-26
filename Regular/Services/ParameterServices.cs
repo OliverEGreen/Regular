@@ -25,7 +25,7 @@ namespace Regular.Services
 
             //Creating the necessary CategorySet to create the outputParameter
 
-            List<ElementId> targetCategoryIds = targetCategoryObjects.Where(x => x.IsChecked).Select(x => new ElementId(x.Id)).ToList();
+            List<ElementId> targetCategoryIds = targetCategoryObjects.Where(x => x.IsChecked).Select(x => new ElementId(x.CategoryObjectId)).ToList();
             List<Category> categories = targetCategoryIds.Select(x => Category.GetCategory(document, x)).ToList();
             CategorySet categorySet = CategoryServices.GetCategorySetFromList(document, categories);
                         
@@ -59,12 +59,17 @@ namespace Regular.Services
             return ((ParameterElement)document.GetElement(parameterId)).GetDefinition().Name;
         }
 
-        public static ObservableCollection<ParameterObject> GetParametersOfCategories(string documentGuid, List<ElementId> categoryIds)
+        public static ObservableCollection<ParameterObject> GetParametersOfCategories(string documentGuid, ObservableCollection<CategoryObject> categoryObjects)
         {
+            // We'll return this ObservableCollection of ParameterObjects straight for UI consumption
             ObservableCollection<ParameterObject> parameterObjects = new ObservableCollection<ParameterObject>();
-            // TODO: This is a cop-out right now. We need both the IDs and the names. And for 
-            // Both built-in and internally-defined parameters. Only for text-type ones, though.
-            // That way we can best-populate the UI list and assign the right ID to the RegexRule's TrackingParameterId property.
+            
+            
+            List<ElementId> categoryIds = categoryObjects
+                .Where(x => x.IsChecked)
+                .Select(x => Convert.ToInt32(x.CategoryObjectId))
+                .Select(x => new ElementId(x))
+                .ToList();
             
             Document document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
             List<ElementId> parameterIds = ParameterFilterUtilities.GetFilterableParametersInCommon(document, categoryIds).ToList();
@@ -72,9 +77,9 @@ namespace Regular.Services
             foreach (ElementId parameterId in parameterIds)
             {
                 string parameterName = GetParameterName(document, parameterId);
-                parameterObjects.Add(new ParameterObject { Id = parameterId.IntegerValue, Name = parameterName });
+                parameterObjects.Add(new ParameterObject { ParameterObjectId = parameterId.IntegerValue, ParameterObjectName = parameterName });
             }
-            return new ObservableCollection<ParameterObject>(parameterObjects.OrderBy(x => x.Name));
+            return new ObservableCollection<ParameterObject>(parameterObjects.OrderBy(x => x.ParameterObjectName));
         }
 
         public static List<Parameter> ConvertParameterSetToList(ParameterSet parameterSet)

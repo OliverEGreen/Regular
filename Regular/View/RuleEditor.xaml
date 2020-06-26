@@ -48,9 +48,9 @@
             Margin="-15,-15,-15,0"
             Padding="12,4,10,3"
             VerticalAlignment="Top"
-            Text="{Binding UserFeedbackText}"
             Background="{StaticResource BackgroundColorWarning}"
             Style="{StaticResource WarningText}"
+            Text="{Binding UserFeedbackText}"
             Visibility="Hidden" />
         <Label
             Grid.Row="1"
@@ -149,10 +149,10 @@
                                     x:Name="CategoryCheckBox"
                                     Width="20"
                                     VerticalAlignment="Center"
-                                    Checked="UpdateCheckedBoxesCount"
+                                    Checked="ListBoxCategorySelection_SelectionChanged"
                                     IsChecked="{Binding IsChecked}"
-                                    Unchecked="UpdateCheckedBoxesCount" />
-                                <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
+                                    Unchecked="ListBoxCategorySelection_SelectionChanged" />
+                                <TextBlock VerticalAlignment="Center" Text="{Binding CategoryObjectName}" />
                             </StackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
@@ -172,10 +172,8 @@
             Grid.Row="3"
             Grid.Column="1"
             VerticalAlignment="Center"
+            DisplayMemberPath="ParameterObjectName"
             ItemsSource="{Binding PossibleTrackingParameters}"
-            DisplayMemberPath="Name"
-            SelectedValuePath="Id"
-            SelectedIndex="0"
             Style="{StaticResource StandardComboBox}" />
         <Label
             Grid.Row="4"
