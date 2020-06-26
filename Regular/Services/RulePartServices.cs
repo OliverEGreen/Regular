@@ -1,5 +1,4 @@
 ﻿using Regular.Enums;
-using Regular.Model;
 using Regular.ViewModel;
 
 namespace Regular.Services

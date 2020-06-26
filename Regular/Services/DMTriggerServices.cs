@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Autodesk.Revit.DB;
 using Regular.Model;
 using Regular.ViewModel;
 
 namespace Regular.Services
 {
-    public static class DMTriggerServices
+    public static class DmTriggerServices
     {
         internal static void AddAllTriggers(string documentGuid, ObservableCollection<RegexRule> regexRules)
         {
@@ -25,7 +24,7 @@ namespace Regular.Services
             List<BuiltInCategory> targetBuiltInCategories = targetCategories.Select(CategoryServices.GetBuiltInCategoryFromCategory).ToList();
             ElementMulticategoryFilter elementMulticategoryFilter = new ElementMulticategoryFilter(targetBuiltInCategories);
 
-            UpdaterId updaterId = DMUpdaters.AllUpdaters[documentGuid].GetUpdaterId();
+            UpdaterId updaterId = DmUpdaters.AllUpdaters[documentGuid].GetUpdaterId();
             ElementId trackingParameterId = new ElementId(regexRule.TrackingParameterObject.ParameterObjectId);
 
             UpdaterRegistry.AddTrigger(updaterId, document, elementMulticategoryFilter, Element.GetChangeTypeParameter(trackingParameterId));
@@ -36,7 +35,7 @@ namespace Regular.Services
             // There is no way to delete a specific trigger so we must remove all document-based triggers
             // and recreate them minus the one trigger we're removing.
             Document document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
-            UpdaterId updaterId = DMUpdaters.AllUpdaters[documentGuid].GetUpdaterId();
+            UpdaterId updaterId = DmUpdaters.AllUpdaters[documentGuid].GetUpdaterId();
             UpdaterRegistry.RemoveDocumentTriggers(updaterId, document);
             foreach (RegexRule regexRule in RegexRules.AllRegexRules[documentGuid])
             {
@@ -51,7 +50,7 @@ namespace Regular.Services
             // There is no way to delete a specific trigger so we must remove all document-based triggers
             // and recreate all of them one by one, but with the new RegexRuleInfo
             Document document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
-            UpdaterId updaterId = DMUpdaters.AllUpdaters[documentGuid].GetUpdaterId();
+            UpdaterId updaterId = DmUpdaters.AllUpdaters[documentGuid].GetUpdaterId();
             UpdaterRegistry.RemoveDocumentTriggers(updaterId, document);
             foreach (RegexRule regexRule in RegexRules.AllRegexRules[documentGuid])
             {

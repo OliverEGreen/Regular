@@ -26,13 +26,11 @@ namespace Regular.Services
         }
         public static string ValidateOutputParameterName(string input)
         {
+            // TODO: Check this parameter name isn't already taken
             if (string.IsNullOrEmpty(input)) return "Output parameter name cannot be blank.";
             return IllegalRevitCharacters.Any(input.Contains) ? @"Output parameter name cannot contain  / : { } [ ] | ; > < ? ` ~" : "";
         }
-        public static bool ValidateRegexString(string input)
-        {
-            return !string.IsNullOrEmpty(input);
-        }
+
         public static string ValidateRegexRuleParts(ObservableCollection<RegexRulePart> regexRuleParts)
         {
             // We need to build & run some validations for each kind of RegexRulePart here.

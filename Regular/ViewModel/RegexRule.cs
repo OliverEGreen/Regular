@@ -147,7 +147,7 @@ namespace Regular.ViewModel
         {
             RegexRules.AllRegexRules[documentGuid].Add(regexRule);
             ExtensibleStorageServices.SaveRegexRuleToExtensibleStorage(documentGuid, regexRule);
-            DMTriggerServices.AddTrigger(documentGuid, regexRule);
+            DmTriggerServices.AddTrigger(documentGuid, regexRule);
             
             // TODO: Check this rule is created as we want
             ParameterServices.CreateProjectParameter(documentGuid, regexRule.OutputParameterObject.ParameterObjectName, regexRule.TargetCategoryIds);
@@ -155,7 +155,7 @@ namespace Regular.ViewModel
         public static RegexRule Duplicate(string documentGuid, RegexRule sourceRegexRule)
         {
             // Helper method to ensure duplicate rules always have a unique name
-            string GenerateRegexRuleDuplicateName(string regexRuleName)
+            string GenerateRegexRuleDuplicateName()
             {
                 List<string> documentRegexRuleNames = GetDocumentRegexRules(documentGuid).Select(x => x.RuleName).ToList();
                 string copyName = $"{sourceRegexRule.RuleName} Copy";
@@ -164,7 +164,7 @@ namespace Regular.ViewModel
             
             // Returns a copy of an existing RegexRule, but with a new GUID
             RegexRule duplicateRegexRule = Create(documentGuid);
-            duplicateRegexRule.RuleName = GenerateRegexRuleDuplicateName(sourceRegexRule.RuleName);
+            duplicateRegexRule.RuleName = GenerateRegexRuleDuplicateName();
             duplicateRegexRule.TargetCategoryIds = sourceRegexRule.TargetCategoryIds;
             duplicateRegexRule.TrackingParameterObject = sourceRegexRule.TrackingParameterObject;
             duplicateRegexRule.OutputParameterObject = sourceRegexRule.OutputParameterObject;
@@ -205,7 +205,7 @@ namespace Regular.ViewModel
             existingRegexRule.IsFrozen = newRegexRule.IsFrozen;
 
             ExtensibleStorageServices.UpdateRegexRuleInExtensibleStorage(documentGuid, existingRegexRule.RuleGuid, newRegexRule);
-            DMTriggerServices.UpdateAllTriggers(documentGuid);
+            DmTriggerServices.UpdateAllTriggers(documentGuid);
         }
         public static void Delete(string documentGuid, string regexRuleGuid)
         {
@@ -215,7 +215,7 @@ namespace Regular.ViewModel
             RegexRule regexRule = documentRegexRules.FirstOrDefault(x => x.RuleGuid == regexRuleGuid);
             if (regexRule != null) documentRegexRules.Remove(regexRule);
 
-            DMTriggerServices.DeleteTrigger(documentGuid, regexRule);
+            DmTriggerServices.DeleteTrigger(documentGuid, regexRule);
         }
         
 
