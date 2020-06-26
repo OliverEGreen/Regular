@@ -21,7 +21,7 @@ namespace Regular
             // This keeps track of sets of rules per document, so is initialized as soon as possible
             RegexRules.AllRegexRules = new Dictionary<string, ObservableCollection<RegexRule>>();
             // This keeps track of all Dynamic Model Updaters, so is also initialized as soon as possible
-            DMUpdaters.AllUpdaters = new Dictionary<string, RegularUpdater>();
+            DmUpdaters.AllUpdaters = new Dictionary<string, RegularUpdater>();
 
             RevitDocumentCache = new Dictionary<string, Document>();
             // Events which will add to or clean up the AllRegexRules cache
@@ -58,14 +58,14 @@ namespace Regular
             if (existingRegexRules != null && existingRegexRules.Count < 1) { return; }
 
             // Rules exist, we need to add the triggers to the RegularUpdater
-            DMTriggerServices.AddAllTriggers(documentGuid, existingRegexRules);
+            DmTriggerServices.AddAllTriggers(documentGuid, existingRegexRules);
         }
         private static void DeRegisterDocument(Document document)
         {
             string documentGuid = ExtensibleStorageServices.GetDocumentGuidFromExtensibleStorage(document) ?? ExtensibleStorageServices.RegisterDocumentGuidToExtensibleStorage(document);
 
             // We can remove all of the triggers
-            UpdaterId updaterId = DMUpdaters.AllUpdaters[documentGuid].GetUpdaterId();
+            UpdaterId updaterId = DmUpdaters.AllUpdaters[documentGuid].GetUpdaterId();
             UpdaterRegistry.RemoveDocumentTriggers(updaterId, document);
 
             // When shutting down the document, we de-register the document-specific RegexRuleUpdater

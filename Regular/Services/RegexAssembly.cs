@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Autodesk.Revit.UI;
 using Regular.Enums;
-using Regular.Model;
 using Regular.ViewModel;
 
 namespace Regular.Services
@@ -18,12 +17,6 @@ namespace Regular.Services
             string caseSensitiveModifier = regexRulePart.IsCaseSensitive ? "(?i)" : "";
             switch (regexRulePart.RuleType)
             {
-                case RuleType.FreeText:
-                    regexPartOutput += SanitizeWord(regexRulePart.DisplayText) + caseSensitiveModifier;
-                    break;
-                case RuleType.SelectionSet:
-                    regexPartOutput += "Test";
-                    break;
                 case RuleType.AnyLetter:
                     switch (regexRulePart.CaseSensitiveDisplayString)
                     {
@@ -38,11 +31,28 @@ namespace Regular.Services
                             break;
                     }
                     break;
+                case RuleType.AnyCharacter:
+                    switch (regexRulePart.CaseSensitiveDisplayString)
+                    {
+                        case "UPPER CASE":
+                            regexPartOutput += "[A-Z0-9]";
+                            break;
+                        case "lower case":
+                            regexPartOutput += "[a-z0-9]";
+                            break;
+                        case "Any Case":
+                            regexPartOutput += "[A-Za-z0-9]";
+                            break;
+                    }
+                    break;
                 case RuleType.AnyDigit:
                     regexPartOutput += @"\d";
                     break;
-                case RuleType.AnyCharacter:
-                    regexPartOutput += @"\w";
+                case RuleType.FreeText:
+                    regexPartOutput += SanitizeWord(regexRulePart.DisplayText) + caseSensitiveModifier;
+                    break;
+                case RuleType.SelectionSet:
+                    regexPartOutput += "Test";
                     break;
             }
             return regexPartOutput + optionalModifier;
@@ -92,8 +102,8 @@ namespace Regular.Services
             return start + regexString + end;
         }
 
-        public static char[] Letters = new[] {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l','m', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
-        public static int[] Numbers = new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        public static char[] Letters = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l','m', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
+        public static int[] Numbers = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
         public static char[] Characters = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','0','1','2','3','4','5','6','7','8','9'};
         public static string GenerateRandomExample(ObservableCollection<RegexRulePart> regexRuleParts)
         {

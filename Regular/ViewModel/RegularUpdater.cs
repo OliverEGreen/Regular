@@ -9,7 +9,7 @@ namespace Regular.ViewModel
 {
     public class RegularUpdater : IUpdater
     {
-        private readonly UpdaterId updaterId = null;
+        private readonly UpdaterId updaterId;
 
         public RegularUpdater(AddInId id)
         {

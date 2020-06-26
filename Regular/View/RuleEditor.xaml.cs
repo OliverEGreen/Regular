@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -10,13 +8,11 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Media;
 using System.Windows.Controls;
-using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Regular.Enums;
 using Regular.ViewModel;
 using Regular.Services;
 using Button = System.Windows.Controls.Button;
-using ComboBox = System.Windows.Controls.ComboBox;
 using Grid = System.Windows.Controls.Grid;
 using TextBox = System.Windows.Controls.TextBox;
 using Visibility = System.Windows.Visibility;
@@ -192,7 +188,7 @@ namespace Regular.View
             TextBoxUserFeedback.Visibility = string.IsNullOrEmpty(UserFeedbackText) ? Visibility.Hidden : Visibility.Visible;
             
             // Helper method to read the static UI properties and turn them into a RegexRule
-            RegexRule CreateRegexRuleFromUserInputs(string DocumentGuid, string ExistingRuleGuid = null)
+            RegexRule CreateRegexRuleFromUserInputs()
             {
                 if (EditingExistingRule)
                 {
@@ -226,7 +222,7 @@ namespace Regular.View
             if (EditingExistingRule)
             {
                 // The rule already exists and is being edited. We'll generate a new temporary rule from the inputs to use as we transfer values across.
-                RegexRule regexRule = CreateRegexRuleFromUserInputs(DocumentGuid, ExistingRuleGuid);
+                RegexRule regexRule = CreateRegexRuleFromUserInputs();
                 
                 // Updates both the static cache and ExtensibleStorage.
                 RegexRule.Update(DocumentGuid, ExistingRuleGuid, regexRule);
@@ -234,7 +230,7 @@ namespace Regular.View
             else
             {
                 // This is a new rule, so we'll create a new rule object based on the static user input values. This will get saved.
-                RegexRule regexRule = CreateRegexRuleFromUserInputs(DocumentGuid);
+                RegexRule regexRule = CreateRegexRuleFromUserInputs();
 
                 // Saves rule to static cache and ExtensibleStorage
                 RegexRule.Save(DocumentGuid, regexRule);

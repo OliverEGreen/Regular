@@ -27,7 +27,7 @@ namespace Regular.Services
 
             List<ElementId> targetCategoryIds = targetCategoryObjects.Where(x => x.IsChecked).Select(x => new ElementId(x.CategoryObjectId)).ToList();
             List<Category> categories = targetCategoryIds.Select(x => Category.GetCategory(document, x)).ToList();
-            CategorySet categorySet = CategoryServices.GetCategorySetFromList(document, categories);
+            CategorySet categorySet = CategoryServices.GetCategorySetFromList(categories);
                         
             using (Transaction transaction = new Transaction(document, $"Regular - Creating New Project Parameter {parameterName}")) 
             {
@@ -80,13 +80,6 @@ namespace Regular.Services
                 parameterObjects.Add(new ParameterObject { ParameterObjectId = parameterId.IntegerValue, ParameterObjectName = parameterName });
             }
             return new ObservableCollection<ParameterObject>(parameterObjects.OrderBy(x => x.ParameterObjectName));
-        }
-
-        public static List<Parameter> ConvertParameterSetToList(ParameterSet parameterSet)
-        {
-            List<Parameter> parameters = new List<Parameter>();
-            foreach (Parameter parameter in parameterSet) parameters.Add(parameter);
-            return parameters;
         }
     }
 }

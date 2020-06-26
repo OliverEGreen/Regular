@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using System.Windows;
 using Regular.Enums;
 
 namespace Regular.ViewModel
@@ -8,9 +7,11 @@ namespace Regular.ViewModel
     {
         private string displayText;
         private string editButtonDisplayText;
+        private string rawUserInputValue;
+        private string caseSensitiveDisplayString;
         private bool isOptional;
         private bool isCaseSensitive;
-        private string caseSensitiveDisplayString;
+        private bool isCaseSensitiveCheckboxVisible;
         private bool isEditable;
         
         public RuleType RuleType { get; }
@@ -32,6 +33,15 @@ namespace Regular.ViewModel
                 NotifyPropertyChanged("EditButtonDisplayText");
             }
         }
+        public string RawUserInputValue
+        {
+            get => rawUserInputValue;
+            set
+            {
+                rawUserInputValue = value;
+                NotifyPropertyChanged("RawUserInputValue");
+            }
+        }
         public bool IsOptional
         {
             get => isOptional;
@@ -48,6 +58,15 @@ namespace Regular.ViewModel
             {
                 isCaseSensitive = value;
                 NotifyPropertyChanged("IsCaseSensitive");
+            }
+        }
+        public bool IsCaseSensitiveCheckboxVisible
+        {
+            get => isCaseSensitiveCheckboxVisible;
+            set
+            {
+                isCaseSensitiveCheckboxVisible = value;
+                NotifyPropertyChanged("IsCaseSensitiveCheckboxVisible");
             }
         }
         public string CaseSensitiveDisplayString
@@ -75,6 +94,9 @@ namespace Regular.ViewModel
             RuleType = ruleType;
             IsOptional = false;
             IsCaseSensitive = false;
+            RawUserInputValue = "";
+            IsEditable = true;
+            IsCaseSensitiveCheckboxVisible = true;
             
             switch (RuleType)
             {
@@ -82,28 +104,29 @@ namespace Regular.ViewModel
                     DisplayText = "Any Digit";
                     IsEditable = false;
                     EditButtonDisplayText = "0-9";
+                    IsCaseSensitiveCheckboxVisible = false;
                     break;
                 case RuleType.AnyCharacter:
                     DisplayText = "Any Character";
-                    IsEditable = true;
                     EditButtonDisplayText = "AB1";
                     CaseSensitiveDisplayString = "UPPER CASE";
+                    IsCaseSensitiveCheckboxVisible = false;
                     break;
                 case RuleType.AnyLetter:
                     DisplayText = "Any Letter";
-                    IsEditable = true;
                     EditButtonDisplayText = "A-Z";
                     CaseSensitiveDisplayString = "UPPER CASE";
+                    IsCaseSensitiveCheckboxVisible = false;
                     break;
                 case RuleType.FreeText:
                     DisplayText = "Free Text";
-                    IsEditable = true;
                     EditButtonDisplayText = "Edit";
+                    CaseSensitiveDisplayString = "Case Sensitive";
                     break;
                 case RuleType.SelectionSet:
                     DisplayText = "Selection Set";
-                    IsEditable = true;
                     EditButtonDisplayText = "Edit";
+                    CaseSensitiveDisplayString = "Case Sensitive";
                     break;
             }
         }

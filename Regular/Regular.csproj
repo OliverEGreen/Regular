@@ -70,7 +70,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Enums\LetterMatchType.cs" />
     <Compile Include="Enums\MatchType.cs" />
     <Compile Include="Model\DMUpdaters.cs" />
     <Compile Include="Model\EnumValueConverter.cs" />

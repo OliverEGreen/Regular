@@ -20,6 +20,7 @@
     <Grid Margin="15">
         <Grid.Resources>
             <model:EnumConverter x:Key="EnumConverter" />
+            <BooleanToVisibilityConverter x:Key="VisibleIfTrueConverter" />
         </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="10" />
@@ -377,8 +378,8 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
                                     Background="{StaticResource WindowBackgroundColor}"
-                                    IsChecked="False"
-                                    Visibility="{Binding CaseSensitiveVisibility}" />
+                                    IsChecked="{Binding IsCaseSensitive}"
+                                    Visibility="{Binding IsCaseSensitiveCheckboxVisible, Converter={StaticResource VisibleIfTrueConverter}}" />
                                 <TextBlock
                                     Grid.Column="4"
                                     Margin="10,0,0,0"
@@ -391,7 +392,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
                                     Background="{StaticResource WindowBackgroundColor}"
-                                    IsChecked="{Binding IsOptional}" />
+                                    IsChecked="{Binding IsOptional}"/>
                                 <Button
                                     Name="ButtonDeleteRegexRulePart"
                                     Grid.Column="6"

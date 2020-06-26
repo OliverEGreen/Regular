@@ -13,7 +13,7 @@ namespace Regular.Services
     {
         // CRUD Services for managing Regular data stored using Revit's ExtensibleStorage API
         #region All DocumentGUID Code
-        private static Schema GetDocumentGuidSchema(Document document)
+        private static Schema GetDocumentGuidSchema()
         {
             Schema ConstructGuidSchema()
             {
@@ -34,7 +34,7 @@ namespace Regular.Services
         }
         public static string RegisterDocumentGuidToExtensibleStorage(Document document)
         {
-            Entity entity = new Entity(GetDocumentGuidSchema(document));
+            Entity entity = new Entity(GetDocumentGuidSchema());
             string newGuidString = Guid.NewGuid().ToString();
             entity.Set("DocumentGUID", newGuidString);
             using (Transaction transaction = new Transaction(document, "Saving Document Reference GUID"))
@@ -48,7 +48,7 @@ namespace Regular.Services
         }
         public static string GetDocumentGuidFromExtensibleStorage(Document document)
         {
-            Schema guidSchema = GetDocumentGuidSchema(document);
+            Schema guidSchema = GetDocumentGuidSchema();
             
             // Retrieving and testing all DataStorage objects in the document against our DocumentGuid schema.
             List<DataStorage> allDataStorage = new FilteredElementCollector(document).OfClass(typeof(DataStorage)).OfType<DataStorage>().ToList();
@@ -163,8 +163,6 @@ namespace Regular.Services
                     case "PartialMatch":
                         regexRule.MatchType = MatchType.PartialMatch;
                         break;
-                    default:
-                        break;
                 }
                 regexRule.IsFrozen = entity.Get<bool>("IsFrozen");
                 
@@ -185,7 +183,11 @@ namespace Regular.Services
             {
                 foreach (Entity entity in regexRuleEntities) { regexRules.Add(ConvertEntityToRegexRule(entity)); }
             }
-            catch { }
+            catch
+            {
+                // ignored
+            }
+
             return regexRules;
         }
         public static void UpdateRegexRuleInExtensibleStorage(string documentGuid, string regexRuleGuid, RegexRule newRegexRule)
@@ -251,7 +253,6 @@ namespace Regular.Services
             foreach (DataStorage dataStorage in regexRuleDataStorage)
             {
                 Entity regexRuleEntity = dataStorage.GetEntity(regularSchema);
-                regexRuleEntity.Get<Guid>("GUID").ToString();
                 if (regexRuleEntity.Get<Guid>("GUID").ToString() == regexRuleGuid) return new KeyValuePair<DataStorage, Entity> (dataStorage, regexRuleEntity); 
             }
             return new KeyValuePair<DataStorage, Entity>(null, null);
