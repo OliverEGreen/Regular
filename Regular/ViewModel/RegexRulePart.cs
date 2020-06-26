@@ -83,6 +83,12 @@ namespace Regular.ViewModel
                     IsEditable = false;
                     EditButtonDisplayText = "0-9";
                     break;
+                case RuleType.AnyCharacter:
+                    DisplayText = "Any Character";
+                    IsEditable = true;
+                    EditButtonDisplayText = "AB1";
+                    CaseSensitiveDisplayString = "UPPER CASE";
+                    break;
                 case RuleType.AnyLetter:
                     DisplayText = "Any Letter";
                     IsEditable = true;
@@ -116,6 +122,11 @@ namespace Regular.ViewModel
                     DisplayText = "Any Digit";
                     IsEditable = false;
                     EditButtonDisplayText = "0-9";
+                    break;
+                case RuleType.AnyCharacter:
+                    DisplayText = "Any Character";
+                    IsEditable = true;
+                    EditButtonDisplayText = "AB1";
                     break;
                 case RuleType.AnyLetter:
                     DisplayText = "Any Letter";

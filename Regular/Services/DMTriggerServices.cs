@@ -20,13 +20,13 @@ namespace Regular.Services
         {
             Document document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
 
-            List<ElementId> targetCategoryIds = regexRule.TargetCategoryIds.Select(x => new ElementId(Convert.ToInt32(x.Id))).ToList();
+            List<ElementId> targetCategoryIds = regexRule.TargetCategoryIds.Select(x => new ElementId(Convert.ToInt32(x.CategoryObjectId))).ToList();
             List<Category> targetCategories = targetCategoryIds.Select(x => Category.GetCategory(document, x)).ToList();
             List<BuiltInCategory> targetBuiltInCategories = targetCategories.Select(CategoryServices.GetBuiltInCategoryFromCategory).ToList();
             ElementMulticategoryFilter elementMulticategoryFilter = new ElementMulticategoryFilter(targetBuiltInCategories);
 
             UpdaterId updaterId = DMUpdaters.AllUpdaters[documentGuid].GetUpdaterId();
-            ElementId trackingParameterId = new ElementId(regexRule.TrackingParameterObject.Id);
+            ElementId trackingParameterId = new ElementId(regexRule.TrackingParameterObject.ParameterObjectId);
 
             UpdaterRegistry.AddTrigger(updaterId, document, elementMulticategoryFilter, Element.GetChangeTypeParameter(trackingParameterId));
         }

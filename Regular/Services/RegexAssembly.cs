@@ -36,14 +36,13 @@ namespace Regular.Services
                         case "Any Case":
                             regexPartOutput += "[A-Za-z]";
                             break;
-                        default:
-                            break;
                     }
                     break;
                 case RuleType.AnyDigit:
                     regexPartOutput += @"\d";
                     break;
-                default:
+                case RuleType.AnyCharacter:
+                    regexPartOutput += @"\w";
                     break;
             }
             return regexPartOutput + optionalModifier;
@@ -95,7 +94,7 @@ namespace Regular.Services
 
         public static char[] Letters = new[] {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l','m', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
         public static int[] Numbers = new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-
+        public static char[] Characters = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','0','1','2','3','4','5','6','7','8','9'};
         public static string GenerateRandomExample(ObservableCollection<RegexRulePart> regexRuleParts)
         {
             Random random = new Random((int) DateTime.Now.Ticks & 0x0000FFFF);
@@ -103,6 +102,7 @@ namespace Regular.Services
             foreach (RegexRulePart regexRulePart in regexRuleParts)
             {
                 double randomDouble = random.NextDouble();
+                double anyCaseRandom = random.NextDouble();
                 if (regexRulePart.IsOptional && randomDouble > 0.5) continue;
                 switch (regexRulePart.RuleType)
                 {
@@ -118,17 +118,32 @@ namespace Regular.Services
                                 break;
                             case "Any Case":
                                 // Randomly pick any letter of random case
-                                double anyCaseRandom = random.NextDouble();
                                 randomExampleString += anyCaseRandom >= 0.5
                                     ? randomLetter.ToLower()
                                     : randomLetter.ToUpper();
-                                break;
-                            default:
                                 break;
                         }
                         break;
                     case RuleType.AnyDigit:
                         randomExampleString += Numbers[random.Next(Numbers.Length)];
+                        break;
+                    case RuleType.AnyCharacter:
+                        string randomCharacter = Characters[random.Next(Characters.Length)].ToString();
+                        switch (regexRulePart.CaseSensitiveDisplayString)
+                        {
+                            case "UPPER CASE":
+                                randomExampleString += randomCharacter.ToUpper();
+                                break;
+                            case "lower case":
+                                randomExampleString += randomCharacter.ToLower();
+                                break;
+                            case "Any Case":
+                                // Randomly pick any letter of random case
+                                randomExampleString += anyCaseRandom >= 0.5
+                                    ? randomCharacter.ToLower()
+                                    : randomCharacter.ToUpper();
+                                break;
+                        }
                         break;
                     case RuleType.FreeText:
                         if (regexRulePart.DisplayText == "Free Text") continue;
