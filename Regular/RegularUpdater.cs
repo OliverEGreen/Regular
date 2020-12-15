@@ -5,7 +5,7 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Regular.Services;
 
-namespace Regular.ViewModel
+namespace Regular
 {
     public class RegularUpdater : IUpdater
     {
@@ -19,7 +19,7 @@ namespace Regular.ViewModel
         public void Execute(UpdaterData data)
         {
             Document document = data.GetDocument();
-            string documentGuid = DocumentServices.GetRevitDocumentGuid(document);
+            string documentGuid = DocumentGuidServices.GetDocumentGuidFromExtensibleStorage(document);
             TaskDialog.Show("Test", "DMU Executing");
             List<ElementId> modifiedElementIds = data.GetModifiedElementIds().ToList();
         }

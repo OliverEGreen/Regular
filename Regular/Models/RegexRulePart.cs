@@ -1,7 +1,8 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using Regular.Enums;
 
-namespace Regular.ViewModel
+namespace Regular.Models
 {
     public class RegexRulePart : INotifyPropertyChanged
     {
@@ -166,6 +167,8 @@ namespace Regular.ViewModel
                     IsEditable = true;
                     EditButtonDisplayText = "Edit";
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }   
 

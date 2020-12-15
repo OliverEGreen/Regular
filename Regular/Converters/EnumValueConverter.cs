@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Data;
 
-namespace Regular.Model
+namespace Regular.Converters
 {
     public class EnumConverter : IValueConverter
     {

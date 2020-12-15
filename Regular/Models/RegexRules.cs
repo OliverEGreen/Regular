@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Regular.ViewModel;
 
-namespace Regular.Model
+namespace Regular.Models
 {
     internal class RegexRules
     {
