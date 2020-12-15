@@ -11,6 +11,7 @@
     MinHeight="500"
     MaxWidth="{Binding WindowMaxWidth}"
     MaxHeight="700"
+    DataContext="{Binding RuleEditorViewModel, RelativeSource={RelativeSource Self}}"
     ResizeMode="CanResizeWithGrip"
     SizeToContent="WidthAndHeight"
     Style="{DynamicResource StandardWindow}"
@@ -33,7 +34,7 @@
             <RowDefinition Height="30" />
             <RowDefinition Height="50" />
             <RowDefinition />
-            <RowDefinition Name="RowExamples" Height="0" />
+            <RowDefinition Name="RowExamples" Height="30" />
             <RowDefinition Height="40" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -412,8 +413,7 @@
             HorizontalAlignment="Left"
             VerticalAlignment="Bottom"
             Style="{StaticResource StandardText}"
-            Text="{Binding CompliantExample, UpdateSourceTrigger=PropertyChanged}"
-            Visibility="{Binding CompliantExampleVisibility}" />
+            Text="{Binding CompliantExample}" />
         <Button
             Name="ButtonTest"
             Grid.Row="9"

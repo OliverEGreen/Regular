@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using Regular.Commands;
@@ -10,7 +11,7 @@ using Regular.Services;
 
 namespace Regular.ViewModels
 {
-    public class RuleEditorViewModel
+    public class RuleEditorViewModel : INotifyPropertyChanged
     {
         // We need the ability to validate what a user is doing before making any changes back to the model.
         // Ideally, we would not have anything confirmed until they pressed OK, whereupon all validation occurs.
@@ -47,9 +48,29 @@ namespace Regular.ViewModels
         public ParameterObject TrackingParameter { get; set; }
 
         // View-based properties 
-        public string Title { get; set; } 
-        public string CompliantExample { get; set; }
-        public Visibility CompliantExampleVisibility { get; set; } = Visibility.Collapsed;
+        public string Title { get; set; }
+
+        private string compliantExample;
+        public string CompliantExample
+        {
+            get => compliantExample;
+            set
+            {
+                compliantExample = value;
+                NotifyPropertyChanged("CompliantExample");
+            }
+        }
+
+        private Visibility compliantExampleVisibility;
+        public Visibility CompliantExampleVisibility
+        {
+            get => compliantExampleVisibility;
+            set
+            {
+                compliantExampleVisibility = value;
+                NotifyPropertyChanged("CompliantExampleVisibility");
+            }
+        }
         public string UserFeedbackText { get; set; } = "";
         public int NumberCategoriesSelected { get; set; } = 0;
         public bool OutputParameterNameInputEnabled { get; set; } = true;
@@ -59,6 +80,12 @@ namespace Regular.ViewModels
         public GridLength ColumnMarginWidth { get; set; } = new GridLength(0);
         public int WindowMinWidth { get; set; } = 436;
         public int WindowMaxWidth { get; set; } = 436;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
         // The two-argument constructor is for editing an existing rule
         // We need a reference to the original rule ID, and to create a 
