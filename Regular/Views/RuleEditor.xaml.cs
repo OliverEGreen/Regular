@@ -1,5 +1,4 @@
-﻿using System.Data;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Input;
 using System.Windows.Controls;
 using Regular.Models;
@@ -19,7 +18,7 @@ namespace Regular.Views
         {
             InitializeComponent();
             RuleEditorViewModel = inputRule == null ? new RuleEditorViewModel(documentGuid) : new RuleEditorViewModel(documentGuid, inputRule);
-            this.DataContext = RuleEditorViewModel;
+            DataContext = RuleEditorViewModel;
             // Lets us close the window by hitting the Escape key
             PreviewKeyDown += (s, e) => { if (e.Key == Key.Escape) Close(); };
         }
