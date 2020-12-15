@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Regular.ViewModel;
+using System.Linq;
+using Regular.Models;
 
 namespace Regular.Services
 {
@@ -14,15 +15,11 @@ namespace Regular.Services
         }
         public static IList<string> SerializeRegexRuleParts(ObservableCollection<RegexRulePart> regexRuleParts)
         {
-            IList<string> regexRulePartList = new List<string>();
-            foreach (RegexRulePart regexRulePart in regexRuleParts)
-            {
-                regexRulePartList.Add($@"{regexRulePart.RuleType}`
+            return regexRuleParts.Select(regexRulePart => $@"{regexRulePart.RuleType}`
                                             {regexRulePart.IsOptional}`
                                             {regexRulePart.IsCaseSensitive}`
-                                            {regexRulePart.IsEditable}");
-            }
-            return regexRulePartList;
+                                            {regexRulePart.IsEditable}")
+                .ToList();
         }
     }
 }

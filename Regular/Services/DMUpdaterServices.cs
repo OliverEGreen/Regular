@@ -1,8 +1,7 @@
 ﻿using System;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
-using Regular.Model;
-using Regular.ViewModel;
+using Regular.Models;
 using static Regular.RegularApp;
 
 namespace Regular.Services
@@ -13,7 +12,7 @@ namespace Regular.Services
         public static void RegisterRegularUpdaterToDocument(string documentGuid)
         {
             // We register the RegularUpdater to each document as it opens
-            Document document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
+            Document document = DocumentGuidServices.GetRevitDocumentByGuid(documentGuid);
             
             RegularUpdater regularUpdater = new RegularUpdater(RevitApplication.ActiveAddInId);
             DmUpdaters.AllUpdaters[documentGuid] = regularUpdater;
@@ -24,7 +23,7 @@ namespace Regular.Services
         public static void DeregisterRegularUpdaterFromDocument(string documentGuid)
         {
             // We deregister the RegularUpdater from each document as it closes
-            Document document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
+            Document document = DocumentGuidServices.GetRevitDocumentByGuid(documentGuid);
             
             // Attempting to deregister the RegularUpdater
             try { UpdaterRegistry.UnregisterUpdater(DmUpdaters.AllUpdaters[documentGuid].GetUpdaterId(), document); }

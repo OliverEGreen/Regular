@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Autodesk.Revit.UI;
 using Regular.Enums;
-using Regular.ViewModel;
+using Regular.Models;
 
 namespace Regular.Services
 {

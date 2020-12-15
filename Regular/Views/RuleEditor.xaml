@@ -1,25 +1,27 @@
 ﻿<Window
-    x:Class="Regular.View.RuleEditor"
+    x:Class="Regular.Views.RuleEditor"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:model="clr-namespace:Regular.Model"
+    xmlns:vm="clr-namespace:Regular.ViewModels"
     Title=" Rule Editor"
     Height="600"
+    MinWidth="{Binding WindowMinWidth}"
     MinHeight="500"
+    MaxWidth="{Binding WindowMaxWidth}"
     MaxHeight="700"
     ResizeMode="CanResizeWithGrip"
     SizeToContent="WidthAndHeight"
     Style="{DynamicResource StandardWindow}"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
+    <!--  d:DataContext="{d:DesignInstance vm:RuleEditorMockViewModel,IsDesignTimeCreatable=True}"  -->
     <Window.Resources>
         <ResourceDictionary Source="../Resources/RegularStyles.xaml" />
     </Window.Resources>
     <Grid Margin="15">
         <Grid.Resources>
-            <model:EnumConverter x:Key="EnumConverter" />
             <BooleanToVisibilityConverter x:Key="VisibleIfTrueConverter" />
         </Grid.Resources>
         <Grid.RowDefinitions>
@@ -36,9 +38,9 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Name="ColumnLabels" Width="160" />
-            <ColumnDefinition Name="ColumnUserInputs" Width="230" />
-            <ColumnDefinition Name="ColumnMargin" Width="0" />
-            <ColumnDefinition Name="ColumnCategories" Width="0" />
+            <ColumnDefinition Name="ColumnUserInputs" />
+            <ColumnDefinition Name="ColumnMargin" Width="{Binding ColumnMarginWidth}" />
+            <ColumnDefinition Name="ColumnCategories" Width="{Binding ColumnCategoriesPanelWidth}" />
         </Grid.ColumnDefinitions>
         <TextBlock
             Name="TextBoxUserFeedback"
@@ -51,7 +53,6 @@
             VerticalAlignment="Top"
             Background="{StaticResource BackgroundColorWarning}"
             Style="{StaticResource WarningText}"
-            Text="{Binding UserFeedbackText}"
             Visibility="Hidden" />
         <Label
             Grid.Row="1"
@@ -69,7 +70,7 @@
             VerticalContentAlignment="Center"
             MaxLength="30"
             Style="{StaticResource StandardTextBox}"
-            Text="{Binding RuleName}"
+            Text="{Binding StagingRule.RuleName}"
             ToolTip="Define a reference ruleName for the rule you're creating." />
         <TextBlock
             Name="TextblockNameYourRuleWatermark"
@@ -81,8 +82,7 @@
             FontSize="12"
             FontWeight="Regular"
             Foreground="{StaticResource FontColorWatermarkGrey}"
-            IsHitTestVisible="False"
-            Text="Type Here...">
+            IsHitTestVisible="False">
             <TextBlock.Style>
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="Visibility" Value="Collapsed" />
@@ -116,8 +116,8 @@
             Grid.Row="2"
             Grid.Column="1"
             Height="20"
-            Click="ButtonExpandCategories_Click"
-            Content="Select Categories"
+            Command="{Binding TriggerCategoryPanelCommand}"
+            Content="{Binding CategoriesPanelButtonText}"
             Style="{StaticResource StandardButton}" />
         <Label
             Grid.Row="1"
@@ -141,7 +141,7 @@
                 <ListBox
                     x:Name="ListBoxCategoriesSelection"
                     BorderThickness="0"
-                    ItemsSource="{Binding TargetCategoryIds}"
+                    ItemsSource="{Binding StagingRule.TargetCategoryObjects}"
                     SelectionMode="Extended">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
@@ -150,9 +150,7 @@
                                     x:Name="CategoryCheckBox"
                                     Width="20"
                                     VerticalAlignment="Center"
-                                    Checked="ListBoxCategorySelection_SelectionChanged"
-                                    IsChecked="{Binding IsChecked}"
-                                    Unchecked="ListBoxCategorySelection_SelectionChanged" />
+                                    IsChecked="{Binding IsChecked}" />
                                 <TextBlock VerticalAlignment="Center" Text="{Binding CategoryObjectName}" />
                             </StackPanel>
                         </DataTemplate>
@@ -175,6 +173,7 @@
             VerticalAlignment="Center"
             DisplayMemberPath="ParameterObjectName"
             ItemsSource="{Binding PossibleTrackingParameters}"
+            SelectedIndex="0"
             Style="{StaticResource StandardComboBox}" />
         <Label
             Grid.Row="4"
@@ -192,7 +191,7 @@
             VerticalContentAlignment="Center"
             MaxLength="30"
             Style="{StaticResource StandardTextBox}"
-            Text="{Binding OutputParameterName, Mode=TwoWay}"
+            Text="{Binding StagingRule.TrackingParameterObject.ParameterObjectName, Mode=TwoWay}"
             ToolTip="This is the project parameter Regular will auto-create and write its validation output to." />
         <TextBlock
             Name="TextblockOutputParameterWatermark"
@@ -205,7 +204,7 @@
             FontWeight="Regular"
             Foreground="{StaticResource FontColorWatermarkGrey}"
             IsHitTestVisible="False"
-            Text="Type Here...">
+            Text="Select Parameter">
             <TextBlock.Style>
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="Visibility" Value="Collapsed" />
@@ -240,13 +239,14 @@
             Grid.Row="5"
             Grid.Column="1"
             VerticalAlignment="Center"
+            ItemsSource="{Binding MatchTypes}"
             SelectedIndex="0"
-            SelectedItem="{Binding SelectedRuleTypes, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource EnumConverter}}"
+            SelectedItem="{Binding StagingRUle.MatchType, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
             Style="{StaticResource StandardComboBox}"
             ToolTip="Specify whether you want the parameter value to match the rule completely, just at the beginning or anywhere within its value.">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Converter={StaticResource EnumConverter}}" />
+                    <TextBlock Text="{Binding}" />
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
@@ -270,11 +270,12 @@
                 Height="24"
                 Margin="0,0,0,10"
                 VerticalAlignment="Bottom"
-                SelectedItem="{Binding SelectedRuleTypes, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource EnumConverter}}"
+                ItemsSource="{Binding RuleTypes}"
+                SelectedItem="{Binding SelectedRuleTypes, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                 Style="{StaticResource StandardComboBox}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding Converter={StaticResource EnumConverter}}" />
+                        <TextBlock Text="{Binding}" />
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
@@ -284,7 +285,7 @@
                 Height="24"
                 Margin="5,0,0,10"
                 VerticalAlignment="Bottom"
-                Click="ButtonAddRulePart_Click"
+                Command="{Binding AddRulePartCommand}"
                 Style="{StaticResource AddItemButton}" />
             <Button
                 Name="ButtonMoveRulePartUp"
@@ -292,8 +293,7 @@
                 Height="24"
                 Margin="3,0,0,10"
                 VerticalAlignment="Bottom"
-                Click="ReorderUpButton_Click"
-                IsEnabled="False"
+                Command="{Binding MoveRulePartUpCommand}"
                 Style="{StaticResource ReorderUpButton}" />
             <Button
                 Name="ButtonMoveRulePartDown"
@@ -301,8 +301,7 @@
                 Height="24"
                 Margin="3,0,0,10"
                 VerticalAlignment="Bottom"
-                Click="ReorderDownButton_Click"
-                IsEnabled="False"
+                Command="{Binding MoveRulePartDownCommand}"
                 Style="{StaticResource ReorderDownButton}" />
         </StackPanel>
 
@@ -321,9 +320,8 @@
                     Name="ListBoxRuleParts"
                     HorizontalAlignment="Stretch"
                     HorizontalContentAlignment="Stretch"
-                    ItemsSource="{Binding RegexRuleParts}"
+                    ItemsSource="{Binding StagingRule.RegexRuleParts}"
                     SelectedIndex="0"
-                    SelectionChanged="ListBoxRuleParts_OnSelectionChanged"
                     Style="{StaticResource StandardListBox}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
@@ -350,8 +348,6 @@
                                     Margin="5,0,0,0"
                                     HorizontalAlignment="Left"
                                     FontSize="13"
-                                    GotFocus="RegexRulePartTypeTextBox_OnGotFocus"
-                                    LostFocus="RegexRulePartTypeTextBox_OnLostFocus"
                                     Style="{StaticResource RulePartTextBox}"
                                     Text="{Binding DisplayText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                 <Button
@@ -360,7 +356,6 @@
                                     Width="35"
                                     Height="15"
                                     HorizontalAlignment="Left"
-                                    Click="ButtonEditRulePart_Click"
                                     Content="{Binding EditButtonDisplayText}"
                                     Style="{StaticResource EditRulePartButton}" />
                                 <TextBlock
@@ -392,7 +387,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
                                     Background="{StaticResource WindowBackgroundColor}"
-                                    IsChecked="{Binding IsOptional}"/>
+                                    IsChecked="{Binding IsOptional}" />
                                 <Button
                                     Name="ButtonDeleteRegexRulePart"
                                     Grid.Column="6"
@@ -401,7 +396,7 @@
                                     Margin="0,0,-3,0"
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Center"
-                                    Click="ButtonDeleteRegexRulePart_OnClick"
+                                    Command="{Binding Path=DeleteRulePartCommand, RelativeSource={RelativeSource AncestorType={x:Type vm:RuleEditorMockViewModel}}}"
                                     Style="{StaticResource DeleteItemButton}" />
                             </Grid>
                         </DataTemplate>
@@ -417,8 +412,8 @@
             HorizontalAlignment="Left"
             VerticalAlignment="Bottom"
             Style="{StaticResource StandardText}"
-            Text="Example: "
-            Visibility="Hidden" />
+            Text="{Binding CompliantExample, UpdateSourceTrigger=PropertyChanged}"
+            Visibility="{Binding CompliantExampleVisibility}" />
         <Button
             Name="ButtonTest"
             Grid.Row="9"
@@ -427,7 +422,7 @@
             Height="25"
             HorizontalAlignment="Left"
             VerticalAlignment="Bottom"
-            Click="ButtonTest_OnClick"
+            Command="{Binding GenerateCompliantExampleCommand}"
             Content="Test"
             Style="{StaticResource StandardButton}"
             ToolTip="Press the button to generate random examples which are compliant with the rule parts you selected." />
@@ -437,7 +432,7 @@
             Grid.Column="1"
             Width="80"
             Height="25"
-            Margin="0,10,85,0"
+            Margin="0,10,90,0"
             HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
             Click="ButtonCancel_Click"
@@ -452,7 +447,7 @@
             Margin="0,10,0,0"
             HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
-            Click="ButtonOK_Click"
+            Command="{Binding SubmitRuleCommand}"
             Content="OK"
             Style="{StaticResource StandardButton}" />
         <Button
@@ -461,23 +456,22 @@
             Grid.Column="3"
             Width="85"
             Height="25"
-            Margin="0,0,90,0"
+            Margin="0,0,0,0"
             HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
-            Click="ButtonSelectAll_Click"
+            Command="{Binding SelectAllCategoriesCommand}"
             Content="Select All"
             Style="{StaticResource StandardButton}" />
         <Button
             Name="ButtonSelectNone"
             Grid.Row="9"
-            Grid.Column="3"
+            Grid.Column="1"
             Width="85"
             Height="25"
-            Margin="0,10,0,0"
             HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
-            Click="ButtonSelectNone_Click"
-            Content="Select None"
+            Command="{Binding SelectNoneCategoriesCommand}"
+            Content="OK"
             Style="{StaticResource StandardButton}" />
     </Grid>
 </Window>

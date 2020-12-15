@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using Regular.ViewModel;
 
-namespace Regular.Model
+namespace Regular.Models
 {
     internal class DmUpdaters
     {

@@ -4,9 +4,8 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.DB.Events;
 using Application = Autodesk.Revit.ApplicationServices.Application;
-using Regular.ViewModel;
 using Regular.Services;
-using Regular.Model;
+using Regular.Models;
 
 namespace Regular
 {
@@ -39,7 +38,7 @@ namespace Regular
         private static void RegisterDocument(Document document)
         {
             // If the document has an existing GUID saved to ExtensibleStorage we retrieve this, otherwise we register it with a new GUID
-            string documentGuid = ExtensibleStorageServices.GetDocumentGuidFromExtensibleStorage(document) ?? ExtensibleStorageServices.RegisterDocumentGuidToExtensibleStorage(document);
+            string documentGuid = DocumentGuidServices.GetDocumentGuidFromExtensibleStorage(document) ?? DocumentGuidServices.RegisterDocumentGuidToExtensibleStorage(document);
 
             // Creates an accessible, stable reference to the Revit document
             RevitDocumentCache[documentGuid] = document;
@@ -62,7 +61,7 @@ namespace Regular
         }
         private static void DeRegisterDocument(Document document)
         {
-            string documentGuid = ExtensibleStorageServices.GetDocumentGuidFromExtensibleStorage(document) ?? ExtensibleStorageServices.RegisterDocumentGuidToExtensibleStorage(document);
+            string documentGuid = DocumentGuidServices.GetDocumentGuidFromExtensibleStorage(document) ?? DocumentGuidServices.RegisterDocumentGuidToExtensibleStorage(document);
 
             // We can remove all of the triggers
             UpdaterId updaterId = DmUpdaters.AllUpdaters[documentGuid].GetUpdaterId();

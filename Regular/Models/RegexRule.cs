@@ -4,15 +4,14 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using Regular.Enums;
-using Regular.Model;
 using Regular.Services;
 
-namespace Regular.ViewModel
+namespace Regular.Models
 {
     public class RegexRule : INotifyPropertyChanged
     {
         private string ruleName;
-        private ObservableCollection<CategoryObject> targetCategoryIds;
+        private ObservableCollection<CategoryObject> targetCategoryObjects;
         private ObservableCollection<RegexRulePart> regexRuleParts;
         private ParameterObject trackingParameterObject;
         private ParameterObject outputParameterObject;
@@ -33,13 +32,13 @@ namespace Regular.ViewModel
         public string DateTimeCreated { get; private set; }
         public string CreatedBy { get; private set; }
         public string RuleGuid { get; private set; }
-        public ObservableCollection<CategoryObject> TargetCategoryIds
+        public ObservableCollection<CategoryObject> TargetCategoryObjects
         {
-            get => targetCategoryIds;
+            get => targetCategoryObjects;
             set
             {
-                targetCategoryIds = value;
-                NotifyPropertyChanged("TargetCategoryIds");
+                targetCategoryObjects = value;
+                NotifyPropertyChanged("TargetCategoryObjects");
             }
         }
 
@@ -66,7 +65,7 @@ namespace Regular.ViewModel
             get
             {
                 toolTipString = $"Rule RuleName: {RuleName}" + Environment.NewLine +
-                                $"Applies To: {String.Join(", ", TargetCategoryIds.Select(x => x.CategoryObjectId))}" + Environment.NewLine +
+                                $"Applies To: {String.Join(", ", TargetCategoryObjects.Select(x => x.CategoryObjectId))}" + Environment.NewLine +
                                 $"Tracks Parameter : {TrackingParameterObject}" + Environment.NewLine +
                                 $"Regex String: {RegexString}" + Environment.NewLine +
                                 $"Writes To : {OutputParameterObject}" + Environment.NewLine +
@@ -78,7 +77,7 @@ namespace Regular.ViewModel
             {
                 toolTipString = value;
                 NotifyPropertyChanged("RuleName");
-                NotifyPropertyChanged("TargetCategoryIds");
+                NotifyPropertyChanged("TargetCategoryObjects");
                 NotifyPropertyChanged("TrackingParameterObject");
                 NotifyPropertyChanged("OutputParameterObject");
                 NotifyPropertyChanged("ToolTip");
@@ -127,10 +126,10 @@ namespace Regular.ViewModel
         {
             return new RegexRule()
             {
-                // If given a GUID, a rule is being recreated, otherwise a new rule is being created
+                // If given a GUID, a rule is being recreated from memory, otherwise a new rule is being created
                 RuleGuid = guid ?? Guid.NewGuid().ToString(),
                 RuleName = "",
-                TargetCategoryIds = CategoryObject.GetInitialCategories(documentGuid),
+                TargetCategoryObjects = CategoryServices.GetInitialCategories(documentGuid),
                 TrackingParameterObject = new ParameterObject { ParameterObjectId = -1, ParameterObjectName = "" },
                 OutputParameterObject = new ParameterObject { ParameterObjectId = -1, ParameterObjectName = "" },
                 MatchType = MatchType.ExactMatch,
@@ -150,7 +149,7 @@ namespace Regular.ViewModel
             DmTriggerServices.AddTrigger(documentGuid, regexRule);
             
             // TODO: Check this rule is created as we want
-            ParameterServices.CreateProjectParameter(documentGuid, regexRule.OutputParameterObject.ParameterObjectName, regexRule.TargetCategoryIds);
+            ParameterServices.CreateProjectParameter(documentGuid, regexRule.OutputParameterObject.ParameterObjectName, regexRule.TargetCategoryObjects);
         }
         public static RegexRule Duplicate(string documentGuid, RegexRule sourceRegexRule)
         {
@@ -165,7 +164,7 @@ namespace Regular.ViewModel
             // Returns a copy of an existing RegexRule, but with a new GUID
             RegexRule duplicateRegexRule = Create(documentGuid);
             duplicateRegexRule.RuleName = GenerateRegexRuleDuplicateName();
-            duplicateRegexRule.TargetCategoryIds = sourceRegexRule.TargetCategoryIds;
+            duplicateRegexRule.TargetCategoryObjects = sourceRegexRule.TargetCategoryObjects;
             duplicateRegexRule.TrackingParameterObject = sourceRegexRule.TrackingParameterObject;
             duplicateRegexRule.OutputParameterObject = sourceRegexRule.OutputParameterObject;
             duplicateRegexRule.MatchType = sourceRegexRule.MatchType;
@@ -196,7 +195,7 @@ namespace Regular.ViewModel
             if (existingRegexRule == null) return;
 
             existingRegexRule.RuleName = newRegexRule.RuleName;
-            existingRegexRule.TargetCategoryIds = newRegexRule.TargetCategoryIds;
+            existingRegexRule.TargetCategoryObjects = newRegexRule.TargetCategoryObjects;
             existingRegexRule.TrackingParameterObject = newRegexRule.TrackingParameterObject;
             existingRegexRule.OutputParameterObject = newRegexRule.OutputParameterObject;
             existingRegexRule.MatchType = newRegexRule.MatchType;

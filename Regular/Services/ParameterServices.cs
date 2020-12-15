@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using Regular.ViewModel;
+using Regular.Models;
 
 namespace Regular.Services
 {
@@ -19,7 +19,7 @@ namespace Regular.Services
             // This creates a temporary shared parameters file, a temporary shared parameter
             // It then binds this back to the model as an InstanceBinding and deletes the temporary stuff
 
-            Document document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
+            Document document = DocumentGuidServices.GetRevitDocumentByGuid(documentGuid);
             const BuiltInParameterGroup builtInParameterGroup = BuiltInParameterGroup.PG_IDENTITY_DATA;
             const ParameterType parameterType = ParameterType.YesNo;
 
@@ -27,7 +27,7 @@ namespace Regular.Services
 
             List<ElementId> targetCategoryIds = targetCategoryObjects.Where(x => x.IsChecked).Select(x => new ElementId(x.CategoryObjectId)).ToList();
             List<Category> categories = targetCategoryIds.Select(x => Category.GetCategory(document, x)).ToList();
-            CategorySet categorySet = CategoryServices.GetCategorySetFromList(categories);
+            CategorySet categorySet = CategoryServices.ConvertListToCategorySet(categories);
                         
             using (Transaction transaction = new Transaction(document, $"Regular - Creating New Project Parameter {parameterName}")) 
             {
@@ -71,7 +71,7 @@ namespace Regular.Services
                 .Select(x => new ElementId(x))
                 .ToList();
             
-            Document document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
+            Document document = DocumentGuidServices.GetRevitDocumentByGuid(documentGuid);
             List<ElementId> parameterIds = ParameterFilterUtilities.GetFilterableParametersInCommon(document, categoryIds).ToList();
             
             foreach (ElementId parameterId in parameterIds)

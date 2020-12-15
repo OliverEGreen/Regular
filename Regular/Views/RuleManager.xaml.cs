@@ -3,11 +3,11 @@ using System.Windows.Controls;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Autodesk.Revit.DB;
-using Regular.Model;
+using Regular.Models;
 using Regular.Services;
-using Regular.ViewModel;
+using Regular.ViewModels;
 
-namespace Regular.View
+namespace Regular.Views
 {
     public partial class RuleManager
     {
@@ -17,9 +17,10 @@ namespace Regular.View
         public RuleManager(string documentGuid)
         {
             InitializeComponent();
+            DataContext = new RuleManagerViewModel();
             DocumentGuid = documentGuid;
             ListBoxRegexRules.ItemsSource = RegexRules.AllRegexRules[documentGuid];
-            Document = DocumentServices.GetRevitDocumentByGuid(documentGuid);
+            Document = DocumentGuidServices.GetRevitDocumentByGuid(documentGuid);
 
             // Gives us the ability to close the window with the Esc kay
             PreviewKeyDown += (s, e) => { if (e.Key == Key.Escape) Close(); };
@@ -27,7 +28,10 @@ namespace Regular.View
 
         private void ButtonAddNewRule_Click(object sender, RoutedEventArgs e)
         {
-            RuleEditor ruleEditor = new RuleEditor(DocumentServices.GetRevitDocumentGuid(Document), RegexRule.Create(DocumentGuid));
+            // No second argument is provided, we'll work with a brand new rule
+            RuleEditor ruleEditor = new RuleEditor(DocumentGuidServices.GetDocumentGuidFromExtensibleStorage(Document));
+            
+            // When the editor closes, the manager will automatically close as well
             ruleEditor.Closed += RuleEditor_Closed;
             ruleEditor.ShowDialog();
         }
@@ -59,8 +63,14 @@ namespace Regular.View
         }
         private void ButtonDuplicateRule_OnClick(object sender, RoutedEventArgs e)
         {
-            RegexRule regexRule = RegexRule.Duplicate(DocumentGuid, (RegexRule) ListBoxRegexRules.SelectedItem);
-            RuleEditor ruleEditor = new RuleEditor(DocumentGuid, regexRule);
+            // Duplicates an existing rule for easier rule creation
+            RuleEditor ruleEditor = new RuleEditor
+            (
+                DocumentGuidServices.GetDocumentGuidFromExtensibleStorage(Document),
+                // We create a copy of the rule. The editor will work with a staging copy but that's fine
+                // As this rule will get created anew when it's submitted
+                RegexRule.Duplicate(DocumentGuid, (RegexRule)ListBoxRegexRules.SelectedItem)
+            );
             ruleEditor.ShowDialog();
         }
         private void ButtonStopStartRule_OnClick(object sender, RoutedEventArgs e)
@@ -74,8 +84,12 @@ namespace Regular.View
         private void EditRegexRuleButton_Click(object sender, RoutedEventArgs e)
         {
             if (!(sender is Button button)) return;
-            RegexRule regexRule = ((RegexRule)button.DataContext);
-            RuleEditor ruleEditor = new RuleEditor(DocumentServices.GetRevitDocumentGuid(Document), regexRule);
+            // We open up the editor with the existing rule
+            RuleEditor ruleEditor = new RuleEditor
+            (
+                DocumentGuidServices.GetDocumentGuidFromExtensibleStorage(Document),
+                (RegexRule)button.DataContext
+            );
             ruleEditor.ShowDialog();
         }
         private void DeleteRegexRuleButton_Click(object sender, RoutedEventArgs e)

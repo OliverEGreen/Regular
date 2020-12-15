@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Regular.ViewModel
+namespace Regular.Models
 {
     public class ParameterObject : INotifyPropertyChanged
     {
