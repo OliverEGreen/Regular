@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Linq;
 using System.Windows.Input;
-using Regular.Models;
 using Regular.Services;
 using Regular.ViewModels;
 
@@ -17,13 +15,14 @@ namespace Regular.Commands
         }
         public bool CanExecute(object parameter)
         {
-            return ruleEditorViewModel.StagingRule.RegexRuleParts.Count > 0;
+            return true;
+            //return ruleEditorViewModel.StagingRule.RegexRuleParts.Count > 0;
         }
 
         public void Execute(object parameter)
         {
-            //TODO: Ascertain the rule part being sent to be deleted and remove this 
-            ruleEditorViewModel.StagingRule.RegexRuleParts.Remove(ruleEditorViewModel.StagingRule.RegexRuleParts.FirstOrDefault());
+            if (ruleEditorViewModel.SelectedRegexRulePart == null) return;
+            ruleEditorViewModel.StagingRule.RegexRuleParts.Remove(ruleEditorViewModel.SelectedRegexRulePart);
             ruleEditorViewModel.CompliantExample = RegexAssembly.GenerateRandomExample(ruleEditorViewModel.StagingRule.RegexRuleParts);
         }
 

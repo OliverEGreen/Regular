@@ -21,7 +21,8 @@ namespace Regular.Commands
 
         public void Execute(object parameter)
         {
-            RegexRulePart regexRulePart = new RegexRulePart(ruleEditorViewModel.SelectedRegexRulePartType);
+            RegexRulePart regexRulePart = new RegexRulePart(ruleEditorViewModel.SelectedRuleType);
+            ruleEditorViewModel.SelectedRegexRulePart = regexRulePart;
             ruleEditorViewModel.StagingRule.RegexRuleParts.Add(regexRulePart);
             ruleEditorViewModel.CompliantExample = RegexAssembly.GenerateRandomExample(ruleEditorViewModel.StagingRule.RegexRuleParts);
         }

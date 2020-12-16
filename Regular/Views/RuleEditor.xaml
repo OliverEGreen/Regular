@@ -3,7 +3,6 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:Regular.Converters"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="clr-namespace:Regular.ViewModels"
     Title=" Rule Editor"
@@ -20,12 +19,7 @@
     mc:Ignorable="d">
     <!--  d:DataContext="{d:DesignInstance vm:RuleEditorMockViewModel,IsDesignTimeCreatable=True}"  -->
     <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../Resources/RegularStyles.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-            <local:EnumDescriptionConverter x:Key="EnumConverter" />
-        </ResourceDictionary>
+        <ResourceDictionary Source="../Resources/RegularStyles.xaml" />
     </Window.Resources>
     <Grid Margin="15">
         <Grid.RowDefinitions>
@@ -277,7 +271,7 @@
                 DisplayMemberPath="Key"
                 ItemsSource="{Binding RulesTypeDict}"
                 SelectedIndex="0"
-                SelectedValue="{Binding SelectedRegexRulePartType, UpdateSourceTrigger=PropertyChanged}"
+                SelectedValue="{Binding SelectedRuleType, UpdateSourceTrigger=PropertyChanged}"
                 SelectedValuePath="Value"
                 Style="{StaticResource StandardComboBox}">
                 <!--<ComboBox.ItemTemplate>
@@ -329,6 +323,7 @@
                     HorizontalContentAlignment="Stretch"
                     ItemsSource="{Binding StagingRule.RegexRuleParts}"
                     SelectedIndex="0"
+                    SelectedItem="{Binding SelectedRegexRulePart}"
                     Style="{StaticResource StandardListBox}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
@@ -402,7 +397,7 @@
                                     Margin="0,0,-3,0"
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Center"
-                                    Command="{Binding Path=DeleteRulePartCommand, RelativeSource={RelativeSource AncestorType={x:Type vm:RuleEditorMockViewModel}}}"
+                                    Command="{Binding Path=DataContext.DeleteRulePartCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"
                                     Style="{StaticResource DeleteItemButton}" />
                             </Grid>
                         </DataTemplate>
