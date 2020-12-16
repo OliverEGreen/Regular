@@ -41,7 +41,18 @@ namespace Regular.ViewModels
         public SelectNoneCategoriesCommand SelectNoneCategoriesCommand { get; }
 
         // Control-based properties
-        public RuleType SelectedRegexRulePartType { get; set; } // Bound to the selected value in the UI ComboBox
+        private RuleType selectedRegexRulePartType;
+        public RuleType SelectedRegexRulePartType
+        {
+            get => selectedRegexRulePartType;
+            set
+            {
+                selectedRegexRulePartType = value;
+                MessageBox.Show("Changed!");
+                NotifyPropertyChanged("SelectedRegexRulePartType");
+            }
+        }
+        public Dictionary<string, RuleType> RulesTypeDict { get; }
         public IEnumerable<RuleType> RuleTypes { get; set; } = Enum.GetValues(typeof(RuleType)).Cast<RuleType>();
         public IEnumerable<MatchType> MatchTypes { get; set; } = Enum.GetValues(typeof(MatchType)).Cast<MatchType>();
         public ObservableCollection<ParameterObject> PossibleTrackingParameters { get; set; } = new ObservableCollection<ParameterObject>();
@@ -109,6 +120,15 @@ namespace Regular.ViewModels
             SelectAllCategoriesCommand = new SelectAllCategoriesCommand(this);
             SelectNoneCategoriesCommand = new SelectNoneCategoriesCommand(this);
             CategoriesPanelButtonText = "Show Categories";
+
+            RulesTypeDict = new Dictionary<string, RuleType>
+            {
+                {"Any Alphanumeric", RuleType.AnyCharacter},
+                {"Any Digit", RuleType.AnyDigit},
+                {"Any Letter", RuleType.AnyLetter},
+                {"Free Text", RuleType.FreeText},
+                {"Selection Set", RuleType.SelectionSet}
+            };
 
             if (InputRule == null) return;
             void LoadExistingRule()
