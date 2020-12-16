@@ -19,15 +19,16 @@ namespace Regular.ViewModels
         // We can use ICommands to validate whether edits proposed to the 'sketch copy' are valid.
         // Upon pressing OK, we can update the existing rule (or create it from scratch if we're making a new one).
         // We need an unsaved 'sketch copy' to work with if editing an existing rule - our "Staging Rule".
-
+        
+        // The document we're editing rules within
+        public string DocumentGuid { get; set; }
+        
         // The original rule object, used if updating the original rule using staging rule values
         public RegexRule InputRule { get; set; }
         // Our staging rule, either a new rule or a copy of an existing rule
         public RegexRule StagingRule { get; set; }
-        public string DocumentGuid { get; set; }
-
         // Saving the original rule's GUID if editing an existing rule
-        public bool EditingExistingRule { get; set; } = false;
+        public bool EditingExistingRule { get; set; }
 
         // ICommands
         public AddRulePartCommand AddRulePartCommand { get; }
@@ -53,7 +54,6 @@ namespace Regular.ViewModels
         }
 
         private RegexRulePart selectedRegexRulePart;
-
         public RegexRulePart SelectedRegexRulePart
         {
             get => selectedRegexRulePart;
@@ -96,11 +96,58 @@ namespace Regular.ViewModels
         public int NumberCategoriesSelected { get; set; } = 0;
         public bool OutputParameterNameInputEnabled { get; set; } = true;
         public bool CategoriesPanelExpanded { get; set; } = false;
-        public string CategoriesPanelButtonText { get; set; }
-        public GridLength ColumnCategoriesPanelWidth { get; set; } = new GridLength(0);
-        public GridLength ColumnMarginWidth { get; set; } = new GridLength(0);
-        public int WindowMinWidth { get; set; } = 436;
-        public int WindowMaxWidth { get; set; } = 436;
+        private string categoriesPanelButtonText;
+        public string CategoriesPanelButtonText
+        {
+            get => categoriesPanelButtonText;
+            set
+            {
+                categoriesPanelButtonText = value;
+                NotifyPropertyChanged("CategoriesPanelButtonText");
+            }
+        }
+        private GridLength columnCategoriesPanelWidth;
+        public GridLength ColumnCategoriesPanelWidth
+        {
+            get => columnCategoriesPanelWidth;
+            set
+            {
+                columnCategoriesPanelWidth = value;
+                NotifyPropertyChanged("ColumnCategoriesPanelWidth");
+            }
+        }
+        private GridLength columnMarginWidth;
+        public GridLength ColumnMarginWidth
+        {
+            get => columnMarginWidth;
+            set
+            {
+                columnMarginWidth = value;
+                NotifyPropertyChanged("ColumnMarginWidth");
+            }
+        }
+
+        private int windowMinWidth;
+        public int WindowMinWidth
+        {
+            get => windowMinWidth;
+            set
+            {
+                windowMinWidth = value;
+                NotifyPropertyChanged("WindowMinWidth");
+            }
+        }
+
+        private int windowMaxWidth;
+        public int WindowMaxWidth
+        {
+            get => windowMaxWidth;
+            set
+            {
+                windowMaxWidth = value;
+                NotifyPropertyChanged("WindowMaxWidth");
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string propertyName)
@@ -130,6 +177,11 @@ namespace Regular.ViewModels
             SelectAllCategoriesCommand = new SelectAllCategoriesCommand(this);
             SelectNoneCategoriesCommand = new SelectNoneCategoriesCommand(this);
             CategoriesPanelButtonText = "Show Categories";
+
+            WindowMinWidth = 436;
+            WindowMaxWidth = 436;
+            ColumnCategoriesPanelWidth = new GridLength(0);
+            ColumnMarginWidth = new GridLength(0);
 
             RulesTypeDict = new Dictionary<string, RuleType>
             {
