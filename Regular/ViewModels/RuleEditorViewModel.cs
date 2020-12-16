@@ -41,19 +41,29 @@ namespace Regular.ViewModels
         public SelectNoneCategoriesCommand SelectNoneCategoriesCommand { get; }
 
         // Control-based properties
-        private RuleType selectedRegexRulePartType;
-        public RuleType SelectedRegexRulePartType
+        private RuleType selectedRuleType;
+        public RuleType SelectedRuleType
         {
-            get => selectedRegexRulePartType;
+            get => selectedRuleType;
             set
             {
-                selectedRegexRulePartType = value;
-                MessageBox.Show("Changed!");
-                NotifyPropertyChanged("SelectedRegexRulePartType");
+                selectedRuleType = value;
+                NotifyPropertyChanged("SelectedRuleType");
+            }
+        }
+
+        private RegexRulePart selectedRegexRulePart;
+
+        public RegexRulePart SelectedRegexRulePart
+        {
+            get => selectedRegexRulePart;
+            set
+            {
+                selectedRegexRulePart = value;
+                NotifyPropertyChanged("SelectedRegexRulePart");
             }
         }
         public Dictionary<string, RuleType> RulesTypeDict { get; }
-        public IEnumerable<RuleType> RuleTypes { get; set; } = Enum.GetValues(typeof(RuleType)).Cast<RuleType>();
         public IEnumerable<MatchType> MatchTypes { get; set; } = Enum.GetValues(typeof(MatchType)).Cast<MatchType>();
         public ObservableCollection<ParameterObject> PossibleTrackingParameters { get; set; } = new ObservableCollection<ParameterObject>();
         public ParameterObject TrackingParameter { get; set; }
@@ -86,7 +96,7 @@ namespace Regular.ViewModels
         public int NumberCategoriesSelected { get; set; } = 0;
         public bool OutputParameterNameInputEnabled { get; set; } = true;
         public bool CategoriesPanelExpanded { get; set; } = false;
-        public string CategoriesPanelButtonText { get; set; } = "Show Categories";
+        public string CategoriesPanelButtonText { get; set; }
         public GridLength ColumnCategoriesPanelWidth { get; set; } = new GridLength(0);
         public GridLength ColumnMarginWidth { get; set; } = new GridLength(0);
         public int WindowMinWidth { get; set; } = 436;

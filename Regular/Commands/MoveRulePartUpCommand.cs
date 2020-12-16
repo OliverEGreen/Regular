@@ -17,18 +17,15 @@ namespace Regular.Commands
         }
         public bool CanExecute(object parameter)
         {
-            return true;
-            //TODO: Need to validate whether we can move the rule part up, check index isn't 0
-            ListBox rulePartsListBox = parameter as ListBox;
-            RegexRulePart regexRulePart =  rulePartsListBox.SelectedItem as RegexRulePart;
+            if (ruleEditorViewModel.SelectedRegexRulePart == null) return false;
+            RegexRulePart regexRulePart = ruleEditorViewModel.SelectedRegexRulePart;
             int index = ruleEditorViewModel.StagingRule.RegexRuleParts.IndexOf(regexRulePart);
             return index > 0;
         }
 
         public void Execute(object parameter)
         {
-            ListBox rulePartsListBox = parameter as ListBox;
-            RegexRulePart regexRulePart = rulePartsListBox.SelectedItem as RegexRulePart;
+            RegexRulePart regexRulePart = ruleEditorViewModel.SelectedRegexRulePart;
             int index = ruleEditorViewModel.StagingRule.RegexRuleParts.IndexOf(regexRulePart);
             
             ruleEditorViewModel.StagingRule.RegexRuleParts.RemoveAt(index);
