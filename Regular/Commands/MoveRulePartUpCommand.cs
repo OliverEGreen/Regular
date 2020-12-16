@@ -30,6 +30,7 @@ namespace Regular.Commands
             
             ruleEditorViewModel.StagingRule.RegexRuleParts.RemoveAt(index);
             ruleEditorViewModel.StagingRule.RegexRuleParts.Insert(index - 1, regexRulePart);
+            ruleEditorViewModel.SelectedRegexRulePart = ruleEditorViewModel.StagingRule.RegexRuleParts[index - 1];
             // ListBoxRuleParts.Focus();
             // ListBoxRuleParts.SelectedItem = regexRulePart;
         }
