@@ -79,10 +79,11 @@
     <Compile Include="Commands\DeleteRulePartCommand.cs" />
     <Compile Include="Commands\AddRulePartCommand.cs" />
     <Compile Include="Commands\TriggerCategoryPanelCommand.cs" />
+    <Compile Include="Converters\EnumDescriptionConverter.cs" />
     <Compile Include="DesignData\DesignTimeData.cs" />
     <Compile Include="Enums\MatchType.cs" />
+    <Compile Include="Enums\RuleTypesDict.cs" />
     <Compile Include="Models\DMUpdaters.cs" />
-    <Compile Include="Converters\EnumValueConverter.cs" />
     <Compile Include="Services\AppRibbonServices.cs" />
     <Compile Include="Services\DeserializationServices.cs" />
     <Compile Include="Services\DMTriggerServices.cs" />

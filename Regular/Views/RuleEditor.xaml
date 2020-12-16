@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Regular.Converters"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="clr-namespace:Regular.ViewModels"
     Title=" Rule Editor"
@@ -19,12 +20,14 @@
     mc:Ignorable="d">
     <!--  d:DataContext="{d:DesignInstance vm:RuleEditorMockViewModel,IsDesignTimeCreatable=True}"  -->
     <Window.Resources>
-        <ResourceDictionary Source="../Resources/RegularStyles.xaml" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Resources/RegularStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <local:EnumDescriptionConverter x:Key="EnumConverter" />
+        </ResourceDictionary>
     </Window.Resources>
     <Grid Margin="15">
-        <Grid.Resources>
-            <BooleanToVisibilityConverter x:Key="VisibleIfTrueConverter" />
-        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="10" />
             <RowDefinition Height="30" />
@@ -242,7 +245,7 @@
             VerticalAlignment="Center"
             ItemsSource="{Binding MatchTypes}"
             SelectedIndex="0"
-            SelectedItem="{Binding StagingRUle.MatchType, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+            SelectedItem="{Binding StagingRule.MatchType, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
             Style="{StaticResource StandardComboBox}"
             ToolTip="Specify whether you want the parameter value to match the rule completely, just at the beginning or anywhere within its value.">
             <ComboBox.ItemTemplate>
@@ -271,14 +274,17 @@
                 Height="24"
                 Margin="0,0,0,10"
                 VerticalAlignment="Bottom"
-                ItemsSource="{Binding RuleTypes}"
-                SelectedItem="{Binding SelectedRuleTypes, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                DisplayMemberPath="Key"
+                ItemsSource="{Binding RulesTypeDict}"
+                SelectedIndex="0"
+                SelectedValue="{Binding SelectedRegexRulePartType, UpdateSourceTrigger=PropertyChanged}"
+                SelectedValuePath="Value"
                 Style="{StaticResource StandardComboBox}">
-                <ComboBox.ItemTemplate>
+                <!--<ComboBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" />
+                        <TextBlock Text="{Binding Converter={StaticResource EnumConverter}}" />
                     </DataTemplate>
-                </ComboBox.ItemTemplate>
+                </ComboBox.ItemTemplate>-->
             </ComboBox>
             <Button
                 Name="ButtonAddRulePart"
@@ -374,8 +380,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
                                     Background="{StaticResource WindowBackgroundColor}"
-                                    IsChecked="{Binding IsCaseSensitive}"
-                                    Visibility="{Binding IsCaseSensitiveCheckboxVisible, Converter={StaticResource VisibleIfTrueConverter}}" />
+                                    IsChecked="{Binding IsCaseSensitive}" />
                                 <TextBlock
                                     Grid.Column="4"
                                     Margin="10,0,0,0"

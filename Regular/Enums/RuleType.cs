@@ -1,18 +1,19 @@
 ﻿using System.ComponentModel;
+using Regular.Converters;
 
 namespace Regular.Enums
 {
     public enum RuleType
     {
-        [Description("Any Character (A-Z, 0-9)")]
-        AnyCharacter,
+        [Description("Any Alphanumeric (A-Z, 0-9)")]
+        AnyCharacter = 0,
         [Description("Any Digit (0-9)")]
-        AnyDigit,
+        AnyDigit = 1,
         [Description("Any Letter (A-Z)")]
-        AnyLetter,
+        AnyLetter = 2,
         [Description("Free Text")]
-        FreeText,
+        FreeText = 3,
         [Description("Selection Set")]
-        SelectionSet
+        SelectionSet = 4
     }
 }
