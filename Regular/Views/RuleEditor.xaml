@@ -16,6 +16,7 @@
     SizeToContent="WidthAndHeight"
     Style="{DynamicResource StandardWindow}"
     WindowStartupLocation="CenterScreen"
+    Loaded="RuleEditor_OnLoaded"
     mc:Ignorable="d">
     <!--  d:DataContext="{d:DesignInstance vm:RuleEditorMockViewModel,IsDesignTimeCreatable=True}"  -->
     <Window.Resources>
@@ -44,14 +45,15 @@
             Name="TextBoxUserFeedback"
             Grid.Row="0"
             Grid.Column="0"
-            Grid.ColumnSpan="3"
+            Grid.ColumnSpan="4"
             Height="25"
             Margin="-15,-15,-15,0"
             Padding="12,4,10,3"
             VerticalAlignment="Top"
             Background="{StaticResource BackgroundColorWarning}"
             Style="{StaticResource WarningText}"
-            Visibility="Hidden" />
+            Text="{Binding UserFeedbackText, UpdateSourceTrigger=PropertyChanged}"
+            Visibility="{Binding UserFeedbackTextVisibility, UpdateSourceTrigger=PropertyChanged}" />
         <Label
             Grid.Row="1"
             Grid.Column="0"
@@ -68,7 +70,8 @@
             VerticalContentAlignment="Center"
             MaxLength="30"
             Style="{StaticResource StandardTextBox}"
-            Text="{Binding StagingRule.RuleName}"
+            Text="{Binding StagingRule.RuleName, UpdateSourceTrigger=PropertyChanged}"
+            TextChanged="TextBoxNameYourRuleInput_OnTextChanged"
             ToolTip="Define a reference ruleName for the rule you're creating." />
         <TextBlock
             Name="TextblockNameYourRuleWatermark"
@@ -80,7 +83,8 @@
             FontSize="12"
             FontWeight="Regular"
             Foreground="{StaticResource FontColorWatermarkGrey}"
-            IsHitTestVisible="False">
+            IsHitTestVisible="False"
+            Text="Enter a rule name">
             <TextBlock.Style>
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="Visibility" Value="Collapsed" />
@@ -148,6 +152,8 @@
                                     x:Name="CategoryCheckBox"
                                     Width="20"
                                     VerticalAlignment="Center"
+                                    Command="{Binding Path=DataContext.TriggerCategoryCheckedCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"
+                                    CommandParameter="{Binding CategoryObjectId}"
                                     IsChecked="{Binding IsChecked}" />
                                 <TextBlock VerticalAlignment="Center" Text="{Binding CategoryObjectName}" />
                             </StackPanel>
@@ -170,9 +176,12 @@
             Grid.Column="1"
             VerticalAlignment="Center"
             DisplayMemberPath="ParameterObjectName"
-            ItemsSource="{Binding PossibleTrackingParameters}"
+            ItemsSource="{Binding PossibleTrackingParameterObjects, UpdateSourceTrigger=PropertyChanged}"
             SelectedIndex="0"
-            Style="{StaticResource StandardComboBox}" />
+            SelectedItem="{Binding SelectedTrackingParameterObject, UpdateSourceTrigger=PropertyChanged}"
+            SelectedValuePath="ParameterObjectId"
+            Style="{StaticResource StandardComboBox}"
+            Text="{Binding ComboBoxTrackingParameterText, UpdateSourceTrigger=PropertyChanged}" />
         <Label
             Grid.Row="4"
             Grid.Column="0"
@@ -189,7 +198,8 @@
             VerticalContentAlignment="Center"
             MaxLength="30"
             Style="{StaticResource StandardTextBox}"
-            Text="{Binding StagingRule.TrackingParameterObject.ParameterObjectName, Mode=TwoWay}"
+            Text="{Binding StagingRule.OutputParameterObject.ParameterObjectName, UpdateSourceTrigger=PropertyChanged}"
+            TextChanged="TextBoxOutputParameterNameInput_OnTextChanged"
             ToolTip="This is the project parameter Regular will auto-create and write its validation output to." />
         <TextBlock
             Name="TextblockOutputParameterWatermark"
@@ -202,7 +212,7 @@
             FontWeight="Regular"
             Foreground="{StaticResource FontColorWatermarkGrey}"
             IsHitTestVisible="False"
-            Text="Select Parameter">
+            Text="Enter a new output parameter name">
             <TextBlock.Style>
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="Visibility" Value="Collapsed" />
@@ -237,17 +247,13 @@
             Grid.Row="5"
             Grid.Column="1"
             VerticalAlignment="Center"
-            ItemsSource="{Binding MatchTypes}"
+            DisplayMemberPath="Key"
+            ItemsSource="{Binding MatchTypesDict}"
             SelectedIndex="0"
-            SelectedItem="{Binding StagingRule.MatchType, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+            SelectedValue="{Binding SelectedMatchType, UpdateSourceTrigger=PropertyChanged}"
+            SelectedValuePath="Value"
             Style="{StaticResource StandardComboBox}"
-            ToolTip="Specify whether you want the parameter value to match the rule completely, just at the beginning or anywhere within its value.">
-            <ComboBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding}" />
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-        </ComboBox>
+            ToolTip="Specify whether you want the parameter value to match the rule completely, just at the beginning or anywhere within its value." />
         <Label
             Grid.Row="6"
             Grid.Column="0"
@@ -273,13 +279,7 @@
                 SelectedIndex="0"
                 SelectedValue="{Binding SelectedRuleType, UpdateSourceTrigger=PropertyChanged}"
                 SelectedValuePath="Value"
-                Style="{StaticResource StandardComboBox}">
-                <!--<ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Converter={StaticResource EnumConverter}}" />
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>-->
-            </ComboBox>
+                Style="{StaticResource StandardComboBox}" />
             <Button
                 Name="ButtonAddRulePart"
                 Width="24"
@@ -465,13 +465,14 @@
         <Button
             Name="ButtonSelectNone"
             Grid.Row="9"
-            Grid.Column="1"
+            Grid.Column="3"
             Width="85"
             Height="25"
+            Margin="0,0,90,0"
             HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
             Command="{Binding SelectNoneCategoriesCommand}"
-            Content="OK"
+            Content="Select None"
             Style="{StaticResource StandardButton}" />
     </Grid>
 </Window>

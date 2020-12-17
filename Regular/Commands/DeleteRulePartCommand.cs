@@ -24,7 +24,13 @@ namespace Regular.Commands
             int index = ruleEditorViewModel.StagingRule.RegexRuleParts.IndexOf(ruleEditorViewModel.SelectedRegexRulePart);
             ruleEditorViewModel.StagingRule.RegexRuleParts.Remove(ruleEditorViewModel.SelectedRegexRulePart);
             ruleEditorViewModel.CompliantExample = RegexAssembly.GenerateRandomExample(ruleEditorViewModel.StagingRule.RegexRuleParts);
+            ruleEditorViewModel.StagingRule.RegexString = RegexAssembly.AssembleRegexString(ruleEditorViewModel.StagingRule);
             int newIndex = index > ruleEditorViewModel.StagingRule.RegexRuleParts.Count - 1 ? index - 1 : index;
+            if (newIndex < 0)
+            {
+                ruleEditorViewModel.SelectedRegexRulePart = null;
+                return;
+            }
             ruleEditorViewModel.SelectedRegexRulePart = ruleEditorViewModel.StagingRule.RegexRuleParts[newIndex];
         }
 

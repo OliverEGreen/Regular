@@ -98,7 +98,6 @@ namespace Regular.Services
                     throw new ArgumentOutOfRangeException();
             }
             // We pad out the final sting to facilitate the MatchType specified by the user.
-            TaskDialog.Show("Test", $"{start + regexString + end}");
             return start + regexString + end;
         }
 
