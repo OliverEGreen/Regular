@@ -22,13 +22,13 @@ namespace Regular.Services
         public static List<string> IllegalRevitCharacters = new List<string> { "/", ":", "{", "}", "[", "]", "|", ";", ">", "<", "?", "`", "~", Environment.NewLine };
         public static string ValidateRuleName(string input)
         {
-            return string.IsNullOrEmpty(input) ? "Rule name cannot be blank." : "";
+            return string.IsNullOrWhiteSpace(input) ? "Rule name cannot be blank." : null;
         }
         public static string ValidateOutputParameterName(string input)
         {
             // TODO: Check this parameter name isn't already taken
-            if (string.IsNullOrEmpty(input)) return "Output parameter name cannot be blank.";
-            return IllegalRevitCharacters.Any(input.Contains) ? @"Output parameter name cannot contain  / : { } [ ] | ; > < ? ` ~" : "";
+            if (string.IsNullOrWhiteSpace(input)) return "Output parameter name cannot be blank.";
+            return IllegalRevitCharacters.Any(input.Contains) ? @"Output parameter name cannot contain  / : { } [ ] | ; > < ? ` ~" : null;
         }
 
         public static string ValidateRegexRuleParts(ObservableCollection<RegexRulePart> regexRuleParts)

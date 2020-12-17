@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Input;
 using Regular.Models;
 using Regular.Services;
@@ -31,13 +32,6 @@ namespace Regular.Commands
                 stagingRule.TrackingParameterObject == null
             )
             {
-                if (stagingRule.OutputParameterObject != null)
-                    ruleEditorViewModel.UserFeedbackText = InputValidationServices.ReturnUserFeedback
-                    (
-                        stagingRule.RuleName,
-                        stagingRule.OutputParameterObject.ParameterObjectName,
-                        stagingRule.RegexRuleParts
-                    );
                 return false;
             }
             return true;

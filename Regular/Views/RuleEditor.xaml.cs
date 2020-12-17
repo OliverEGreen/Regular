@@ -1,7 +1,9 @@
 ﻿using System.Windows;
 using System.Windows.Input;
 using System.Windows.Controls;
+using System.Windows.Media;
 using Regular.Models;
+using Regular.Services;
 using Regular.ViewModels;
 
 namespace Regular.Views
@@ -37,28 +39,80 @@ namespace Regular.Views
         }
 
         private void ButtonCancel_Click(object sender, RoutedEventArgs e) => Close();
+        
+        private void TextBoxNameYourRuleInput_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            RuleEditorViewModel.RuleNameInputDirty = true;
+            string ruleNameInputFeedback = InputValidationServices.ValidateRuleName(RuleEditorViewModel.StagingRule.RuleName);
+            TextBox textBox = (TextBox)sender;
+
+            if (textBox.Text.Length < 1)
+            {
+                if (RuleEditorViewModel.RuleNameInputDirty)
+                {
+                    EllipseNameYourRuleInput.Fill = (SolidColorBrush)this.Resources["EllipseColorRed"];
+                    RuleEditorViewModel.UserFeedbackText = ruleNameInputFeedback;
+                    RuleEditorViewModel.UserFeedbackTextVisibility = Visibility.Visible;
+                }
+                else
+                {
+                    EllipseNameYourRuleInput.Fill = (SolidColorBrush)this.Resources["EllipseColorGray"];
+                    RuleEditorViewModel.UserFeedbackTextVisibility = Visibility.Hidden;
+                }
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(ruleNameInputFeedback))
+            {
+                EllipseNameYourRuleInput.Fill = (SolidColorBrush)this.Resources["EllipseColorGreen"];
+                RuleEditorViewModel.UserFeedbackText = "";
+                RuleEditorViewModel.UserFeedbackTextVisibility = Visibility.Hidden;
+            }
+            else
+            {
+                EllipseNameYourRuleInput.Fill = (SolidColorBrush)this.Resources["EllipseColorRed"];
+                RuleEditorViewModel.UserFeedbackText = ruleNameInputFeedback;
+                RuleEditorViewModel.UserFeedbackTextVisibility = Visibility.Visible;
+            }
+        }
+
+        private void TextBoxOutputParameterNameInput_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            RuleEditorViewModel.OutputParameterNameInputDirty = true;
+            string outputParameterNameFeedback = InputValidationServices.ValidateOutputParameterName(RuleEditorViewModel.StagingRule.OutputParameterObject.ParameterObjectName);
+            TextBox textBox = (TextBox)sender;
+
+            if (textBox.Text.Length < 1)
+            {
+                if (RuleEditorViewModel.OutputParameterNameInputDirty)
+                {
+                    EllipseOutputParameterNameInput.Fill = (SolidColorBrush)this.Resources["EllipseColorRed"];
+                    RuleEditorViewModel.UserFeedbackText = outputParameterNameFeedback;
+                    RuleEditorViewModel.UserFeedbackTextVisibility = Visibility.Visible;
+                }
+                else
+                {
+                    EllipseOutputParameterNameInput.Fill = (SolidColorBrush)this.Resources["EllipseColorGray"];
+                    RuleEditorViewModel.UserFeedbackTextVisibility = Visibility.Hidden;
+                }
+                return;
+            }
+            
+            if (string.IsNullOrWhiteSpace(outputParameterNameFeedback))
+            {
+                EllipseOutputParameterNameInput.Fill = (SolidColorBrush) this.Resources["EllipseColorGreen"];
+                RuleEditorViewModel.UserFeedbackText = "";
+                RuleEditorViewModel.UserFeedbackTextVisibility = Visibility.Hidden;
+            }
+            else
+            {
+                EllipseOutputParameterNameInput.Fill = (SolidColorBrush)this.Resources["EllipseColorRed"];
+                RuleEditorViewModel.UserFeedbackText = outputParameterNameFeedback;
+                RuleEditorViewModel.UserFeedbackTextVisibility = Visibility.Visible;
+            }
+        }
+
         /*
-        private void TextBoxOutputParameterNameInput_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            TextBox textBox = (TextBox)sender;
-            if (textBox.Text.Length < 1)
-            {
-                EllipseOutputParameterNameInput.Fill = (SolidColorBrush)this.Resources["EllipseColorGray"];
-                return;
-            }
-            bool ruleNameInputValid = string.IsNullOrEmpty(InputValidationServices.ValidateOutputParameterName(textBox.Text));
-            EllipseOutputParameterNameInput.Fill = ruleNameInputValid ? (SolidColorBrush)this.Resources["EllipseColorGreen"] : (SolidColorBrush)this.Resources["EllipseColorRed"];
-        }
-        private void TextBoxNameYourRuleInput_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            TextBox textBox = (TextBox)sender;
-            if (textBox.Text.Length < 1)
-            {
-                EllipseNameYourRuleInput.Fill = (SolidColorBrush)this.Resources["EllipseColorGray"];
-                return;
-            }
-            EllipseNameYourRuleInput.Fill = string.IsNullOrEmpty(InputValidationServices.ValidateRuleName(textBox.Text)) ? (SolidColorBrush)this.Resources["EllipseColorGreen"] : (SolidColorBrush)this.Resources["EllipseColorRed"];
-        }
         private void ButtonEditRulePart_Click(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
@@ -130,43 +184,6 @@ namespace Regular.Views
                     throw new ArgumentOutOfRangeException();
             }
         }
-        private void ButtonExpandCategories_Click(object sender, RoutedEventArgs e)
-        {
-            const int categoriesPanelWidth = 250;
-            const int minWindowWidth = 436;
-            const int maxWindowWidth = 701;
-            bool isCategoryPanelExpanded = ColumnCategories.Width == new GridLength(categoriesPanelWidth);
-            
-            Button button = sender as Button;
-            if (!isCategoryPanelExpanded)
-            {
-                ColumnCategories.Width = new GridLength(categoriesPanelWidth);
-                ColumnMargin.Width = new GridLength(15);
-                button.Content = "Hide Categories";
-                MinWidth = maxWindowWidth;
-                MaxWidth = maxWindowWidth;
-            }
-            else
-            {
-                ColumnCategories.Width = new GridLength(0);
-                ColumnMargin.Width = new GridLength(0);
-                button.Content = "Select Categories";
-                MinWidth = minWindowWidth;
-                MaxWidth = minWindowWidth;
-            }
-        }
-        private void ButtonSelectAll_Click(object sender, RoutedEventArgs e)
-        {
-            foreach (CategoryObject observableObject in TargetCategoryObjects) { observableObject.IsChecked = true; }
-        }
-        private void ButtonSelectNone_Click(object sender, RoutedEventArgs e)
-        {
-            foreach (CategoryObject observableObject in TargetCategoryObjects) { observableObject.IsChecked = false; }
-        }
-        private void ButtonTest_OnClick(object sender, RoutedEventArgs e)
-        {
-            if(RowExamples.Height != new GridLength(20)) RowExamples.Height = new GridLength(20);
-        }
         private void ListBoxCategorySelection_SelectionChanged(object sender, RoutedEventArgs e)
         {
             void UpdateCheckedBoxesCount()
@@ -178,14 +195,14 @@ namespace Regular.Views
             {
                 ParameterObject currentParameterObject = ComboBoxTrackingParameterInput.SelectedItem as ParameterObject;
                 // Updates the ComboBox to let users select parameter
-                PossibleTrackingParameters = ParameterServices.GetParametersOfCategories(DocumentGuid, TargetCategoryObjects);
-                if (PossibleTrackingParameters.Count > 0 && PossibleTrackingParameters.Contains(currentParameterObject)) return;
+                PossibleTrackingParameterObjects = ParameterServices.GetParametersOfCategories(DocumentGuid, TargetCategoryObjects);
+                if (PossibleTrackingParameterObjects.Count > 0 && PossibleTrackingParameterObjects.Contains(currentParameterObject)) return;
                 if (NumberCategoriesSelected == 0)
                 {
                     ComboBoxTrackingParameterInput.Text = "Select Categories";
                     return;
                 }
-                if (PossibleTrackingParameters.Count < 1)
+                if (PossibleTrackingParameterObjects.Count < 1)
                 {
                     ComboBoxTrackingParameterInput.Text = "No Common Parameter(s)";
                     return;
@@ -215,6 +232,11 @@ namespace Regular.Views
             ButtonMoveRulePartUp.IsEnabled = index != 0;
             ButtonMoveRulePartDown.IsEnabled = index != regexRuleParts.Count - 1;
         }*/
+        private void RuleEditor_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            RuleEditorViewModel.OutputParameterNameInputDirty = false;
+            RuleEditorViewModel.RuleNameInputDirty = false;
+        }
     }
 }
  
