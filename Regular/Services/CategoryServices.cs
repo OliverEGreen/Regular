@@ -38,8 +38,7 @@ namespace Regular.Services
             Document document = DocumentGuidServices.GetRevitDocumentByGuid(documentGuid);
 
             // Fetching all categories to create ObservableObjects
-            List<Category> userVisibleCategories = CategoryServices
-                .ConvertCategorySetToList(document.Settings.Categories)
+            List<Category> userVisibleCategories = ConvertCategorySetToList(document.Settings.Categories)
                 .Where(x => x.AllowsBoundParameters)
                 .OrderBy(x => x.Name)
                 .ToList();

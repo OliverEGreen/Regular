@@ -136,7 +136,7 @@ namespace Regular.Views
                             break;
                     }
                     break;
-                case RuleType.AnyCharacter:
+                case RuleType.AnyAlphanumeric:
                     switch (regexRulePart.EditButtonDisplayText)
                     {
                         case "AB1":

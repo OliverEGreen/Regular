@@ -31,12 +31,13 @@ namespace Regular.DesignData
             regexRule1.IsFrozen = false;
             regexRule1.MatchType = MatchType.ExactMatch;
             
-            regexRule1.RegexRuleParts = new ObservableCollection<RegexRulePart>
+            regexRule1.RegexRuleParts = new ObservableCollection<IRegexRulePart>
             {
-                new RegexRulePart(RuleType.AnyCharacter, true, true, true),
-                new RegexRulePart(RuleType.AnyLetter, true, true, true),
-                new RegexRulePart(RuleType.AnyDigit, true, true, true),
-                new RegexRulePart(RuleType.FreeText, true, true, true)
+                RegexRulePart.Create(RuleType.AnyLetter),
+                RegexRulePart.Create(RuleType.AnyAlphanumeric),
+                RegexRulePart.Create(RuleType.AnyLetter),
+                RegexRulePart.Create(RuleType.FreeText),
+                RegexRulePart.Create(RuleType.SelectionSet)
             };
             
             regexRule1.OutputParameterObject = new ParameterObject

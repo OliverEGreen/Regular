@@ -11,7 +11,7 @@ namespace Regular.Services
         // TODO: We need to ignore non-unicode characters. In fact, we might just stick to the basic alphabet.
         // TODO: We need methods by which to test inputs given to individual RegexRuleParts
 
-        public static string ReturnUserFeedback(string ruleNameInput, string outputParameterNameInput, ObservableCollection<RegexRulePart> regexRuleParts)
+        public static string ReturnUserFeedback(string ruleNameInput, string outputParameterNameInput, ObservableCollection<IRegexRulePart> regexRuleParts)
         {
             if (!string.IsNullOrEmpty(ValidateRuleName(ruleNameInput))) return ValidateRuleName(ruleNameInput);
             if (!string.IsNullOrEmpty(ValidateOutputParameterName(outputParameterNameInput))) return ValidateOutputParameterName(outputParameterNameInput);
@@ -31,7 +31,7 @@ namespace Regular.Services
             return IllegalRevitCharacters.Any(input.Contains) ? @"Output parameter name cannot contain  / : { } [ ] | ; > < ? ` ~" : null;
         }
 
-        public static string ValidateRegexRuleParts(ObservableCollection<RegexRulePart> regexRuleParts)
+        public static string ValidateRegexRuleParts(ObservableCollection<IRegexRulePart> regexRuleParts)
         {
             // We need to build & run some validations for each kind of RegexRulePart here.
             if (regexRuleParts.Count < 1) return "Rules require at least 1 rule part.";

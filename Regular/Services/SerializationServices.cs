@@ -13,12 +13,12 @@ namespace Regular.Services
             foreach(T input in inputList) { iList.Add(input); }
             return iList;
         }
-        public static IList<string> SerializeRegexRuleParts(ObservableCollection<RegexRulePart> regexRuleParts)
+        public static IList<string> SerializeRegexRuleParts(ObservableCollection<IRegexRulePart> regexRuleParts)
         {
             return regexRuleParts.Select(regexRulePart => $@"{regexRulePart.RuleType}`
                                             {regexRulePart.IsOptional}`
                                             {regexRulePart.IsCaseSensitive}`
-                                            {regexRulePart.IsEditable}")
+                                            {regexRulePart.IsEditButtonEnabled}")
                 .ToList();
         }
     }
