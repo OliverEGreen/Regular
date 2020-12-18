@@ -34,6 +34,7 @@ namespace Regular.ViewModels
         // ICommands
         public AddRulePartCommand AddRulePartCommand { get; }
         public DeleteRulePartCommand DeleteRulePartCommand { get; }
+        public EditRulePartCommand EditRulePartCommand { get; }
         public SubmitRuleCommand SubmitRuleCommand { get; }
         public MoveRulePartUpCommand MoveRulePartUpCommand { get; }
         public MoveRulePartDownCommand MoveRulePartDownCommand { get; }
@@ -67,8 +68,8 @@ namespace Regular.ViewModels
             }
         }
 
-        private RegexRulePart selectedRegexRulePart;
-        public RegexRulePart SelectedRegexRulePart
+        private IRegexRulePart selectedRegexRulePart;
+        public IRegexRulePart SelectedRegexRulePart
         {
             get => selectedRegexRulePart;
             set
@@ -268,6 +269,7 @@ namespace Regular.ViewModels
 
             AddRulePartCommand = new AddRulePartCommand(this);
             DeleteRulePartCommand = new DeleteRulePartCommand(this);
+            EditRulePartCommand = new EditRulePartCommand();
             SubmitRuleCommand = new SubmitRuleCommand(this);
             MoveRulePartUpCommand = new MoveRulePartUpCommand(this);
             MoveRulePartDownCommand = new MoveRulePartDownCommand(this);
@@ -294,7 +296,7 @@ namespace Regular.ViewModels
 
             RulesTypeDict = new Dictionary<string, RuleType>
             {
-                {"Any Alphanumeric", RuleType.AnyCharacter},
+                {"Any Alphanumeric", RuleType.AnyAlphanumeric},
                 {"Any Digit", RuleType.AnyDigit},
                 {"Any Letter", RuleType.AnyLetter},
                 {"Free Text", RuleType.FreeText},

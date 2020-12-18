@@ -18,14 +18,14 @@ namespace Regular.Commands
         public bool CanExecute(object parameter)
         {
             if (ruleEditorViewModel.SelectedRegexRulePart == null) return false;
-            RegexRulePart regexRulePart = ruleEditorViewModel.SelectedRegexRulePart;
+            IRegexRulePart regexRulePart = ruleEditorViewModel.SelectedRegexRulePart;
             int index = ruleEditorViewModel.StagingRule.RegexRuleParts.IndexOf(regexRulePart);
             return index > 0;
         }
 
         public void Execute(object parameter)
         {
-            RegexRulePart regexRulePart = ruleEditorViewModel.SelectedRegexRulePart;
+            IRegexRulePart regexRulePart = ruleEditorViewModel.SelectedRegexRulePart;
             int index = ruleEditorViewModel.StagingRule.RegexRuleParts.IndexOf(regexRulePart);
             
             ruleEditorViewModel.StagingRule.RegexRuleParts.RemoveAt(index);

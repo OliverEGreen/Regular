@@ -12,11 +12,11 @@
     MaxWidth="{Binding WindowMaxWidth}"
     MaxHeight="700"
     DataContext="{Binding RuleEditorViewModel, RelativeSource={RelativeSource Self}}"
+    Loaded="RuleEditor_OnLoaded"
     ResizeMode="CanResizeWithGrip"
     SizeToContent="WidthAndHeight"
     Style="{DynamicResource StandardWindow}"
     WindowStartupLocation="CenterScreen"
-    Loaded="RuleEditor_OnLoaded"
     mc:Ignorable="d">
     <!--  d:DataContext="{d:DesignInstance vm:RuleEditorMockViewModel,IsDesignTimeCreatable=True}"  -->
     <Window.Resources>
@@ -126,7 +126,7 @@
             Grid.Column="3"
             Margin="0,5,0,5"
             VerticalContentAlignment="Center"
-            Content="Select Categories:"
+            Content="Select Categories"
             FontSize="13"
             Style="{StaticResource StandardLabel}" />
         <Border
@@ -351,14 +351,24 @@
                                     HorizontalAlignment="Left"
                                     FontSize="13"
                                     Style="{StaticResource RulePartTextBox}"
-                                    Text="{Binding DisplayText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    Text="{Binding DisplayText, UpdateSourceTrigger=PropertyChanged}" />
+                                <TextBox
+                                    x:Name="RawUserInputValueTextBox"
+                                    Grid.Column="0"
+                                    Margin="5,0,0,0"
+                                    HorizontalAlignment="Left"
+                                    FontSize="13"
+                                    Style="{StaticResource RulePartTextBox}"
+                                    Text="{Binding RawUserInputValue, UpdateSourceTrigger=PropertyChanged}" />
                                 <Button
                                     Name="ButtonEditRulePart"
                                     Grid.Column="1"
                                     Width="35"
                                     Height="15"
                                     HorizontalAlignment="Left"
-                                    Content="{Binding EditButtonDisplayText}"
+                                    Command="{Binding ElementName=RuleEditorWindow, Path=DataContext.EditRulePartCommand}"
+                                    CommandParameter="{Binding ElementName=ButtonEditRulePart, Path=DataContext}"
+                                    Content="{Binding EditButtonDisplayText, UpdateSourceTrigger=PropertyChanged}"
                                     Style="{StaticResource EditRulePartButton}" />
                                 <TextBlock
                                     Grid.Column="2"
@@ -367,15 +377,15 @@
                                     VerticalAlignment="Center"
                                     FontFamily="SegoeUI"
                                     FontSize="12"
-                                    Text="{Binding CaseSensitiveDisplayString}"
-                                    Visibility="{Binding CaseSensitiveDisplayString}" />
+                                    Text="{Binding CaseSensitiveDisplayString, UpdateSourceTrigger=PropertyChanged}" />
                                 <CheckBox
                                     Name="CheckBoxMatchCase"
                                     Grid.Column="3"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
                                     Background="{StaticResource WindowBackgroundColor}"
-                                    IsChecked="{Binding IsCaseSensitive}" />
+                                    IsChecked="{Binding IsCaseSensitive, UpdateSourceTrigger=PropertyChanged}"
+                                    Visibility="{Binding CaseSensitiveCheckboxVisibility}" />
                                 <TextBlock
                                     Grid.Column="4"
                                     Margin="10,0,0,0"
@@ -388,7 +398,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
                                     Background="{StaticResource WindowBackgroundColor}"
-                                    IsChecked="{Binding IsOptional}" />
+                                    IsChecked="{Binding IsOptional, UpdateSourceTrigger=PropertyChanged}" />
                                 <Button
                                     Name="ButtonDeleteRegexRulePart"
                                     Grid.Column="6"

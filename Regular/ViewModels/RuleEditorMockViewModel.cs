@@ -31,7 +31,7 @@ namespace Regular.ViewModels
         public Visibility CompliantExampleVisibility { get; set; }
         public ObservableCollection<ParameterObject> TrackingParameterObjects { get; set; }
         public ParameterObject OutputParameterObject { get; set; }
-        public ObservableCollection<RegexRulePart> RegexRuleParts { get; set; }
+        public ObservableCollection<IRegexRulePart> RegexRuleParts { get; set; }
         public ObservableCollection<CategoryObject> TargetCategoryObjects { get; set; }
 
         public RuleEditorMockViewModel()
@@ -53,30 +53,13 @@ namespace Regular.ViewModels
             {
                 ParameterObjectId = 12345, ParameterObjectName = "Some Parameter Object"
             };
-            RegexRuleParts = new ObservableCollection<RegexRulePart>()
+            RegexRuleParts = new ObservableCollection<IRegexRulePart>()
             {
-                new RegexRulePart(RuleType.AnyCharacter, true, true, true)
-                {
-                    CaseSensitiveDisplayString = "doijd",
-                    DisplayText = "eworijwr",
-                    EditButtonDisplayText = "Edit",
-                    IsCaseSensitive = true,
-                    IsCaseSensitiveCheckboxVisible = true,
-                    IsEditable = true,
-                    IsOptional = true,
-                    RawUserInputValue = "dsefs"
-                },
-                new RegexRulePart(RuleType.AnyCharacter, true, true, true)
-                {
-                    CaseSensitiveDisplayString = "doijd",
-                    DisplayText = "eworijwr",
-                    EditButtonDisplayText = "Edit",
-                    IsCaseSensitive = true,
-                    IsCaseSensitiveCheckboxVisible = true,
-                    IsEditable = true,
-                    IsOptional = true,
-                    RawUserInputValue = "dsefs"
-                }
+                RegexRulePart.Create(RuleType.AnyAlphanumeric),
+                RegexRulePart.Create(RuleType.AnyAlphanumeric),
+                RegexRulePart.Create(RuleType.AnyAlphanumeric),
+                RegexRulePart.Create(RuleType.AnyAlphanumeric),
+                RegexRulePart.Create(RuleType.AnyAlphanumeric)
             };
             
             TargetCategoryObjects = new ObservableCollection<CategoryObject>()

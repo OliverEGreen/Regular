@@ -21,7 +21,7 @@ namespace Regular.Commands
 
         public void Execute(object parameter)
         {
-            if (!(parameter is RegexRulePart regexRulePart)) return;
+            if (!(parameter is IRegexRulePart regexRulePart)) return;
             int index = ruleEditorViewModel.StagingRule.RegexRuleParts.IndexOf(regexRulePart);
             ruleEditorViewModel.StagingRule.RegexRuleParts.Remove(regexRulePart);
             ruleEditorViewModel.CompliantExample = RegexAssemblyService.GenerateRandomExample(ruleEditorViewModel.StagingRule.RegexRuleParts);

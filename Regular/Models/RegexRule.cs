@@ -12,7 +12,7 @@ namespace Regular.Models
     {
         private string ruleName;
         private ObservableCollection<CategoryObject> targetCategoryObjects;
-        private ObservableCollection<RegexRulePart> regexRuleParts;
+        private ObservableCollection<IRegexRulePart> regexRuleParts;
         private ParameterObject trackingParameterObject;
         private ParameterObject outputParameterObject;
         private string toolTipString;
@@ -93,7 +93,7 @@ namespace Regular.Models
                 NotifyPropertyChanged("RegexString");
             }
         }
-        public ObservableCollection<RegexRulePart> RegexRuleParts
+        public ObservableCollection<IRegexRulePart> RegexRuleParts
         {
             get => regexRuleParts;
             set
@@ -133,7 +133,7 @@ namespace Regular.Models
                 TrackingParameterObject = new ParameterObject { ParameterObjectId = -1, ParameterObjectName = "" },
                 OutputParameterObject = new ParameterObject { ParameterObjectId = -1, ParameterObjectName = "" },
                 MatchType = MatchType.ExactMatch,
-                RegexRuleParts = new ObservableCollection<RegexRulePart>(),
+                RegexRuleParts = new ObservableCollection<IRegexRulePart>(),
                 RegexString = "",
                 IsFrozen = false,
 

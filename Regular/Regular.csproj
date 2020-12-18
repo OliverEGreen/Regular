@@ -70,6 +70,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\EditRulePartCommand.cs" />
     <Compile Include="Commands\GenerateCompliantExampleCommand.cs" />
     <Compile Include="Commands\MoveRulePartDownCommand.cs" />
     <Compile Include="Commands\MoveRulePartUpCommand.cs" />
@@ -81,8 +82,15 @@
     <Compile Include="Commands\TriggerCategoryCheckedCommand.cs" />
     <Compile Include="Commands\TriggerCategoryPanelCommand.cs" />
     <Compile Include="DesignData\DesignTimeData.cs" />
+    <Compile Include="Enums\CaseSensitivity.cs" />
     <Compile Include="Enums\MatchType.cs" />
     <Compile Include="Models\DMUpdaters.cs" />
+    <Compile Include="Models\IRegexRulePart.cs" />
+    <Compile Include="Models\RegexRuleParts\AnyAlphanumeric.cs" />
+    <Compile Include="Models\RegexRuleParts\AnyDigit.cs" />
+    <Compile Include="Models\RegexRuleParts\AnyLetter.cs" />
+    <Compile Include="Models\RegexRuleParts\FreeText.cs" />
+    <Compile Include="Models\RegexRuleParts\SelectionSet.cs" />
     <Compile Include="Services\AppRibbonServices.cs" />
     <Compile Include="Services\DeserializationServices.cs" />
     <Compile Include="Services\DMTriggerServices.cs" />
@@ -104,6 +112,7 @@
     <Compile Include="Services\RegexAssemblyService.cs" />
     <Compile Include="Services\SerializationServices.cs" />
     <Compile Include="RegularUpdater.cs" />
+    <Compile Include="Utilities\EnumUtils.cs" />
     <Compile Include="Utilities\WpfUtils.cs" />
     <Compile Include="ViewModels\RuleEditorMockViewModel.cs" />
     <Compile Include="ViewModels\RuleEditorViewModel.cs" />

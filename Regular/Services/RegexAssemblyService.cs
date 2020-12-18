@@ -10,7 +10,7 @@ namespace Regular.Services
     public static class RegexAssemblyService
     {
         private static readonly List<string> SpecialCharacters = new List<string>() { @".", @"\", @"*", @"+", @"?", @"|", @"(", @")", @"[", @"]", @"^", @"{", @"}" };
-        private static string GetRegexPartFromRuleType(RegexRulePart regexRulePart)
+        private static string GetRegexPartFromRuleType(IRegexRulePart regexRulePart)
         {
             string regexPartOutput = "";
             string optionalModifier = regexRulePart.IsOptional ? "?" : "";
@@ -18,31 +18,39 @@ namespace Regular.Services
             switch (regexRulePart.RuleType)
             {
                 case RuleType.AnyLetter:
-                    switch (regexRulePart.CaseSensitiveDisplayString)
+                    switch (regexRulePart.CaseSensitivityMode)
                     {
-                        case "UPPER CASE":
+                        case CaseSensitivity.UpperCase:
                             regexPartOutput += "[A-Z]";
                             break;
-                        case "lower case":
-                            regexPartOutput += "[a-z]";
-                            break;
-                        case "Any Case":
+                        case CaseSensitivity.AnyCase:
                             regexPartOutput += "[A-Za-z]";
                             break;
+                        case CaseSensitivity.LowerCase:
+                            regexPartOutput += "[a-z]";
+                            break;
+                        case CaseSensitivity.None:
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
                     }
                     break;
-                case RuleType.AnyCharacter:
-                    switch (regexRulePart.CaseSensitiveDisplayString)
+                case RuleType.AnyAlphanumeric:
+                    switch (regexRulePart.CaseSensitivityMode)
                     {
-                        case "UPPER CASE":
+                        case CaseSensitivity.UpperCase:
                             regexPartOutput += "[A-Z0-9]";
                             break;
-                        case "lower case":
-                            regexPartOutput += "[a-z0-9]";
-                            break;
-                        case "Any Case":
+                        case CaseSensitivity.AnyCase:
                             regexPartOutput += "[A-Za-z0-9]";
                             break;
+                        case CaseSensitivity.LowerCase:
+                            regexPartOutput += "[a-z0-9]";
+                            break;
+                        case CaseSensitivity.None:
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
                     }
                     break;
                 case RuleType.AnyDigit:
@@ -59,8 +67,7 @@ namespace Regular.Services
         }
         private static string SanitizeCharacter(string character)
         {
-            if (SpecialCharacters.Contains(character)) return $@"\{character}";
-            return character;
+            return SpecialCharacters.Contains(character) ? $@"\{character}" : character;
         }
         private static string SanitizeWord(string word)
         {
@@ -75,7 +82,7 @@ namespace Regular.Services
         public static string AssembleRegexString(RegexRule regexRule)
         {
             string regexString = "";
-            foreach(RegexRulePart regexRulePart in regexRule.RegexRuleParts) { regexString += GetRegexPartFromRuleType(regexRulePart); }
+            foreach(IRegexRulePart regexRulePart in regexRule.RegexRuleParts) { regexString += GetRegexPartFromRuleType(regexRulePart); }
 
             string start = ".*";
             string end = ".*";
@@ -104,11 +111,11 @@ namespace Regular.Services
         public static char[] Letters = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l','m', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
         public static int[] Numbers = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
         public static char[] Characters = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','0','1','2','3','4','5','6','7','8','9'};
-        public static string GenerateRandomExample(ObservableCollection<RegexRulePart> regexRuleParts)
+        public static string GenerateRandomExample(ObservableCollection<IRegexRulePart> regexRuleParts)
         {
             Random random = new Random((int) DateTime.Now.Ticks & 0x0000FFFF);
             string randomExampleString = "Example: ";
-            foreach (RegexRulePart regexRulePart in regexRuleParts)
+            foreach (IRegexRulePart regexRulePart in regexRuleParts)
             {
                 double randomDouble = random.NextDouble();
                 double anyCaseRandom = random.NextDouble();
@@ -136,7 +143,7 @@ namespace Regular.Services
                     case RuleType.AnyDigit:
                         randomExampleString += Numbers[random.Next(Numbers.Length)];
                         break;
-                    case RuleType.AnyCharacter:
+                    case RuleType.AnyAlphanumeric:
                         string randomCharacter = Characters[random.Next(Characters.Length)].ToString();
                         switch (regexRulePart.CaseSensitiveDisplayString)
                         {

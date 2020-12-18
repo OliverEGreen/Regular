@@ -5,7 +5,7 @@ namespace Regular.Enums
     public enum RuleType
     {
         [Description("Any Alphanumeric (A-Z, 0-9)")]
-        AnyCharacter = 0,
+        AnyAlphanumeric = 0,
         [Description("Any Digit (0-9)")]
         AnyDigit = 1,
         [Description("Any Letter (A-Z)")]
