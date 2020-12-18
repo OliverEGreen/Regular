@@ -101,9 +101,10 @@
     <Compile Include="Services\ExtensibleStorageServices.cs" />
     <Compile Include="Services\ParameterServices.cs" />
     <Compile Include="Services\InputValidationServices.cs" />
-    <Compile Include="Services\RegexAssembly.cs" />
+    <Compile Include="Services\RegexAssemblyService.cs" />
     <Compile Include="Services\SerializationServices.cs" />
     <Compile Include="RegularUpdater.cs" />
+    <Compile Include="Utilities\WpfUtils.cs" />
     <Compile Include="ViewModels\RuleEditorMockViewModel.cs" />
     <Compile Include="ViewModels\RuleEditorViewModel.cs" />
     <Compile Include="ViewModels\RuleManagerViewModel.cs" />

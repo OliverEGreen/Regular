@@ -7,7 +7,7 @@ using Regular.Models;
 
 namespace Regular.Services
 {
-    public static class RegexAssembly
+    public static class RegexAssemblyService
     {
         private static readonly List<string> SpecialCharacters = new List<string>() { @".", @"\", @"*", @"+", @"?", @"|", @"(", @")", @"[", @"]", @"^", @"{", @"}" };
         private static string GetRegexPartFromRuleType(RegexRulePart regexRulePart)

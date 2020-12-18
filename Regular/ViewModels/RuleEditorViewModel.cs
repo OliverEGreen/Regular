@@ -278,6 +278,7 @@ namespace Regular.ViewModels
             TriggerCategoryCheckedCommand = new TriggerCategoryCheckedCommand(this);
 
             CategoriesPanelButtonText = "Show Categories";
+            ComboBoxTrackingParameterText = "Select Categories";
             UserFeedbackTextVisibility = Visibility.Hidden;
 
             // Retrieving the list of parameters which might possibly be tracked, given the selected categories

@@ -22,7 +22,7 @@ namespace Regular.Commands
         public void Execute(object parameter)
         {
             ruleEditorViewModel.CompliantExampleVisibility= Visibility.Visible;
-            ruleEditorViewModel.CompliantExample = RegexAssembly.GenerateRandomExample(ruleEditorViewModel.StagingRule.RegexRuleParts);
+            ruleEditorViewModel.CompliantExample = RegexAssemblyService.GenerateRandomExample(ruleEditorViewModel.StagingRule.RegexRuleParts);
         }
 
         public event EventHandler CanExecuteChanged

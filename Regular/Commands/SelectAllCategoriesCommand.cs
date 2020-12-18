@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Input;
 using Regular.ViewModels;
 
@@ -21,6 +22,12 @@ namespace Regular.Commands
             {
                 ruleEditorViewModel.StagingRule.TargetCategoryObjects[i].IsChecked = true;
             }
+            
+            // We update the number of categories ticked
+            ruleEditorViewModel.NumberCategoriesSelected = ruleEditorViewModel.
+                StagingRule.
+                TargetCategoryObjects
+                .Count(x => x.IsChecked);
         }
 
         public event EventHandler CanExecuteChanged
