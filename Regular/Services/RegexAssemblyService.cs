@@ -57,7 +57,7 @@ namespace Regular.Services
                     regexPartOutput += @"\d";
                     break;
                 case RuleType.FreeText:
-                    regexPartOutput += SanitizeWord(regexRulePart.DisplayText) + caseSensitiveModifier;
+                    regexPartOutput += SanitizeWord(regexRulePart.RawUserInputValue) + caseSensitiveModifier;
                     break;
                 case RuleType.SelectionSet:
                     regexPartOutput += "Test";

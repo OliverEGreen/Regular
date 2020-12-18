@@ -55,7 +55,7 @@ namespace Regular.Commands
             {
                 ruleEditorViewModel.ComboBoxTrackingParameterText = "Select Categories";
             }
-            else if (ruleEditorViewModel.PossibleTrackingParameterObjects == null)
+            else if (ruleEditorViewModel.PossibleTrackingParameterObjects == null || ruleEditorViewModel.PossibleTrackingParameterObjects.Count < 1)
             {
                 ruleEditorViewModel.ComboBoxTrackingParameterText = "No Common Parameters Found";
             }

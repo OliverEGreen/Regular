@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Controls;
 using System.Windows.Input;
 using Regular.Enums;
 using Regular.Models;
@@ -25,23 +26,23 @@ namespace Regular.Commands
                 case RuleType.AnyAlphanumeric:
                     switch (regexRulePart.CaseSensitivityMode)
                     {
-                        case CaseSensitivity.UpperCase:
-                            regexRulePart.CaseSensitivityMode = CaseSensitivity.AnyCase;
+                        case CaseSensitivity.AnyCase:
+                            regexRulePart.CaseSensitivityMode = CaseSensitivity.UpperCase;
                             regexRulePart.CaseSensitiveDisplayString =
                                 EnumUtils.GetEnumDescription(regexRulePart.CaseSensitivityMode);
-                            regexRulePart.EditButtonDisplayText= "Ab3";
+                            regexRulePart.EditButtonDisplayText = "AB3";
                             break;
-                        case CaseSensitivity.AnyCase:
+                        case CaseSensitivity.UpperCase:
                             regexRulePart.CaseSensitivityMode = CaseSensitivity.LowerCase;
                             regexRulePart.CaseSensitiveDisplayString =
                                 EnumUtils.GetEnumDescription(regexRulePart.CaseSensitivityMode);
                             regexRulePart.EditButtonDisplayText = "ab3";
                             break;
                         case CaseSensitivity.LowerCase:
-                            regexRulePart.CaseSensitivityMode = CaseSensitivity.UpperCase;
+                            regexRulePart.CaseSensitivityMode = CaseSensitivity.AnyCase;
                             regexRulePart.CaseSensitiveDisplayString =
                                 EnumUtils.GetEnumDescription(regexRulePart.CaseSensitivityMode);
-                            regexRulePart.EditButtonDisplayText = "AB3";
+                            regexRulePart.EditButtonDisplayText= "Ab3";
                             break;
                         case CaseSensitivity.None:
                             break;
@@ -54,23 +55,23 @@ namespace Regular.Commands
                 case RuleType.AnyLetter:
                     switch (regexRulePart.CaseSensitivityMode)
                     {
-                        case CaseSensitivity.UpperCase:
-                            regexRulePart.CaseSensitivityMode = CaseSensitivity.AnyCase;
+                        case CaseSensitivity.AnyCase:
+                            regexRulePart.CaseSensitivityMode = CaseSensitivity.UpperCase;
                             regexRulePart.CaseSensitiveDisplayString =
                                 EnumUtils.GetEnumDescription(regexRulePart.CaseSensitivityMode);
-                            regexRulePart.EditButtonDisplayText = "A-z";
+                            regexRulePart.EditButtonDisplayText = "A-Z";
                             break;
-                        case CaseSensitivity.AnyCase:
+                        case CaseSensitivity.UpperCase:
                             regexRulePart.CaseSensitivityMode = CaseSensitivity.LowerCase;
                             regexRulePart.CaseSensitiveDisplayString =
                                 EnumUtils.GetEnumDescription(regexRulePart.CaseSensitivityMode);
                             regexRulePart.EditButtonDisplayText = "a-z";
                             break;
                         case CaseSensitivity.LowerCase:
-                            regexRulePart.CaseSensitivityMode = CaseSensitivity.UpperCase;
+                            regexRulePart.CaseSensitivityMode = CaseSensitivity.AnyCase;
                             regexRulePart.CaseSensitiveDisplayString =
                                 EnumUtils.GetEnumDescription(regexRulePart.CaseSensitivityMode);
-                            regexRulePart.EditButtonDisplayText = "A-Z";
+                            regexRulePart.EditButtonDisplayText = "A-z";
                             break;
                         case CaseSensitivity.None:
                             break;
