@@ -72,7 +72,7 @@ namespace Regular.Models.RegexRuleParts
         public FreeText()
         {
             DisplayText = "Free Text";
-            RawUserInputValue = "";
+            RawUserInputValue = "Type Here";
             IsOptional = false;
             IsCaseSensitive = false;
             CaseSensitiveCheckboxVisibility = Visibility.Visible;

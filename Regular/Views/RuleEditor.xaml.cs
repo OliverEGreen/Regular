@@ -1,9 +1,12 @@
-﻿using System.Windows;
+﻿using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Regular.Enums;
 using Regular.Models;
 using Regular.Services;
+using Regular.Utilities;
 using Regular.ViewModels;
 
 namespace Regular.Views
@@ -23,6 +26,7 @@ namespace Regular.Views
             DataContext = RuleEditorViewModel;
             // Lets us close the window by hitting the Escape key
             PreviewKeyDown += (s, e) => { if (e.Key == Key.Escape) Close(); };
+            TextBoxNameYourRuleInput.Focus();
         }
         private void ScrollViewerRuleParts_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
@@ -111,131 +115,24 @@ namespace Regular.Views
                 RuleEditorViewModel.UserFeedbackTextVisibility = Visibility.Visible;
             }
         }
-
-        /*
-        private void ButtonEditRulePart_Click(object sender, RoutedEventArgs e)
-        {
-            Button button = sender as Button;
-            RegexRulePart regexRulePart = button.DataContext as RegexRulePart;
-            switch (regexRulePart.RuleType)
-            {
-                case RuleType.AnyLetter:
-                    switch (regexRulePart.EditButtonDisplayText)
-                    {
-                        case "A-Z":
-                            regexRulePart.EditButtonDisplayText = "a-z";
-                            regexRulePart.CaseSensitiveDisplayString = "lower case";
-                            break;
-                        case "a-z":
-                            regexRulePart.EditButtonDisplayText = "A-z";
-                            regexRulePart.CaseSensitiveDisplayString = "Any Case";
-                            break;
-                        default:
-                            regexRulePart.EditButtonDisplayText = "A-Z";
-                            regexRulePart.CaseSensitiveDisplayString = "UPPER CASE";
-                            break;
-                    }
-                    break;
-                case RuleType.AnyAlphanumeric:
-                    switch (regexRulePart.EditButtonDisplayText)
-                    {
-                        case "AB1":
-                            regexRulePart.EditButtonDisplayText = "ab1";
-                            regexRulePart.CaseSensitiveDisplayString = "lower case";
-                            break;
-                        case "ab1":
-                            regexRulePart.EditButtonDisplayText = "Ab1";
-                            regexRulePart.CaseSensitiveDisplayString = "Any Case";
-                            break;
-                        default:
-                            regexRulePart.EditButtonDisplayText = "AB1";
-                            regexRulePart.CaseSensitiveDisplayString = "UPPER CASE";
-                            break;
-                    }
-                    break;
-                case RuleType.AnyDigit:
-                    break;
-                case RuleType.FreeText:
-                    Grid grid = VisualTreeHelper.GetParent(button) as Grid;
-                    UIElementCollection uiElementCollection = grid.Children;
-                    TextBox textBox = null;
-                    foreach (UIElement uiElement in uiElementCollection)
-                    {
-                        if (uiElement.GetType() == typeof(TextBox)) { textBox = uiElement as TextBox; }
-                    }
-                    PreviewKeyDown += (keySender, eventArgs) =>
-                    {
-                        if (eventArgs.Key == Key.Enter) Keyboard.ClearFocus();
-                        textBox.BorderThickness = new Thickness(0);
-                    };
-                    textBox.IsReadOnly = false;
-                    textBox.Focusable = true;
-                    textBox.Focus();
-                    if (textBox.Text == "Free Text")
-                    {
-                        textBox.Text = "Start Typing";
-                        textBox.Select(0, textBox.Text.Length);
-                    }
-                    break;
-                case RuleType.SelectionSet:
-                    TaskDialog.Show("Test", "You are now editing selection set");
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
-        private void ListBoxCategorySelection_SelectionChanged(object sender, RoutedEventArgs e)
-        {
-            void UpdateCheckedBoxesCount()
-            {
-                // Updates the UI Counter
-                NumberCategoriesSelected = TargetCategoryObjects.Count(x => x.IsChecked);
-            }
-            void UpdateTrackingParameterSelectionComboBox()
-            {
-                ParameterObject currentParameterObject = ComboBoxTrackingParameterInput.SelectedItem as ParameterObject;
-                // Updates the ComboBox to let users select parameter
-                PossibleTrackingParameterObjects = ParameterServices.GetParametersOfCategories(DocumentGuid, TargetCategoryObjects);
-                if (PossibleTrackingParameterObjects.Count > 0 && PossibleTrackingParameterObjects.Contains(currentParameterObject)) return;
-                if (NumberCategoriesSelected == 0)
-                {
-                    ComboBoxTrackingParameterInput.Text = "Select Categories";
-                    return;
-                }
-                if (PossibleTrackingParameterObjects.Count < 1)
-                {
-                    ComboBoxTrackingParameterInput.Text = "No Common Parameter(s)";
-                    return;
-                }
-                if (ComboBoxTrackingParameterInput.SelectedItem == null) ComboBoxTrackingParameterInput.SelectedIndex = 0;
-            }
-            UpdateCheckedBoxesCount();
-            UpdateTrackingParameterSelectionComboBox();
-        }
-        private void RegexRulePartTypeTextBox_OnGotFocus(object sender, RoutedEventArgs e)
-        {
-            TextBox textBox = sender as TextBox;
-            textBox.IsReadOnly = false;
-            textBox.BorderThickness = new Thickness(1);
-        }
-        private void RegexRulePartTypeTextBox_OnLostFocus(object sender, RoutedEventArgs e)
-        {
-            TextBox textBox = sender as TextBox;
-            textBox.IsReadOnly = true;
-            textBox.Focusable = false;
-            textBox.BorderThickness = new Thickness(0);
-        }
-        private void ListBoxRuleParts_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            RegexRulePart regexRulePart = ((ListBox)sender).SelectedItem as RegexRulePart;
-            int index = RegexRuleParts.IndexOf(regexRulePart);
-            ButtonMoveRulePartUp.IsEnabled = index != 0;
-            ButtonMoveRulePartDown.IsEnabled = index != regexRuleParts.Count - 1;
-        }*/
+        
         private void RuleEditor_OnLoaded(object sender, RoutedEventArgs e)
         {
             RuleEditorViewModel.OutputParameterNameInputDirty = false;
             RuleEditorViewModel.RuleNameInputDirty = false;
+        }
+
+        private void ButtonEditRulePart_OnClick(object sender, RoutedEventArgs e)
+        {
+            Button editButton = sender as Button;
+            IRegexRulePart regexRulePart = editButton.DataContext as IRegexRulePart;
+            if (!(regexRulePart.RuleType == RuleType.FreeText)) return;
+            Grid grid = WpfUtils.FindParent<Grid>(editButton);
+            UIElementCollection uiElementCollection = grid.Children;
+            TextBox textBox = uiElementCollection.OfType<TextBox>().FirstOrDefault();
+            textBox.BorderThickness = new Thickness(1);
+            textBox?.Focus();
+            textBox.Select(0, textBox.Text.Length);
         }
     }
 }
