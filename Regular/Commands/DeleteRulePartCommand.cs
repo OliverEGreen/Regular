@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Input;
+using Regular.Models;
 using Regular.Services;
 using Regular.ViewModels;
 
@@ -20,11 +21,11 @@ namespace Regular.Commands
 
         public void Execute(object parameter)
         {
-            if (ruleEditorViewModel.SelectedRegexRulePart == null) return;
-            int index = ruleEditorViewModel.StagingRule.RegexRuleParts.IndexOf(ruleEditorViewModel.SelectedRegexRulePart);
-            ruleEditorViewModel.StagingRule.RegexRuleParts.Remove(ruleEditorViewModel.SelectedRegexRulePart);
-            ruleEditorViewModel.CompliantExample = RegexAssembly.GenerateRandomExample(ruleEditorViewModel.StagingRule.RegexRuleParts);
-            ruleEditorViewModel.StagingRule.RegexString = RegexAssembly.AssembleRegexString(ruleEditorViewModel.StagingRule);
+            if (!(parameter is RegexRulePart regexRulePart)) return;
+            int index = ruleEditorViewModel.StagingRule.RegexRuleParts.IndexOf(regexRulePart);
+            ruleEditorViewModel.StagingRule.RegexRuleParts.Remove(regexRulePart);
+            ruleEditorViewModel.CompliantExample = RegexAssemblyService.GenerateRandomExample(ruleEditorViewModel.StagingRule.RegexRuleParts);
+            ruleEditorViewModel.StagingRule.RegexString = RegexAssemblyService.AssembleRegexString(ruleEditorViewModel.StagingRule);
             int newIndex = index > ruleEditorViewModel.StagingRule.RegexRuleParts.Count - 1 ? index - 1 : index;
             if (newIndex < 0)
             {

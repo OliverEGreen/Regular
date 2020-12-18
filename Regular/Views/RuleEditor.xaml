@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:vm="clr-namespace:Regular.ViewModels"
+    x:Name="RuleEditorWindow"
     Title=" Rule Editor"
     Height="600"
     MinWidth="{Binding WindowMinWidth}"
@@ -152,8 +152,8 @@
                                     x:Name="CategoryCheckBox"
                                     Width="20"
                                     VerticalAlignment="Center"
-                                    Command="{Binding Path=DataContext.TriggerCategoryCheckedCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"
-                                    CommandParameter="{Binding CategoryObjectId}"
+                                    Command="{Binding ElementName=RuleEditorWindow, Path=DataContext.TriggerCategoryCheckedCommand}"
+                                    CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
                                     IsChecked="{Binding IsChecked}" />
                                 <TextBlock VerticalAlignment="Center" Text="{Binding CategoryObjectName}" />
                             </StackPanel>
@@ -397,7 +397,8 @@
                                     Margin="0,0,-3,0"
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Center"
-                                    Command="{Binding Path=DataContext.DeleteRulePartCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"
+                                    Command="{Binding ElementName=RuleEditorWindow, Path=DataContext.DeleteRulePartCommand}"
+                                    CommandParameter="{Binding .}"
                                     Style="{StaticResource DeleteItemButton}" />
                             </Grid>
                         </DataTemplate>
