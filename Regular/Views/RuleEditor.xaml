@@ -372,49 +372,68 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
                                     FontSize="13"
-                                    Text="{Binding DisplayText, UpdateSourceTrigger=PropertyChanged}">
-                                    <TextBlock.Style>
-                                        <Style TargetType="{x:Type TextBlock}">
-                                            <Setter Property="Visibility" Value="Visible" />
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding ElementName=RawUserInputValueTextBox, Path=Visibility, UpdateSourceTrigger=PropertyChanged}" Value="Visible">
-                                                    <Setter Property="Visibility" Value="Collapsed" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
+                                    Text="{Binding RuleTypeName, UpdateSourceTrigger=PropertyChanged}"
+                                    Visibility="{Binding RuleTypeNameVisibility}" />
                                 <TextBox
                                     Name="RawUserInputValueTextBox"
                                     Grid.Column="0"
                                     Width="90"
-                                    Margin="5,0,5,0"
+                                    Padding="3,0"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
-                                    FontSize="12"
-                                    Text="{Binding RawUserInputValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                                    Foreground="{StaticResource FontColorDefault}"
+                                    Background="{StaticResource RulePartBoxColor}"
+                                    FontSize="13"
+                                    Text="{Binding RawUserInputValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                    TextChanged="RawUserInputValueTextBox_OnTextChanged"
+                                    Visibility="{Binding RawUserInputTextBoxVisibility}">
                                     <TextBox.Style>
                                         <Style TargetType="{x:Type TextBox}">
-                                            <Setter Property="Visibility" Value="Visible" />
+                                            <Setter Property="BorderThickness" Value="0" />
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding RawUserInputValue, UpdateSourceTrigger=PropertyChanged}" Value="">
-                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                <DataTrigger Binding="{Binding ElementName=RawUserInputValueTextBox, Path=IsFocused, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                                    <Setter Property="BorderThickness" Value="1" />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
                                     </TextBox.Style>
                                 </TextBox>
+                                <TextBlock
+                                    Name="RawUserInputWatermark"
+                                    Grid.Column="0"
+                                    Height="17"
+                                    Padding="4,0"
+                                    VerticalAlignment="Center"
+                                    Panel.ZIndex="1"
+                                    FontSize="13"
+                                    FontWeight="Regular"
+                                    Foreground="{StaticResource FontColorWatermarkGrey}">
+                                    <TextBlock.Style>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                            <Setter Property="Text" Value="" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ElementName=RawUserInputValueTextBox, Path=Text, UpdateSourceTrigger=PropertyChanged}" Value="">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding ElementName=RawUserInputValueTextBox, Path=Visibility, UpdateSourceTrigger=PropertyChanged}" Value="Visible">
+                                                    <Setter Property="Text" Value="Edit Me" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
                                 <Button
-                                    Name="ButtonEditRulePart"
+                                    Name="ButtonControl"
                                     Grid.Column="1"
                                     Width="35"
                                     Height="15"
                                     HorizontalAlignment="Left"
-                                    Click="ButtonEditRulePart_OnClick"
+                                    Click="ButtonControl_OnClick"
                                     Command="{Binding ElementName=RuleEditorWindow, Path=DataContext.EditRulePartCommand}"
-                                    CommandParameter="{Binding ElementName=ButtonEditRulePart, Path=DataContext}"
-                                    Content="{Binding EditButtonDisplayText, UpdateSourceTrigger=PropertyChanged}"
-                                    Style="{StaticResource EditRulePartButton}" />
+                                    CommandParameter="{Binding ElementName=ButtonControl, Path=DataContext}"
+                                    Content="{Binding ButtonControlDisplayText, UpdateSourceTrigger=PropertyChanged}"
+                                    Style="{StaticResource RulePartButtonControl}" />
                                 <TextBlock
                                     Name="TextBlockCaseSensitiveDisplayString"
                                     Grid.Column="2"

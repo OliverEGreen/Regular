@@ -5,31 +5,50 @@ using Regular.Utilities;
 
 namespace Regular.Models.RegexRuleParts
 {
-    class AnyLetter : IRegexRulePart
+    internal class AnyLetter : IRegexRulePart
     {
+        private Visibility caseSensitiveCheckboxVisibility;
+        private string caseSensitiveDisplayString;
         private string displayText;
         private string editButtonDisplayText;
         private bool isCaseSensitive;
-        private Visibility caseSensitiveCheckboxVisibility;
-        private string caseSensitiveDisplayString;
 
-        public string DisplayText
+        public AnyLetter()
+        {
+            RuleTypeName = "Any Letter";
+            RawUserInputValue = "";
+            IsOptional = false;
+            IsCaseSensitive = false;
+            CaseSensitiveCheckboxVisibility = Visibility.Hidden;
+            IsButtonControlEnabled = true;
+            CaseSensitivityMode = CaseSensitivity.AnyCase;
+            CaseSensitiveDisplayString = EnumUtils.GetEnumDescription(CaseSensitivityMode);
+            ButtonControlDisplayText = "A-z";
+            RuleType = RuleType.AnyLetter;
+            RawUserInputTextBoxVisibility = Visibility.Collapsed;
+            RuleTypeNameVisibility = Visibility.Visible;
+        }
+
+        public string RuleTypeName
         {
             get => displayText;
             set
             {
                 displayText = value;
-                NotifyPropertyChanged("DisplayText");
+                NotifyPropertyChanged("RuleTypeName");
             }
         }
 
-        public string EditButtonDisplayText
+        public Visibility RuleTypeNameVisibility { get; set; }
+        public Visibility RawUserInputTextBoxVisibility { get; set; }
+
+        public string ButtonControlDisplayText
         {
             get => editButtonDisplayText;
             set
             {
                 editButtonDisplayText = value;
-                NotifyPropertyChanged("EditButtonDisplayText");
+                NotifyPropertyChanged("ButtonControlDisplayText");
             }
         }
 
@@ -66,24 +85,12 @@ namespace Regular.Models.RegexRuleParts
             }
         }
 
-        public bool IsEditButtonEnabled { get; set; }
+        public bool IsButtonControlEnabled { get; set; }
         public CaseSensitivity CaseSensitivityMode { get; set; }
         public RuleType RuleType { get; set; }
-        public AnyLetter()
-        {
-            DisplayText = "Any Letter";
-            RawUserInputValue = "";
-            IsOptional = false;
-            IsCaseSensitive = false;
-            CaseSensitiveCheckboxVisibility = Visibility.Hidden;
-            IsEditButtonEnabled = true;
-            CaseSensitivityMode = CaseSensitivity.AnyCase;
-            CaseSensitiveDisplayString = EnumUtils.GetEnumDescription(CaseSensitivityMode);
-            EditButtonDisplayText = "A-z";
-            RuleType = RuleType.AnyLetter;
-        }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
         public void NotifyPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

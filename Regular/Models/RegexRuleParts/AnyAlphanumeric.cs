@@ -5,31 +5,50 @@ using Regular.Utilities;
 
 namespace Regular.Models.RegexRuleParts
 {
-    class AnyAlphanumeric : IRegexRulePart
+    internal class AnyAlphanumeric : IRegexRulePart
     {
+        private Visibility caseSensitiveCheckboxVisibility;
+        private string caseSensitiveDisplayString;
         private string displayText;
         private string editButtonDisplayText;
         private bool isCaseSensitive;
-        private Visibility caseSensitiveCheckboxVisibility;
-        private string caseSensitiveDisplayString;
 
-        public string DisplayText
+        public AnyAlphanumeric()
+        {
+            RuleTypeName = "Alphanumeric";
+            RawUserInputValue = "";
+            IsOptional = false;
+            IsCaseSensitive = false;
+            CaseSensitiveCheckboxVisibility = Visibility.Hidden;
+            IsButtonControlEnabled = true;
+            CaseSensitivityMode = CaseSensitivity.AnyCase;
+            CaseSensitiveDisplayString = EnumUtils.GetEnumDescription(CaseSensitivityMode);
+            ButtonControlDisplayText = "Ab3";
+            RuleType = RuleType.AnyAlphanumeric;
+            RawUserInputTextBoxVisibility = Visibility.Collapsed;
+            RuleTypeNameVisibility = Visibility.Visible;
+        }
+
+        public string RuleTypeName
         {
             get => displayText;
             set
             {
                 displayText = value;
-                NotifyPropertyChanged("DisplayText");
+                NotifyPropertyChanged("RuleTypeName");
             }
         }
 
-        public string EditButtonDisplayText
+        public Visibility RuleTypeNameVisibility { get; set; }
+        public Visibility RawUserInputTextBoxVisibility { get; set; }
+
+        public string ButtonControlDisplayText
         {
             get => editButtonDisplayText;
             set
             {
                 editButtonDisplayText = value;
-                NotifyPropertyChanged("EditButtonDisplayText");
+                NotifyPropertyChanged("ButtonControlDisplayText");
             }
         }
 
@@ -66,24 +85,12 @@ namespace Regular.Models.RegexRuleParts
             }
         }
 
-        public bool IsEditButtonEnabled { get; set; }
+        public bool IsButtonControlEnabled { get; set; }
         public CaseSensitivity CaseSensitivityMode { get; set; }
         public RuleType RuleType { get; set; }
-        public AnyAlphanumeric()
-        {
-            DisplayText = "Alphanumeric";
-            RawUserInputValue = "";
-            IsOptional = false;
-            IsCaseSensitive = false;
-            CaseSensitiveCheckboxVisibility = Visibility.Hidden;
-            IsEditButtonEnabled = true;
-            CaseSensitivityMode = CaseSensitivity.AnyCase;
-            CaseSensitiveDisplayString = EnumUtils.GetEnumDescription(CaseSensitivityMode);
-            EditButtonDisplayText = "Ab3";
-            RuleType = RuleType.AnyAlphanumeric;
-        }
-        
+
         public event PropertyChangedEventHandler PropertyChanged;
+
         public void NotifyPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

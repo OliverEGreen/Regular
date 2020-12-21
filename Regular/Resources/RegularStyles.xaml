@@ -163,7 +163,7 @@
         </Setter>
     </Style>
 
-    <Style x:Key="EditRulePartButton" TargetType="Button">
+    <Style x:Key="RulePartButtonControl" TargetType="Button">
         <Setter Property="OverridesDefaultStyle" Value="True" />
         <Setter Property="Template">
             <Setter.Value>
