@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
-using Regular.Commands;
+using Regular.Commands.RuleEditor;
 using Regular.Enums;
 using Regular.Models;
 using Regular.Services;

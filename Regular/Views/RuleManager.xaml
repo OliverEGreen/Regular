@@ -9,6 +9,7 @@
     MinHeight="400"
     MaxWidth="600"
     MaxHeight="700"
+    DataContext="{Binding RuleManagerViewModel, RelativeSource={RelativeSource Self}}"
     ResizeMode="CanResizeWithGrip"
     SizeToContent="WidthAndHeight"
     Style="{DynamicResource StandardWindow}"
@@ -31,7 +32,7 @@
                 Width="25"
                 Height="25"
                 Margin="0,0,3,0"
-                Click="ReorderUpButton_Click"
+                Command="{Binding MoveRuleUpCommand}"
                 IsEnabled="False"
                 Style="{StaticResource ReorderUpButton}" />
             <Button
@@ -39,7 +40,7 @@
                 Width="25"
                 Height="25"
                 Margin="0,0,3,0"
-                Click="ReorderDownButton_Click"
+                Command="{Binding MoveRuleDownCommand}"
                 IsEnabled="False"
                 Style="{StaticResource ReorderDownButton}" />
             <Button
@@ -47,7 +48,7 @@
                 Width="25"
                 Height="25"
                 Margin="0,0,3,0"
-                Click="ButtonDuplicateRule_OnClick"
+                Command="{Binding DuplicateRuleCommand}"
                 FontSize="13"
                 IsEnabled="False"
                 Style="{StaticResource DuplicateRuleButton}" />
@@ -55,7 +56,7 @@
                 Name="ButtonStopStartRule"
                 Width="25"
                 Height="25"
-                Click="ButtonStopStartRule_OnClick"
+                Command="{Binding TriggerRuleFrozenCommand}"
                 FontSize="13"
                 IsEnabled="False"
                 Style="{StaticResource StopStartRuleButton}" />
@@ -74,11 +75,10 @@
             Name="ButtonAddNewRule"
             Grid.Row="0"
             Grid.Column="0"
-            Width="25"
             Height="25"
-            HorizontalAlignment="Right"
+            Margin="357,0,0,0"
             VerticalAlignment="Center"
-            Click="ButtonAddNewRule_Click"
+            Command="{Binding AddRuleCommand}"
             Style="{StaticResource AddItemButton}" />
         <Border
             Grid.Row="1"
@@ -94,8 +94,7 @@
                     Name="ListBoxRegexRules"
                     HorizontalAlignment="Stretch"
                     HorizontalContentAlignment="Stretch"
-                    MouseDown="ListBoxRegexRules_OnMouseDown"
-                    SelectionChanged="ListBoxRegexRules_OnSelectionChanged"
+                    SelectedItem="{Binding SelectedRegexRule, UpdateSourceTrigger=PropertyChanged}"
                     Style="{StaticResource StandardListBox}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
@@ -134,7 +133,7 @@
                                     Width="25"
                                     Height="30"
                                     HorizontalAlignment="Right"
-                                    Click="EditRegexRuleButton_Click"
+                                    Command="{Binding AddRuleCommand}"
                                     Style="{StaticResource EditItemButton}"
                                     ToolTip="Edit Rule" />
                                 <Button
@@ -145,7 +144,7 @@
                                     Height="30"
                                     Margin="0,0,-2,0"
                                     HorizontalAlignment="Right"
-                                    Click="DeleteRegexRuleButton_Click"
+                                    Command="{Binding DeleteRuleCommand}"
                                     Style="{StaticResource DeleteItemButton}"
                                     ToolTip="Delete Rule" />
                             </Grid>

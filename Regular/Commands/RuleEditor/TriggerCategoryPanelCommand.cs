@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Input;
 using Regular.ViewModels;
 
-namespace Regular.Commands
+namespace Regular.Commands.RuleEditor
 {
     public class TriggerCategoryPanelCommand : ICommand
     {

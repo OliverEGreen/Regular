@@ -1,28 +1,31 @@
 ﻿using System;
-using System.Windows;
 using System.Windows.Input;
+using Regular.Models;
 using Regular.Services;
 using Regular.ViewModels;
 
-namespace Regular.Commands
+namespace Regular.Commands.RuleEditor
 {
-    public class GenerateCompliantExampleCommand: ICommand
+    public class AddRulePartCommand : ICommand
     {
         private readonly RuleEditorViewModel ruleEditorViewModel;
 
-        public GenerateCompliantExampleCommand(RuleEditorViewModel ruleEditorViewModel)
+        public AddRulePartCommand(RuleEditorViewModel ruleEditorViewModel)
         {
             this.ruleEditorViewModel = ruleEditorViewModel;
         }
         public bool CanExecute(object parameter)
         {
-            return ruleEditorViewModel.StagingRule.RegexRuleParts.Count >= 0;
+            return true;
         }
 
         public void Execute(object parameter)
         {
-            ruleEditorViewModel.CompliantExampleVisibility= Visibility.Visible;
+            IRegexRulePart regexRulePart = RegexRulePart.Create(ruleEditorViewModel.SelectedRuleType);
+            ruleEditorViewModel.SelectedRegexRulePart = regexRulePart;
+            ruleEditorViewModel.StagingRule.RegexRuleParts.Add(regexRulePart);
             ruleEditorViewModel.CompliantExample = RegexAssemblyService.GenerateRandomExample(ruleEditorViewModel.StagingRule.RegexRuleParts);
+            ruleEditorViewModel.StagingRule.RegexString = RegexAssemblyService.AssembleRegexString(ruleEditorViewModel.StagingRule);
         }
 
         public event EventHandler CanExecuteChanged

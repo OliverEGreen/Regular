@@ -3,26 +3,26 @@ using System.Linq;
 using System.Windows.Input;
 using Regular.ViewModels;
 
-namespace Regular.Commands
+namespace Regular.Commands.RuleEditor
 {
-    public class SelectAllCategoriesCommand : ICommand
+    public class SelectNoneCategoriesCommand : ICommand
     {
         private readonly RuleEditorViewModel ruleEditorViewModel;
 
-        public SelectAllCategoriesCommand(RuleEditorViewModel ruleEditorViewModel)
+        public SelectNoneCategoriesCommand(RuleEditorViewModel ruleEditorViewModel)
         {
             this.ruleEditorViewModel = ruleEditorViewModel;
         }
         public bool CanExecute(object parameter) => ruleEditorViewModel.CategoriesPanelExpanded;
-        
+
         public void Execute(object parameter)
         {
             // We tick all of the categories on
             for (int i = 0; i < ruleEditorViewModel.StagingRule.TargetCategoryObjects.Count; i++)
             {
-                ruleEditorViewModel.StagingRule.TargetCategoryObjects[i].IsChecked = true;
+                ruleEditorViewModel.StagingRule.TargetCategoryObjects[i].IsChecked = false;
             }
-            
+
             // We update the number of categories ticked
             ruleEditorViewModel.NumberCategoriesSelected = ruleEditorViewModel.
                 StagingRule.

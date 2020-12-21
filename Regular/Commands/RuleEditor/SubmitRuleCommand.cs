@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Windows;
 using System.Windows.Input;
 using Regular.Models;
-using Regular.Services;
 using Regular.ViewModels;
 
-namespace Regular.Commands
+namespace Regular.Commands.RuleEditor
 {
     public class SubmitRuleCommand : ICommand
     {

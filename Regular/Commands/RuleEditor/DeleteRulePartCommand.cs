@@ -4,7 +4,7 @@ using Regular.Models;
 using Regular.Services;
 using Regular.ViewModels;
 
-namespace Regular.Commands
+namespace Regular.Commands.RuleEditor
 {
     public class DeleteRulePartCommand : ICommand
     {
