@@ -70,18 +70,24 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\EditRulePartCommand.cs" />
-    <Compile Include="Commands\GenerateCompliantExampleCommand.cs" />
-    <Compile Include="Commands\MoveRulePartDownCommand.cs" />
-    <Compile Include="Commands\MoveRulePartUpCommand.cs" />
-    <Compile Include="Commands\SelectAllCategoriesCommand.cs" />
-    <Compile Include="Commands\SelectNoneCategoriesCommand.cs" />
-    <Compile Include="Commands\SubmitRuleCommand.cs" />
-    <Compile Include="Commands\DeleteRulePartCommand.cs" />
-    <Compile Include="Commands\AddRulePartCommand.cs" />
-    <Compile Include="Commands\TriggerCategoryCheckedCommand.cs" />
-    <Compile Include="Commands\TriggerCategoryPanelCommand.cs" />
-    <Compile Include="DesignData\DesignTimeData.cs" />
+    <Compile Include="Commands\RuleEditor\EditRulePartCommand.cs" />
+    <Compile Include="Commands\RuleEditor\GenerateCompliantExampleCommand.cs" />
+    <Compile Include="Commands\RuleEditor\MoveRulePartDownCommand.cs" />
+    <Compile Include="Commands\RuleEditor\MoveRulePartUpCommand.cs" />
+    <Compile Include="Commands\RuleEditor\SelectAllCategoriesCommand.cs" />
+    <Compile Include="Commands\RuleEditor\SelectNoneCategoriesCommand.cs" />
+    <Compile Include="Commands\RuleEditor\SubmitRuleCommand.cs" />
+    <Compile Include="Commands\RuleEditor\DeleteRulePartCommand.cs" />
+    <Compile Include="Commands\RuleEditor\AddRulePartCommand.cs" />
+    <Compile Include="Commands\RuleEditor\TriggerCategoryCheckedCommand.cs" />
+    <Compile Include="Commands\RuleEditor\TriggerCategoryPanelCommand.cs" />
+    <Compile Include="Commands\RuleManager\AddRuleCommand.cs" />
+    <Compile Include="Commands\RuleManager\DeleteRuleCommand.cs" />
+    <Compile Include="Commands\RuleManager\DuplicateRuleCommand.cs" />
+    <Compile Include="Commands\RuleManager\EditRuleCommand.cs" />
+    <Compile Include="Commands\RuleManager\MoveRuleDownCommand.cs" />
+    <Compile Include="Commands\RuleManager\MoveRuleUpCommand.cs" />
+    <Compile Include="Commands\RuleManager\TriggerRuleFrozenCommand.cs" />
     <Compile Include="Enums\CaseSensitivity.cs" />
     <Compile Include="Enums\MatchType.cs" />
     <Compile Include="Models\DMUpdaters.cs" />
@@ -91,6 +97,7 @@
     <Compile Include="Models\RegexRuleParts\AnyLetter.cs" />
     <Compile Include="Models\RegexRuleParts\FreeText.cs" />
     <Compile Include="Models\RegexRuleParts\SelectionSet.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Services\AppRibbonServices.cs" />
     <Compile Include="Services\DeserializationServices.cs" />
     <Compile Include="Services\DMTriggerServices.cs" />
@@ -114,7 +121,6 @@
     <Compile Include="RegularUpdater.cs" />
     <Compile Include="Utilities\EnumUtils.cs" />
     <Compile Include="Utilities\WpfUtils.cs" />
-    <Compile Include="ViewModels\RuleEditorMockViewModel.cs" />
     <Compile Include="ViewModels\RuleEditorViewModel.cs" />
     <Compile Include="ViewModels\RuleManagerViewModel.cs" />
     <Compile Include="Views\RuleEditor.xaml.cs">

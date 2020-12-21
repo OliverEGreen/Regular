@@ -381,9 +381,9 @@
                                     Padding="3,0"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
-                                    Foreground="{StaticResource FontColorDefault}"
                                     Background="{StaticResource RulePartBoxColor}"
                                     FontSize="13"
+                                    Foreground="{StaticResource FontColorDefault}"
                                     Text="{Binding RawUserInputValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                     TextChanged="RawUserInputValueTextBox_OnTextChanged"
                                     Visibility="{Binding RawUserInputTextBoxVisibility}">
