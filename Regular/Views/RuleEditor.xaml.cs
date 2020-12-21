@@ -14,16 +14,16 @@ namespace Regular.Views
     public partial class RuleEditor
     {
         public RuleEditorViewModel RuleEditorViewModel { get; set; }
-        //public RuleEditorMockViewModel RuleEditorMockViewModel { get; set; }
 
-        // The two-argument constructor is for editing an existing rule
-        // We need a reference to the original rule ID, and to create a 
-        // staging rule for the user to play around with until submission
+        // Optional second argument constructor is for editing an existing rule
+        // We need a reference to the original rule ID, and to then create a 
+        // staging rule for the user to play around with until form submission / validation
         public RuleEditor(string documentGuid, RegexRule inputRule = null)
         {
             InitializeComponent();
             RuleEditorViewModel = inputRule == null ? new RuleEditorViewModel(documentGuid) : new RuleEditorViewModel(documentGuid, inputRule);
             DataContext = RuleEditorViewModel;
+
             // Lets us close the window by hitting the Escape key
             PreviewKeyDown += (s, e) => { if (e.Key == Key.Escape) Close(); };
             TextBoxNameYourRuleInput.Focus();
@@ -122,17 +122,35 @@ namespace Regular.Views
             RuleEditorViewModel.RuleNameInputDirty = false;
         }
 
-        private void ButtonEditRulePart_OnClick(object sender, RoutedEventArgs e)
+        private void ButtonControl_OnClick(object sender, RoutedEventArgs e)
         {
-            Button editButton = sender as Button;
-            IRegexRulePart regexRulePart = editButton.DataContext as IRegexRulePart;
-            if (!(regexRulePart.RuleType == RuleType.FreeText)) return;
+            // Jumping through hoops to determine if the sender RegexRulePart is 
+            // of the FreeText kind
+            if (!(sender is Button editButton)) return;
+            if (!(editButton.DataContext is IRegexRulePart regexRulePart)) return;
+            if (regexRulePart.RuleType != RuleType.FreeText) return;
             Grid grid = WpfUtils.FindParent<Grid>(editButton);
             UIElementCollection uiElementCollection = grid.Children;
-            TextBox textBox = uiElementCollection.OfType<TextBox>().FirstOrDefault();
-            textBox.BorderThickness = new Thickness(1);
-            textBox?.Focus();
+            TextBox textBox = uiElementCollection
+                .OfType<TextBox>()
+                .FirstOrDefault(x => x.Name == "RawUserInputValueTextBox");
+            if (textBox == null) return;
+            
+            // Sets focus to the textbox and highlights and text found in it
+            textBox.Focus();
             textBox.Select(0, textBox.Text.Length);
+        }
+
+        private void RawUserInputValueTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (!(sender is TextBox textBox)) return;
+            // Lets us close the window by hitting the Escape key
+            PreviewKeyDown += (s, eventHandler) =>
+            {
+                if (eventHandler.Key != Key.Escape && eventHandler.Key != Key.Enter) return;
+                ListBoxItem listBoxItem = WpfUtils.FindParent<ListBoxItem>(textBox);
+                listBoxItem?.Focus();
+            };
         }
     }
 }

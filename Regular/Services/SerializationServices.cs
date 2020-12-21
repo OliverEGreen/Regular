@@ -18,7 +18,7 @@ namespace Regular.Services
             return regexRuleParts.Select(regexRulePart => $@"{regexRulePart.RuleType}`
                                             {regexRulePart.IsOptional}`
                                             {regexRulePart.IsCaseSensitive}`
-                                            {regexRulePart.IsEditButtonEnabled}")
+                                            {regexRulePart.IsButtonControlEnabled}")
                 .ToList();
         }
     }

@@ -162,11 +162,16 @@ namespace Regular.Services
                         }
                         break;
                     case RuleType.FreeText:
-                        if (regexRulePart.DisplayText == "Free Text") continue;
-                        randomExampleString += regexRulePart.DisplayText;
+                        if (regexRulePart.IsCaseSensitive)
+                        {
+                            randomExampleString += regexRulePart.RawUserInputValue;
+                            break;
+                        }
+                        randomExampleString += anyCaseRandom >= 0.5
+                            ? regexRulePart.RawUserInputValue.ToLower()
+                            : regexRulePart.RawUserInputValue.ToUpper();
                         break;
                     case RuleType.SelectionSet:
-                        randomExampleString += regexRulePart.DisplayText;
                         break;
                     default:
                         randomExampleString += "";

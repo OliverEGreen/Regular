@@ -1,40 +1,53 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using System.Windows;
 using Regular.Enums;
-using Regular.Utilities;
 
 namespace Regular.Models.RegexRuleParts
 {
-    class SelectionSet : IRegexRulePart
+    internal class SelectionSet : IRegexRulePart
     {
+        private Visibility caseSensitiveCheckboxVisibility;
+        private string caseSensitiveDisplayString;
         private string displayText;
         private string editButtonDisplayText;
         private bool isCaseSensitive;
-        private Visibility caseSensitiveCheckboxVisibility;
-        private string caseSensitiveDisplayString;
 
-        public string DisplayText
+        public SelectionSet()
+        {
+            RuleTypeName = "Selection Set";
+            RawUserInputValue = "";
+            IsOptional = false;
+            IsCaseSensitive = true;
+            CaseSensitiveCheckboxVisibility = Visibility.Visible;
+            IsButtonControlEnabled = true;
+            CaseSensitivityMode = CaseSensitivity.None;
+            CaseSensitiveDisplayString = "Case Sensitive";
+            ButtonControlDisplayText = "Edit";
+            RuleType = RuleType.SelectionSet;
+            RawUserInputTextBoxVisibility = Visibility.Collapsed;
+            RuleTypeNameVisibility = Visibility.Visible;
+        }
+
+        public string RuleTypeName
         {
             get => displayText;
             set
             {
                 displayText = value;
-                NotifyPropertyChanged("DisplayText");
+                NotifyPropertyChanged("RuleTypeName");
             }
         }
 
-        public string EditButtonDisplayText
+        public Visibility RuleTypeNameVisibility { get; set; }
+        public Visibility RawUserInputTextBoxVisibility { get; set; }
+
+        public string ButtonControlDisplayText
         {
             get => editButtonDisplayText;
             set
             {
                 editButtonDisplayText = value;
-                NotifyPropertyChanged("EditButtonDisplayText");
+                NotifyPropertyChanged("ButtonControlDisplayText");
             }
         }
 
@@ -71,24 +84,12 @@ namespace Regular.Models.RegexRuleParts
             }
         }
 
-        public bool IsEditButtonEnabled { get; set; }
+        public bool IsButtonControlEnabled { get; set; }
         public CaseSensitivity CaseSensitivityMode { get; set; }
         public RuleType RuleType { get; set; }
-        public SelectionSet()
-        {
-            DisplayText = "Selection Set";
-            RawUserInputValue = "";
-            IsOptional = false;
-            IsCaseSensitive = false;
-            CaseSensitiveCheckboxVisibility = Visibility.Visible;
-            IsEditButtonEnabled = true;
-            CaseSensitivityMode = CaseSensitivity.None;
-            CaseSensitiveDisplayString = "Case Sensitive";
-            EditButtonDisplayText = "Edit";
-            RuleType = RuleType.SelectionSet;
-        }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
         public void NotifyPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
