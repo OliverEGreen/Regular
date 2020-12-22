@@ -5,7 +5,7 @@ using Regular.ViewModels;
 
 namespace Regular.Commands.RuleManager
 {
-    public class DuplicateRuleCommand
+    public class DuplicateRuleCommand : ICommand
     {
         private readonly RuleManagerViewModel ruleManagerViewModel;
 
@@ -14,13 +14,21 @@ namespace Regular.Commands.RuleManager
             this.ruleManagerViewModel = ruleManagerViewModel;
         }
 
-        public bool CanExecute => true;
-
-        public void Execute()
+        public bool CanExecute(object parameter)
         {
-            Views.RuleEditor ruleEditor = new Views.RuleEditor(
-                ruleManagerViewModel.DocumentGuid,
-                RegexRule.Duplicate(ruleManagerViewModel.DocumentGuid, ruleManagerViewModel.SelectedRegexRule));
+            // Can duplicate any rule as long as it's selected
+            return ruleManagerViewModel.SelectedRegexRule != null;
+        }
+
+        public void Execute(object parameter)
+        {
+            RegexRule duplicatedRegexRule =
+                RegexRule.Duplicate(ruleManagerViewModel.DocumentGuid, ruleManagerViewModel.SelectedRegexRule);
+
+            Views.RuleEditor ruleEditor = new Views.RuleEditor(ruleManagerViewModel.DocumentGuid)
+            {
+                RuleEditorViewModel = {StagingRule = duplicatedRegexRule}
+            };
             ruleEditor.ShowDialog();
         }
 

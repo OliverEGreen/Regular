@@ -5,7 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     x:Name="RuleEditorWindow"
-    Title=" Rule Editor"
+    Title="{Binding Title}"
     Height="600"
     MinWidth="{Binding WindowMinWidth}"
     MinHeight="500"
@@ -139,7 +139,7 @@
             <ScrollViewer
                 x:Name="ScrollViewerCategories"
                 PreviewMouseWheel="ScrollViewerCategories_PreviewMouseWheel"
-                Style="{StaticResource DefaultScrollerViewerStyle}">
+                Style="{StaticResource DefaultScrollViewerStyle}">
                 <ListBox
                     x:Name="ListBoxCategoriesSelection"
                     BorderThickness="0"
@@ -336,7 +336,7 @@
             <ScrollViewer
                 Name="ScrollViewerRuleParts"
                 PreviewMouseWheel="ScrollViewerRuleParts_PreviewMouseWheel"
-                Style="{StaticResource DefaultScrollerViewerStyle}"
+                Style="{StaticResource DefaultScrollViewerStyle}"
                 VerticalScrollBarVisibility="Visible">
                 <ListBox
                     Name="ListBoxRuleParts"
@@ -525,6 +525,7 @@
             VerticalAlignment="Bottom"
             Command="{Binding SubmitRuleCommand}"
             Content="OK"
+            Click="ButtonOk_OnClick"
             Style="{StaticResource StandardButton}" />
         <Button
             Name="ButtonSelectAll"

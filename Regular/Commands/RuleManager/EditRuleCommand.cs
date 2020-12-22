@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Windows.Controls;
 using System.Windows.Input;
 using Regular.Models;
 using Regular.ViewModels;
 
 namespace Regular.Commands.RuleManager
 {
-    public class EditRuleCommand
+    public class EditRuleCommand : ICommand
     {
         private readonly RuleManagerViewModel ruleManagerViewModel;
 
@@ -14,18 +13,19 @@ namespace Regular.Commands.RuleManager
         {
             this.ruleManagerViewModel = ruleManagerViewModel;
         }
-
-        public bool CanExecute() => true;
-
+        
+        public bool CanExecute(object parameter)
+        {
+            if (!(parameter is RegexRule regexRule)) return false;
+            
+            // If the rule is frozen, it cannot be edited
+            return !(regexRule.IsFrozen);
+        }
+        
         public void Execute(object parameter)
         {
-            if (!(parameter is Button button)) return;
             // We open up the editor with the existing rule
-            Views.RuleEditor ruleEditor = new Views.RuleEditor
-            (
-                ruleManagerViewModel.DocumentGuid,
-                (RegexRule)button.DataContext
-            );
+            Views.RuleEditor ruleEditor = new Views.RuleEditor(ruleManagerViewModel.DocumentGuid, (RegexRule)parameter);
             ruleEditor.ShowDialog();
         }
 

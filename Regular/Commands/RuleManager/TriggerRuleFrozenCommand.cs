@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Regular.ViewModels;
 
 namespace Regular.Commands.RuleManager
 {
-    public class TriggerRuleFrozenCommand
+    public class TriggerRuleFrozenCommand : ICommand
     {
         private readonly RuleManagerViewModel ruleManagerViewModel;
 
@@ -17,13 +13,13 @@ namespace Regular.Commands.RuleManager
             this.ruleManagerViewModel = ruleManagerViewModel;
         }
 
-        public bool CanExecute()
+        public bool CanExecute(object parameter)
         {
             // If there's no selected item, we return
             return ruleManagerViewModel.SelectedRegexRule != null;
         }
 
-        public void Execute()
+        public void Execute(object parameter)
         {
             ruleManagerViewModel.SelectedRegexRule.IsFrozen = !(ruleManagerViewModel.SelectedRegexRule.IsFrozen);
         }

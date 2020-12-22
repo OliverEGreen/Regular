@@ -8,6 +8,7 @@ using Regular.Models;
 using Regular.Services;
 using Regular.Utilities;
 using Regular.ViewModels;
+using System.Collections.Generic;
 
 namespace Regular.Views
 {
@@ -46,10 +47,17 @@ namespace Regular.Views
         
         private void TextBoxNameYourRuleInput_OnTextChanged(object sender, TextChangedEventArgs e)
         {
+            // Once touched, we can display an error message if the value is invalid
             RuleEditorViewModel.RuleNameInputDirty = true;
-            string ruleNameInputFeedback = InputValidationServices.ValidateRuleName(RuleEditorViewModel.StagingRule.RuleName);
-            TextBox textBox = (TextBox)sender;
 
+            // Gathering other RegexRule names to ensure the user inputs a unique name
+            List<RegexRule> otherRegexRules = RegexRules.AllRegexRules[RuleEditorViewModel.DocumentGuid]
+                    .Where(x => x != RuleEditorViewModel.StagingRule)
+                    .ToList();
+            string ruleNameInputFeedback = InputValidationServices.ValidateRuleName(RuleEditorViewModel.StagingRule, otherRegexRules);
+
+            // Sets ellipse colours and feedback visibility
+            TextBox textBox = (TextBox)sender;
             if (textBox.Text.Length < 1)
             {
                 if (RuleEditorViewModel.RuleNameInputDirty)
@@ -152,6 +160,10 @@ namespace Regular.Views
                 listBoxItem?.Focus();
             };
         }
+
+        // If the user is allowed to submit the rule, we close the window to prevent them 
+        // creating the same rule as many times as they like
+        private void ButtonOk_OnClick(object sender, RoutedEventArgs e) => Close();
     }
 }
  

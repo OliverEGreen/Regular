@@ -17,7 +17,7 @@ namespace Regular.Views
         {
             InitializeComponent();
             RuleManagerViewModel = new RuleManagerViewModel(documentGuid);
-
+            DataContext = RuleManagerViewModel;
             // Gives us the ability to close the window with the Esc kay
             PreviewKeyDown += (s, e) =>
             {

@@ -5,7 +5,7 @@ using Regular.ViewModels;
 
 namespace Regular.Commands.RuleManager
 {
-    public class MoveRuleUpCommand
+    public class MoveRuleUpCommand : ICommand
     {
         private readonly RuleManagerViewModel ruleManagerViewModel;
 
@@ -14,7 +14,7 @@ namespace Regular.Commands.RuleManager
             this.ruleManagerViewModel = ruleManagerViewModel;
         }
 
-        public bool CanExecute()
+        public bool CanExecute(object parameter)
         {
             if (ruleManagerViewModel.RegexRules.Count < 1 ||
                 ruleManagerViewModel.SelectedRegexRule == null) return false;
@@ -24,7 +24,7 @@ namespace Regular.Commands.RuleManager
             return index > 0;
         }
 
-        public void Execute()
+        public void Execute(object parameter)
         {
             RegexRule selectedRegexRule = ruleManagerViewModel.SelectedRegexRule;
             

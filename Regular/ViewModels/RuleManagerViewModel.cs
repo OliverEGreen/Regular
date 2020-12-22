@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using Regular.Annotations;
 using Regular.Commands.RuleManager;
 using Regular.Models;
+using Regular.Views;
 
 namespace Regular.ViewModels
 {
@@ -52,7 +45,8 @@ namespace Regular.ViewModels
 
         public RuleManagerViewModel(string documentGuid)
         {
-            RegexRules = Models.RegexRules.AllRegexRules[documentGuid];
+            DocumentGuid = documentGuid;
+            RegexRules = Models.RegexRules.AllRegexRules[DocumentGuid];
 
             AddRuleCommand = new AddRuleCommand(this);
             DeleteRuleCommand = new DeleteRuleCommand(this);

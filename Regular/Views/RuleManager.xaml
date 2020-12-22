@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    x:Name="RuleManagerWindow"
     Title=" Rule Manager"
     MinWidth="420"
     MinHeight="400"
@@ -33,7 +34,6 @@
                 Height="25"
                 Margin="0,0,3,0"
                 Command="{Binding MoveRuleUpCommand}"
-                IsEnabled="False"
                 Style="{StaticResource ReorderUpButton}" />
             <Button
                 Name="ButtonMoveRulePartDown"
@@ -41,7 +41,6 @@
                 Height="25"
                 Margin="0,0,3,0"
                 Command="{Binding MoveRuleDownCommand}"
-                IsEnabled="False"
                 Style="{StaticResource ReorderDownButton}" />
             <Button
                 Name="ButtonDuplicateRule"
@@ -50,7 +49,6 @@
                 Margin="0,0,3,0"
                 Command="{Binding DuplicateRuleCommand}"
                 FontSize="13"
-                IsEnabled="False"
                 Style="{StaticResource DuplicateRuleButton}" />
             <Button
                 Name="ButtonStopStartRule"
@@ -58,7 +56,6 @@
                 Height="25"
                 Command="{Binding TriggerRuleFrozenCommand}"
                 FontSize="13"
-                IsEnabled="False"
                 Style="{StaticResource StopStartRuleButton}" />
         </StackPanel>
         <Label
@@ -75,6 +72,7 @@
             Name="ButtonAddNewRule"
             Grid.Row="0"
             Grid.Column="0"
+            Width="25"
             Height="25"
             Margin="357,0,0,0"
             VerticalAlignment="Center"
@@ -88,12 +86,14 @@
             <ScrollViewer
                 Name="RulesScrollViewer"
                 PreviewMouseWheel="RegexRulesScrollViewer_PreviewMouseWheel"
-                Style="{StaticResource DefaultScrollerViewerStyle}"
+                Style="{StaticResource DefaultScrollViewerStyle}"
                 VerticalScrollBarVisibility="Visible">
                 <ListBox
                     Name="ListBoxRegexRules"
                     HorizontalAlignment="Stretch"
                     HorizontalContentAlignment="Stretch"
+                    ItemsSource="{Binding RegexRules}"
+                    SelectedIndex="0"
                     SelectedItem="{Binding SelectedRegexRule, UpdateSourceTrigger=PropertyChanged}"
                     Style="{StaticResource StandardListBox}">
                     <ListBox.ItemTemplate>
@@ -133,7 +133,8 @@
                                     Width="25"
                                     Height="30"
                                     HorizontalAlignment="Right"
-                                    Command="{Binding AddRuleCommand}"
+                                    Command="{Binding ElementName=RuleManagerWindow, Path=DataContext.EditRuleCommand}"
+                                    CommandParameter="{Binding .}"
                                     Style="{StaticResource EditItemButton}"
                                     ToolTip="Edit Rule" />
                                 <Button
@@ -144,7 +145,8 @@
                                     Height="30"
                                     Margin="0,0,-2,0"
                                     HorizontalAlignment="Right"
-                                    Command="{Binding DeleteRuleCommand}"
+                                    Command="{Binding ElementName=RuleManagerWindow, Path=DataContext.DeleteRuleCommand}"
+                                    CommandParameter="{Binding .}"
                                     Style="{StaticResource DeleteItemButton}"
                                     ToolTip="Delete Rule" />
                             </Grid>
