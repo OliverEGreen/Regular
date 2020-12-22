@@ -106,7 +106,16 @@ namespace Regular.ViewModels
         public ParameterObject TrackingParameter { get; set; }
 
         // View-based properties 
-        public string Title { get; set; }
+        private string title;
+        public string Title
+        {
+            get => title;
+            set
+            {
+                title = value;
+                NotifyPropertyChanged("Title");
+            }
+        }
 
         private string compliantExample;
         public string CompliantExample
@@ -266,6 +275,10 @@ namespace Regular.ViewModels
             // If there's no rule provided, we start from scratch
             // Otherwise we create a staging rule to work with until submission / validation
             StagingRule = inputRule == null ? RegexRule.Create(documentGuid) : RegexRule.Duplicate(DocumentGuid, InputRule);
+            
+            // If there is an InputRule, we are editing an existing rule
+            EditingExistingRule = InputRule != null;
+            Title = EditingExistingRule ? $"Editing Rule: {StagingRule.RuleName}" : "Creating New Rule";
 
             AddRulePartCommand = new AddRulePartCommand(this);
             DeleteRulePartCommand = new DeleteRulePartCommand(this);
@@ -311,11 +324,9 @@ namespace Regular.ViewModels
                 {"Partial Match", MatchType.PartialMatch}
             };
             
-            if (InputRule == null) return;
+            if (!EditingExistingRule) return;
             void LoadExistingRule()
             {
-                EditingExistingRule = true;
-                Title = EditingExistingRule ? $"Editing Rule: {StagingRule.RuleName}" : "Creating New Rule";
                 OutputParameterNameInputEnabled = !EditingExistingRule;
                 
                 // Selecting the previously-saved tracking parameter

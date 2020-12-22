@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Regular.Models;
 using Regular.ViewModels;
 
 namespace Regular.Commands.RuleManager
 {
-    public class MoveRuleDownCommand
+    public class MoveRuleDownCommand : ICommand
     {
         private readonly RuleManagerViewModel ruleManagerViewModel;
 
@@ -18,7 +14,7 @@ namespace Regular.Commands.RuleManager
             this.ruleManagerViewModel = ruleManagerViewModel;
         }
 
-        public bool CanExecute()
+        public bool CanExecute(object parameter)
         {
             if (ruleManagerViewModel.RegexRules.Count < 1 ||
                 ruleManagerViewModel.SelectedRegexRule == null) return false;
@@ -27,7 +23,7 @@ namespace Regular.Commands.RuleManager
             return index < ruleManagerViewModel.RegexRules.Count - 1;
         }
 
-        public void Execute()
+        public void Execute(object parameter)
         {
             RegexRule selectedRegexRule = ruleManagerViewModel.SelectedRegexRule;
             

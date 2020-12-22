@@ -7,7 +7,7 @@ using Regular.ViewModels;
 
 namespace Regular.Commands.RuleManager
 {
-    public class DeleteRuleCommand
+    public class DeleteRuleCommand : ICommand
     {
         private readonly RuleManagerViewModel ruleManagerViewModel;
 
@@ -16,21 +16,16 @@ namespace Regular.Commands.RuleManager
             this.ruleManagerViewModel = ruleManagerViewModel;
         }
 
-        public bool CanExecute()
-        {
-            // The delete button is inactive if there are no rules, or there is no selected rule
-            return !(ruleManagerViewModel.RegexRules.Count < 1 || ruleManagerViewModel.SelectedRegexRule == null);
-        }
+        public bool CanExecute(object parameter) => true;
 
         public void Execute(object parameter)
         {
             // TODO: Add in confirmation button before rule gets deleted forever
-            if (!(parameter is Button button)) return;
-            string regexRuleGuid = ((RegexRule)button.DataContext).RuleGuid;
+            if (!(parameter is RegexRule regexRule)) return;
 
             // Deleting both the cached RegexRule and the associated DataStorage object
-            RegexRule.Delete(ruleManagerViewModel.DocumentGuid, regexRuleGuid);
-            ExtensibleStorageServices.DeleteRegexRuleFromExtensibleStorage(ruleManagerViewModel.DocumentGuid, regexRuleGuid);
+            RegexRule.Delete(ruleManagerViewModel.DocumentGuid, regexRule.RuleGuid);
+            ExtensibleStorageServices.DeleteRegexRuleFromExtensibleStorage(ruleManagerViewModel.DocumentGuid, regexRule.RuleGuid);
         }
 
         public event EventHandler CanExecuteChanged

@@ -65,10 +65,10 @@ namespace Regular.Models
             get
             {
                 toolTipString = $"Rule RuleName: {RuleName}" + Environment.NewLine +
-                                $"Applies To: {String.Join(", ", TargetCategoryObjects.Select(x => x.CategoryObjectId))}" + Environment.NewLine +
-                                $"Tracks Parameter : {TrackingParameterObject}" + Environment.NewLine +
+                                $"Applies To: {String.Join(", ", TargetCategoryObjects.Where(x => x.IsChecked).Select(x => x.CategoryObjectName))}" + Environment.NewLine +
+                                $"Tracks Parameter : {TrackingParameterObject.ParameterObjectName}" + Environment.NewLine +
                                 $"Regex String: {RegexString}" + Environment.NewLine +
-                                $"Writes To : {OutputParameterObject}" + Environment.NewLine +
+                                $"Writes To : {OutputParameterObject.ParameterObjectName}" + Environment.NewLine +
                                 $"Created By: {CreatedBy}" + Environment.NewLine +
                                 $"Created At: {DateTimeCreated}";
                 return toolTipString;
@@ -76,12 +76,7 @@ namespace Regular.Models
             set
             {
                 toolTipString = value;
-                NotifyPropertyChanged("RuleName");
-                NotifyPropertyChanged("TargetCategoryObjects");
-                NotifyPropertyChanged("TrackingParameterObject");
-                NotifyPropertyChanged("OutputParameterObject");
                 NotifyPropertyChanged("ToolTip");
-                NotifyPropertyChanged("RegexString");
             }
         }
         public string RegexString
@@ -187,13 +182,11 @@ namespace Regular.Models
         {
             return GetDocumentRegexRules(documentGuid).Select(x => x.RuleGuid).ToList();
         }
-        public static void Update(string documentGuid, string regexRuleGuid, RegexRule newRegexRule)
+        public static void Update(string documentGuid, RegexRule existingRegexRule, RegexRule newRegexRule)
         {
             // Takes a newly-generated RegexRule object and sets an existing rules values to match
             // To be used when updating an existing rule from the Rule Editor
-            RegexRule existingRegexRule = GetRuleById(documentGuid, regexRuleGuid);
-            if (existingRegexRule == null) return;
-
+            
             existingRegexRule.RuleName = newRegexRule.RuleName;
             existingRegexRule.TargetCategoryObjects = newRegexRule.TargetCategoryObjects;
             existingRegexRule.TrackingParameterObject = newRegexRule.TrackingParameterObject;
@@ -203,7 +196,9 @@ namespace Regular.Models
             existingRegexRule.RegexString = newRegexRule.RegexString;
             existingRegexRule.IsFrozen = newRegexRule.IsFrozen;
 
+            // Need to check if existingRegexRule is in ExtensibleStorage or not.
             ExtensibleStorageServices.UpdateRegexRuleInExtensibleStorage(documentGuid, existingRegexRule.RuleGuid, newRegexRule);
+            
             DmTriggerServices.UpdateAllTriggers(documentGuid);
         }
         public static void Delete(string documentGuid, string regexRuleGuid)

@@ -10,19 +10,13 @@ namespace Regular.Services
     {
         // TODO: We need to ignore non-unicode characters. In fact, we might just stick to the basic alphabet.
         // TODO: We need methods by which to test inputs given to individual RegexRuleParts
-
-        public static string ReturnUserFeedback(string ruleNameInput, string outputParameterNameInput, ObservableCollection<IRegexRulePart> regexRuleParts)
-        {
-            if (!string.IsNullOrEmpty(ValidateRuleName(ruleNameInput))) return ValidateRuleName(ruleNameInput);
-            if (!string.IsNullOrEmpty(ValidateOutputParameterName(outputParameterNameInput))) return ValidateOutputParameterName(outputParameterNameInput);
-            if (!string.IsNullOrEmpty(ValidateRegexRuleParts(regexRuleParts))) return ValidateRegexRuleParts(regexRuleParts);
-            return "";
-        }
-
+        
         public static List<string> IllegalRevitCharacters = new List<string> { "/", ":", "{", "}", "[", "]", "|", ";", ">", "<", "?", "`", "~", Environment.NewLine };
-        public static string ValidateRuleName(string input)
+        public static string ValidateRuleName(RegexRule regexRule, List<RegexRule> existingRegexRules)
         {
-            return string.IsNullOrWhiteSpace(input) ? "Rule name cannot be blank." : null;
+            if (string.IsNullOrWhiteSpace(regexRule.RuleName)) return "Rule name cannot be blank";
+            List<string> existingRuleNames = existingRegexRules.Select(x => x.RuleName).ToList();
+            return existingRuleNames.Contains(regexRule.RuleName) ? $"Rule name '{regexRule.RuleName}' is already taken by another rule" : null;
         }
         public static string ValidateOutputParameterName(string input)
         {

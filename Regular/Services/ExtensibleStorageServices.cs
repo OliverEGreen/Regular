@@ -180,8 +180,9 @@ namespace Regular.Services
         {
             Document document = DocumentGuidServices.GetRevitDocumentByGuid(documentGuid);
             KeyValuePair<DataStorage, Entity> ruleInExtensibleStorage = GetRegexRuleInExtensibleStorage(documentGuid, regexRuleGuid);
-            DataStorage dataStorage = ruleInExtensibleStorage.Key;
             Entity regexRuleEntity = ruleInExtensibleStorage.Value;
+            if (regexRuleEntity == null) return;
+            DataStorage dataStorage = ruleInExtensibleStorage.Key;
 
             string ruleName = regexRuleEntity.Get<string>("RuleName");
             using (Transaction transaction = new Transaction(document, $"Regular - Deleting Rule {ruleName}"))

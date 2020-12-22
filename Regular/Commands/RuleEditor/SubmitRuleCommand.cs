@@ -42,7 +42,7 @@ namespace Regular.Commands.RuleEditor
             if (ruleEditorViewModel.EditingExistingRule)
             {
                 // Updates both the static cache and ExtensibleStorage.
-                RegexRule.Update(ruleEditorViewModel.DocumentGuid, ruleEditorViewModel.InputRule.RuleGuid, ruleEditorViewModel.StagingRule);
+                RegexRule.Update(ruleEditorViewModel.DocumentGuid, ruleEditorViewModel.InputRule, ruleEditorViewModel.StagingRule);
             }
             else
             {
