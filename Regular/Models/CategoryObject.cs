@@ -1,9 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using Autodesk.Revit.DB;
-using Regular.Services;
+﻿using System.ComponentModel;
 
 namespace Regular.Models
 {
@@ -43,10 +38,6 @@ namespace Regular.Models
                 isChecked = value;
                 NotifyPropertyChanged("IsChecked");
             }
-        }
-        public CategoryObject()
-        {
-
         }
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string propertyName)

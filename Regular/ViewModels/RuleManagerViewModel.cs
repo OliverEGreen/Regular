@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using Regular.Commands.RuleManager;
 using Regular.Models;
-using Regular.Views;
 
 namespace Regular.ViewModels
 {

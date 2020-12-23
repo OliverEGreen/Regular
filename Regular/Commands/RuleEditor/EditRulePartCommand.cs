@@ -8,7 +8,6 @@ namespace Regular.Commands.RuleEditor
 {
     public class EditRulePartCommand: ICommand
     {
-        public EditRulePartCommand() {}
         public bool CanExecute(object parameter)
         {
             if (!(parameter is IRegexRulePart regexRulePart)) return false;

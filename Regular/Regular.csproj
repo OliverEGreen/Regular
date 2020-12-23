@@ -122,7 +122,6 @@
     <Compile Include="Services\SerializationServices.cs" />
     <Compile Include="RegularUpdater.cs" />
     <Compile Include="Utilities\EnumUtils.cs" />
-    <Compile Include="Utilities\ListUtils.cs" />
     <Compile Include="Utilities\WpfUtils.cs" />
     <Compile Include="ViewModels\RuleEditorViewModel.cs" />
     <Compile Include="ViewModels\RuleManagerViewModel.cs" />

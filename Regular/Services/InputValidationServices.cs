@@ -24,12 +24,5 @@ namespace Regular.Services
             if (string.IsNullOrWhiteSpace(input)) return "Output parameter name cannot be blank.";
             return IllegalRevitCharacters.Any(input.Contains) ? @"Output parameter name cannot contain  / : { } [ ] | ; > < ? ` ~" : null;
         }
-
-        public static string ValidateRegexRuleParts(ObservableCollection<IRegexRulePart> regexRuleParts)
-        {
-            // We need to build & run some validations for each kind of RegexRulePart here.
-            if (regexRuleParts.Count < 1) return "Rules require at least 1 rule part.";
-            return "";
-        }
     }
 }
