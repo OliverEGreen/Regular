@@ -1,10 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using System.Collections.ObjectModel;
 using System.Windows.Input;
-using Autodesk.Revit.DB;
-using Regular.Models;
-using Regular.Services;
 using Regular.ViewModels;
 
 namespace Regular.Views

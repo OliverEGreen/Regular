@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using Newtonsoft.Json;
 using Regular.Enums;
 using Regular.Services;
 
@@ -189,19 +188,12 @@ namespace Regular.Models
             
             return duplicateRegexRule;
         }
-        public static RegexRule GetRuleById(string documentGuid, string regexRuleGuid)
-        {
-            ObservableCollection<RegexRule> documentRegexRules = GetDocumentRegexRules(documentGuid);
-            return documentRegexRules?.FirstOrDefault(x => x.RuleGuid == regexRuleGuid);
-        }
+        
         public static ObservableCollection<RegexRule> GetDocumentRegexRules(string documentGuid)
         {
             return RegexRules.AllRegexRules.ContainsKey(documentGuid) ? RegexRules.AllRegexRules[documentGuid] : null;
         }
-        public static List<string> GetDocumentRegexRuleGuids(string documentGuid)
-        {
-            return GetDocumentRegexRules(documentGuid).Select(x => x.RuleGuid).ToList();
-        }
+        
         public static void Update(string documentGuid, RegexRule existingRegexRule, RegexRule newRegexRule)
         {
             // Takes a newly-generated RegexRule object and sets an existing rules values to match

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Autodesk.Revit.UI;
 using Regular.Enums;
 using Regular.Models;
 

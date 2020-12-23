@@ -51,7 +51,6 @@ namespace Regular.Services
                 dataStorage.SetEntity(entity);
                 transaction.Commit();
             }
-            string serializedRegexRule = entity.Get<string>("SerializedRegexRule");
         }
         public static ObservableCollection<RegexRule> GetAllRegexRulesInExtensibleStorage(string documentGuid)
         {
