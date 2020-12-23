@@ -6,7 +6,7 @@ using Regular.Models.RegexRuleParts;
 
 namespace Regular.Models
 {
-    public static class RegexRulePart
+    public class RegexRulePart
     {
         // Takes a RuleType enum value and returns a new RegexRulePart implementing IRegexRulePart
         public static IRegexRulePart Create(RuleType ruleType)
