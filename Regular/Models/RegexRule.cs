@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using Newtonsoft.Json;
 using Regular.Enums;
 using Regular.Services;
 
@@ -19,7 +20,10 @@ namespace Regular.Models
         private string regexString;
         private MatchType matchType;
         private bool isFrozen;
-        
+        private string dateTimeCreated;
+        private string createdBy;
+        private string ruleGuid;
+
         public string RuleName
         {
             get => ruleName;
@@ -29,9 +33,25 @@ namespace Regular.Models
                 NotifyPropertyChanged("RuleName");
             }
         }
-        public string DateTimeCreated { get; private set; }
-        public string CreatedBy { get; private set; }
-        public string RuleGuid { get; private set; }
+
+        public string DateTimeCreated
+        {
+            get => dateTimeCreated;
+            private set => dateTimeCreated = value;
+        }
+
+        public string CreatedBy
+        {
+            get => createdBy;
+            private set => createdBy = value;
+        }
+
+        public string RuleGuid
+        {
+            get => ruleGuid;
+            private set => ruleGuid = value;
+        }
+
         public ObservableCollection<CategoryObject> TargetCategoryObjects
         {
             get => targetCategoryObjects;

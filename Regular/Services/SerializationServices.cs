@@ -1,25 +1,27 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using Regular.Models;
+using Newtonsoft.Json;
 
 namespace Regular.Services
 {
     public static class SerializationServices
     {
-        public static IList<T> ConvertListToIList<T>(List<T> inputList)
+        private static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings()
         {
-            IList<T> iList = new List<T>();
-            foreach(T input in inputList) { iList.Add(input); }
-            return iList;
+            TypeNameHandling = TypeNameHandling.Auto
+        };
+        public static string SerializeRegexRule(RegexRule regexRule)
+        {
+            return JsonConvert.SerializeObject(regexRule, JsonSerializerSettings);
         }
-        public static IList<string> SerializeRegexRuleParts(ObservableCollection<IRegexRulePart> regexRuleParts)
+
+        public static RegexRule DeserializeRegexRule(string serializedRegexRule)
         {
-            return regexRuleParts.Select(regexRulePart => $@"{regexRulePart.RuleType}`
-                                            {regexRulePart.IsOptional}`
-                                            {regexRulePart.IsCaseSensitive}`
-                                            {regexRulePart.IsButtonControlEnabled}")
-                .ToList();
+            return JsonConvert.DeserializeObject<RegexRule>(serializedRegexRule, JsonSerializerSettings);
         }
     }
 }
