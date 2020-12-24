@@ -523,9 +523,9 @@
             Margin="0,10,0,0"
             HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
+            Click="ButtonOk_OnClick"
             Command="{Binding SubmitRuleCommand}"
             Content="OK"
-            Click="ButtonOk_OnClick"
             Style="{StaticResource StandardButton}" />
         <Button
             Name="ButtonSelectAll"

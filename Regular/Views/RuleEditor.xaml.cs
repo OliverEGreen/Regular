@@ -133,10 +133,10 @@ namespace Regular.Views
         private void ButtonControl_OnClick(object sender, RoutedEventArgs e)
         {
             // Jumping through hoops to determine if the sender RegexRulePart is 
-            // of the FreeText kind
+            // of the CustomText kind
             if (!(sender is Button editButton)) return;
             if (!(editButton.DataContext is IRegexRulePart regexRulePart)) return;
-            if (regexRulePart.RuleType != RuleType.FreeText) return;
+            if (regexRulePart.RuleType != RuleType.CustomText) return;
             Grid grid = WpfUtils.FindParent<Grid>(editButton);
             UIElementCollection uiElementCollection = grid.Children;
             TextBox textBox = uiElementCollection

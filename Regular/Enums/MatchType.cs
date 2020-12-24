@@ -7,7 +7,7 @@ namespace Regular.Enums
         [Description("Exact Match")]
         ExactMatch,
         [Description("Match Anywhere")]
-        PartialMatch,
+        MatchAnywhere,
         [Description("Match Beginning")]
         MatchAtBeginning,
         [Description("Match Ending")]

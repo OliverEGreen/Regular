@@ -98,8 +98,8 @@
     <Compile Include="Models\RegexRuleParts\AnyAlphanumeric.cs" />
     <Compile Include="Models\RegexRuleParts\AnyDigit.cs" />
     <Compile Include="Models\RegexRuleParts\AnyLetter.cs" />
-    <Compile Include="Models\RegexRuleParts\FreeText.cs" />
-    <Compile Include="Models\RegexRuleParts\SelectionSet.cs" />
+    <Compile Include="Models\RegexRuleParts\CustomText.cs" />
+    <Compile Include="Models\RegexRuleParts\OptionSet.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Services\AppRibbonServices.cs" />
     <Compile Include="Services\DMTriggerServices.cs" />
@@ -125,6 +125,9 @@
     <Compile Include="Utilities\WpfUtils.cs" />
     <Compile Include="ViewModels\RuleEditorViewModel.cs" />
     <Compile Include="ViewModels\RuleManagerViewModel.cs" />
+    <Compile Include="Views\OptionSetEditor.xaml.cs">
+      <DependentUpon>OptionSetEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\RuleEditor.xaml.cs">
       <DependentUpon>RuleEditor.xaml</DependentUpon>
     </Compile>
@@ -136,6 +139,10 @@
     <Page Include="Resources\RegularStyles.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\OptionSetEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\RuleEditor.xaml">
       <SubType>Designer</SubType>

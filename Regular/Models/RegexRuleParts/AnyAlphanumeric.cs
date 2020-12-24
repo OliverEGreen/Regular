@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows;
 using Regular.Enums;
 using Regular.Utilities;
@@ -12,6 +14,14 @@ namespace Regular.Models.RegexRuleParts
         private string displayText;
         private string editButtonDisplayText;
         private bool isCaseSensitive;
+        private ObservableCollection<string> options;
+        private Visibility ruleTypeNameVisibility;
+        private Visibility rawUserInputTextBoxVisibility;
+        private string rawUserInputValue;
+        private bool isOptional;
+        private bool isButtonControlEnabled;
+        private CaseSensitivity caseSensitivityMode;
+        private RuleType ruleType;
 
         public AnyAlphanumeric()
         {
@@ -27,6 +37,7 @@ namespace Regular.Models.RegexRuleParts
             RuleType = RuleType.AnyAlphanumeric;
             RawUserInputTextBoxVisibility = Visibility.Collapsed;
             RuleTypeNameVisibility = Visibility.Visible;
+            Options = new ObservableCollection<string>();
         }
 
         public string RuleTypeName
@@ -39,8 +50,17 @@ namespace Regular.Models.RegexRuleParts
             }
         }
 
-        public Visibility RuleTypeNameVisibility { get; set; }
-        public Visibility RawUserInputTextBoxVisibility { get; set; }
+        public Visibility RuleTypeNameVisibility
+        {
+            get => ruleTypeNameVisibility;
+            set => ruleTypeNameVisibility = value;
+        }
+
+        public Visibility RawUserInputTextBoxVisibility
+        {
+            get => rawUserInputTextBoxVisibility;
+            set => rawUserInputTextBoxVisibility = value;
+        }
 
         public string ButtonControlDisplayText
         {
@@ -52,8 +72,27 @@ namespace Regular.Models.RegexRuleParts
             }
         }
 
-        public string RawUserInputValue { get; set; }
-        public bool IsOptional { get; set; }
+        public string RawUserInputValue
+        {
+            get => rawUserInputValue;
+            set => rawUserInputValue = value;
+        }
+
+        public ObservableCollection<string> Options
+        {
+            get => options;
+            set
+            {
+                options = value;
+                NotifyPropertyChanged("Options");
+            }
+        }
+
+        public bool IsOptional
+        {
+            get => isOptional;
+            set => isOptional = value;
+        }
 
         public bool IsCaseSensitive
         {
@@ -85,9 +124,23 @@ namespace Regular.Models.RegexRuleParts
             }
         }
 
-        public bool IsButtonControlEnabled { get; set; }
-        public CaseSensitivity CaseSensitivityMode { get; set; }
-        public RuleType RuleType { get; set; }
+        public bool IsButtonControlEnabled
+        {
+            get => isButtonControlEnabled;
+            set => isButtonControlEnabled = value;
+        }
+
+        public CaseSensitivity CaseSensitivityMode
+        {
+            get => caseSensitivityMode;
+            set => caseSensitivityMode = value;
+        }
+
+        public RuleType RuleType
+        {
+            get => ruleType;
+            set => ruleType = value;
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

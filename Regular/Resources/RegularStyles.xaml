@@ -24,6 +24,9 @@
     <SolidColorBrush x:Key="WindowBackgroundColor" Color="#FAFAFA" />
     <SolidColorBrush x:Key="RulePartBoxColor" Color="#EBEBEB" />
 
+    <SolidColorBrush x:Key="DataGridDarkGrey" Color="#F2F2F2" />
+    <SolidColorBrush x:Key="TextBoxBackgroundColor" Color="#EBEBEB" />
+
     <Style x:Key="StandardWindow" TargetType="Window">
         <Setter Property="ResizeMode" Value="NoResize" />
         <Setter Property="Topmost" Value="False" />
@@ -107,6 +110,39 @@
         <Setter Property="Padding" Value="0px" />
         <Setter Property="BorderThickness" Value="0px" />
         <Setter Property="VerticalAlignment" Value="Stretch" />
+    </Style>
+
+    <Style x:Key="StandardDataGridColumnHeaderStyle" TargetType="DataGridColumnHeader">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="DataGridColumnHeader">
+                    <Label
+                        Background="{StaticResource DataGridDarkGrey}"
+                        Content="{TemplateBinding Content}"
+                        FontFamily="Segoe UI"
+                        Foreground="{StaticResource FontColorDefault}" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <Style x:Key="StandardDataGrid" TargetType="DataGrid">
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="AutoGenerateColumns" Value="False" />
+        <Setter Property="Background" Value="{StaticResource DataGridDarkGrey}" />
+        <Setter Property="CanUserAddRows" Value="False" />
+        <Setter Property="CanUserReorderColumns" Value="True" />
+        <Setter Property="CanUserResizeColumns" Value="True" />
+        <Setter Property="CanUserResizeRows" Value="False" />
+        <Setter Property="ColumnHeaderHeight" Value="25" />
+        <Setter Property="ColumnHeaderStyle" Value="{StaticResource StandardDataGridColumnHeaderStyle}" />
+        <Setter Property="HeadersVisibility" Value="Column" />
+        <Setter Property="HorizontalGridLinesBrush" Value="{StaticResource TextBoxBackgroundColor}" />
+        <Setter Property="SelectionMode" Value="Extended" />
+        <Setter Property="VerticalGridLinesBrush" Value="White" />
+        <Setter Property="VerticalScrollBarVisibility" Value="Visible" />
+        <Setter Property="EnableRowVirtualization" Value="False" />
     </Style>
 
     <Style x:Key="FadedText" TargetType="TextBlock">

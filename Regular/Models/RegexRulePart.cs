@@ -17,10 +17,10 @@ namespace Regular.Models
                     return new AnyDigit();
                 case RuleType.AnyLetter:
                     return new AnyLetter();
-                case RuleType.FreeText:
-                    return new FreeText();
-                case RuleType.SelectionSet:
-                    return new SelectionSet();
+                case RuleType.CustomText:
+                    return new CustomText();
+                case RuleType.OptionSet:
+                    return new OptionSet();
                 default:
                     throw new ArgumentOutOfRangeException(nameof(ruleType), ruleType, null);
             }
