@@ -55,10 +55,10 @@ namespace Regular.Services
                 case RuleType.AnyDigit:
                     regexPartOutput += @"\d";
                     break;
-                case RuleType.FreeText:
+                case RuleType.CustomText:
                     regexPartOutput += SanitizeWord(regexRulePart.RawUserInputValue) + caseSensitiveModifier;
                     break;
-                case RuleType.SelectionSet:
+                case RuleType.OptionSet:
                     regexPartOutput += "Test";
                     break;
             }
@@ -92,7 +92,7 @@ namespace Regular.Services
                     start = "^";
                     end = "$";
                     break;
-                case MatchType.PartialMatch:
+                case MatchType.MatchAnywhere:
                     break;
                 case MatchType.MatchAtBeginning:
                     start = "^";
@@ -160,7 +160,7 @@ namespace Regular.Services
                                 break;
                         }
                         break;
-                    case RuleType.FreeText:
+                    case RuleType.CustomText:
                         if (regexRulePart.IsCaseSensitive)
                         {
                             randomExampleString += regexRulePart.RawUserInputValue;
@@ -170,7 +170,7 @@ namespace Regular.Services
                             ? regexRulePart.RawUserInputValue.ToLower()
                             : regexRulePart.RawUserInputValue.ToUpper();
                         break;
-                    case RuleType.SelectionSet:
+                    case RuleType.OptionSet:
                         break;
                     default:
                         randomExampleString += "";

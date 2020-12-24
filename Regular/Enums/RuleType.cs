@@ -10,9 +10,9 @@ namespace Regular.Enums
         AnyDigit = 1,
         [Description("Any Letter (A-Z)")]
         AnyLetter = 2,
-        [Description("Free Text")]
-        FreeText = 3,
-        [Description("Selection Set")]
-        SelectionSet = 4
+        [Description("Custom Text")]
+        CustomText = 3,
+        [Description("Option Set")]
+        OptionSet = 4
     }
 }

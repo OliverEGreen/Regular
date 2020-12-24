@@ -281,7 +281,7 @@ namespace Regular.ViewModels
 
             AddRulePartCommand = new AddRulePartCommand(this);
             DeleteRulePartCommand = new DeleteRulePartCommand(this);
-            EditRulePartCommand = new EditRulePartCommand();
+            EditRulePartCommand = new EditRulePartCommand(this);
             SubmitRuleCommand = new SubmitRuleCommand(this);
             MoveRulePartUpCommand = new MoveRulePartUpCommand(this);
             MoveRulePartDownCommand = new MoveRulePartDownCommand(this);
@@ -311,8 +311,8 @@ namespace Regular.ViewModels
                 {"Any Alphanumeric", RuleType.AnyAlphanumeric},
                 {"Any Digit", RuleType.AnyDigit},
                 {"Any Letter", RuleType.AnyLetter},
-                {"Free Text", RuleType.FreeText},
-                {"Selection Set", RuleType.SelectionSet}
+                {"Custom Text", RuleType.CustomText},
+                {"Option Set", RuleType.OptionSet}
             };
 
             MatchTypesDict = new Dictionary<string, MatchType>
@@ -320,7 +320,7 @@ namespace Regular.ViewModels
                 {"Exact Match", MatchType.ExactMatch},
                 {"Match At Beginning", MatchType.MatchAtBeginning},
                 {"Match At End", MatchType.MatchAtEnd},
-                {"Partial Match", MatchType.PartialMatch}
+                {"Match Anywhere", MatchType.MatchAnywhere}
             };
             
             if (!EditingExistingRule) return;

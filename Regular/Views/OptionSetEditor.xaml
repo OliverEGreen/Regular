@@ -1,0 +1,96 @@
+﻿<Window
+    x:Class="Regular.Views.OptionSetEditor"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    x:Name="OptionSetEditorWindow"
+    Title="Edit Option Set"
+    Width="500"
+    Height="500"
+    MinWidth="500"
+    MinHeight="500"
+    MaxWidth="700"
+    MaxHeight="700"
+    ResizeMode="CanResizeWithGrip"
+    SizeToContent="Height"
+    Style="{DynamicResource StandardWindow}"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+    <Window.Resources>
+        <ResourceDictionary Source="../Resources/RegularStyles.xaml" />
+    </Window.Resources>
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="350" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Label
+            Grid.Row="0"
+            Grid.Column="0"
+            Margin="0,5"
+            VerticalContentAlignment="Center"
+            Content="Edit Option Set"
+            FontSize="13"
+            Style="{StaticResource StandardLabel}" />
+        <Border
+            Grid.Row="1"
+            Grid.Column="0"
+            BorderBrush="{StaticResource TextBoxBorderColorDefault}"
+            BorderThickness="1">
+            <DataGrid
+                x:Name="DataGridOptions"
+                HorizontalAlignment="Stretch"
+                AutoGenerateColumns="False"
+                Background="{StaticResource DataGridDarkGrey}"
+                CanUserAddRows="True"
+                CanUserReorderColumns="False"
+                CanUserResizeColumns="False"
+                CanUserResizeRows="False"
+                ColumnHeaderHeight="0"
+                ColumnHeaderStyle="{StaticResource StandardDataGridColumnHeaderStyle}"
+                HeadersVisibility="Column"
+                HorizontalGridLinesBrush="{StaticResource TextBoxBackgroundColor}"
+                ItemsSource="{Binding Path=Options, UpdateSourceTrigger=PropertyChanged}"
+                SelectionMode="Extended"
+                VerticalGridLinesBrush="White"
+                VerticalScrollBarVisibility="Visible">
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                        Width="70"
+                        IsReadOnly="False" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+        <Button
+            Name="ButtonCancel"
+            Grid.Row="2"
+            Grid.Column="0"
+            Width="80"
+            Height="25"
+            Margin="0,10,90,0"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Bottom"
+            Click="ButtonCancel_Click"
+            Content="Cancel"
+            Style="{StaticResource StandardButton}" />
+        <Button
+            Name="ButtonOk"
+            Grid.Row="2"
+            Grid.Column="0"
+            Width="80"
+            Height="25"
+            Margin="0,10,0,0"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Bottom"
+            Click="ButtonOk_Click"
+            Command="{Binding SubmitRuleCommand}"
+            Content="OK"
+            Style="{StaticResource StandardButton}" />
+    </Grid>
+</Window>
+

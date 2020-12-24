@@ -3,11 +3,20 @@ using System.Windows.Input;
 using Regular.Enums;
 using Regular.Models;
 using Regular.Utilities;
+using Regular.ViewModels;
+using Regular.Views;
 
 namespace Regular.Commands.RuleEditor
 {
     public class EditRulePartCommand: ICommand
     {
+        private readonly RuleEditorViewModel ruleEditorViewModel;
+
+        public EditRulePartCommand(RuleEditorViewModel ruleEditorViewModel)
+        {
+            this.ruleEditorViewModel = ruleEditorViewModel;
+        }
+
         public bool CanExecute(object parameter)
         {
             if (!(parameter is IRegexRulePart regexRulePart)) return false;
@@ -75,9 +84,11 @@ namespace Regular.Commands.RuleEditor
                             throw new ArgumentOutOfRangeException();
                     }
                     break;
-                case RuleType.FreeText:
+                case RuleType.CustomText:
                     break;
-                case RuleType.SelectionSet:
+                case RuleType.OptionSet:
+                    OptionSetEditor optionSetEditor = new OptionSetEditor(regexRulePart);
+                    optionSetEditor.ShowDialog();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
