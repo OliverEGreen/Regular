@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Regular.Enums;
 using Regular.Models;
 
@@ -59,7 +60,12 @@ namespace Regular.Services
                     regexPartOutput += SanitizeWord(regexRulePart.RawUserInputValue) + caseSensitiveModifier;
                     break;
                 case RuleType.OptionSet:
-                    regexPartOutput += "Test";
+                    List<string> options = regexRulePart.Options
+                        .Select(x => SanitizeWord(x.OptionValue))
+                        .Where(x => !(string.IsNullOrWhiteSpace(x)))
+                        .ToList();
+                    if (options.Count < 1) break;
+                    regexPartOutput = $"[{ string.Join(@"|", options) }]";
                     break;
             }
             return regexPartOutput + optionalModifier;
@@ -171,6 +177,22 @@ namespace Regular.Services
                             : regexRulePart.RawUserInputValue.ToUpper();
                         break;
                     case RuleType.OptionSet:
+                        List<string> values = regexRulePart.Options
+                            .Select(x => x.OptionValue)
+                            .Where(x => !(string.IsNullOrWhiteSpace(x)))
+                            .ToList();
+                        if (values.Count < 1) break;
+                        string randomValue = SanitizeWord(values.OrderBy(s => Guid.NewGuid()).First());
+                        if (regexRulePart.IsCaseSensitive)
+                        {
+                            randomExampleString += randomValue;
+                        }
+                        else
+                        {
+                            randomExampleString += anyCaseRandom >= 0.5
+                                ? randomValue.ToLower()
+                                : randomValue.ToUpper();
+                        }
                         break;
                     default:
                         randomExampleString += "";

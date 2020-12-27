@@ -31,7 +31,7 @@ namespace Regular.Models
         string RawUserInputValue { get; set; }
 
         // The various options entered in an Option Set
-        ObservableCollection<string> Options { get; set; }
+        ObservableCollection<OptionObject> Options { get; set; }
 
         // Can apply to any rule part, modified via checkbox
         bool IsOptional { get; set; }
