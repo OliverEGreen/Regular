@@ -12,6 +12,7 @@
     MinHeight="500"
     MaxWidth="700"
     MaxHeight="700"
+    DataContext="{Binding OptionSetEditorViewModel, RelativeSource={RelativeSource Self}}"
     ResizeMode="CanResizeWithGrip"
     SizeToContent="Height"
     Style="{DynamicResource StandardWindow}"
@@ -26,12 +27,8 @@
             <RowDefinition Height="350" />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
         <Label
             Grid.Row="0"
-            Grid.Column="0"
             Margin="0,5"
             VerticalContentAlignment="Center"
             Content="Edit Option Set"
@@ -39,11 +36,10 @@
             Style="{StaticResource StandardLabel}" />
         <Border
             Grid.Row="1"
-            Grid.Column="0"
             BorderBrush="{StaticResource TextBoxBorderColorDefault}"
             BorderThickness="1">
             <DataGrid
-                x:Name="DataGridOptions"
+                Name="DataGridOptions"
                 HorizontalAlignment="Stretch"
                 AutoGenerateColumns="False"
                 Background="{StaticResource DataGridDarkGrey}"
@@ -55,14 +51,12 @@
                 ColumnHeaderStyle="{StaticResource StandardDataGridColumnHeaderStyle}"
                 HeadersVisibility="Column"
                 HorizontalGridLinesBrush="{StaticResource TextBoxBackgroundColor}"
-                ItemsSource="{Binding Path=Options, UpdateSourceTrigger=PropertyChanged}"
+                ItemsSource="{Binding Path=Options}"
                 SelectionMode="Extended"
                 VerticalGridLinesBrush="White"
                 VerticalScrollBarVisibility="Visible">
                 <DataGrid.Columns>
-                    <DataGridTextColumn
-                        Width="70"
-                        IsReadOnly="False" />
+                    <DataGridTextColumn Width="*" Binding="{Binding Path=OptionValue, Mode=TwoWay, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}" />
                 </DataGrid.Columns>
             </DataGrid>
         </Border>

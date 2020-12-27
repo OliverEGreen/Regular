@@ -14,7 +14,7 @@ namespace Regular.Models.RegexRuleParts
         private string displayText;
         private string editButtonDisplayText;
         private bool isCaseSensitive;
-        private ObservableCollection<string> options;
+        private ObservableCollection<OptionObject> options;
         private Visibility ruleTypeNameVisibility;
         private Visibility rawUserInputTextBoxVisibility;
         private string rawUserInputValue;
@@ -37,7 +37,7 @@ namespace Regular.Models.RegexRuleParts
             RuleType = RuleType.AnyAlphanumeric;
             RawUserInputTextBoxVisibility = Visibility.Collapsed;
             RuleTypeNameVisibility = Visibility.Visible;
-            Options = new ObservableCollection<string>();
+            Options = new ObservableCollection<OptionObject>();
         }
 
         public string RuleTypeName
@@ -78,7 +78,7 @@ namespace Regular.Models.RegexRuleParts
             set => rawUserInputValue = value;
         }
 
-        public ObservableCollection<string> Options
+        public ObservableCollection<OptionObject> Options
         {
             get => options;
             set

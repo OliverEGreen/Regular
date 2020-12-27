@@ -95,6 +95,7 @@
     <Compile Include="Enums\MatchType.cs" />
     <Compile Include="Models\DMUpdaters.cs" />
     <Compile Include="Models\IRegexRulePart.cs" />
+    <Compile Include="Models\OptionObject.cs" />
     <Compile Include="Models\RegexRuleParts\AnyAlphanumeric.cs" />
     <Compile Include="Models\RegexRuleParts\AnyDigit.cs" />
     <Compile Include="Models\RegexRuleParts\AnyLetter.cs" />
@@ -123,6 +124,7 @@
     <Compile Include="RegularUpdater.cs" />
     <Compile Include="Utilities\EnumUtils.cs" />
     <Compile Include="Utilities\WpfUtils.cs" />
+    <Compile Include="ViewModels\OptionSetEditorViewModel.cs" />
     <Compile Include="ViewModels\RuleEditorViewModel.cs" />
     <Compile Include="ViewModels\RuleManagerViewModel.cs" />
     <Compile Include="Views\OptionSetEditor.xaml.cs">
