@@ -3,6 +3,7 @@ using System.Windows.Input;
 using Regular.Models;
 using Regular.Services;
 using Regular.ViewModels;
+using Regular.Views;
 
 namespace Regular.Commands.RuleManager
 {
@@ -19,7 +20,9 @@ namespace Regular.Commands.RuleManager
 
         public void Execute(object parameter)
         {
-            // TODO: Add in confirmation button before rule gets deleted forever
+            ConfirmationDialog confirmationDialog = new ConfirmationDialog();
+            confirmationDialog.ShowDialog();
+            if (!confirmationDialog.ConfirmDelete) return;
             if (!(parameter is RegexRule regexRule)) return;
 
             // Deleting both the cached RegexRule and the associated DataStorage object

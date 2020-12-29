@@ -18,7 +18,7 @@ namespace Regular
             RegularRibbon.BuildRegularRibbon(uiControlledApp);
             
             // This keeps track of sets of rules per document, so is initialized as soon as possible
-            RegexRules.AllRegexRules = new Dictionary<string, ObservableCollection<RegexRule>>();
+            RegexRuleCache.AllRegexRules = new Dictionary<string, ObservableCollection<RegexRule>>();
             // This keeps track of all Dynamic Model Updaters, so is also initialized as soon as possible
             DmUpdaters.AllUpdaters = new Dictionary<string, RegularUpdater>();
 
@@ -51,7 +51,7 @@ namespace Regular
             
             // Getting all of the saved rules in the document
             ObservableCollection<RegexRule> existingRegexRules = ExtensibleStorageServices.GetAllRegexRulesInExtensibleStorage(documentGuid);
-            RegexRules.AllRegexRules[documentGuid] = existingRegexRules ?? new ObservableCollection<RegexRule>();
+            RegexRuleCache.AllRegexRules[documentGuid] = existingRegexRules ?? new ObservableCollection<RegexRule>();
 
             // If there are no saved rules we return, otherwise we establish the updaters
             if (existingRegexRules != null && existingRegexRules.Count < 1) { return; }
@@ -74,7 +74,7 @@ namespace Regular
             if (RevitDocumentCache.ContainsKey(documentGuid)) RevitDocumentCache.Remove(documentGuid);
             
             // If there are any saved rules in the application-wide cache, we can remove them
-            if (RegexRules.AllRegexRules.ContainsKey(documentGuid)) RegexRules.AllRegexRules.Remove(documentGuid);
+            if (RegexRuleCache.AllRegexRules.ContainsKey(documentGuid)) RegexRuleCache.AllRegexRules.Remove(documentGuid);
         }
 
         public Result OnShutdown(UIControlledApplication uiControlledApp) { return Result.Succeeded; }

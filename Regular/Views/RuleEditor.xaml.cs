@@ -51,7 +51,7 @@ namespace Regular.Views
             RuleEditorViewModel.RuleNameInputDirty = true;
 
             // Gathering other RegexRule names to ensure the user inputs a unique name
-            List<RegexRule> otherRegexRules = RegexRules.AllRegexRules[RuleEditorViewModel.DocumentGuid]
+            List<RegexRule> otherRegexRules = RegexRuleCache.AllRegexRules[RuleEditorViewModel.DocumentGuid]
                     .Where(x => x != RuleEditorViewModel.StagingRule)
                     .ToList();
             string ruleNameInputFeedback = InputValidationServices.ValidateRuleName(RuleEditorViewModel.StagingRule, otherRegexRules);

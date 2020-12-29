@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Windows.Input;
 using Regular.Models;
 using Regular.Services;
 using Regular.ViewModels;
+using Regular.Views;
 
 namespace Regular.Commands.RuleEditor
 {
@@ -21,6 +23,9 @@ namespace Regular.Commands.RuleEditor
 
         public void Execute(object parameter)
         {
+            ConfirmationDialog confirmationDialog = new ConfirmationDialog();
+            confirmationDialog.ShowDialog();
+            if (!confirmationDialog.ConfirmDelete) return;
             if (!(parameter is IRegexRulePart regexRulePart)) return;
             int index = ruleEditorViewModel.StagingRule.RegexRuleParts.IndexOf(regexRulePart);
             ruleEditorViewModel.StagingRule.RegexRuleParts.Remove(regexRulePart);

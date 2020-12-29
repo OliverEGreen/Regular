@@ -45,7 +45,7 @@ namespace Regular.ViewModels
         public RuleManagerViewModel(string documentGuid)
         {
             DocumentGuid = documentGuid;
-            RegexRules = Models.RegexRules.AllRegexRules[DocumentGuid];
+            RegexRules = Models.RegexRuleCache.AllRegexRules[DocumentGuid];
 
             AddRuleCommand = new AddRuleCommand(this);
             DeleteRuleCommand = new DeleteRuleCommand(this);
