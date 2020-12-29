@@ -3,20 +3,12 @@ using System.Windows.Input;
 using Regular.Enums;
 using Regular.Models;
 using Regular.Utilities;
-using Regular.ViewModels;
 using Regular.Views;
 
 namespace Regular.Commands.RuleEditor
 {
     public class EditRulePartCommand: ICommand
     {
-        private readonly RuleEditorViewModel ruleEditorViewModel;
-
-        public EditRulePartCommand(RuleEditorViewModel ruleEditorViewModel)
-        {
-            this.ruleEditorViewModel = ruleEditorViewModel;
-        }
-
         public bool CanExecute(object parameter)
         {
             if (!(parameter is IRegexRulePart regexRulePart)) return false;

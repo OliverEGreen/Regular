@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using Regular.Enums;
-using Regular.Services;
+using Regular.Utilities;
 
 namespace Regular.Models
 {
@@ -135,15 +135,14 @@ namespace Regular.Models
             }
         }
         
-
         public static RegexRule Create(string documentGuid, string guid = null)
         {
-            return new RegexRule()
+            return new RegexRule
             {
                 // If given a GUID, a rule is being recreated from memory, otherwise a new rule is being created
                 RuleGuid = guid ?? Guid.NewGuid().ToString(),
                 RuleName = "",
-                TargetCategoryObjects = CategoryServices.GetInitialCategories(documentGuid),
+                TargetCategoryObjects = CategoryUtils.GetInitialCategories(documentGuid),
                 TrackingParameterObject = new ParameterObject { ParameterObjectId = -1, ParameterObjectName = "" },
                 OutputParameterObject = new ParameterObject { ParameterObjectId = -1, ParameterObjectName = "" },
                 MatchType = MatchType.ExactMatch,
@@ -156,21 +155,16 @@ namespace Regular.Models
                 CreatedBy = Environment.UserName
             };
         }
-        public static void Save(string documentGuid, RegexRule regexRule)
-        {
-            RegexRuleCache.AllRegexRules[documentGuid].Add(regexRule);
-            ExtensibleStorageServices.SaveRegexRuleToExtensibleStorage(documentGuid, regexRule);
-            DmTriggerServices.AddTrigger(documentGuid, regexRule);
-            
-            // TODO: Check this rule is created as we want
-            ParameterServices.CreateProjectParameter(documentGuid, regexRule.OutputParameterObject.ParameterObjectName, regexRule.TargetCategoryObjects);
-        }
+        
         public static RegexRule Duplicate(string documentGuid, RegexRule sourceRegexRule)
         {
             // Helper method to ensure duplicate rules always have a unique name
             string GenerateRegexRuleDuplicateName()
             {
-                List<string> documentRegexRuleNames = GetDocumentRegexRules(documentGuid).Select(x => x.RuleName).ToList();
+                List<string> documentRegexRuleNames = RegularApp.RegexRuleCacheService
+                    .GetDocumentRules(documentGuid)
+                    .Select(x => x.RuleName)
+                    .ToList();
                 string copyName = $"{sourceRegexRule.RuleName} Copy";
                 return documentRegexRuleNames.Contains(copyName) ? $"{copyName} Copy" : copyName;
             }
@@ -188,43 +182,7 @@ namespace Regular.Models
             
             return duplicateRegexRule;
         }
-        
-        public static ObservableCollection<RegexRule> GetDocumentRegexRules(string documentGuid)
-        {
-            return RegexRuleCache.AllRegexRules.ContainsKey(documentGuid) ? RegexRuleCache.AllRegexRules[documentGuid] : null;
-        }
-        
-        public static void Update(string documentGuid, RegexRule existingRegexRule, RegexRule newRegexRule)
-        {
-            // Takes a newly-generated RegexRule object and sets an existing rules values to match
-            // To be used when updating an existing rule from the Rule Editor
-            
-            existingRegexRule.RuleName = newRegexRule.RuleName;
-            existingRegexRule.TargetCategoryObjects = newRegexRule.TargetCategoryObjects;
-            existingRegexRule.TrackingParameterObject = newRegexRule.TrackingParameterObject;
-            existingRegexRule.OutputParameterObject = newRegexRule.OutputParameterObject;
-            existingRegexRule.MatchType = newRegexRule.MatchType;
-            existingRegexRule.RegexRuleParts = newRegexRule.RegexRuleParts;
-            existingRegexRule.RegexString = newRegexRule.RegexString;
-            existingRegexRule.IsFrozen = newRegexRule.IsFrozen;
-
-            // Need to check if existingRegexRule is in ExtensibleStorage or not.
-            ExtensibleStorageServices.UpdateRegexRuleInExtensibleStorage(documentGuid, existingRegexRule.RuleGuid, newRegexRule);
-            
-            DmTriggerServices.UpdateAllTriggers(documentGuid);
-        }
-        public static void Delete(string documentGuid, string regexRuleGuid)
-        {
-            // Deletes a RegexRule from the document's static cache
-            if (!RegexRuleCache.AllRegexRules.ContainsKey(documentGuid)) return;
-            ObservableCollection<RegexRule> documentRegexRules = GetDocumentRegexRules(documentGuid);
-            RegexRule regexRule = documentRegexRules.FirstOrDefault(x => x.RuleGuid == regexRuleGuid);
-            if (regexRule != null) documentRegexRules.Remove(regexRule);
-
-            DmTriggerServices.DeleteTrigger(documentGuid, regexRule);
-        }
-        
-
+       
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string propertyName)
         {

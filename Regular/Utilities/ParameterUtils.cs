@@ -1,16 +1,16 @@
-﻿using Autodesk.Revit.ApplicationServices;
-using Autodesk.Revit.DB;
-using Autodesk.Revit.UI;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using Autodesk.Revit.ApplicationServices;
+using Autodesk.Revit.DB;
+using Autodesk.Revit.UI;
 using Regular.Models;
 
-namespace Regular.Services
+namespace Regular.Utilities
 {
-    public static class ParameterServices
+    public static class ParameterUtils
     {
         public static void CreateProjectParameter(string documentGuid, string parameterName, ObservableCollection<CategoryObject> targetCategoryObjects)
         {
@@ -19,7 +19,7 @@ namespace Regular.Services
             // This creates a temporary shared parameters file, a temporary shared parameter
             // It then binds this back to the model as an InstanceBinding and deletes the temporary stuff
 
-            Document document = DocumentGuidServices.GetRevitDocumentByGuid(documentGuid);
+            Document document = RegularApp.DocumentCacheService.GetDocument(documentGuid);
             const BuiltInParameterGroup builtInParameterGroup = BuiltInParameterGroup.PG_IDENTITY_DATA;
             const ParameterType parameterType = ParameterType.YesNo;
 
@@ -27,7 +27,7 @@ namespace Regular.Services
 
             List<ElementId> targetCategoryIds = targetCategoryObjects.Where(x => x.IsChecked).Select(x => new ElementId(x.CategoryObjectId)).ToList();
             List<Category> categories = targetCategoryIds.Select(x => Category.GetCategory(document, x)).ToList();
-            CategorySet categorySet = CategoryServices.ConvertListToCategorySet(categories);
+            CategorySet categorySet = CategoryUtils.ConvertListToCategorySet(categories);
                         
             using (Transaction transaction = new Transaction(document, $"Regular - Creating New Project Parameter {parameterName}")) 
             {
@@ -71,7 +71,7 @@ namespace Regular.Services
                 .Select(x => new ElementId(x))
                 .ToList();
             
-            Document document = DocumentGuidServices.GetRevitDocumentByGuid(documentGuid);
+            Document document = RegularApp.DocumentCacheService.GetDocument(documentGuid);
             List<ElementId> parameterIds = ParameterFilterUtilities.GetFilterableParametersInCommon(document, categoryIds).ToList();
             
             foreach (ElementId parameterId in parameterIds)

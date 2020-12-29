@@ -6,7 +6,7 @@ using System.Windows;
 using Regular.Commands.RuleEditor;
 using Regular.Enums;
 using Regular.Models;
-using Regular.Services;
+using Regular.Utilities;
 using Visibility = System.Windows.Visibility;
 
 namespace Regular.ViewModels
@@ -281,7 +281,7 @@ namespace Regular.ViewModels
 
             AddRulePartCommand = new AddRulePartCommand(this);
             DeleteRulePartCommand = new DeleteRulePartCommand(this);
-            EditRulePartCommand = new EditRulePartCommand(this);
+            EditRulePartCommand = new EditRulePartCommand();
             SubmitRuleCommand = new SubmitRuleCommand(this);
             MoveRulePartUpCommand = new MoveRulePartUpCommand(this);
             MoveRulePartDownCommand = new MoveRulePartDownCommand(this);
@@ -296,7 +296,7 @@ namespace Regular.ViewModels
             UserFeedbackTextVisibility = Visibility.Hidden;
 
             // Retrieving the list of parameters which might possibly be tracked, given the selected categories
-            PossibleTrackingParameterObjects = ParameterServices.GetParametersOfCategories(DocumentGuid, StagingRule.TargetCategoryObjects);
+            PossibleTrackingParameterObjects = ParameterUtils.GetParametersOfCategories(DocumentGuid, StagingRule.TargetCategoryObjects);
 
             WindowMinWidth = 436;
             WindowMaxWidth = 436;

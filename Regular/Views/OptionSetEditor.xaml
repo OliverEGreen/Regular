@@ -4,7 +4,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    x:Name="OptionSetEditorWindow"
     Title="Edit Option Set"
     Width="500"
     Height="500"
@@ -82,7 +81,6 @@
             HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
             Click="ButtonOk_Click"
-            Command="{Binding SubmitRuleCommand}"
             Content="OK"
             Style="{StaticResource StandardButton}" />
     </Grid>

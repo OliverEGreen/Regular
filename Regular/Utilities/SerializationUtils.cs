@@ -1,9 +1,9 @@
-﻿using Regular.Models;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using Regular.Models;
 
-namespace Regular.Services
+namespace Regular.Utilities
 {
-    public static class SerializationServices
+    public static class SerializationUtils
     {
         private static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings()
         {

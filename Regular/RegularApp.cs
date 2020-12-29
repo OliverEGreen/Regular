@@ -1,28 +1,25 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.DB.Events;
 using Application = Autodesk.Revit.ApplicationServices.Application;
 using Regular.Services;
 using Regular.Models;
+using Regular.Utilities;
 
 namespace Regular
 {
     public class RegularApp : IExternalApplication
     {
-        public static Dictionary<string, Document> RevitDocumentCache { get; set; }
+        public static RegexRuleCacheService RegexRuleCacheService = RegexRuleCacheService.Instance();
+        public static DocumentCacheService DocumentCacheService = DocumentCacheService.Instance();
+        public static DmUpdaterCacheService DmUpdaterCacheService = DmUpdaterCacheService.Instance();
+        
         public static Application RevitApplication { get; set; }
         public Result OnStartup(UIControlledApplication uiControlledApp)
         {
             RegularRibbon.BuildRegularRibbon(uiControlledApp);
             
-            // This keeps track of sets of rules per document, so is initialized as soon as possible
-            RegexRuleCache.AllRegexRules = new Dictionary<string, ObservableCollection<RegexRule>>();
-            // This keeps track of all Dynamic Model Updaters, so is also initialized as soon as possible
-            DmUpdaters.AllUpdaters = new Dictionary<string, RegularUpdater>();
-
-            RevitDocumentCache = new Dictionary<string, Document>();
             // Events which will add to or clean up the AllRegexRules cache
             uiControlledApp.ControlledApplication.DocumentOpened += ControlledApplication_DocumentOpened;
             uiControlledApp.ControlledApplication.DocumentCreated += ControlledApplication_DocumentCreated;
@@ -38,43 +35,42 @@ namespace Regular
         private static void RegisterDocument(Document document)
         {
             // If the document has an existing GUID saved to ExtensibleStorage we retrieve this, otherwise we register it with a new GUID
-            string documentGuid = DocumentGuidServices.GetDocumentGuidFromExtensibleStorage(document) ?? DocumentGuidServices.RegisterDocumentGuidToExtensibleStorage(document);
+            string documentGuid = DocumentGuidUtils.GetDocumentGuidFromExtensibleStorage(document) ?? DocumentGuidUtils.RegisterDocumentGuidToExtensibleStorage(document);
 
             // Creates an accessible, stable reference to the Revit document
-            RevitDocumentCache[documentGuid] = document;
+            DocumentCacheService.AddDocument(documentGuid, document);
 
             // Setting a static, accessible reference to the Revit application just this once, for everything to use
             if (RevitApplication == null) RevitApplication = document.Application;
 
             // If the document has been opened, saved-as or newly-created, we register the RegularUpdater to it
-            DmUpdaterServices.RegisterRegularUpdaterToDocument(documentGuid);
+            DmUpdaterUtils.RegisterRegularUpdaterToDocument(documentGuid);
             
             // Getting all of the saved rules in the document
-            ObservableCollection<RegexRule> existingRegexRules = ExtensibleStorageServices.GetAllRegexRulesInExtensibleStorage(documentGuid);
-            RegexRuleCache.AllRegexRules[documentGuid] = existingRegexRules ?? new ObservableCollection<RegexRule>();
-
+            ObservableCollection<RegexRule> existingRegexRules = ExtensibleStorageUtils.GetAllRegexRulesInExtensibleStorage(documentGuid);
+            
             // If there are no saved rules we return, otherwise we establish the updaters
             if (existingRegexRules != null && existingRegexRules.Count < 1) { return; }
 
             // Rules exist, we need to add the triggers to the RegularUpdater
-            DmTriggerServices.AddAllTriggers(documentGuid, existingRegexRules);
+            DmTriggerUtils.AddAllTriggers(documentGuid, existingRegexRules);
         }
         private static void DeRegisterDocument(Document document)
         {
-            string documentGuid = DocumentGuidServices.GetDocumentGuidFromExtensibleStorage(document) ?? DocumentGuidServices.RegisterDocumentGuidToExtensibleStorage(document);
+            string documentGuid = DocumentGuidUtils.GetDocumentGuidFromExtensibleStorage(document) ?? DocumentGuidUtils.RegisterDocumentGuidToExtensibleStorage(document);
 
             // We can remove all of the triggers
-            UpdaterId updaterId = DmUpdaters.AllUpdaters[documentGuid].GetUpdaterId();
+            UpdaterId updaterId = DmUpdaterCacheService.GetUpdater(documentGuid).GetUpdaterId();
             UpdaterRegistry.RemoveDocumentTriggers(updaterId, document);
 
             // When shutting down the document, we de-register the document-specific RegexRuleUpdater
-            DmUpdaterServices.DeregisterRegularUpdaterFromDocument(documentGuid);
+            DmUpdaterUtils.DeregisterRegularUpdaterFromDocument(documentGuid);
 
             // If the RevitDocumentCache contains this document's GUID then we can remove it
-            if (RevitDocumentCache.ContainsKey(documentGuid)) RevitDocumentCache.Remove(documentGuid);
+            DocumentCacheService.RemoveDocument(documentGuid);
             
             // If there are any saved rules in the application-wide cache, we can remove them
-            if (RegexRuleCache.AllRegexRules.ContainsKey(documentGuid)) RegexRuleCache.AllRegexRules.Remove(documentGuid);
+            RegexRuleCacheService.ClearDocumentRules(documentGuid);
         }
 
         public Result OnShutdown(UIControlledApplication uiControlledApp) { return Result.Succeeded; }

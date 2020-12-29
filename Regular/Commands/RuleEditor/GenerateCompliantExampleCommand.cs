@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Input;
-using Regular.Services;
+using Regular.Utilities;
 using Regular.ViewModels;
 
 namespace Regular.Commands.RuleEditor
@@ -22,7 +22,7 @@ namespace Regular.Commands.RuleEditor
         public void Execute(object parameter)
         {
             ruleEditorViewModel.CompliantExampleVisibility= Visibility.Visible;
-            ruleEditorViewModel.CompliantExample = RegexAssemblyService.GenerateRandomExample(ruleEditorViewModel.StagingRule.RegexRuleParts);
+            ruleEditorViewModel.CompliantExample = RegexAssemblyUtils.GenerateRandomExample(ruleEditorViewModel.StagingRule.RegexRuleParts);
         }
 
         public event EventHandler CanExecuteChanged

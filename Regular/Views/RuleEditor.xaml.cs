@@ -5,7 +5,6 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using Regular.Enums;
 using Regular.Models;
-using Regular.Services;
 using Regular.Utilities;
 using Regular.ViewModels;
 using System.Collections.Generic;
@@ -51,7 +50,7 @@ namespace Regular.Views
             RuleEditorViewModel.RuleNameInputDirty = true;
 
             // Gathering other RegexRule names to ensure the user inputs a unique name
-            List<RegexRule> otherRegexRules = RegexRuleCache.AllRegexRules[RuleEditorViewModel.DocumentGuid]
+            List<RegexRule> otherRegexRules = RegularApp.RegexRuleCacheService.GetDocumentRules(RuleEditorViewModel.DocumentGuid)
                     .Where(x => x != RuleEditorViewModel.StagingRule)
                     .ToList();
             string ruleNameInputFeedback = InputValidationServices.ValidateRuleName(RuleEditorViewModel.StagingRule, otherRegexRules);
@@ -137,7 +136,7 @@ namespace Regular.Views
             if (!(sender is Button editButton)) return;
             if (!(editButton.DataContext is IRegexRulePart regexRulePart)) return;
             if (regexRulePart.RuleType != RuleType.CustomText) return;
-            Grid grid = WpfUtils.FindParent<Grid>(editButton);
+            Grid grid = VisualTreeUtils.FindParent<Grid>(editButton);
             UIElementCollection uiElementCollection = grid.Children;
             TextBox textBox = uiElementCollection
                 .OfType<TextBox>()
@@ -156,7 +155,7 @@ namespace Regular.Views
             PreviewKeyDown += (s, eventHandler) =>
             {
                 if (eventHandler.Key != Key.Escape && eventHandler.Key != Key.Enter) return;
-                ListBoxItem listBoxItem = WpfUtils.FindParent<ListBoxItem>(textBox);
+                ListBoxItem listBoxItem = VisualTreeUtils.FindParent<ListBoxItem>(textBox);
                 listBoxItem?.Focus();
             };
         }

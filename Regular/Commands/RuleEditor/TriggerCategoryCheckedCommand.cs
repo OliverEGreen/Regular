@@ -4,7 +4,6 @@ using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Regular.Models;
-using Regular.Services;
 using Regular.Utilities;
 using Regular.ViewModels;
 
@@ -25,7 +24,7 @@ namespace Regular.Commands.RuleEditor
         {
             // Lets the user multi-select and multi-deselect items
             if (!(parameter is CheckBox checkBox)) return;
-            ListBox categoriesListBox = WpfUtils.FindParent<ListBox>(checkBox);
+            ListBox categoriesListBox = VisualTreeUtils.FindParent<ListBox>(checkBox);
             List<CategoryObject> selectedItems = categoriesListBox.SelectedItems.Cast<CategoryObject>().ToList();
             foreach (CategoryObject categoryObject in selectedItems) { categoryObject.IsChecked = checkBox.IsChecked == true; }
 
@@ -36,7 +35,7 @@ namespace Regular.Commands.RuleEditor
                 .Count(x => x.IsChecked);
             
             // And need to find out which parameters are now valid for the selection
-            ruleEditorViewModel.PossibleTrackingParameterObjects = ParameterServices.
+            ruleEditorViewModel.PossibleTrackingParameterObjects = ParameterUtils.
                 GetParametersOfCategories(
                     ruleEditorViewModel.DocumentGuid,
                     ruleEditorViewModel.StagingRule.TargetCategoryObjects);

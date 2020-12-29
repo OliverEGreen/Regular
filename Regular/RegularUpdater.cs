@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Autodesk.Revit.DB;
-using Autodesk.Revit.UI;
-using Regular.Services;
 
 namespace Regular
 {
@@ -18,10 +14,10 @@ namespace Regular
 
         public void Execute(UpdaterData data)
         {
-            Document document = data.GetDocument();
-            string documentGuid = DocumentGuidServices.GetDocumentGuidFromExtensibleStorage(document);
-            TaskDialog.Show("Test", "DMU Executing");
-            List<ElementId> modifiedElementIds = data.GetModifiedElementIds().ToList();
+            //Document document = data.GetDocument();
+            //string documentGuid = DocumentGuidUtils.GetDocumentGuidFromExtensibleStorage(document);
+            //TaskDialog.Show("Test", "DMU Executing");
+            //List<ElementId> modifiedElementIds = data.GetModifiedElementIds().ToList();
         }
         public string GetAdditionalInformation() { return "Regular: Reads any Regex Rules in the open document"; }
         public ChangePriority GetChangePriority() { return ChangePriority.Annotations; }

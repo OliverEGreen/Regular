@@ -20,10 +20,10 @@
         </Grid.RowDefinitions>
         <TextBlock
             Grid.Row="0"
-            Text="Are you sure you want to delete this?"
             Padding="5"
+            Background="{StaticResource BackgroundColorWarning}"
             Style="{StaticResource WarningText}"
-            Background="{StaticResource BackgroundColorWarning}"/>
+            Text="Are you sure you want to delete this?" />
         <Button
             Name="ButtonCancel"
             Grid.Row="1"
