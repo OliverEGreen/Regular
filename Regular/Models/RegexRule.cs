@@ -158,7 +158,7 @@ namespace Regular.Models
         }
         public static void Save(string documentGuid, RegexRule regexRule)
         {
-            RegexRules.AllRegexRules[documentGuid].Add(regexRule);
+            RegexRuleCache.AllRegexRules[documentGuid].Add(regexRule);
             ExtensibleStorageServices.SaveRegexRuleToExtensibleStorage(documentGuid, regexRule);
             DmTriggerServices.AddTrigger(documentGuid, regexRule);
             
@@ -191,7 +191,7 @@ namespace Regular.Models
         
         public static ObservableCollection<RegexRule> GetDocumentRegexRules(string documentGuid)
         {
-            return RegexRules.AllRegexRules.ContainsKey(documentGuid) ? RegexRules.AllRegexRules[documentGuid] : null;
+            return RegexRuleCache.AllRegexRules.ContainsKey(documentGuid) ? RegexRuleCache.AllRegexRules[documentGuid] : null;
         }
         
         public static void Update(string documentGuid, RegexRule existingRegexRule, RegexRule newRegexRule)
@@ -216,7 +216,7 @@ namespace Regular.Models
         public static void Delete(string documentGuid, string regexRuleGuid)
         {
             // Deletes a RegexRule from the document's static cache
-            if (!RegexRules.AllRegexRules.ContainsKey(documentGuid)) return;
+            if (!RegexRuleCache.AllRegexRules.ContainsKey(documentGuid)) return;
             ObservableCollection<RegexRule> documentRegexRules = GetDocumentRegexRules(documentGuid);
             RegexRule regexRule = documentRegexRules.FirstOrDefault(x => x.RuleGuid == regexRuleGuid);
             if (regexRule != null) documentRegexRules.Remove(regexRule);

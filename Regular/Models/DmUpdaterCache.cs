@@ -2,7 +2,7 @@
 
 namespace Regular.Models
 {
-    internal class DmUpdaters
+    public static class DmUpdaters
     {
         public static Dictionary<string, RegularUpdater> AllUpdaters { get; set; }
     }

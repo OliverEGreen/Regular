@@ -37,7 +37,7 @@ namespace Regular.Services
             Document document = DocumentGuidServices.GetRevitDocumentByGuid(documentGuid);
             UpdaterId updaterId = DmUpdaters.AllUpdaters[documentGuid].GetUpdaterId();
             UpdaterRegistry.RemoveDocumentTriggers(updaterId, document);
-            foreach (RegexRule regexRule in RegexRules.AllRegexRules[documentGuid])
+            foreach (RegexRule regexRule in RegexRuleCache.AllRegexRules[documentGuid])
             {
                 // We don't add back the trigger for the rule we're removing
                 if (regexRule.RuleGuid == ruleToRemoveTriggerFrom.RuleGuid) continue;
@@ -52,7 +52,7 @@ namespace Regular.Services
             Document document = DocumentGuidServices.GetRevitDocumentByGuid(documentGuid);
             UpdaterId updaterId = DmUpdaters.AllUpdaters[documentGuid].GetUpdaterId();
             UpdaterRegistry.RemoveDocumentTriggers(updaterId, document);
-            foreach (RegexRule regexRule in RegexRules.AllRegexRules[documentGuid])
+            foreach (RegexRule regexRule in RegexRuleCache.AllRegexRules[documentGuid])
             {
                 // We recreate all of the triggers
                 AddTrigger(documentGuid, regexRule);

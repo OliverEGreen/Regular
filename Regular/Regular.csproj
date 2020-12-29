@@ -93,7 +93,7 @@
     <Compile Include="Commands\RuleManager\TriggerRuleFrozenCommand.cs" />
     <Compile Include="Enums\CaseSensitivity.cs" />
     <Compile Include="Enums\MatchType.cs" />
-    <Compile Include="Models\DMUpdaters.cs" />
+    <Compile Include="Models\DmUpdaterCache.cs" />
     <Compile Include="Models\IRegexRulePart.cs" />
     <Compile Include="Models\OptionObject.cs" />
     <Compile Include="Models\RegexRuleParts\AnyAlphanumeric.cs" />
@@ -103,19 +103,19 @@
     <Compile Include="Models\RegexRuleParts\OptionSet.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Services\AppRibbonServices.cs" />
-    <Compile Include="Services\DMTriggerServices.cs" />
+    <Compile Include="Services\DmTriggerServices.cs" />
     <Compile Include="Models\CategoryObject.cs" />
     <Compile Include="Models\ParameterObject.cs" />
     <Compile Include="Models\RegexRule.cs" />
     <Compile Include="Models\RegexRulePart.cs" />
     <Compile Include="Enums\RuleType.cs" />
-    <Compile Include="Models\RegexRules.cs" />
+    <Compile Include="Models\RegexRuleCache.cs" />
     <Compile Include="RegularApp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LaunchRuleManager.cs" />
     <Compile Include="Services\CategoryServices.cs" />
     <Compile Include="Services\DocumentGuidServices.cs" />
-    <Compile Include="Services\DMUpdaterServices.cs" />
+    <Compile Include="Services\DmUpdaterServices.cs" />
     <Compile Include="Services\ExtensibleStorageServices.cs" />
     <Compile Include="Services\ParameterServices.cs" />
     <Compile Include="Services\InputValidationServices.cs" />
@@ -127,6 +127,9 @@
     <Compile Include="ViewModels\OptionSetEditorViewModel.cs" />
     <Compile Include="ViewModels\RuleEditorViewModel.cs" />
     <Compile Include="ViewModels\RuleManagerViewModel.cs" />
+    <Compile Include="Views\ConfirmationDialog.xaml.cs">
+      <DependentUpon>ConfirmationDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\OptionSetEditor.xaml.cs">
       <DependentUpon>OptionSetEditor.xaml</DependentUpon>
     </Compile>
@@ -141,6 +144,10 @@
     <Page Include="Resources\RegularStyles.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ConfirmationDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\OptionSetEditor.xaml">
       <SubType>Designer</SubType>
