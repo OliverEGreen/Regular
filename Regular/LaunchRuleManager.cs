@@ -3,7 +3,7 @@ using System.Windows;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.Attributes;
-using Regular.Services;
+using Regular.Utilities;
 using Regular.Views;
 
 namespace Regular
@@ -15,7 +15,7 @@ namespace Regular
         {
             try
             {
-                string documentGuid = DocumentGuidServices.GetDocumentGuidFromExtensibleStorage(commandData.Application.ActiveUIDocument.Document);
+                string documentGuid = DocumentGuidUtils.GetDocumentGuidFromExtensibleStorage(commandData.Application.ActiveUIDocument.Document);
                 RuleManager ruleManager = new RuleManager(documentGuid);
                 ruleManager.ShowDialog();
                 return Result.Succeeded;

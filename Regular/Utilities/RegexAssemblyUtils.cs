@@ -5,11 +5,11 @@ using System.Linq;
 using Regular.Enums;
 using Regular.Models;
 
-namespace Regular.Services
+namespace Regular.Utilities
 {
-    public static class RegexAssemblyService
+    public static class RegexAssemblyUtils
     {
-        private static readonly List<string> SpecialCharacters = new List<string>() { @".", @"\", @"*", @"+", @"?", @"|", @"(", @")", @"[", @"]", @"^", @"{", @"}" };
+        private static readonly List<string> SpecialCharacters = new List<string> { @".", @"\", @"*", @"+", @"?", @"|", @"(", @")", @"[", @"]", @"^", @"{", @"}" };
         private static string GetRegexPartFromRuleType(IRegexRulePart regexRulePart)
         {
             string regexPartOutput = "";

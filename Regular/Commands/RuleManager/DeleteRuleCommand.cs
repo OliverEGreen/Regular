@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 using Regular.Models;
-using Regular.Services;
+using Regular.Utilities;
 using Regular.ViewModels;
 using Regular.Views;
 
@@ -26,8 +26,9 @@ namespace Regular.Commands.RuleManager
             if (!(parameter is RegexRule regexRule)) return;
 
             // Deleting both the cached RegexRule and the associated DataStorage object
-            RegexRule.Delete(ruleManagerViewModel.DocumentGuid, regexRule.RuleGuid);
-            ExtensibleStorageServices.DeleteRegexRuleFromExtensibleStorage(ruleManagerViewModel.DocumentGuid, regexRule.RuleGuid);
+            RegularApp.RegexRuleCacheService.RemoveRule(ruleManagerViewModel.DocumentGuid, regexRule.RuleGuid);
+            ExtensibleStorageUtils.DeleteRegexRuleFromExtensibleStorage(ruleManagerViewModel.DocumentGuid, regexRule.RuleGuid);
+            DmTriggerUtils.DeleteTrigger(ruleManagerViewModel.DocumentGuid, regexRule);
         }
 
         public event EventHandler CanExecuteChanged

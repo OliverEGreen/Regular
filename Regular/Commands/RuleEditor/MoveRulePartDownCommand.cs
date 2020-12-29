@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 using Regular.Models;
-using Regular.Services;
+using Regular.Utilities;
 using Regular.ViewModels;
 
 namespace Regular.Commands.RuleEditor
@@ -30,7 +30,7 @@ namespace Regular.Commands.RuleEditor
             ruleEditorViewModel.StagingRule.RegexRuleParts.RemoveAt(index);
             ruleEditorViewModel.StagingRule.RegexRuleParts.Insert(index + 1, regexRulePart);
             ruleEditorViewModel.SelectedRegexRulePart = ruleEditorViewModel.StagingRule.RegexRuleParts[index + 1];
-            ruleEditorViewModel.StagingRule.RegexString = RegexAssemblyService.AssembleRegexString(ruleEditorViewModel.StagingRule);
+            ruleEditorViewModel.StagingRule.RegexString = RegexAssemblyUtils.AssembleRegexString(ruleEditorViewModel.StagingRule);
         }
 
         public event EventHandler CanExecuteChanged

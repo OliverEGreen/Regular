@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Windows.Media.Imaging;
 using Autodesk.Revit.UI;
 
-namespace Regular.Services
+namespace Regular.Utilities
 {
     public class RegularRibbon
     {

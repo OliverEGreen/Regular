@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Regular.Models;
 
-namespace Regular.Services
+namespace Regular.Utilities
 {
     public static class InputValidationServices
     {

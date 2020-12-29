@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.ExtensibleStorage;
 using Regular.Models;
 
-namespace Regular.Services
+namespace Regular.Utilities
 {
-    public static class ExtensibleStorageServices
+    public static class ExtensibleStorageUtils
     {
         // CRUD Services for managing Regular rule data stored using Revit's ExtensibleStorage API
         
@@ -39,11 +39,11 @@ namespace Regular.Services
         }
         public static void SaveRegexRuleToExtensibleStorage(string documentGuid, RegexRule regexRule)
         {
-            Document document = DocumentGuidServices.GetRevitDocumentByGuid(documentGuid);
+            Document document = RegularApp.DocumentCacheService.GetDocument(documentGuid);
 
             //This needs to be turned into a method taking a RegexRule and saving to ExtensibleStorage
             Entity entity = new Entity(GetRegularSchema());
-            entity.Set("SerializedRegexRule", SerializationServices.SerializeRegexRule(regexRule));
+            entity.Set("SerializedRegexRule", SerializationUtils.SerializeRegexRule(regexRule));
             using (Transaction transaction = new Transaction(document, $"Saving RegexRule {regexRule.RuleName}"))
             {
                 transaction.Start();
@@ -58,12 +58,12 @@ namespace Regular.Services
             RegexRule ConvertEntityToRegexRule(Entity entity)
             {
                 string serializedRegexRule = entity.Get<string>("SerializedRegexRule");
-                return SerializationServices.DeserializeRegexRule(serializedRegexRule);
+                return SerializationUtils.DeserializeRegexRule(serializedRegexRule);
             }
             Schema regularSchema = GetRegularSchema();
 
             // Retrieving and testing all DataStorage objects in the document against our Regular schema.
-            Document document = DocumentGuidServices.GetRevitDocumentByGuid(documentGuid);
+            Document document = RegularApp.DocumentCacheService.GetDocument(documentGuid);
             List<DataStorage> allDataStorage = new FilteredElementCollector(document).OfClass(typeof(DataStorage)).OfType<DataStorage>().ToList();
             if (allDataStorage.Count < 1) { return null; }
 
@@ -84,34 +84,34 @@ namespace Regular.Services
         }
         public static void UpdateRegexRuleInExtensibleStorage(string documentGuid, string regexRuleGuid, RegexRule newRegexRule)
         {
-            Document document = DocumentGuidServices.GetRevitDocumentByGuid(documentGuid);
+            Document document = RegularApp.DocumentCacheService.GetDocument(documentGuid);
             KeyValuePair<DataStorage, Entity> ruleInExtensibleStorage = GetRegexRuleInExtensibleStorage(documentGuid, regexRuleGuid);
             Entity regexRuleEntity = ruleInExtensibleStorage.Value;
             if (regexRuleEntity == null) return;
             DataStorage dataStorage = ruleInExtensibleStorage.Key;
 
             string serializedRegexRule = regexRuleEntity.Get<string>("SerializedRegexRule");
-            RegexRule regexRule = SerializationServices.DeserializeRegexRule(serializedRegexRule);
+            RegexRule regexRule = SerializationUtils.DeserializeRegexRule(serializedRegexRule);
             string previousName = regexRule.RuleName;
 
             using (Transaction transaction = new Transaction(document, $"Regular - Modifying Rule {previousName}"))
             {
                 transaction.Start();
-                regexRuleEntity.Set("SerializedRegexRule", SerializationServices.SerializeRegexRule(newRegexRule));
+                regexRuleEntity.Set("SerializedRegexRule", SerializationUtils.SerializeRegexRule(newRegexRule));
                 dataStorage.SetEntity(regexRuleEntity);
                 transaction.Commit();
             }
         }
         public static void DeleteRegexRuleFromExtensibleStorage(string documentGuid, string regexRuleGuid)
         {
-            Document document = DocumentGuidServices.GetRevitDocumentByGuid(documentGuid);
+            Document document = RegularApp.DocumentCacheService.GetDocument(documentGuid);
             KeyValuePair<DataStorage, Entity> ruleInExtensibleStorage = GetRegexRuleInExtensibleStorage(documentGuid, regexRuleGuid);
             Entity regexRuleEntity = ruleInExtensibleStorage.Value;
             if (regexRuleEntity == null) return;
             DataStorage dataStorage = ruleInExtensibleStorage.Key;
 
             string serializedRegexRule = regexRuleEntity.Get<string>("SerializedRegexRule");
-            RegexRule regexRule = SerializationServices.DeserializeRegexRule(serializedRegexRule);
+            RegexRule regexRule = SerializationUtils.DeserializeRegexRule(serializedRegexRule);
             string ruleName = regexRule.RuleName;
 
             using (Transaction transaction = new Transaction(document, $"Regular - Deleting Rule {ruleName}"))
@@ -124,7 +124,7 @@ namespace Regular.Services
         }
         private static KeyValuePair<DataStorage, Entity> GetRegexRuleInExtensibleStorage(string documentGuid, string regexRuleGuid)
         {
-            Document document = DocumentGuidServices.GetRevitDocumentByGuid(documentGuid);
+            Document document = RegularApp.DocumentCacheService.GetDocument(documentGuid);
             Schema regularSchema = GetRegularSchema();
 
             // Retrieving and testing all DataStorage objects in the document against our Regular schema.
@@ -137,7 +137,7 @@ namespace Regular.Services
             {
                 Entity regexRuleEntity = dataStorage.GetEntity(regularSchema);
                 string serializedRegexRule = regexRuleEntity.Get<string>("SerializedRegexRule");
-                RegexRule regexRule = SerializationServices.DeserializeRegexRule(serializedRegexRule);
+                RegexRule regexRule = SerializationUtils.DeserializeRegexRule(serializedRegexRule);
                 // If the rule has the right GUID, we return the DataStorage and Entity objects to be worked with
                 if(regexRule.RuleGuid == regexRuleGuid) return new KeyValuePair<DataStorage, Entity>(dataStorage, regexRuleEntity);
             }

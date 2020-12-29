@@ -3,7 +3,7 @@ using System.Windows.Media;
 
 namespace Regular.Utilities
 {
-    public static class WpfUtils
+    public static class VisualTreeUtils
 
     {
         // Method from Brian Lagunas to find an element's parent of a particular type

@@ -1,13 +1,13 @@
-﻿using Autodesk.Revit.DB;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Autodesk.Revit.DB;
 using Regular.Models;
 
-namespace Regular.Services
+namespace Regular.Utilities
 {
-    public static class CategoryServices
+    public static class CategoryUtils
     {
         public static List<Category> ConvertCategorySetToList(Categories categories)
         {
@@ -35,7 +35,7 @@ namespace Regular.Services
             // Here we return all possible category objects for the new RegexRule and set them all to unchecked
 
             ObservableCollection<CategoryObject> observableObjects = new ObservableCollection<CategoryObject>();
-            Document document = DocumentGuidServices.GetRevitDocumentByGuid(documentGuid);
+            Document document = RegularApp.DocumentCacheService.GetDocument(documentGuid);
 
             // Fetching all categories to create ObservableObjects
             List<Category> userVisibleCategories = ConvertCategorySetToList(document.Settings.Categories)
