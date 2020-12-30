@@ -1,19 +1,17 @@
 ﻿using System;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
-using static Regular.RegularApp;
 
 namespace Regular.Utilities
 {
-    public static class DmUpdaterUtils
+    public static class RegularUpdaterUtils
     {
-        
         public static void RegisterRegularUpdaterToDocument(string documentGuid)
         {
             // We register the RegularUpdater to each document as it opens
             Document document = RegularApp.DocumentCacheService.GetDocument(documentGuid);
 
-            RegularUpdater regularUpdater = new RegularUpdater(RevitApplication.ActiveAddInId);
+            RegularUpdater regularUpdater = new RegularUpdater(RegularApp.RevitApplication.ActiveAddInId);
             RegularApp.DmUpdaterCacheService.AddUpdater(documentGuid, regularUpdater);
             
             // Using the optional boolean flag so the updater doesn't pop up with a massive scary message on loading

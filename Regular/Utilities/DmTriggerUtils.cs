@@ -18,45 +18,33 @@ namespace Regular.Utilities
         {
             Document document = RegularApp.DocumentCacheService.GetDocument(documentGuid);
 
-            List<ElementId> targetCategoryIds = regexRule.TargetCategoryObjects.Select(x => new ElementId(Convert.ToInt32((int) x.CategoryObjectId))).ToList();
-            List<Category> targetCategories = targetCategoryIds.Select(x => Category.GetCategory(document, x)).ToList();
-            List<BuiltInCategory> targetBuiltInCategories = targetCategories.Select(CategoryUtils.GetBuiltInCategoryFromCategory).ToList();
+            List<BuiltInCategory> targetBuiltInCategories = regexRule.TargetCategoryObjects
+                .Where(x => x.IsChecked)
+                .Select(x => Category.GetCategory(document, new ElementId(x.CategoryObjectId)))
+                .Select(CategoryUtils.GetBuiltInCategoryFromCategory)
+                .ToList();
+            
             ElementId trackingParameterId = new ElementId(regexRule.TrackingParameterObject.ParameterObjectId);
 
             UpdaterRegistry.AddTrigger(
-                RegularApp.DmUpdaterCacheService.GetUpdater(documentGuid).GetUpdaterId(),
+                regexRule.UpdaterId,
                 document,
                 new ElementMulticategoryFilter(targetBuiltInCategories),
                 Element.GetChangeTypeParameter(trackingParameterId));
         }
 
-        public static void DeleteTrigger(string documentGuid, RegexRule ruleToRemoveTriggerFrom)
+        public static void DeleteTrigger(string documentGuid, RegexRule regexRule)
         {
-            // There is no way to delete a specific trigger so we must remove all document-based triggers
-            // and recreate them minus the one trigger we're removing.
             Document document = RegularApp.DocumentCacheService.GetDocument(documentGuid);
-            UpdaterId updaterId = RegularApp.DmUpdaterCacheService.GetUpdater(documentGuid).GetUpdaterId();
-            UpdaterRegistry.RemoveDocumentTriggers(updaterId, document);
-            foreach (RegexRule regexRule in RegularApp.RegexRuleCacheService.GetDocumentRules(documentGuid))
-            {
-                // We don't add back the trigger for the rule we're removing
-                if (regexRule.RuleGuid == ruleToRemoveTriggerFrom.RuleGuid) continue;
-                AddTrigger(documentGuid, regexRule);
-            }
+            UpdaterRegistry.RemoveDocumentTriggers(regexRule.UpdaterId, document);
         }
 
-        public static void UpdateAllTriggers(string documentGuid)
+        public static void UpdateTrigger(string documentGuid, RegexRule regexRule)
         {
-            // There is no way to delete a specific trigger so we must remove all document-based triggers
-            // and recreate all of them one by one, but with the new RegexRuleInfo
             Document document = RegularApp.DocumentCacheService.GetDocument(documentGuid);
-            UpdaterId updaterId = RegularApp.DmUpdaterCacheService.GetUpdater(documentGuid).GetUpdaterId();
+            UpdaterId updaterId = regexRule.UpdaterId;
             UpdaterRegistry.RemoveDocumentTriggers(updaterId, document);
-            foreach (RegexRule regexRule in RegularApp.RegexRuleCacheService.GetDocumentRules(documentGuid))
-            {
-                // We recreate all of the triggers
-                AddTrigger(documentGuid, regexRule);
-            }
+            AddTrigger(documentGuid, regexRule);
         }
     }
 }

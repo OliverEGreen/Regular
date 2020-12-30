@@ -59,25 +59,38 @@ namespace Regular.Utilities
             return ((ParameterElement)document.GetElement(parameterId)).GetDefinition().Name;
         }
 
+        public static ParameterType GetParameterType(Document document, ElementId parameterId)
+        {
+            return ((ParameterElement)document.GetElement(parameterId)).GetDefinition().ParameterType;
+        }
+
         public static ObservableCollection<ParameterObject> GetParametersOfCategories(string documentGuid, ObservableCollection<CategoryObject> categoryObjects)
         {
             // We'll return this ObservableCollection of ParameterObjects straight for UI consumption
             ObservableCollection<ParameterObject> parameterObjects = new ObservableCollection<ParameterObject>();
             
-            
             List<ElementId> categoryIds = categoryObjects
                 .Where(x => x.IsChecked)
-                .Select(x => Convert.ToInt32(x.CategoryObjectId))
+                .Select(x => x.CategoryObjectId)
                 .Select(x => new ElementId(x))
                 .ToList();
             
             Document document = RegularApp.DocumentCacheService.GetDocument(documentGuid);
-            List<ElementId> parameterIds = ParameterFilterUtilities.GetFilterableParametersInCommon(document, categoryIds).ToList();
+
+            // Trying to only retrieve parameter of string type
+            List<ElementId> parameterIds = ParameterFilterUtilities
+                .GetFilterableParametersInCommon(document, categoryIds)
+                .Where(x => GetParameterType(document, x) == ParameterType.Text)
+                .ToList();
             
             foreach (ElementId parameterId in parameterIds)
             {
-                string parameterName = GetParameterName(document, parameterId);
-                parameterObjects.Add(new ParameterObject { ParameterObjectId = parameterId.IntegerValue, ParameterObjectName = parameterName });
+                parameterObjects.Add(
+                    new ParameterObject
+                    {
+                        ParameterObjectId = parameterId.IntegerValue,
+                        ParameterObjectName = GetParameterName(document, parameterId)
+                    });
             }
             return new ObservableCollection<ParameterObject>(parameterObjects.OrderBy(x => x.ParameterObjectName));
         }

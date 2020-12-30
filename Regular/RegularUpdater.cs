@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using Autodesk.Revit.DB;
+using Regular.Utilities;
 
 namespace Regular
 {
@@ -14,10 +16,11 @@ namespace Regular
 
         public void Execute(UpdaterData data)
         {
-            //Document document = data.GetDocument();
-            //string documentGuid = DocumentGuidUtils.GetDocumentGuidFromExtensibleStorage(document);
-            //TaskDialog.Show("Test", "DMU Executing");
-            //List<ElementId> modifiedElementIds = data.GetModifiedElementIds().ToList();
+            
+            RuleExecutionUtils.ExecuteRegexRule(
+                DocumentGuidUtils.GetDocumentGuidFromExtensibleStorage(data.GetDocument()),
+                updaterId,
+                data.GetModifiedElementIds().ToList());
         }
         public string GetAdditionalInformation() { return "Regular: Reads any Regex Rules in the open document"; }
         public ChangePriority GetChangePriority() { return ChangePriority.Annotations; }
