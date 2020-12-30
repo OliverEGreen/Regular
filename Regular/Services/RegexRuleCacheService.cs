@@ -43,7 +43,11 @@ namespace Regular.Services
 
         public ObservableCollection<RegexRule> GetDocumentRules(string documentGuid)
         {
-            return RegexRules.ContainsKey(documentGuid) ? RegexRules[documentGuid] : null;
+            if (!RegexRules.ContainsKey(documentGuid))
+            {
+                RegexRules[documentGuid] = new ObservableCollection<RegexRule>();
+            }
+            return RegexRules[documentGuid];
         }
 
         public void ClearDocumentRules(string documentGuid)

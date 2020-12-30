@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using Autodesk.Revit.DB;
 using Regular.Enums;
 using Regular.Utilities;
 
@@ -22,7 +23,7 @@ namespace Regular.Models
         private string dateTimeCreated;
         private string createdBy;
         private string ruleGuid;
-
+        private UpdaterId updaterId;
         public string RuleName
         {
             get => ruleName;
@@ -134,6 +135,12 @@ namespace Regular.Models
                 NotifyPropertyChanged("IsFrozen");
             }
         }
+
+        public UpdaterId UpdaterId
+        {
+            get => updaterId;
+            set => updaterId = value;
+        }
         
         public static RegexRule Create(string documentGuid, string guid = null)
         {
@@ -149,7 +156,7 @@ namespace Regular.Models
                 RegexRuleParts = new ObservableCollection<IRegexRulePart>(),
                 RegexString = "",
                 IsFrozen = false,
-
+                UpdaterId = new RegularUpdater(RegularApp.RevitApplication.ActiveAddInId).GetUpdaterId(),
                 ToolTip = "",
                 DateTimeCreated = DateTime.Now.ToString("r"),
                 CreatedBy = Environment.UserName
@@ -179,7 +186,7 @@ namespace Regular.Models
             duplicateRegexRule.RegexRuleParts = sourceRegexRule.RegexRuleParts;
             duplicateRegexRule.RegexString = sourceRegexRule.RegexString;
             duplicateRegexRule.IsFrozen = sourceRegexRule.IsFrozen;
-            
+            duplicateRegexRule.UpdaterId = sourceRegexRule.UpdaterId;
             return duplicateRegexRule;
         }
        

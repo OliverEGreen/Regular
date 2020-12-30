@@ -91,17 +91,6 @@ namespace Regular.ViewModels
             }
         }
 
-        private ParameterObject selectedTrackingParameterObject;
-
-        public ParameterObject SelectedTrackingParameterObject
-        {
-            get => selectedTrackingParameterObject;
-            set
-            {
-                selectedTrackingParameterObject = value;
-                NotifyPropertyChanged("SelectedTrackingParameterObject");
-            }
-        }
         public ParameterObject TrackingParameter { get; set; }
 
         // View-based properties 
@@ -324,12 +313,15 @@ namespace Regular.ViewModels
             };
             
             if (!EditingExistingRule) return;
+            
             void LoadExistingRule()
             {
                 OutputParameterNameInputEnabled = !EditingExistingRule;
-                
+                NumberCategoriesSelected = StagingRule.TargetCategoryObjects.Count(x => x.IsChecked);
+
                 // Selecting the previously-saved tracking parameter
-                TrackingParameter = PossibleTrackingParameterObjects.FirstOrDefault(x => x.ParameterObjectId == StagingRule.TrackingParameterObject.ParameterObjectId);
+                TrackingParameter = StagingRule.TrackingParameterObject ?? PossibleTrackingParameterObjects
+                    .FirstOrDefault(x => x.ParameterObjectId == StagingRule.TrackingParameterObject.ParameterObjectId);
             }
             
             // If we're editing an existing rule, the UI-bound properties can load the rule to display saved information

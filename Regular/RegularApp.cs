@@ -43,8 +43,11 @@ namespace Regular
             // Setting a static, accessible reference to the Revit application just this once, for everything to use
             if (RevitApplication == null) RevitApplication = document.Application;
 
+            // NOTE
             // If the document has been opened, saved-as or newly-created, we register the RegularUpdater to it
-            DmUpdaterUtils.RegisterRegularUpdaterToDocument(documentGuid);
+            // We no longer have one updater, but one per rule. We need to get all rules and register their updaters
+            
+            //RegularUpdaterUtils.RegisterRegularUpdaterToDocument(documentGuid);
             
             // Getting all of the saved rules in the document
             ObservableCollection<RegexRule> existingRegexRules = ExtensibleStorageUtils.GetAllRegexRulesInExtensibleStorage(documentGuid);
@@ -64,7 +67,7 @@ namespace Regular
             UpdaterRegistry.RemoveDocumentTriggers(updaterId, document);
 
             // When shutting down the document, we de-register the document-specific RegexRuleUpdater
-            DmUpdaterUtils.DeregisterRegularUpdaterFromDocument(documentGuid);
+            RegularUpdaterUtils.DeregisterRegularUpdaterFromDocument(documentGuid);
 
             // If the RevitDocumentCache contains this document's GUID then we can remove it
             DocumentCacheService.RemoveDocument(documentGuid);

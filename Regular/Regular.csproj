@@ -115,12 +115,13 @@
     <Compile Include="LaunchRuleManager.cs" />
     <Compile Include="Utilities\CategoryUtils.cs" />
     <Compile Include="Utilities\DocumentGuidUtils.cs" />
-    <Compile Include="Utilities\DmUpdaterUtils.cs" />
+    <Compile Include="Utilities\RegularUpdaterUtils.cs" />
     <Compile Include="Utilities\ExtensibleStorageUtils.cs" />
     <Compile Include="Utilities\ParameterUtils.cs" />
     <Compile Include="Utilities\InputValidationServices.cs" />
     <Compile Include="Utilities\RegexAssemblyUtils.cs" />
     <Compile Include="Services\DocumentCacheService.cs" />
+    <Compile Include="Utilities\RuleExecutionUtils.cs" />
     <Compile Include="Utilities\SerializationUtils.cs" />
     <Compile Include="RegularUpdater.cs" />
     <Compile Include="Utilities\EnumUtils.cs" />

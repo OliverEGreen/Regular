@@ -56,10 +56,11 @@ namespace Regular.Commands.RuleEditor
                 existingRegexRule.RegexRuleParts = newRegexRule.RegexRuleParts;
                 existingRegexRule.RegexString = newRegexRule.RegexString;
                 existingRegexRule.IsFrozen = newRegexRule.IsFrozen;
+                existingRegexRule.UpdaterId = newRegexRule.UpdaterId;
 
                 // Need to check if existingRegexRule is in ExtensibleStorage or not.
                 ExtensibleStorageUtils.UpdateRegexRuleInExtensibleStorage(ruleEditorViewModel.DocumentGuid, existingRegexRule.RuleGuid, newRegexRule);
-                DmTriggerUtils.UpdateAllTriggers(ruleEditorViewModel.DocumentGuid);
+                DmTriggerUtils.UpdateTrigger(ruleEditorViewModel.DocumentGuid, existingRegexRule);
             }
             else
             {

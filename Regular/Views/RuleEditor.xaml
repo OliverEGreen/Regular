@@ -18,7 +18,6 @@
     Style="{DynamicResource StandardWindow}"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
-    <!--  d:DataContext="{d:DesignInstance vm:RuleEditorMockViewModel,IsDesignTimeCreatable=True}"  -->
     <Window.Resources>
         <ResourceDictionary Source="../Resources/RegularStyles.xaml" />
     </Window.Resources>
@@ -74,7 +73,7 @@
             TextChanged="TextBoxNameYourRuleInput_OnTextChanged"
             ToolTip="Define a reference ruleName for the rule you're creating." />
         <TextBlock
-            Name="TextblockNameYourRuleWatermark"
+            Name="TextBlockNameYourRuleWatermark"
             Grid.Row="1"
             Grid.Column="1"
             Padding="7,3"
@@ -200,8 +199,8 @@
             DisplayMemberPath="ParameterObjectName"
             ItemsSource="{Binding PossibleTrackingParameterObjects, UpdateSourceTrigger=PropertyChanged}"
             SelectedIndex="0"
-            SelectedItem="{Binding SelectedTrackingParameterObject, UpdateSourceTrigger=PropertyChanged}"
-            SelectedValuePath="ParameterObjectId"
+            SelectedItem="{Binding StagingRule.TrackingParameterObject, UpdateSourceTrigger=PropertyChanged}"
+            SelectedValuePath="{Binding .}"
             Style="{StaticResource StandardComboBox}" />
         <Label
             Grid.Row="4"
@@ -217,6 +216,7 @@
             Grid.Column="1"
             VerticalAlignment="Center"
             VerticalContentAlignment="Center"
+            IsEnabled="{Binding OutputParameterNameInputEnabled}"
             MaxLength="30"
             Style="{StaticResource StandardTextBox}"
             Text="{Binding StagingRule.OutputParameterObject.ParameterObjectName, UpdateSourceTrigger=PropertyChanged}"

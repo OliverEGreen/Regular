@@ -19,10 +19,9 @@ namespace Regular.Services
 
         public void AddUpdater(string documentGuid, RegularUpdater updater)
         {
-            if (DmUpdaters.ContainsKey(documentGuid))
-            {
-                DmUpdaters[documentGuid] = updater;
-            }
+            // Any previous updaters for the document are removed (shouldn't happen in theory)
+            if (DmUpdaters.ContainsKey(documentGuid)) DmUpdaters.Remove(documentGuid);
+            DmUpdaters[documentGuid] = updater;
         }
         public void RemoveUpdater(string documentGuid)
         {
@@ -32,8 +31,7 @@ namespace Regular.Services
 
         public RegularUpdater GetUpdater(string documentGuid)
         {
-            if (!DmUpdaters.ContainsKey(documentGuid)) return null;
-            return DmUpdaters[documentGuid];
+            return !DmUpdaters.ContainsKey(documentGuid) ? null : DmUpdaters[documentGuid];
         }
     }
 }
