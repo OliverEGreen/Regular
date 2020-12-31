@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using Autodesk.Revit.DB;
 using Regular.Enums;
+using Regular.Services;
 using Regular.Utilities;
 
 namespace Regular.Models
@@ -23,7 +24,7 @@ namespace Regular.Models
         private string dateTimeCreated;
         private string createdBy;
         private string ruleGuid;
-        private UpdaterId updaterId;
+        private RegularUpdater regularUpdater;
         public string RuleName
         {
             get => ruleName;
@@ -136,15 +137,15 @@ namespace Regular.Models
             }
         }
 
-        public UpdaterId UpdaterId
+        public RegularUpdater RegularUpdater
         {
-            get => updaterId;
-            set => updaterId = value;
+            get => regularUpdater;
+            set => regularUpdater = value;
         }
         
         public static RegexRule Create(string documentGuid, string guid = null)
         {
-            return new RegexRule
+            RegexRule regexRule = new RegexRule
             {
                 // If given a GUID, a rule is being recreated from memory, otherwise a new rule is being created
                 RuleGuid = guid ?? Guid.NewGuid().ToString(),
@@ -156,13 +157,53 @@ namespace Regular.Models
                 RegexRuleParts = new ObservableCollection<IRegexRulePart>(),
                 RegexString = "",
                 IsFrozen = false,
-                UpdaterId = new RegularUpdater(RegularApp.RevitApplication.ActiveAddInId).GetUpdaterId(),
+                RegularUpdater = new RegularUpdater(RegularApp.RevitApplication.ActiveAddInId),
                 ToolTip = "",
                 DateTimeCreated = DateTime.Now.ToString("r"),
                 CreatedBy = Environment.UserName
             };
+            return regexRule;
         }
-        
+
+        public static void Save(string documentGuid, RegexRule regexRule)
+        {
+            // Saves rule to static cache and ExtensibleStorage
+            RegularApp.RegexRuleCacheService.AddRule(documentGuid, regexRule);
+            RegularApp.DmUpdaterCacheService.AddUpdater(documentGuid, regexRule);
+            ExtensibleStorageUtils.SaveRegexRuleToExtensibleStorage(documentGuid, regexRule);
+
+            // TODO: Check this rule is created as we want
+            ParameterUtils.CreateProjectParameter(documentGuid, regexRule);
+        }
+
+        public static void Delete(string documentGuid, RegexRule regexRule)
+        {
+            // Deleting the cached RegexRule, associated DataStorage object, cached DmUpdater, UpdaterRegistry object and Trigger
+            RegularApp.RegexRuleCacheService.RemoveRule(documentGuid, regexRule.RuleGuid);
+            RegularApp.DmUpdaterCacheService.RemoveUpdater(documentGuid, regexRule);
+            ExtensibleStorageUtils.DeleteRegexRuleFromExtensibleStorage(documentGuid, regexRule.RuleGuid);
+        }
+
+        public static void Update(string documentGuid, RegexRule existingRegexRule, RegexRule newRegexRule)
+        {
+            // Takes a newly-generated RegexRule object and sets an existing rules values to match
+            // To be used when updating an existing rule from the Rule Editor
+
+            existingRegexRule.RuleName = newRegexRule.RuleName;
+            existingRegexRule.TargetCategoryObjects = newRegexRule.TargetCategoryObjects;
+            existingRegexRule.TrackingParameterObject = newRegexRule.TrackingParameterObject;
+            existingRegexRule.OutputParameterObject = newRegexRule.OutputParameterObject;
+            existingRegexRule.MatchType = newRegexRule.MatchType;
+            existingRegexRule.RegexRuleParts = newRegexRule.RegexRuleParts;
+            existingRegexRule.RegexString = newRegexRule.RegexString;
+            existingRegexRule.IsFrozen = newRegexRule.IsFrozen;
+            existingRegexRule.RegularUpdater = newRegexRule.RegularUpdater;
+
+            // Need to check if existingRegexRule is in ExtensibleStorage or not.
+            ExtensibleStorageUtils.UpdateRegexRuleInExtensibleStorage(documentGuid, existingRegexRule.RuleGuid, newRegexRule);
+            DmTriggerUtils.UpdateTrigger(documentGuid, existingRegexRule);
+        }
+
         public static RegexRule Duplicate(string documentGuid, RegexRule sourceRegexRule)
         {
             // Helper method to ensure duplicate rules always have a unique name
@@ -186,7 +227,7 @@ namespace Regular.Models
             duplicateRegexRule.RegexRuleParts = sourceRegexRule.RegexRuleParts;
             duplicateRegexRule.RegexString = sourceRegexRule.RegexString;
             duplicateRegexRule.IsFrozen = sourceRegexRule.IsFrozen;
-            duplicateRegexRule.UpdaterId = sourceRegexRule.UpdaterId;
+            duplicateRegexRule.RegularUpdater = sourceRegexRule.RegularUpdater;
             return duplicateRegexRule;
         }
        

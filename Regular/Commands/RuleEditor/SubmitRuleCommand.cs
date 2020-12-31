@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Input;
 using Regular.Models;
-using Regular.Utilities;
 using Regular.ViewModels;
 
 namespace Regular.Commands.RuleEditor
@@ -42,35 +41,11 @@ namespace Regular.Commands.RuleEditor
 
             if (ruleEditorViewModel.EditingExistingRule)
             {
-                RegexRule existingRegexRule = ruleEditorViewModel.InputRule;
-                RegexRule newRegexRule = ruleEditorViewModel.StagingRule;
-
-                // Takes a newly-generated RegexRule object and sets an existing rules values to match
-                // To be used when updating an existing rule from the Rule Editor
-
-                existingRegexRule.RuleName = newRegexRule.RuleName;
-                existingRegexRule.TargetCategoryObjects = newRegexRule.TargetCategoryObjects;
-                existingRegexRule.TrackingParameterObject = newRegexRule.TrackingParameterObject;
-                existingRegexRule.OutputParameterObject = newRegexRule.OutputParameterObject;
-                existingRegexRule.MatchType = newRegexRule.MatchType;
-                existingRegexRule.RegexRuleParts = newRegexRule.RegexRuleParts;
-                existingRegexRule.RegexString = newRegexRule.RegexString;
-                existingRegexRule.IsFrozen = newRegexRule.IsFrozen;
-                existingRegexRule.UpdaterId = newRegexRule.UpdaterId;
-
-                // Need to check if existingRegexRule is in ExtensibleStorage or not.
-                ExtensibleStorageUtils.UpdateRegexRuleInExtensibleStorage(ruleEditorViewModel.DocumentGuid, existingRegexRule.RuleGuid, newRegexRule);
-                DmTriggerUtils.UpdateTrigger(ruleEditorViewModel.DocumentGuid, existingRegexRule);
+                RegexRule.Update(ruleEditorViewModel.DocumentGuid, ruleEditorViewModel.InputRule, ruleEditorViewModel.StagingRule);
             }
             else
             {
-                // Saves rule to static cache and ExtensibleStorage
-                RegularApp.RegexRuleCacheService.AddRule(ruleEditorViewModel.DocumentGuid, ruleEditorViewModel.StagingRule);
-                ExtensibleStorageUtils.SaveRegexRuleToExtensibleStorage(ruleEditorViewModel.DocumentGuid, ruleEditorViewModel.StagingRule);
-                DmTriggerUtils.AddTrigger(ruleEditorViewModel.DocumentGuid, ruleEditorViewModel.StagingRule);
-
-                // TODO: Check this rule is created as we want
-                ParameterUtils.CreateProjectParameter(ruleEditorViewModel.DocumentGuid, ruleEditorViewModel.StagingRule.OutputParameterObject.ParameterObjectName, ruleEditorViewModel.StagingRule.TargetCategoryObjects);
+                RegexRule.Save(ruleEditorViewModel.DocumentGuid, ruleEditorViewModel.StagingRule);
             }
         }
 

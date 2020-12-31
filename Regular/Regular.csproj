@@ -115,7 +115,6 @@
     <Compile Include="LaunchRuleManager.cs" />
     <Compile Include="Utilities\CategoryUtils.cs" />
     <Compile Include="Utilities\DocumentGuidUtils.cs" />
-    <Compile Include="Utilities\RegularUpdaterUtils.cs" />
     <Compile Include="Utilities\ExtensibleStorageUtils.cs" />
     <Compile Include="Utilities\ParameterUtils.cs" />
     <Compile Include="Utilities\InputValidationServices.cs" />

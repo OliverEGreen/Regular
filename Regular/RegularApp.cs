@@ -1,4 +1,8 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Windows.Documents;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.DB.Events;
@@ -42,12 +46,6 @@ namespace Regular
 
             // Setting a static, accessible reference to the Revit application just this once, for everything to use
             if (RevitApplication == null) RevitApplication = document.Application;
-
-            // NOTE
-            // If the document has been opened, saved-as or newly-created, we register the RegularUpdater to it
-            // We no longer have one updater, but one per rule. We need to get all rules and register their updaters
-            
-            //RegularUpdaterUtils.RegisterRegularUpdaterToDocument(documentGuid);
             
             // Getting all of the saved rules in the document
             ObservableCollection<RegexRule> existingRegexRules = ExtensibleStorageUtils.GetAllRegexRulesInExtensibleStorage(documentGuid);
@@ -55,22 +53,14 @@ namespace Regular
             // If there are no saved rules we return, otherwise we establish the updaters
             if (existingRegexRules != null && existingRegexRules.Count < 1) { return; }
 
-            // Rules exist, we need to add the triggers to the RegularUpdater
-            DmTriggerUtils.AddAllTriggers(documentGuid, existingRegexRules);
+            DmUpdaterCacheService.AddDocumentUpdaters(documentGuid);
         }
         private static void DeRegisterDocument(Document document)
         {
             string documentGuid = DocumentGuidUtils.GetDocumentGuidFromExtensibleStorage(document) ?? DocumentGuidUtils.RegisterDocumentGuidToExtensibleStorage(document);
 
-            // We can remove all of the triggers
-            UpdaterId updaterId = DmUpdaterCacheService.GetUpdater(documentGuid).GetUpdaterId();
-            UpdaterRegistry.RemoveDocumentTriggers(updaterId, document);
-
-            // When shutting down the document, we de-register the document-specific RegexRuleUpdater
-            RegularUpdaterUtils.DeregisterRegularUpdaterFromDocument(documentGuid);
-
-            // If the RevitDocumentCache contains this document's GUID then we can remove it
-            DocumentCacheService.RemoveDocument(documentGuid);
+            // Handles both clearing the cache and the UpdaterRegistry
+            DmUpdaterCacheService.RemoveDocumentUpdaters(documentGuid);
             
             // If there are any saved rules in the application-wide cache, we can remove them
             RegexRuleCacheService.ClearDocumentRules(documentGuid);

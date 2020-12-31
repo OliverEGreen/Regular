@@ -9,13 +9,10 @@ namespace Regular.Utilities
 {
     public static class DmTriggerUtils
     {
-        internal static void AddAllTriggers(string documentGuid, ObservableCollection<RegexRule> regexRules)
-        {
-            foreach (RegexRule regexRule in regexRules) AddTrigger(documentGuid, regexRule);
-        }
-        
         public static void AddTrigger(string documentGuid, RegexRule regexRule)
         {
+            if (regexRule == null) return;
+
             Document document = RegularApp.DocumentCacheService.GetDocument(documentGuid);
 
             List<BuiltInCategory> targetBuiltInCategories = regexRule.TargetCategoryObjects
@@ -27,7 +24,7 @@ namespace Regular.Utilities
             ElementId trackingParameterId = new ElementId(regexRule.TrackingParameterObject.ParameterObjectId);
 
             UpdaterRegistry.AddTrigger(
-                regexRule.UpdaterId,
+                regexRule.RegularUpdater.GetUpdaterId(),
                 document,
                 new ElementMulticategoryFilter(targetBuiltInCategories),
                 Element.GetChangeTypeParameter(trackingParameterId));
@@ -36,13 +33,13 @@ namespace Regular.Utilities
         public static void DeleteTrigger(string documentGuid, RegexRule regexRule)
         {
             Document document = RegularApp.DocumentCacheService.GetDocument(documentGuid);
-            UpdaterRegistry.RemoveDocumentTriggers(regexRule.UpdaterId, document);
+            UpdaterRegistry.RemoveDocumentTriggers(regexRule.RegularUpdater.GetUpdaterId(), document);
         }
 
         public static void UpdateTrigger(string documentGuid, RegexRule regexRule)
         {
             Document document = RegularApp.DocumentCacheService.GetDocument(documentGuid);
-            UpdaterId updaterId = regexRule.UpdaterId;
+            UpdaterId updaterId = regexRule.RegularUpdater.GetUpdaterId();
             UpdaterRegistry.RemoveDocumentTriggers(updaterId, document);
             AddTrigger(documentGuid, regexRule);
         }
