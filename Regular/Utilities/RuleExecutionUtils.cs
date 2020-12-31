@@ -17,30 +17,23 @@ namespace Regular.Utilities
         {
             RegexRule regexRule = RegularApp.RegexRuleCacheService
                 .GetDocumentRules(documentGuid)
-                .FirstOrDefault(x => x.UpdaterId == updaterId);
+                .FirstOrDefault(x => x.RegularUpdater.GetUpdaterId() == updaterId);
             if (regexRule == null) return;
 
             Document document = RegularApp.DocumentCacheService.GetDocument(documentGuid);
             if (document == null) return;
 
-            using (Transaction transaction = new Transaction(document, $"Executing Regular Rule: {regexRule.RuleName}"))
+            for (int i = 0; i < modifiedElementIds.Count; i++)
             {
-                transaction.Start();
-                
-                for (int i = 0; i < modifiedElementIds.Count; i++)
-                {
-                    // Retrieving the modified element
-                    Element element = RegularApp.DocumentCacheService
-                        .GetDocument(documentGuid)
-                        .GetElement(modifiedElementIds[i]);
+                // Retrieving the modified element
+                Element element = RegularApp.DocumentCacheService
+                    .GetDocument(documentGuid)
+                    .GetElement(modifiedElementIds[i]);
 
-                    BuiltInParameter builtInParameter = (BuiltInParameter) regexRule.OutputParameterObject.ParameterObjectId;
-                    Parameter parameter = element.get_Parameter(builtInParameter);
-                    if (parameter == null) continue;
-                    parameter.Set(TestRuleValidity(regexRule, element));
-                }
-                
-                transaction.Commit();
+                BuiltInParameter builtInParameter = (BuiltInParameter)regexRule.OutputParameterObject.ParameterObjectId;
+                Parameter parameter = element.get_Parameter(builtInParameter);
+                if (parameter == null) continue;
+                parameter.Set(TestRuleValidity(regexRule, element));
             }
         }
 

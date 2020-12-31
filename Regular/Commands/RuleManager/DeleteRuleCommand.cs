@@ -20,15 +20,13 @@ namespace Regular.Commands.RuleManager
 
         public void Execute(object parameter)
         {
+            // Asks user if they're sure before deleting anything
             ConfirmationDialog confirmationDialog = new ConfirmationDialog();
             confirmationDialog.ShowDialog();
             if (!confirmationDialog.ConfirmDelete) return;
-            if (!(parameter is RegexRule regexRule)) return;
 
-            // Deleting both the cached RegexRule and the associated DataStorage object
-            RegularApp.RegexRuleCacheService.RemoveRule(ruleManagerViewModel.DocumentGuid, regexRule.RuleGuid);
-            ExtensibleStorageUtils.DeleteRegexRuleFromExtensibleStorage(ruleManagerViewModel.DocumentGuid, regexRule.RuleGuid);
-            DmTriggerUtils.DeleteTrigger(ruleManagerViewModel.DocumentGuid, regexRule);
+            if (!(parameter is RegexRule regexRule)) return;
+            RegexRule.Delete(ruleManagerViewModel.DocumentGuid, regexRule);
         }
 
         public event EventHandler CanExecuteChanged

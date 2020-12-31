@@ -12,7 +12,7 @@ namespace Regular.Utilities
 {
     public static class ParameterUtils
     {
-        public static void CreateProjectParameter(string documentGuid, string parameterName, ObservableCollection<CategoryObject> targetCategoryObjects)
+        public static void CreateProjectParameter(string documentGuid, RegexRule regexRule)
         {
             // Spiderinnet's hacky method to create a project parameter, despite the Revit API's limitations on this
             // From https:// spiderinnet.typepad.com/blog/2011/05/parameter-of-revit-api-31-create-project-parameter.html
@@ -25,11 +25,12 @@ namespace Regular.Utilities
 
             //Creating the necessary CategorySet to create the outputParameter
 
-            List<ElementId> targetCategoryIds = targetCategoryObjects.Where(x => x.IsChecked).Select(x => new ElementId(x.CategoryObjectId)).ToList();
+            List<ElementId> targetCategoryIds = regexRule.TargetCategoryObjects.Where(x => x.IsChecked).Select(x => new ElementId(x.CategoryObjectId)).ToList();
             List<Category> categories = targetCategoryIds.Select(x => Category.GetCategory(document, x)).ToList();
             CategorySet categorySet = CategoryUtils.ConvertListToCategorySet(categories);
-                        
-            using (Transaction transaction = new Transaction(document, $"Regular - Creating New Project Parameter {parameterName}")) 
+            ExternalDefinition definition;
+
+            using (Transaction transaction = new Transaction(document, $"Regular - Creating New Project Parameter { regexRule.OutputParameterObject.ParameterObjectName }")) 
             {
                 transaction.Start();
 
@@ -39,18 +40,25 @@ namespace Regular.Utilities
                 string tempFile = Path.GetTempFileName() + ".txt";
                 using (File.Create(tempFile)) { }
                 revitApplication.SharedParametersFilename = tempFile;
-                ExternalDefinitionCreationOptions externalDefinitionCreationOptions = new ExternalDefinitionCreationOptions(parameterName, parameterType);
-                ExternalDefinition def = revitApplication.OpenSharedParameterFile().Groups.Create("TemporaryDefintionGroup").Definitions.Create(externalDefinitionCreationOptions) as ExternalDefinition;
-
+                ExternalDefinitionCreationOptions externalDefinitionCreationOptions = new ExternalDefinitionCreationOptions(regexRule.OutputParameterObject.ParameterObjectName, parameterType);
+                definition = revitApplication.OpenSharedParameterFile().Groups.Create("TemporaryDefintionGroup").Definitions.Create(externalDefinitionCreationOptions) as ExternalDefinition;
+                
                 revitApplication.SharedParametersFilename = oriFile;
                 File.Delete(tempFile);
 
                 Binding binding = revitApplication.Create.NewInstanceBinding(categorySet);
                 BindingMap bindingMap = new UIApplication(revitApplication).ActiveUIDocument.Document.ParameterBindings;
-                bindingMap.Insert(def, binding, builtInParameterGroup);
-
+                bindingMap.Insert(definition, binding, builtInParameterGroup);
+                
                 transaction.Commit();
+
+                if (definition != null)
+                {
+                    regexRule.OutputParameterObject.ParameterObjectId =
+                        GetProjectParameterByName(documentGuid, definition.Name).Id.IntegerValue;
+                }
             }
+            
         }
         
         public static string GetParameterName(Document document, ElementId parameterId)
@@ -59,9 +67,14 @@ namespace Regular.Utilities
             return ((ParameterElement)document.GetElement(parameterId)).GetDefinition().Name;
         }
 
-        public static ParameterType GetParameterType(Document document, ElementId parameterId)
+        public static ParameterElement GetProjectParameterByName(string documentGuid, string parameterName)
         {
-            return ((ParameterElement)document.GetElement(parameterId)).GetDefinition().ParameterType;
+            Document document = RegularApp.DocumentCacheService.GetDocument(documentGuid);
+            List<ParameterElement> parameterElements = new FilteredElementCollector(document)
+                .OfClass(typeof(ParameterElement))
+                .OfType<ParameterElement>().ToList();
+            if (parameterElements.Count < 1) return null;
+            return parameterElements.FirstOrDefault(x => x.Name == parameterName);
         }
 
         public static ObservableCollection<ParameterObject> GetParametersOfCategories(string documentGuid, ObservableCollection<CategoryObject> categoryObjects)
@@ -78,10 +91,7 @@ namespace Regular.Utilities
             Document document = RegularApp.DocumentCacheService.GetDocument(documentGuid);
 
             // Trying to only retrieve parameter of string type
-            List<ElementId> parameterIds = ParameterFilterUtilities
-                .GetFilterableParametersInCommon(document, categoryIds)
-                .Where(x => GetParameterType(document, x) == ParameterType.Text)
-                .ToList();
+            List<ElementId> parameterIds = ParameterFilterUtilities.GetFilterableParametersInCommon(document, categoryIds).ToList();
             
             foreach (ElementId parameterId in parameterIds)
             {

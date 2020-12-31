@@ -22,9 +22,11 @@ namespace Regular.Commands.RuleEditor
 
         public void Execute(object parameter)
         {
+            // Asks user if they're sure before deleting anything
             ConfirmationDialog confirmationDialog = new ConfirmationDialog();
             confirmationDialog.ShowDialog();
             if (!confirmationDialog.ConfirmDelete) return;
+
             if (!(parameter is IRegexRulePart regexRulePart)) return;
             int index = ruleEditorViewModel.StagingRule.RegexRuleParts.IndexOf(regexRulePart);
             ruleEditorViewModel.StagingRule.RegexRuleParts.Remove(regexRulePart);
