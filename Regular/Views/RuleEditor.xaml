@@ -450,6 +450,7 @@
                                     VerticalAlignment="Center"
                                     Background="{StaticResource WindowBackgroundColor}"
                                     IsChecked="{Binding IsCaseSensitive, UpdateSourceTrigger=PropertyChanged}"
+                                    Command="{Binding ElementName=RuleEditorWindow, Path=DataContext.UpdateRegexStringCommand}"
                                     Visibility="{Binding CaseSensitiveCheckboxVisibility}" />
                                 <TextBlock
                                     Grid.Column="4"
@@ -463,6 +464,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
                                     Background="{StaticResource WindowBackgroundColor}"
+                                    Command="{Binding ElementName=RuleEditorWindow, Path=DataContext.UpdateRegexStringCommand}"
                                     IsChecked="{Binding IsOptional, UpdateSourceTrigger=PropertyChanged}" />
                                 <Button
                                     Name="ButtonDeleteRegexRulePart"
@@ -489,7 +491,7 @@
             HorizontalAlignment="Left"
             VerticalAlignment="Bottom"
             Style="{StaticResource StandardText}"
-            Text="{Binding CompliantExample}" />
+            Text="{Binding CompliantExample, StringFormat=Example: \{0\}}" />
         <Button
             Name="ButtonTest"
             Grid.Row="9"

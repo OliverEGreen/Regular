@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Windows.Documents;
+﻿using System.Collections.ObjectModel;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.DB.Events;
@@ -54,6 +50,9 @@ namespace Regular
             if (existingRegexRules != null && existingRegexRules.Count < 1) { return; }
 
             DmUpdaterCacheService.AddDocumentUpdaters(documentGuid);
+
+            // Upon opening, we refresh all values affected by the document's RegexRules, to make sure all values are valid
+            RuleExecutionUtils.ExecuteDocumentRegexRules(documentGuid);
         }
         private static void DeRegisterDocument(Document document)
         {

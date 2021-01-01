@@ -84,6 +84,7 @@
     <Compile Include="Commands\RuleEditor\AddRulePartCommand.cs" />
     <Compile Include="Commands\RuleEditor\TriggerCategoryCheckedCommand.cs" />
     <Compile Include="Commands\RuleEditor\TriggerCategoryPanelCommand.cs" />
+    <Compile Include="Commands\RuleEditor\UpdateRegexStringCommand.cs" />
     <Compile Include="Commands\RuleManager\AddRuleCommand.cs" />
     <Compile Include="Commands\RuleManager\DeleteRuleCommand.cs" />
     <Compile Include="Commands\RuleManager\DuplicateRuleCommand.cs" />
