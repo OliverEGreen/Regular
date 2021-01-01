@@ -158,6 +158,7 @@ namespace Regular.Views
                 ListBoxItem listBoxItem = VisualTreeUtils.FindParent<ListBoxItem>(textBox);
                 listBoxItem?.Focus();
             };
+            RuleEditorViewModel.UpdateRegexStringCommand.Execute(null);
         }
 
         // If the user is allowed to submit the rule, we close the window to prevent them 

@@ -25,7 +25,7 @@ namespace Regular.Commands.RuleEditor
             ruleEditorViewModel.SelectedRegexRulePart = regexRulePart;
             ruleEditorViewModel.StagingRule.RegexRuleParts.Add(regexRulePart);
             ruleEditorViewModel.CompliantExample = RegexAssemblyUtils.GenerateRandomExample(ruleEditorViewModel.StagingRule.RegexRuleParts);
-            ruleEditorViewModel.StagingRule.RegexString = RegexAssemblyUtils.AssembleRegexString(ruleEditorViewModel.StagingRule);
+            ruleEditorViewModel.UpdateRegexStringCommand.Execute(null);
         }
 
         public event EventHandler CanExecuteChanged

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
+using Autodesk.Revit.UI;
 using Regular.Utilities;
 using Regular.ViewModels;
 
@@ -23,6 +25,13 @@ namespace Regular.Commands.RuleEditor
         {
             ruleEditorViewModel.CompliantExampleVisibility= Visibility.Visible;
             ruleEditorViewModel.CompliantExample = RegexAssemblyUtils.GenerateRandomExample(ruleEditorViewModel.StagingRule.RegexRuleParts);
+
+            Regex regex = new Regex(ruleEditorViewModel.StagingRule.RegexString);
+            if (regex.IsMatch(ruleEditorViewModel.CompliantExample) == false)
+            {
+                TaskDialog.Show("Regex Mismatch",
+                    $"Compliant example {ruleEditorViewModel.CompliantExample} does not match regular expression {ruleEditorViewModel.StagingRule.RegexString}");
+            }
         }
 
         public event EventHandler CanExecuteChanged

@@ -119,7 +119,7 @@ namespace Regular.Utilities
         public static string GenerateRandomExample(ObservableCollection<IRegexRulePart> regexRuleParts)
         {
             Random random = new Random((int) DateTime.Now.Ticks & 0x0000FFFF);
-            string randomExampleString = "Example: ";
+            string randomExampleString = "";
             foreach (IRegexRulePart regexRulePart in regexRuleParts)
             {
                 double randomDouble = random.NextDouble();

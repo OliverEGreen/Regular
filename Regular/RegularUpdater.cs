@@ -16,7 +16,7 @@ namespace Regular
 
         public void Execute(UpdaterData data)
         {
-            RuleExecutionUtils.ExecuteRegexRule(
+            RuleExecutionUtils.TriggerExecuteRegexRule(
                 DocumentGuidUtils.GetDocumentGuidFromExtensibleStorage(data.GetDocument()),
                 updaterId,
                 data.GetModifiedElementIds().ToList());

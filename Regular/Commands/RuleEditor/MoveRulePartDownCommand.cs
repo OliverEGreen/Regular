@@ -30,7 +30,7 @@ namespace Regular.Commands.RuleEditor
             ruleEditorViewModel.StagingRule.RegexRuleParts.RemoveAt(index);
             ruleEditorViewModel.StagingRule.RegexRuleParts.Insert(index + 1, regexRulePart);
             ruleEditorViewModel.SelectedRegexRulePart = ruleEditorViewModel.StagingRule.RegexRuleParts[index + 1];
-            ruleEditorViewModel.StagingRule.RegexString = RegexAssemblyUtils.AssembleRegexString(ruleEditorViewModel.StagingRule);
+            ruleEditorViewModel.UpdateRegexStringCommand.Execute(null);
         }
 
         public event EventHandler CanExecuteChanged

@@ -42,6 +42,7 @@ namespace Regular.ViewModels
         public SelectAllCategoriesCommand SelectAllCategoriesCommand { get; }
         public SelectNoneCategoriesCommand SelectNoneCategoriesCommand { get; }
         public TriggerCategoryCheckedCommand TriggerCategoryCheckedCommand { get; }
+        public UpdateRegexStringCommand UpdateRegexStringCommand { get; }
 
         // Control-based properties
         private RuleType selectedRuleType;
@@ -270,7 +271,7 @@ namespace Regular.ViewModels
 
             AddRulePartCommand = new AddRulePartCommand(this);
             DeleteRulePartCommand = new DeleteRulePartCommand(this);
-            EditRulePartCommand = new EditRulePartCommand();
+            EditRulePartCommand = new EditRulePartCommand(this);
             SubmitRuleCommand = new SubmitRuleCommand(this);
             MoveRulePartUpCommand = new MoveRulePartUpCommand(this);
             MoveRulePartDownCommand = new MoveRulePartDownCommand(this);
@@ -279,6 +280,7 @@ namespace Regular.ViewModels
             SelectAllCategoriesCommand = new SelectAllCategoriesCommand(this);
             SelectNoneCategoriesCommand = new SelectNoneCategoriesCommand(this);
             TriggerCategoryCheckedCommand = new TriggerCategoryCheckedCommand(this);
+            UpdateRegexStringCommand = new UpdateRegexStringCommand(this);
 
             CategoriesPanelButtonText = "Show Categories";
             ComboBoxTrackingParameterText = "Select Categories";
