@@ -14,7 +14,8 @@ namespace Regular.Utilities
         {
             string regexPartOutput = "";
             string optionalModifier = regexRulePart.IsOptional ? "?" : "";
-            string caseSensitiveModifier = regexRulePart.IsCaseSensitive ? "(?i)" : "";
+            string caseSensitiveModifierStart = regexRulePart.IsCaseSensitive ? "(?-i)" : @"(?i)";
+            string caseSensitiveModifierEnd = regexRulePart.IsCaseSensitive ? "(?i)" : @"(?-i)";
             switch (regexRulePart.RuleType)
             {
                 case RuleType.AnyLetter:
@@ -57,7 +58,7 @@ namespace Regular.Utilities
                     regexPartOutput += @"\d";
                     break;
                 case RuleType.CustomText:
-                    regexPartOutput += SanitizeWord(regexRulePart.RawUserInputValue) + caseSensitiveModifier;
+                    regexPartOutput += caseSensitiveModifierStart + SanitizeWord(regexRulePart.RawUserInputValue) + caseSensitiveModifierEnd;
                     break;
                 case RuleType.OptionSet:
                     List<string> options = regexRulePart.Options
@@ -65,8 +66,10 @@ namespace Regular.Utilities
                         .Where(x => !(string.IsNullOrWhiteSpace(x)))
                         .ToList();
                     if (options.Count < 1) break;
-                    regexPartOutput = $"[{ string.Join(@"|", options) }]";
+                    regexPartOutput = caseSensitiveModifierStart + $"({ string.Join(@"|", options) })" + caseSensitiveModifierEnd;
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
             return regexPartOutput + optionalModifier;
         }
@@ -116,6 +119,7 @@ namespace Regular.Utilities
         public static char[] Letters = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l','m', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
         public static int[] Numbers = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
         public static char[] Characters = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','0','1','2','3','4','5','6','7','8','9'};
+        
         public static string GenerateRandomExample(ObservableCollection<IRegexRulePart> regexRuleParts)
         {
             Random random = new Random((int) DateTime.Now.Ticks & 0x0000FFFF);

@@ -30,7 +30,7 @@
             Grid.Row="0"
             Margin="0,5"
             VerticalContentAlignment="Center"
-            Content="Edit Option Set"
+            Content="Enter each option on its own row:"
             FontSize="13"
             Style="{StaticResource StandardLabel}" />
         <Border
