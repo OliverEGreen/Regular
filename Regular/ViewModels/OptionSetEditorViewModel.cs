@@ -19,10 +19,6 @@ namespace Regular.ViewModels
         public OptionSetEditorViewModel(IRegexRulePart regexRulePart)
         {
             Options = regexRulePart.Options;
-
-            Options.Add(new OptionObject { OptionValue = "Test1" });
-            Options.Add(new OptionObject { OptionValue = "Test2" });
-            Options.Add(new OptionObject { OptionValue = "Test3" });
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
