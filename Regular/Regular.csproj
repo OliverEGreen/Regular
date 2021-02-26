@@ -93,6 +93,7 @@
     <Compile Include="Commands\RuleManager\MoveRuleUpCommand.cs" />
     <Compile Include="Commands\RuleManager\TriggerRuleFrozenCommand.cs" />
     <Compile Include="Enums\CaseSensitivity.cs" />
+    <Compile Include="Enums\EnumDicts.cs" />
     <Compile Include="Enums\MatchType.cs" />
     <Compile Include="Services\DmUpdaterCacheService.cs" />
     <Compile Include="Models\IRegexRulePart.cs" />
@@ -132,6 +133,7 @@
     <Compile Include="Views\ConfirmationDialog.xaml.cs">
       <DependentUpon>ConfirmationDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\NotifyPropertyChangedBase.cs" />
     <Compile Include="Views\OptionSetEditor.xaml.cs">
       <DependentUpon>OptionSetEditor.xaml</DependentUpon>
     </Compile>

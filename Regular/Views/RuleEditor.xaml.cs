@@ -24,7 +24,11 @@ namespace Regular.Views
             RuleEditorViewModel = inputRule == null ? new RuleEditorViewModel(documentGuid) : new RuleEditorViewModel(documentGuid, inputRule);
             DataContext = RuleEditorViewModel;
 
-            // Lets us close the window by hitting the Escape key
+            ParameterObject trackingParameterObject = RuleEditorViewModel.PossibleTrackingParameterObjects
+                .FirstOrDefault(x => x.ParameterObjectId == RuleEditorViewModel.StagingRule.TrackingParameterObject.ParameterObjectId);
+            
+            ComboBoxTrackingParameterInput.SelectedItem = trackingParameterObject;
+
             PreviewKeyDown += (s, e) => { if (e.Key == Key.Escape) Close(); };
             TextBoxNameYourRuleInput.Focus();
         }

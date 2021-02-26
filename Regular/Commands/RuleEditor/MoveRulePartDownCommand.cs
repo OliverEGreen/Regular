@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Input;
 using Regular.Models;
-using Regular.Utilities;
 using Regular.ViewModels;
 
 namespace Regular.Commands.RuleEditor

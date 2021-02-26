@@ -1,5 +1,4 @@
 ﻿using Autodesk.Revit.DB;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -12,6 +11,9 @@ namespace Regular.Utilities
     {
         public static void TriggerExecuteRegexRule(string documentGuid, UpdaterId updaterId, List<ElementId> modifiedElementIds)
         {
+            // Executes a single RegexRule on a limited set of elements
+            // Used when user has modified elements in the document and set off the DMU trigger
+            
             RegexRule regexRule = RegularApp.RegexRuleCacheService
                 .GetDocumentRules(documentGuid)
                 .FirstOrDefault(x => x.RegularUpdater.GetUpdaterId() == updaterId);
@@ -34,8 +36,10 @@ namespace Regular.Utilities
             }
         }
 
-        private static void ExecuteRegexRule(string documentGuid, RegexRule regexRule)
+        public static void ExecuteRegexRule(string documentGuid, RegexRule regexRule)
         {
+            // Executes a single RegexRule in a document on all elements it affects
+            // Used when creating or updating a rule
             if (regexRule == null) return;
 
             Document document = RegularApp.DocumentCacheService.GetDocument(documentGuid);
@@ -57,17 +61,27 @@ namespace Regular.Utilities
 
             ElementId trackingParameterId = new ElementId(regexRule.TrackingParameterObject.ParameterObjectId);
 
-            for (int i = 0; i < targetedElements.Count; i++)
+            using(Transaction transaction = new Transaction(document, $"Executing Rule: {regexRule.RuleName}"))
             {
-                BuiltInParameter builtInParameter = (BuiltInParameter)regexRule.OutputParameterObject.ParameterObjectId;
-                Parameter parameter = targetedElements[i].get_Parameter(builtInParameter);
-                if (parameter == null) continue;
-                parameter.Set(TestRuleValidity(regexRule, targetedElements[i]));
+                transaction.Start();
+
+                for (int i = 0; i < targetedElements.Count; i++)
+                {
+                    BuiltInParameter builtInParameter = (BuiltInParameter) regexRule.OutputParameterObject.ParameterObjectId;
+                    Parameter parameter = targetedElements[i].get_Parameter(builtInParameter);
+                    if (parameter == null) continue;
+                    parameter.Set(TestRuleValidity(regexRule, targetedElements[i]));
+                }
+
+                transaction.Commit();
             }
         }
 
         public static void ExecuteDocumentRegexRules(string documentGuid)
         {
+            // Runs validation on all regex rules in a document
+            // Used for when opening a file
+
             List<RegexRule> documentRegexRules = RegularApp.RegexRuleCacheService.GetDocumentRules(documentGuid).ToList();
             if (documentRegexRules.Count < 1) return;
 
@@ -79,13 +93,16 @@ namespace Regular.Utilities
 
         private static int TestRuleValidity(RegexRule regexRule, Element element)
         {
+            // Tests whether a saved rule's regular expression matches the element's parameter value
             if (element == null) return 0;
             Parameter parameter = element.get_Parameter((BuiltInParameter)regexRule.TrackingParameterObject.ParameterObjectId);
             if (parameter == null || parameter.StorageType != StorageType.String) return 0;
+            string parameterValue = parameter.AsString();
+            if (string.IsNullOrWhiteSpace(parameterValue)) return 0;
             string regexString = regexRule.RegexString;
-            if (String.IsNullOrWhiteSpace(regexString)) return 0;
+            if (string.IsNullOrWhiteSpace(regexString)) return 0;
             Regex regex = new Regex(regexRule.RegexString);
-            return regex.IsMatch(parameter.AsString()) == true ? 1 : 0;
+            return regex.IsMatch(parameterValue) == true ? 1 : 0;
         }
     }
 }

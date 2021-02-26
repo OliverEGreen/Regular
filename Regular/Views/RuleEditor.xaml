@@ -192,15 +192,13 @@
             </TextBlock.Style>
         </TextBlock>
         <ComboBox
-            Name="ComboBoxTrackingParameterInput"
+            x:Name="ComboBoxTrackingParameterInput"
             Grid.Row="3"
             Grid.Column="1"
             VerticalAlignment="Center"
             DisplayMemberPath="ParameterObjectName"
             ItemsSource="{Binding PossibleTrackingParameterObjects, UpdateSourceTrigger=PropertyChanged}"
-            SelectedIndex="0"
-            SelectedItem="{Binding StagingRule.TrackingParameterObject, UpdateSourceTrigger=PropertyChanged}"
-            SelectedValuePath="{Binding .}"
+            SelectedItem="{Binding StagingRule.TrackingParameterObject}"
             Style="{StaticResource StandardComboBox}" />
         <Label
             Grid.Row="4"
@@ -449,8 +447,8 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
                                     Background="{StaticResource WindowBackgroundColor}"
-                                    IsChecked="{Binding IsCaseSensitive, UpdateSourceTrigger=PropertyChanged}"
                                     Command="{Binding ElementName=RuleEditorWindow, Path=DataContext.UpdateRegexStringCommand}"
+                                    IsChecked="{Binding IsCaseSensitive, UpdateSourceTrigger=PropertyChanged}"
                                     Visibility="{Binding CaseSensitiveCheckboxVisibility}" />
                                 <TextBlock
                                     Grid.Column="4"

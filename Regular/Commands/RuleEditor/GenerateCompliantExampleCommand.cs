@@ -23,7 +23,7 @@ namespace Regular.Commands.RuleEditor
 
         public void Execute(object parameter)
         {
-            ruleEditorViewModel.CompliantExampleVisibility= Visibility.Visible;
+            ruleEditorViewModel.CompliantExampleVisibility = Visibility.Visible;
             ruleEditorViewModel.CompliantExample = RegexAssemblyUtils.GenerateRandomExample(ruleEditorViewModel.StagingRule.RegexRuleParts);
 
             ruleEditorViewModel.UpdateRegexStringCommand.Execute(null);
