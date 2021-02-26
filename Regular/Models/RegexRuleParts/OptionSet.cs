@@ -13,12 +13,7 @@ namespace Regular.Models.RegexRuleParts
         private string editButtonDisplayText;
         private bool isCaseSensitive;
         private ObservableCollection<OptionObject> options;
-        private Visibility ruleTypeNameVisibility;
-        private Visibility rawUserInputTextBoxVisibility;
-        private bool isOptional;
-        private bool isButtonControlEnabled;
-        private CaseSensitivity caseSensitivityMode;
-        private RuleType ruleType;
+        private string rawUserInputValue;
 
         public OptionSet()
         {
@@ -47,17 +42,9 @@ namespace Regular.Models.RegexRuleParts
             }
         }
 
-        public Visibility RuleTypeNameVisibility
-        {
-            get => ruleTypeNameVisibility;
-            set => ruleTypeNameVisibility = value;
-        }
+        public Visibility RuleTypeNameVisibility { get; set; }
 
-        public Visibility RawUserInputTextBoxVisibility
-        {
-            get => rawUserInputTextBoxVisibility;
-            set => rawUserInputTextBoxVisibility = value;
-        }
+        public Visibility RawUserInputTextBoxVisibility { get; set; }
 
         public string ButtonControlDisplayText
         {
@@ -69,7 +56,15 @@ namespace Regular.Models.RegexRuleParts
             }
         }
 
-        public string RawUserInputValue { get; set; }
+        public string RawUserInputValue
+        {
+            get => rawUserInputValue;
+            set
+            {
+                rawUserInputValue = value;
+                NotifyPropertyChanged("RawUserInputValue");
+            }
+        }
 
         public ObservableCollection<OptionObject> Options
         {
@@ -81,11 +76,7 @@ namespace Regular.Models.RegexRuleParts
             }
         }
 
-        public bool IsOptional
-        {
-            get => isOptional;
-            set => isOptional = value;
-        }
+        public bool IsOptional { get; set; }
 
         public bool IsCaseSensitive
         {
@@ -117,23 +108,11 @@ namespace Regular.Models.RegexRuleParts
             }
         }
 
-        public bool IsButtonControlEnabled
-        {
-            get => isButtonControlEnabled;
-            set => isButtonControlEnabled = value;
-        }
+        public bool IsButtonControlEnabled { get; set; }
 
-        public CaseSensitivity CaseSensitivityMode
-        {
-            get => caseSensitivityMode;
-            set => caseSensitivityMode = value;
-        }
+        public CaseSensitivity CaseSensitivityMode { get; set; }
 
-        public RuleType RuleType
-        {
-            get => ruleType;
-            set => ruleType = value;
-        }
+        public RuleType RuleType { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

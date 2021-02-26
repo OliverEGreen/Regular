@@ -79,7 +79,7 @@ namespace Regular.Utilities
         }
         private static string SanitizeWord(string word)
         {
-            if (String.IsNullOrEmpty(word)) return word;
+            if (string.IsNullOrEmpty(word)) return word;
             string outputString = "";
             foreach(char character in word)
             {

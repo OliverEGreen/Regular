@@ -30,6 +30,7 @@ namespace Regular.Commands.RuleEditor
             ruleEditorViewModel.StagingRule.RegexRuleParts.Insert(index + 1, regexRulePart);
             ruleEditorViewModel.SelectedRegexRulePart = ruleEditorViewModel.StagingRule.RegexRuleParts[index + 1];
             ruleEditorViewModel.UpdateRegexStringCommand.Execute(null);
+            ruleEditorViewModel.GenerateCompliantExampleCommand.Execute(null);
         }
 
         public event EventHandler CanExecuteChanged
