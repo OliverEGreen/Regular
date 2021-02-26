@@ -1,16 +1,15 @@
 ﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
 using Regular.Commands.RuleManager;
 using Regular.Models;
+using Regular.Views;
 
 namespace Regular.ViewModels
 {
-    public class RuleManagerViewModel : INotifyPropertyChanged
+    public class RuleManagerViewModel : NotifyPropertyChangedBase
     {
         // The document we're editing rules within
         public string DocumentGuid { get; set; }
-
-
+        
         private ObservableCollection<RegexRule> regexRules;
         public ObservableCollection<RegexRule> RegexRules
         {
@@ -18,7 +17,7 @@ namespace Regular.ViewModels
             set
             {
                 regexRules = value;
-                NotifyPropertyChanged("RegexRules");
+                NotifyPropertyChanged();
             }
         }
         
@@ -29,7 +28,7 @@ namespace Regular.ViewModels
             set
             {
                 selectedRegexRule = value;
-                NotifyPropertyChanged("SelectedRegexRule");
+                NotifyPropertyChanged();
             }
         }
 
@@ -54,12 +53,6 @@ namespace Regular.ViewModels
             MoveRuleUpCommand = new MoveRuleUpCommand(this);
             MoveRuleDownCommand = new MoveRuleDownCommand(this);
             TriggerRuleFrozenCommand = new TriggerRuleFrozenCommand(this);
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void NotifyPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

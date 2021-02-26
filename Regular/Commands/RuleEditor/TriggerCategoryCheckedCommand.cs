@@ -44,10 +44,10 @@ namespace Regular.Commands.RuleEditor
             ParameterObject selectedTrackingParameterObject = ruleEditorViewModel.StagingRule.TrackingParameterObject;
             
             // If the parameter is still available after categories selection has ended, we don't need to change anything
-            if (selectedTrackingParameterObject != null && ruleEditorViewModel.PossibleTrackingParameterObjects.Contains(selectedTrackingParameterObject)) return;
+            if (selectedTrackingParameterObject.ParameterObjectId != -1 && ruleEditorViewModel.PossibleTrackingParameterObjects.Contains(selectedTrackingParameterObject)) return;
             
             // However if the previously selected tracking parameter is no longer available, we'll default to the first item in the list
-            if (selectedTrackingParameterObject == null && ruleEditorViewModel.PossibleTrackingParameterObjects.Count > 0)
+            if (selectedTrackingParameterObject.ParameterObjectId == -1 && ruleEditorViewModel.PossibleTrackingParameterObjects.Count > 0)
             {
                 ruleEditorViewModel.StagingRule.TrackingParameterObject = ruleEditorViewModel.PossibleTrackingParameterObjects.First();
                 return;
@@ -64,7 +64,7 @@ namespace Regular.Commands.RuleEditor
             }
             else
             {
-                ruleEditorViewModel.ComboBoxTrackingParameterText = "";
+                ruleEditorViewModel.ComboBoxTrackingParameterText = "ERROR";
             }
         }
 

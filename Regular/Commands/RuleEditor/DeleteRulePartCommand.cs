@@ -3,7 +3,6 @@ using System.Windows.Input;
 using Regular.Models;
 using Regular.Utilities;
 using Regular.ViewModels;
-using Regular.Views;
 
 namespace Regular.Commands.RuleEditor
 {

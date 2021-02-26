@@ -1,17 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using Regular.Commands.RuleEditor;
 using Regular.Enums;
 using Regular.Models;
 using Regular.Utilities;
+using Regular.Views;
 using Visibility = System.Windows.Visibility;
 
 namespace Regular.ViewModels
 {
-    public class RuleEditorViewModel : INotifyPropertyChanged
+    public class RuleEditorViewModel : NotifyPropertyChangedBase
     {
         // We need the ability to validate what a user is doing before making any changes back to the model.
         // Ideally, we would not have anything confirmed until they pressed OK, whereupon all validation occurs.
@@ -52,7 +52,7 @@ namespace Regular.ViewModels
             set
             {
                 selectedRuleType = value;
-                NotifyPropertyChanged("SelectedRuleType");
+                NotifyPropertyChanged();
             }
         }
 
@@ -64,7 +64,7 @@ namespace Regular.ViewModels
             {
                 selectedMatchType = value;
                 StagingRule.MatchType = value;
-                NotifyPropertyChanged("SelectedMatchType");
+                NotifyPropertyChanged();
             }
         }
 
@@ -75,11 +75,12 @@ namespace Regular.ViewModels
             set
             {
                 selectedRegexRulePart = value;
-                NotifyPropertyChanged("SelectedRegexRulePart");
+                NotifyPropertyChanged();
             }
         }
-        public Dictionary<string, RuleType> RulesTypeDict { get; }
-        public Dictionary<string, MatchType> MatchTypesDict { get; }
+        
+        public Dictionary<string, RuleType> RulesTypeDict { get; } = EnumDicts.RulesTypeDict;
+        public Dictionary<string, MatchType> MatchTypesDict { get; } = EnumDicts.MatchTypesDict;
 
         private ObservableCollection<ParameterObject> possibleTrackingParameterObjects;
         public ObservableCollection<ParameterObject> PossibleTrackingParameterObjects
@@ -88,12 +89,10 @@ namespace Regular.ViewModels
             set
             {
                 possibleTrackingParameterObjects = value;
-                NotifyPropertyChanged("PossibleTrackingParameterObjects");
+                NotifyPropertyChanged();
             }
         }
-
-        public ParameterObject TrackingParameter { get; set; }
-
+        
         // View-based properties 
         private string title;
         public string Title
@@ -102,7 +101,7 @@ namespace Regular.ViewModels
             set
             {
                 title = value;
-                NotifyPropertyChanged("Title");
+                NotifyPropertyChanged();
             }
         }
 
@@ -113,7 +112,7 @@ namespace Regular.ViewModels
             set
             {
                 compliantExample = value;
-                NotifyPropertyChanged("CompliantExample");
+                NotifyPropertyChanged();
             }
         }
 
@@ -124,19 +123,18 @@ namespace Regular.ViewModels
             set
             {
                 compliantExampleVisibility = value;
-                NotifyPropertyChanged("CompliantExampleVisibility");
+                NotifyPropertyChanged();
             }
         }
 
-        private Visibility userFeedbackTextVisibility;
-
+        private Visibility userFeedbackTextVisibility = Visibility.Hidden;
         public Visibility UserFeedbackTextVisibility
         {
             get => userFeedbackTextVisibility;
             set
             {
                 userFeedbackTextVisibility = value;
-                NotifyPropertyChanged("UserFeedbackTextVisibility");
+                NotifyPropertyChanged();
             }
         }
 
@@ -147,9 +145,10 @@ namespace Regular.ViewModels
             set
             {
                 userFeedbackText = value;
-                NotifyPropertyChanged("UserFeedbackText");
+                NotifyPropertyChanged();
             }
         }
+
         private int numberCategoriesSelected;
         public int NumberCategoriesSelected
         {
@@ -157,33 +156,36 @@ namespace Regular.ViewModels
             set
             {
                 numberCategoriesSelected = value;
-                NotifyPropertyChanged("NumberCategoriesSelected");
+                NotifyPropertyChanged();
             }
         }
 
-        private string comboBoxTrackingParameterText;
+        private string comboBoxTrackingParameterText = "Select Categories";
         public string ComboBoxTrackingParameterText
         {
             get => comboBoxTrackingParameterText;
             set
             {
                 comboBoxTrackingParameterText = value;
-                NotifyPropertyChanged("ComboBoxTrackingParameterText");
+                NotifyPropertyChanged();
             }
         }
-        public bool OutputParameterNameInputEnabled { get; set; } = true;
-        public bool CategoriesPanelExpanded { get; set; } = false;
-        private bool ruleNameInputDirty;
 
+        public bool OutputParameterNameInputEnabled { get; set; } = true;
+        
+        public bool CategoriesPanelExpanded { get; set; } = false;
+        
+        private bool ruleNameInputDirty;
         public bool RuleNameInputDirty
         {
             get => ruleNameInputDirty;
             set
             {
                 ruleNameInputDirty = value;
-                NotifyPropertyChanged("RuleNameInputDirty");
+                NotifyPropertyChanged();
             }
         }
+        
         private bool outputParameterNameInputDirty;
         public bool OutputParameterNameInputDirty
         {
@@ -191,67 +193,65 @@ namespace Regular.ViewModels
             set
             {
                 outputParameterNameInputDirty = value;
-                NotifyPropertyChanged("OutputParameterNameInputDirty");
+                NotifyPropertyChanged();
             }
         }
-        private string categoriesPanelButtonText;
+        
+        private string categoriesPanelButtonText = "Show Categories";
         public string CategoriesPanelButtonText
         {
             get => categoriesPanelButtonText;
             set
             {
                 categoriesPanelButtonText = value;
-                NotifyPropertyChanged("CategoriesPanelButtonText");
+                NotifyPropertyChanged();
             }
         }
-        private GridLength columnCategoriesPanelWidth;
+        
+        private GridLength columnCategoriesPanelWidth = new GridLength(0);
         public GridLength ColumnCategoriesPanelWidth
         {
             get => columnCategoriesPanelWidth;
             set
             {
                 columnCategoriesPanelWidth = value;
-                NotifyPropertyChanged("ColumnCategoriesPanelWidth");
+                NotifyPropertyChanged();
             }
         }
-        private GridLength columnMarginWidth;
+        
+        private GridLength columnMarginWidth = new GridLength(0);
         public GridLength ColumnMarginWidth
         {
             get => columnMarginWidth;
             set
             {
                 columnMarginWidth = value;
-                NotifyPropertyChanged("ColumnMarginWidth");
+                NotifyPropertyChanged();
             }
         }
 
-        private int windowMinWidth;
+        private int windowMinWidth = 436;
         public int WindowMinWidth
         {
             get => windowMinWidth;
             set
             {
                 windowMinWidth = value;
-                NotifyPropertyChanged("WindowMinWidth");
+                NotifyPropertyChanged();
             }
         }
 
-        private int windowMaxWidth;
+        private int windowMaxWidth = 436;
         public int WindowMaxWidth
         {
             get => windowMaxWidth;
             set
             {
                 windowMaxWidth = value;
-                NotifyPropertyChanged("WindowMaxWidth");
+                NotifyPropertyChanged();
             }
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void NotifyPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        
 
         // The two-argument constructor is for editing an existing rule
         // We need a reference to the original rule ID, and to create a 
@@ -259,15 +259,6 @@ namespace Regular.ViewModels
         public RuleEditorViewModel(string documentGuid, RegexRule inputRule = null)
         {
             DocumentGuid = documentGuid;
-            if (inputRule != null) InputRule = inputRule;
-
-            // If there's no rule provided, we start from scratch
-            // Otherwise we create a staging rule to work with until submission / validation
-            StagingRule = inputRule == null ? RegexRule.Create(documentGuid) : RegexRule.Duplicate(DocumentGuid, InputRule);
-            
-            // If there is an InputRule, we are editing an existing rule
-            EditingExistingRule = InputRule != null;
-            Title = EditingExistingRule ? $"Editing Rule: {StagingRule.RuleName}" : "Creating New Rule";
 
             AddRulePartCommand = new AddRulePartCommand(this);
             DeleteRulePartCommand = new DeleteRulePartCommand(this);
@@ -281,53 +272,27 @@ namespace Regular.ViewModels
             SelectNoneCategoriesCommand = new SelectNoneCategoriesCommand(this);
             TriggerCategoryCheckedCommand = new TriggerCategoryCheckedCommand(this);
             UpdateRegexStringCommand = new UpdateRegexStringCommand(this);
-
-            CategoriesPanelButtonText = "Show Categories";
-            ComboBoxTrackingParameterText = "Select Categories";
-            UserFeedbackTextVisibility = Visibility.Hidden;
-
-            // Retrieving the list of parameters which might possibly be tracked, given the selected categories
-            PossibleTrackingParameterObjects = ParameterUtils.GetParametersOfCategories(DocumentGuid, StagingRule.TargetCategoryObjects);
-
-            WindowMinWidth = 436;
-            WindowMaxWidth = 436;
-            ColumnCategoriesPanelWidth = new GridLength(0);
-            ColumnMarginWidth = new GridLength(0);
-
-            RuleNameInputDirty = false;
-            OutputParameterNameInputDirty = false;
-
-            RulesTypeDict = new Dictionary<string, RuleType>
-            {
-                {"Any Alphanumeric", RuleType.AnyAlphanumeric},
-                {"Any Digit", RuleType.AnyDigit},
-                {"Any Letter", RuleType.AnyLetter},
-                {"Custom Text", RuleType.CustomText},
-                {"Option Set", RuleType.OptionSet}
-            };
-
-            MatchTypesDict = new Dictionary<string, MatchType>
-            {
-                {"Exact Match", MatchType.ExactMatch},
-                {"Match At Beginning", MatchType.MatchAtBeginning},
-                {"Match At End", MatchType.MatchAtEnd},
-                {"Match Anywhere", MatchType.MatchAnywhere}
-            };
             
-            if (!EditingExistingRule) return;
-            
-            void LoadExistingRule()
+            // If we're editing an existing rule
+            if (inputRule != null)
             {
-                OutputParameterNameInputEnabled = !EditingExistingRule;
+                EditingExistingRule = true;
+                InputRule = inputRule;
+                StagingRule = RegexRule.Duplicate(DocumentGuid, InputRule);
+                Title = $"Editing Rule: {StagingRule.RuleName}";
+                OutputParameterNameInputEnabled = false;
                 NumberCategoriesSelected = StagingRule.TargetCategoryObjects.Count(x => x.IsChecked);
-
-                // Selecting the previously-saved tracking parameter
-                TrackingParameter = StagingRule.TrackingParameterObject ?? PossibleTrackingParameterObjects
-                    .FirstOrDefault(x => x.ParameterObjectId == StagingRule.TrackingParameterObject.ParameterObjectId);
+                GenerateCompliantExampleCommand.Execute(null);
+            }
+            // Otherwise we're creating a new rule from scratch
+            else
+            {
+                StagingRule = RegexRule.Create(documentGuid);
+                Title = "Creating New Rule";
             }
             
-            // If we're editing an existing rule, the UI-bound properties can load the rule to display saved information
-            LoadExistingRule();
+            // Retrieving the list of parameters which might possibly be tracked, given the selected categories
+            PossibleTrackingParameterObjects = ParameterUtils.GetParametersOfCategories(DocumentGuid, StagingRule.TargetCategoryObjects);
         }
     }
 }
