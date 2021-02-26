@@ -94,6 +94,7 @@ namespace Regular.Commands.RuleEditor
                     throw new ArgumentOutOfRangeException();
             }
             ruleEditorViewModel.UpdateRegexStringCommand.Execute(null);
+            ruleEditorViewModel.GenerateCompliantExampleCommand.Execute(null);
         }
 
         public event EventHandler CanExecuteChanged
