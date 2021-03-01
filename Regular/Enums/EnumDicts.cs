@@ -10,6 +10,7 @@ namespace Regular.Enums
             { "Any Digit", RuleType.AnyDigit },
             { "Any Letter", RuleType.AnyLetter },
             { "Custom Text", RuleType.CustomText },
+            { "Option Set", RuleType.OptionSet },
             { "Full Stop", RuleType.FullStop },
             { "Hyphen", RuleType.Hyphen },
             { "Underscore", RuleType.Underscore },

@@ -17,16 +17,16 @@ namespace Regular.Models.RegexRuleParts
 
         public FullStop()
         {
-            RuleTypeName = "Alphanumeric";
+            RuleTypeName = "Full Stop";
             RawUserInputValue = "";
             IsOptional = false;
             IsCaseSensitive = false;
             CaseSensitiveCheckboxVisibility = Visibility.Hidden;
-            IsButtonControlEnabled = true;
-            CaseSensitivityMode = CaseSensitivity.UpperCase;
+            IsButtonControlEnabled = false;
+            CaseSensitivityMode = CaseSensitivity.None;
             CaseSensitiveDisplayString = EnumUtils.GetEnumDescription(CaseSensitivityMode);
-            ButtonControlDisplayText = "Ab3";
-            RuleType = RuleType.AnyAlphanumeric;
+            ButtonControlDisplayText = ".";
+            RuleType = RuleType.FullStop;
             RawUserInputTextBoxVisibility = Visibility.Collapsed;
             RuleTypeNameVisibility = Visibility.Visible;
             Options = new ObservableCollection<OptionObject>();

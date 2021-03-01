@@ -67,12 +67,21 @@ namespace Regular.Utilities
                 case RuleType.OptionSet:
                     List<string> options = regexRulePart.Options
                         .Select(x => SanitizeWord(x.OptionValue))
-                        .Where(x => !(string.IsNullOrWhiteSpace(x)))
+                        .Where(x => !string.IsNullOrWhiteSpace(x))
                         .ToList();
                     if (options.Count < 1) break;
                     regexPartOutput = caseSensitiveModifierStart +
                                       $"({string.Join(@"|", options)})" +
                                       caseSensitiveModifierEnd;
+                    break;
+                case RuleType.FullStop:
+                    regexPartOutput = @"\.";
+                    break;
+                case RuleType.Hyphen:
+                    regexPartOutput = @"-";
+                    break;
+                case RuleType.Underscore:
+                    regexPartOutput = @"_";
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -189,7 +198,7 @@ namespace Regular.Utilities
                     case RuleType.OptionSet:
                         List<string> values = regexRulePart.Options
                             .Select(x => x.OptionValue)
-                            .Where(x => !(string.IsNullOrWhiteSpace(x)))
+                            .Where(x => !string.IsNullOrWhiteSpace(x))
                             .ToList();
                         if (values.Count < 1) break;
                         string randomValue = values.OrderBy(s => Guid.NewGuid()).First();
@@ -203,6 +212,15 @@ namespace Regular.Utilities
                                 ? randomValue.ToLower()
                                 : randomValue.ToUpper();
                         }
+                        break;
+                    case RuleType.FullStop:
+                        randomExampleString += @".";
+                        break;
+                    case RuleType.Hyphen:
+                        randomExampleString += @"-";
+                        break;
+                    case RuleType.Underscore:
+                        randomExampleString += @"_";
                         break;
                     default:
                         randomExampleString += "";

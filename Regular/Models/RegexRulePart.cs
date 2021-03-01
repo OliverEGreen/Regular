@@ -21,6 +21,12 @@ namespace Regular.Models
                     return new CustomText();
                 case RuleType.OptionSet:
                     return new OptionSet();
+                case RuleType.FullStop:
+                    return new FullStop();
+                case RuleType.Hyphen:
+                    return new Hyphen();
+                case RuleType.Underscore:
+                    return new Underscore();
                 default:
                     throw new ArgumentOutOfRangeException(nameof(ruleType), ruleType, null);
             }
