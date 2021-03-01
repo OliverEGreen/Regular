@@ -59,11 +59,10 @@ namespace Regular.Utilities
                     regexPartOutput += @"\d";
                     break;
                 case RuleType.CustomText:
-                    regexPartOutput += optionalModifierStart +
-                                       caseSensitiveModifierStart +
+                    regexPartOutput += caseSensitiveModifierStart +
                                        SanitizeWord(regexRulePart.RawUserInputValue) +
-                                       caseSensitiveModifierEnd +
-                                       optionalModifierEnd;
+                                       caseSensitiveModifierEnd;
+                                       
                     break;
                 case RuleType.OptionSet:
                     List<string> options = regexRulePart.Options
@@ -71,16 +70,14 @@ namespace Regular.Utilities
                         .Where(x => !(string.IsNullOrWhiteSpace(x)))
                         .ToList();
                     if (options.Count < 1) break;
-                    regexPartOutput = optionalModifierStart +
-                                      caseSensitiveModifierStart +
+                    regexPartOutput = caseSensitiveModifierStart +
                                       $"({string.Join(@"|", options)})" +
-                                      caseSensitiveModifierEnd +
-                                      optionalModifierEnd;
+                                      caseSensitiveModifierEnd;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            return regexPartOutput;
+            return optionalModifierStart + regexPartOutput + optionalModifierEnd;
         }
         private static string SanitizeCharacter(string character)
         {

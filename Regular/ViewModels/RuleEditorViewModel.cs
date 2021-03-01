@@ -257,9 +257,10 @@ namespace Regular.ViewModels
         // The two-argument constructor is for editing an existing rule
         // We need a reference to the original rule ID, and to create a 
         // staging rule for the user to play around with until submission
-        public RuleEditorViewModel(string documentGuid, RegexRule inputRule = null)
+        public RuleEditorViewModel(string documentGuid, bool editingExistingRule, RegexRule inputRule = null)
         {
             DocumentGuid = documentGuid;
+            EditingExistingRule = editingExistingRule;
 
             AddRulePartCommand = new AddRulePartCommand(this);
             DeleteRulePartCommand = new DeleteRulePartCommand(this);
@@ -274,14 +275,15 @@ namespace Regular.ViewModels
             TriggerCategoryCheckedCommand = new TriggerCategoryCheckedCommand(this);
             UpdateRegexStringCommand = new UpdateRegexStringCommand(this);
             
-            // If we're editing an existing rule
+            // If a rule was passed to the contructor, we're either editing an existing rule
+            // Or it's been duplicated
             if (inputRule != null)
             {
-                EditingExistingRule = true;
                 InputRule = inputRule;
+                // The staging rule is always a carbon copy of the rule we're editing
                 StagingRule = RegexRule.Duplicate(DocumentGuid, InputRule, true);
-                Title = $"Editing Rule: {StagingRule.RuleName}";
-                OutputParameterNameInputEnabled = false;
+                Title = EditingExistingRule ? $"Editing Rule: {StagingRule.RuleName}" : "New Rule";
+                //OutputParameterNameInputEnabled = !EditingExistingRule;
                 SelectedMatchType = inputRule.MatchType;
                 NumberCategoriesSelected = StagingRule.TargetCategoryObjects.Count(x => x.IsChecked);
             }
@@ -289,11 +291,12 @@ namespace Regular.ViewModels
             else
             {
                 StagingRule = RegexRule.Create(documentGuid);
-                Title = "Creating New Rule";
+                Title = "New Rule";
             }
             
             // Retrieving the list of parameters which might possibly be tracked, given the selected categories
-            PossibleTrackingParameterObjects = ParameterUtils.GetParametersOfCategories(DocumentGuid, StagingRule.TargetCategoryObjects);
+            PossibleTrackingParameterObjects = new ObservableCollection<ParameterObject>(ParameterUtils.GetParametersOfCategories(DocumentGuid, StagingRule.TargetCategoryObjects)
+                .Where(x => x.ParameterObjectId != StagingRule.OutputParameterObject.ParameterObjectId));
             // The compliant example should always update
             GenerateCompliantExampleCommand.Execute(null);
         }

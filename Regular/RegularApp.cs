@@ -50,8 +50,13 @@ namespace Regular
             // If there are no saved rules we return, otherwise we establish the updaters
             if (existingRegexRules != null && existingRegexRules.Count < 1) { return; }
 
-            DmUpdaterCacheService.AddDocumentUpdaters(documentGuid);
-
+            // If we found rules, load them into the rules cache
+            foreach (RegexRule existingRegexRule in existingRegexRules)
+            {
+                RegexRuleCacheService.AddRule(documentGuid, existingRegexRule); 
+                DmUpdaterCacheService.AddAndRegisterUpdater(documentGuid, existingRegexRule);
+            }
+            
             // Upon opening, we refresh all values affected by the document's RegexRules, to make sure all values are valid
             RuleExecutionUtils.ExecuteDocumentRegexRules(documentGuid);
         }

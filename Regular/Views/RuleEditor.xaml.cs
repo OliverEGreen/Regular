@@ -18,10 +18,10 @@ namespace Regular.Views
         // Optional second argument constructor is for editing an existing rule
         // We need a reference to the original rule ID, and to then create a 
         // staging rule for the user to play around with until form submission / validation
-        public RuleEditor(string documentGuid, RegexRule inputRule = null)
+        public RuleEditor(string documentGuid, bool editingExistingRule, RegexRule inputRule = null)
         {
             InitializeComponent();
-            RuleEditorViewModel = inputRule == null ? new RuleEditorViewModel(documentGuid) : new RuleEditorViewModel(documentGuid, inputRule);
+            RuleEditorViewModel = inputRule == null ? new RuleEditorViewModel(documentGuid, false) : new RuleEditorViewModel(documentGuid, editingExistingRule, inputRule);
             DataContext = RuleEditorViewModel;
 
             ComboBoxTrackingParameterInput.SelectedItem = RuleEditorViewModel.PossibleTrackingParameterObjects
