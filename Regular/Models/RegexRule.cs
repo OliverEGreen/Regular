@@ -119,6 +119,7 @@ namespace Regular.Models
             }
         }
 
+        public bool IsStagingRule { get; set; } = false;
         public string DateTimeCreated { get; set; } = DateTime.Now.ToString("r");
         public string CreatedBy { get; set; } = Environment.UserName;
         public string RuleGuid { get; private set; }
@@ -175,7 +176,7 @@ namespace Regular.Models
             DmTriggerUtils.UpdateTrigger(documentGuid, existingRegexRule);
         }
 
-        public static RegexRule Duplicate(string documentGuid, RegexRule sourceRegexRule)
+        public static RegexRule Duplicate(string documentGuid, RegexRule sourceRegexRule, bool isStagingRule)
         {
             // Helper method to ensure duplicate rules always have a unique name
             string GenerateRegexRuleDuplicateName()
@@ -190,10 +191,13 @@ namespace Regular.Models
             
             // Returns a copy of an existing RegexRule, but with a new GUID
             RegexRule duplicateRegexRule = Create(documentGuid);
-            duplicateRegexRule.RuleName = GenerateRegexRuleDuplicateName();
+            if (isStagingRule) duplicateRegexRule.IsStagingRule = true;
+            // If we're duplicating a rule we need a new name, but if it's a temporary staging rule we don't
+            // need to ensure the name and GUID is unique
+            duplicateRegexRule.RuleName = isStagingRule ? sourceRegexRule.RuleName : GenerateRegexRuleDuplicateName();
             duplicateRegexRule.TargetCategoryObjects = sourceRegexRule.TargetCategoryObjects;
             duplicateRegexRule.TrackingParameterObject = sourceRegexRule.TrackingParameterObject;
-            duplicateRegexRule.OutputParameterObject = sourceRegexRule.OutputParameterObject;
+            duplicateRegexRule.OutputParameterObject = new ParameterObject();
             duplicateRegexRule.MatchType = sourceRegexRule.MatchType;
             duplicateRegexRule.RegexRuleParts = sourceRegexRule.RegexRuleParts;
             duplicateRegexRule.RegexString = sourceRegexRule.RegexString;

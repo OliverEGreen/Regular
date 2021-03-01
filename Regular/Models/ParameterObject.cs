@@ -4,8 +4,8 @@ namespace Regular.Models
 {
     public class ParameterObject : INotifyPropertyChanged
     {
-        private string parameterObjectName;
-        private int parameterObjectId;
+        private string parameterObjectName = "";
+        private int parameterObjectId = -1;
 
         public string ParameterObjectName
         {

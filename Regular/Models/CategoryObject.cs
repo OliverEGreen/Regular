@@ -8,8 +8,8 @@ namespace Regular.Models
         // Ids get stored in ExtensibleStorage, Names are displayed to the user 
         // and IsChecked is used to save the checkbox state for each object
         
-        private string categoryObjectName;
-        private int categoryObjectId;
+        private string categoryObjectName = "";
+        private int categoryObjectId = -1;
         private bool isChecked;
                         
         public string CategoryObjectName

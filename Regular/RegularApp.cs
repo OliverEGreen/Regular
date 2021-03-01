@@ -16,6 +16,7 @@ namespace Regular
         public static DmUpdaterCacheService DmUpdaterCacheService = DmUpdaterCacheService.Instance();
         
         public static Application RevitApplication { get; set; }
+        public static bool DialogShowing { get; set; } = false;
         public Result OnStartup(UIControlledApplication uiControlledApp)
         {
             RegularRibbon.BuildRegularRibbon(uiControlledApp);

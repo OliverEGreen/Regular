@@ -15,7 +15,8 @@ namespace Regular.Utilities
         {
             if (string.IsNullOrWhiteSpace(regexRule.RuleName)) return "Rule name cannot be blank";
             List<string> existingRuleNames = existingRegexRules.Select(x => x.RuleName).ToList();
-            return existingRuleNames.Contains(regexRule.RuleName) ? $"Rule name '{regexRule.RuleName}' is already taken by another rule" : null;
+            if(regexRule.IsStagingRule) return "";
+            return existingRuleNames.Contains(regexRule.RuleName) ? $"Rule name '{regexRule.RuleName}' already exists" : null;
         }
         public static string ValidateOutputParameterName(string input)
         {

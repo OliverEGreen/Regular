@@ -26,19 +26,23 @@ namespace Regular.Commands.RuleEditor
             if (!(parameter is CheckBox checkBox)) return;
             ListBox categoriesListBox = VisualTreeUtils.FindParent<ListBox>(checkBox);
             List<CategoryObject> selectedItems = categoriesListBox.SelectedItems.Cast<CategoryObject>().ToList();
-            foreach (CategoryObject categoryObject in selectedItems) { categoryObject.IsChecked = checkBox.IsChecked == true; }
+
+            if(selectedItems.Count > 1)
+            {
+                foreach (CategoryObject categoryObject in selectedItems) categoryObject.IsChecked = checkBox.IsChecked == true;
+            }
 
             // We update the number of categories ticked
-            ruleEditorViewModel.NumberCategoriesSelected = ruleEditorViewModel.
-                StagingRule.
-                TargetCategoryObjects
+            ruleEditorViewModel.NumberCategoriesSelected = ruleEditorViewModel.StagingRule.TargetCategoryObjects
                 .Count(x => x.IsChecked);
             
             // And need to ascertain which parameters are now valid for the selection
             ruleEditorViewModel.PossibleTrackingParameterObjects = ParameterUtils.
-                GetParametersOfCategories(
-                    ruleEditorViewModel.DocumentGuid,
-                    ruleEditorViewModel.StagingRule.TargetCategoryObjects);
+            GetParametersOfCategories
+            (
+                ruleEditorViewModel.DocumentGuid,
+                ruleEditorViewModel.StagingRule.TargetCategoryObjects
+            );
 
             // Refreshing the list of possible tracking parameter objects
             ParameterObject selectedTrackingParameterObject = ruleEditorViewModel.StagingRule.TrackingParameterObject;

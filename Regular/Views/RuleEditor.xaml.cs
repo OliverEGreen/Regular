@@ -24,10 +24,8 @@ namespace Regular.Views
             RuleEditorViewModel = inputRule == null ? new RuleEditorViewModel(documentGuid) : new RuleEditorViewModel(documentGuid, inputRule);
             DataContext = RuleEditorViewModel;
 
-            ParameterObject trackingParameterObject = RuleEditorViewModel.PossibleTrackingParameterObjects
+            ComboBoxTrackingParameterInput.SelectedItem = RuleEditorViewModel.PossibleTrackingParameterObjects
                 .FirstOrDefault(x => x.ParameterObjectId == RuleEditorViewModel.StagingRule.TrackingParameterObject.ParameterObjectId);
-            
-            ComboBoxTrackingParameterInput.SelectedItem = trackingParameterObject;
 
             PreviewKeyDown += (s, e) => { if (e.Key == Key.Escape) Close(); };
             TextBoxNameYourRuleInput.Focus();
@@ -55,8 +53,9 @@ namespace Regular.Views
 
             // Gathering other RegexRule names to ensure the user inputs a unique name
             List<RegexRule> otherRegexRules = RegularApp.RegexRuleCacheService.GetDocumentRules(RuleEditorViewModel.DocumentGuid)
-                    .Where(x => x != RuleEditorViewModel.StagingRule)
+                    .Where(x => x.IsStagingRule = false)
                     .ToList();
+
             string ruleNameInputFeedback = InputValidationServices.ValidateRuleName(RuleEditorViewModel.StagingRule, otherRegexRules);
 
             // Sets ellipse colours and feedback visibility
@@ -162,7 +161,7 @@ namespace Regular.Views
                 ListBoxItem listBoxItem = VisualTreeUtils.FindParent<ListBoxItem>(textBox);
                 listBoxItem?.Focus();
             };
-            RuleEditorViewModel.UpdateRegexStringCommand.Execute(null);
+            RuleEditorViewModel.GenerateCompliantExampleCommand.Execute(null);
         }
 
         // If the user is allowed to submit the rule, we close the window to prevent them 

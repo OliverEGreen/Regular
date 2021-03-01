@@ -25,7 +25,6 @@ namespace Regular.Commands.RuleEditor
             int index = ruleEditorViewModel.StagingRule.RegexRuleParts.IndexOf(regexRulePart);
             ruleEditorViewModel.StagingRule.RegexRuleParts.Remove(regexRulePart);
             ruleEditorViewModel.GenerateCompliantExampleCommand.Execute(null);
-            ruleEditorViewModel.UpdateRegexStringCommand.Execute(null);
             int newIndex = index > ruleEditorViewModel.StagingRule.RegexRuleParts.Count - 1 ? index - 1 : index;
             if (newIndex < 0)
             {
