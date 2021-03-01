@@ -23,7 +23,7 @@ namespace Regular.Commands.RuleManager
         public void Execute(object parameter)
         {
             RegexRule duplicatedRegexRule =
-                RegexRule.Duplicate(ruleManagerViewModel.DocumentGuid, ruleManagerViewModel.SelectedRegexRule);
+                RegexRule.Duplicate(ruleManagerViewModel.DocumentGuid, ruleManagerViewModel.SelectedRegexRule, false);
 
             Views.RuleEditor ruleEditor = new Views.RuleEditor(ruleManagerViewModel.DocumentGuid)
             {

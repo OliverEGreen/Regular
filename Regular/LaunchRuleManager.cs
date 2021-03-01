@@ -15,9 +15,11 @@ namespace Regular
         {
             try
             {
+                if (RegularApp.DialogShowing) return Result.Cancelled;
                 string documentGuid = DocumentGuidUtils.GetDocumentGuidFromExtensibleStorage(commandData.Application.ActiveUIDocument.Document);
                 RuleManager ruleManager = new RuleManager(documentGuid);
                 ruleManager.ShowDialog();
+                RegularApp.DialogShowing = false;
                 return Result.Succeeded;
             }
             catch (Exception ex)

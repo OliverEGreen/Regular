@@ -19,6 +19,7 @@ namespace Regular.Views
             {
                 if (e.Key == Key.Escape) Close();
             };
+            RegularApp.DialogShowing = true;
         }
 
         private void RegexRulesScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)

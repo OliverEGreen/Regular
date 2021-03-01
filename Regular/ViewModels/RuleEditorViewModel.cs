@@ -57,6 +57,7 @@ namespace Regular.ViewModels
         }
 
         private MatchType selectedMatchType;
+
         public MatchType SelectedMatchType
         {
             get => selectedMatchType;
@@ -92,7 +93,7 @@ namespace Regular.ViewModels
                 NotifyPropertyChanged();
             }
         }
-        
+
         // View-based properties 
         private string title;
         public string Title
@@ -278,11 +279,11 @@ namespace Regular.ViewModels
             {
                 EditingExistingRule = true;
                 InputRule = inputRule;
-                StagingRule = RegexRule.Duplicate(DocumentGuid, InputRule);
+                StagingRule = RegexRule.Duplicate(DocumentGuid, InputRule, true);
                 Title = $"Editing Rule: {StagingRule.RuleName}";
                 OutputParameterNameInputEnabled = false;
+                SelectedMatchType = inputRule.MatchType;
                 NumberCategoriesSelected = StagingRule.TargetCategoryObjects.Count(x => x.IsChecked);
-                GenerateCompliantExampleCommand.Execute(null);
             }
             // Otherwise we're creating a new rule from scratch
             else
@@ -293,6 +294,8 @@ namespace Regular.ViewModels
             
             // Retrieving the list of parameters which might possibly be tracked, given the selected categories
             PossibleTrackingParameterObjects = ParameterUtils.GetParametersOfCategories(DocumentGuid, StagingRule.TargetCategoryObjects);
+            // The compliant example should always update
+            GenerateCompliantExampleCommand.Execute(null);
         }
     }
 }

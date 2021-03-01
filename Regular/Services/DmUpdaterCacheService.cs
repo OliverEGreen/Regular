@@ -41,8 +41,9 @@ namespace Regular.Services
             }
 
             // Adds a RegularUpdater object to the cache
-            if (DmUpdaters.ContainsKey(documentGuid) && !DmUpdaters[documentGuid].Contains(regexRule.RegularUpdater))
+            if (DmUpdaters.ContainsKey(documentGuid))
             {
+                if(DmUpdaters[documentGuid].Contains(regexRule.RegularUpdater)) return;
                 DmUpdaters[documentGuid].Add(regexRule.RegularUpdater);
             }
             else 

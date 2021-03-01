@@ -186,7 +186,7 @@ namespace Regular.Utilities
                             .Where(x => !(string.IsNullOrWhiteSpace(x)))
                             .ToList();
                         if (values.Count < 1) break;
-                        string randomValue = SanitizeWord(values.OrderBy(s => Guid.NewGuid()).First());
+                        string randomValue = values.OrderBy(s => Guid.NewGuid()).First();
                         if (regexRulePart.IsCaseSensitive)
                         {
                             randomExampleString += randomValue;

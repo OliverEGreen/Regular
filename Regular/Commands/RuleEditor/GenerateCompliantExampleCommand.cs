@@ -26,7 +26,9 @@ namespace Regular.Commands.RuleEditor
             ruleEditorViewModel.CompliantExampleVisibility = Visibility.Visible;
             ruleEditorViewModel.CompliantExample = RegexAssemblyUtils.GenerateRandomExample(ruleEditorViewModel.StagingRule.RegexRuleParts);
 
+            // This needs to fire so that we're comparing two updated values
             ruleEditorViewModel.UpdateRegexStringCommand.Execute(null);
+
             Regex regex = new Regex(ruleEditorViewModel.StagingRule.RegexString);
             if (regex.IsMatch(ruleEditorViewModel.CompliantExample) == false)
             {

@@ -93,7 +93,6 @@ namespace Regular.Commands.RuleEditor
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            ruleEditorViewModel.UpdateRegexStringCommand.Execute(null);
             ruleEditorViewModel.GenerateCompliantExampleCommand.Execute(null);
         }
 
