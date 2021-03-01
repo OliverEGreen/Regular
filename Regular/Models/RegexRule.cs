@@ -161,6 +161,9 @@ namespace Regular.Models
             // Takes a newly-generated RegexRule object and sets an existing rules values to match
             // To be used when updating an existing rule from the Rule Editor
 
+            // In case any changes have been made to the rule
+            ParameterUtils.RecreateProjectParameter(documentGuid, existingRegexRule, newRegexRule);
+
             existingRegexRule.RuleName = newRegexRule.RuleName;
             existingRegexRule.TargetCategoryObjects = newRegexRule.TargetCategoryObjects;
             existingRegexRule.TrackingParameterObject = newRegexRule.TrackingParameterObject;
@@ -170,7 +173,7 @@ namespace Regular.Models
             existingRegexRule.RegexString = newRegexRule.RegexString;
             existingRegexRule.IsFrozen = newRegexRule.IsFrozen;
             existingRegexRule.RegularUpdater = newRegexRule.RegularUpdater;
-
+            
             // Need to check if existingRegexRule is in ExtensibleStorage or not.
             ExtensibleStorageUtils.UpdateRegexRuleInExtensibleStorage(documentGuid, existingRegexRule.RuleGuid, newRegexRule);
             DmTriggerUtils.UpdateTrigger(documentGuid, existingRegexRule);
@@ -191,18 +194,32 @@ namespace Regular.Models
             
             // Returns a copy of an existing RegexRule, but with a new GUID
             RegexRule duplicateRegexRule = Create(documentGuid);
-            if (isStagingRule) duplicateRegexRule.IsStagingRule = true;
-            // If we're duplicating a rule we need a new name, but if it's a temporary staging rule we don't
-            // need to ensure the name and GUID is unique
-            duplicateRegexRule.RuleName = isStagingRule ? sourceRegexRule.RuleName : GenerateRegexRuleDuplicateName();
+
+            if (isStagingRule)
+            {
+                duplicateRegexRule.IsStagingRule = true;
+                duplicateRegexRule.RuleName = sourceRegexRule.RuleName;
+                duplicateRegexRule.OutputParameterObject = new ParameterObject
+                {
+                    ParameterObjectId = sourceRegexRule.OutputParameterObject.ParameterObjectId,
+                    ParameterObjectName = sourceRegexRule.OutputParameterObject.ParameterObjectName
+                };
+                duplicateRegexRule.RegularUpdater = sourceRegexRule.RegularUpdater;
+            }
+            else
+            {
+                duplicateRegexRule.RuleName = GenerateRegexRuleDuplicateName();
+                duplicateRegexRule.OutputParameterObject = new ParameterObject();
+                duplicateRegexRule.RegularUpdater = new RegularUpdater(RegularApp.RevitApplication.ActiveAddInId);
+            }
+            
             duplicateRegexRule.TargetCategoryObjects = sourceRegexRule.TargetCategoryObjects;
             duplicateRegexRule.TrackingParameterObject = sourceRegexRule.TrackingParameterObject;
-            duplicateRegexRule.OutputParameterObject = new ParameterObject();
             duplicateRegexRule.MatchType = sourceRegexRule.MatchType;
             duplicateRegexRule.RegexRuleParts = sourceRegexRule.RegexRuleParts;
             duplicateRegexRule.RegexString = sourceRegexRule.RegexString;
             duplicateRegexRule.IsFrozen = sourceRegexRule.IsFrozen;
-            duplicateRegexRule.RegularUpdater = sourceRegexRule.RegularUpdater;
+            
             return duplicateRegexRule;
         }
        

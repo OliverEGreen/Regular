@@ -57,7 +57,41 @@ namespace Regular.Utilities
                         GetProjectParameterByName(documentGuid, definition.Name).Id.IntegerValue;
                 }
             }
+        }
+
+        private static bool CompareOutputParameters(RegexRule existingRegexRule, RegexRule newRegexRule)
+        {
+            List<int> existingTargetCategoryIds = existingRegexRule.TargetCategoryObjects.Select(x => x.CategoryObjectId).ToList();
+            List<int> newTargetCategoryIds = newRegexRule.TargetCategoryObjects.Select(x => x.CategoryObjectId).ToList();
             
+            var removedIds = existingTargetCategoryIds.Except(newTargetCategoryIds).ToList();
+            var addedIds = newTargetCategoryIds.Except(existingTargetCategoryIds).ToList();
+            bool targetCategoryIdsMatch = !removedIds.Any() && !addedIds.Any();
+
+            return existingRegexRule.OutputParameterObject.ParameterObjectName ==
+                   newRegexRule.OutputParameterObject.ParameterObjectName &&
+                   existingRegexRule.TrackingParameterObject.ParameterObjectId ==
+                   newRegexRule.TrackingParameterObject.ParameterObjectId &&
+                   targetCategoryIdsMatch;
+        }
+
+        public static void RecreateProjectParameter(string documentGuid, RegexRule existingRegexRule, RegexRule newRegexRule)
+        {
+            // Do we really have to delete and recreate from scratcH?
+            if (CompareOutputParameters(existingRegexRule, newRegexRule)) return;
+            
+            Document document = RegularApp.DocumentCacheService.GetDocument(documentGuid);
+            ParameterElement parameterElement = GetProjectParameterByName(documentGuid, existingRegexRule.OutputParameterObject.ParameterObjectName);
+            if (parameterElement == null) return;
+
+            using (Transaction transaction = new Transaction(document, $"Regular - Recreating Parameter { newRegexRule.OutputParameterObject.ParameterObjectName }")) 
+            {
+                transaction.Start();
+                document.Delete(parameterElement.Id);
+                transaction.Commit();
+            }
+            
+            CreateProjectParameter(documentGuid, newRegexRule);
         }
         
         public static string GetParameterName(Document document, ElementId parameterId)

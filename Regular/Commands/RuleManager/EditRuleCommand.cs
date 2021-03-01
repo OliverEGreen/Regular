@@ -25,7 +25,7 @@ namespace Regular.Commands.RuleManager
         public void Execute(object parameter)
         {
             // We open up the editor with the existing rule
-            Views.RuleEditor ruleEditor = new Views.RuleEditor(ruleManagerViewModel.DocumentGuid, (RegexRule)parameter);
+            Views.RuleEditor ruleEditor = new Views.RuleEditor(ruleManagerViewModel.DocumentGuid, true, (RegexRule) parameter);
             ruleEditor.ShowDialog();
         }
 

@@ -13,6 +13,12 @@ namespace Regular.Enums
         [Description("Custom Text")]
         CustomText = 3,
         [Description("Option Set")]
-        OptionSet = 4
+        OptionSet = 4,
+        [Description("Full Stop")]
+        FullStop = 5,
+        [Description("Hyphen")]
+        Hyphen = 6,
+        [Description("Underscore")]
+        Underscore = 7,
     }
 }
