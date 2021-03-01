@@ -13,22 +13,23 @@ namespace Regular.Utilities
         private static string GetRegexPartFromRuleType(IRegexRulePart regexRulePart)
         {
             string regexPartOutput = "";
-            string optionalModifier = regexRulePart.IsOptional ? "?" : "";
-            string caseSensitiveModifierStart = regexRulePart.IsCaseSensitive ? "(?-i)" : @"(?i)";
-            string caseSensitiveModifierEnd = regexRulePart.IsCaseSensitive ? "(?i)" : @"(?-i)";
+            string optionalModifierStart = regexRulePart.IsOptional ? @"(" : "";
+            string optionalModifierEnd = regexRulePart.IsOptional ? @")?" : "";
+            string caseSensitiveModifierStart = regexRulePart.IsCaseSensitive ? @"(?-i)" : @"(?i)";
+            string caseSensitiveModifierEnd = regexRulePart.IsCaseSensitive ? @"(?i)" : @"(?-i)";
             switch (regexRulePart.RuleType)
             {
                 case RuleType.AnyLetter:
                     switch (regexRulePart.CaseSensitivityMode)
                     {
                         case CaseSensitivity.UpperCase:
-                            regexPartOutput += "[A-Z]";
+                            regexPartOutput += @"[A-Z]";
                             break;
                         case CaseSensitivity.AnyCase:
-                            regexPartOutput += "[A-Za-z]";
+                            regexPartOutput += @"[A-Za-z]";
                             break;
                         case CaseSensitivity.LowerCase:
-                            regexPartOutput += "[a-z]";
+                            regexPartOutput += @"[a-z]";
                             break;
                         case CaseSensitivity.None:
                             break;
@@ -58,7 +59,11 @@ namespace Regular.Utilities
                     regexPartOutput += @"\d";
                     break;
                 case RuleType.CustomText:
-                    regexPartOutput += caseSensitiveModifierStart + SanitizeWord(regexRulePart.RawUserInputValue) + caseSensitiveModifierEnd;
+                    regexPartOutput += optionalModifierStart +
+                                       caseSensitiveModifierStart +
+                                       SanitizeWord(regexRulePart.RawUserInputValue) +
+                                       caseSensitiveModifierEnd +
+                                       optionalModifierEnd;
                     break;
                 case RuleType.OptionSet:
                     List<string> options = regexRulePart.Options
@@ -66,12 +71,16 @@ namespace Regular.Utilities
                         .Where(x => !(string.IsNullOrWhiteSpace(x)))
                         .ToList();
                     if (options.Count < 1) break;
-                    regexPartOutput = caseSensitiveModifierStart + $"({ string.Join(@"|", options) })" + caseSensitiveModifierEnd;
+                    regexPartOutput = optionalModifierStart +
+                                      caseSensitiveModifierStart +
+                                      $"({string.Join(@"|", options)})" +
+                                      caseSensitiveModifierEnd +
+                                      optionalModifierEnd;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            return regexPartOutput + optionalModifier;
+            return regexPartOutput;
         }
         private static string SanitizeCharacter(string character)
         {
@@ -92,8 +101,8 @@ namespace Regular.Utilities
             string regexString = "";
             foreach(IRegexRulePart regexRulePart in regexRule.RegexRuleParts) { regexString += GetRegexPartFromRuleType(regexRulePart); }
 
-            string start = ".*";
-            string end = ".*";
+            string start = "^.*";
+            string end = ".*$";
 
             switch (regexRule.MatchType)
             {
