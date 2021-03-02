@@ -5,11 +5,11 @@ using Regular.ViewModels;
 
 namespace Regular.Views
 {
-    public partial class RuleManager
+    public partial class RuleManagerView
     {
         public RuleManagerViewModel RuleManagerViewModel { get; set; }
 
-        public RuleManager(string documentGuid)
+        public RuleManagerView(string documentGuid)
         {
             InitializeComponent();
             RuleManagerViewModel = new RuleManagerViewModel(documentGuid);

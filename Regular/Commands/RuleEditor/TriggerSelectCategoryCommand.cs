@@ -9,11 +9,11 @@ using Regular.ViewModels;
 
 namespace Regular.Commands.RuleEditor
 {
-    public class TriggerCategoryCheckedCommand : ICommand
+    public class TriggerSelectCategoryCommand : ICommand
     {
         private readonly RuleEditorViewModel ruleEditorViewModel;
 
-        public TriggerCategoryCheckedCommand(RuleEditorViewModel ruleEditorViewModel)
+        public TriggerSelectCategoryCommand(RuleEditorViewModel ruleEditorViewModel)
         {
             this.ruleEditorViewModel = ruleEditorViewModel;
         }
@@ -24,8 +24,8 @@ namespace Regular.Commands.RuleEditor
         {
             // Lets the user multi-select and multi-deselect items
             if (!(parameter is CheckBox checkBox)) return;
-            ListBox categoriesListBox = VisualTreeUtils.FindParent<ListBox>(checkBox);
-            List<CategoryObject> selectedItems = categoriesListBox.SelectedItems.Cast<CategoryObject>().ToList();
+            DataGrid categoriesDataGrid = VisualTreeUtils.FindParent<DataGrid>(checkBox);
+            List<CategoryObject> selectedItems = categoriesDataGrid.SelectedItems.Cast<CategoryObject>().ToList();
 
             if(selectedItems.Count > 1)
             {

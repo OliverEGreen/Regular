@@ -87,8 +87,8 @@ namespace Regular.Commands.RuleEditor
                 case RuleType.CustomText:
                     break;
                 case RuleType.OptionSet:
-                    OptionSetEditor optionSetEditor = new OptionSetEditor(regexRulePart);
-                    optionSetEditor.ShowDialog();
+                    OptionSetEditorView optionSetEditorView = new OptionSetEditorView(regexRulePart);
+                    optionSetEditorView.ShowDialog();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

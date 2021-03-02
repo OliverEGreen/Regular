@@ -24,8 +24,8 @@ namespace Regular.Commands.RuleManager
         {
             RegexRule duplicatedRegexRule = RegexRule.Duplicate(ruleManagerViewModel.DocumentGuid, ruleManagerViewModel.SelectedRegexRule, false);
 
-            Views.RuleEditor ruleEditor = new Views.RuleEditor(ruleManagerViewModel.DocumentGuid, false, duplicatedRegexRule);
-            ruleEditor.ShowDialog();
+            Views.RuleEditorView ruleEditorView = new Views.RuleEditorView(ruleManagerViewModel.DocumentGuid, false, duplicatedRegexRule);
+            ruleEditorView.ShowDialog();
         }
 
         public event EventHandler CanExecuteChanged

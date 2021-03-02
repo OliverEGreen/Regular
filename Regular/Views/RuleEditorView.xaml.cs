@@ -8,17 +8,14 @@ using Regular.Models;
 using Regular.Utilities;
 using Regular.ViewModels;
 using System.Collections.Generic;
+using System.Windows.Shapes;
 
 namespace Regular.Views
 {
-    public partial class RuleEditor
+    public partial class RuleEditorView
     {
         public RuleEditorViewModel RuleEditorViewModel { get; set; }
-
-        // Optional second argument constructor is for editing an existing rule
-        // We need a reference to the original rule ID, and to then create a 
-        // staging rule for the user to play around with until form submission / validation
-        public RuleEditor(string documentGuid, bool editingExistingRule, RegexRule inputRule = null)
+        public RuleEditorView(string documentGuid, bool editingExistingRule, RegexRule inputRule = null)
         {
             InitializeComponent();
             RuleEditorViewModel = inputRule == null ? new RuleEditorViewModel(documentGuid, false) : new RuleEditorViewModel(documentGuid, editingExistingRule, inputRule);
@@ -36,14 +33,7 @@ namespace Regular.Views
             scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
             e.Handled = true;
         }
-
-        private void ScrollViewerCategories_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
-        {
-            ScrollViewer scv = (ScrollViewer)sender;
-            scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
-            e.Handled = true;
-        }
-
+        
         private void ButtonCancel_Click(object sender, RoutedEventArgs e) => Close();
         
         private void TextBoxNameYourRuleInput_OnTextChanged(object sender, TextChangedEventArgs e)
@@ -167,6 +157,55 @@ namespace Regular.Views
         // If the user is allowed to submit the rule, we close the window to prevent them 
         // creating the same rule as many times as they like
         private void ButtonOk_OnClick(object sender, RoutedEventArgs e) => Close();
+
+        private void Grid_MouseLeave(object sender, MouseEventArgs e)
+        {
+            if (!(sender is Grid grid)) return;
+            UIElementCollection children = grid.Children;
+            Color textBlockColorBrush = (Color)ColorConverter.ConvertFromString("#333333");
+            foreach (UIElement uiElement in children)
+            {
+                switch (uiElement)
+                {
+                    case Rectangle rectangle:
+                    {
+                        Color rolloutColor = (Color)ColorConverter.ConvertFromString("#E5E5E5");
+                        rectangle.Fill = new SolidColorBrush(rolloutColor);
+                        break;
+                    }
+                    case TextBox textBox:
+                    {
+                        Color rolloverColor = (Color)ColorConverter.ConvertFromString("#E5E5E5");
+                        textBox.Background = new SolidColorBrush(rolloverColor);
+                        break;
+                    }
+                }
+            }
+        }
+        
+        private void Grid_MouseEnter(object sender, MouseEventArgs e)
+        {
+            if (!(sender is Grid grid)) return;
+            UIElementCollection children = grid.Children;
+            foreach (UIElement uiElement in children)
+            {
+                switch (uiElement)
+                {
+                    case Rectangle rectangle:
+                    {
+                        Color rolloverColor = (Color)ColorConverter.ConvertFromString("#CCCCCC");
+                        rectangle.Fill = new SolidColorBrush(rolloverColor);
+                        break;
+                    }
+                    case TextBox textBox:
+                    {
+                        Color rolloverColor = (Color)ColorConverter.ConvertFromString("#CCCCCC");
+                        textBox.Background = new SolidColorBrush(rolloverColor);
+                        break;
+                    }
+                }
+            }
+        }
     }
 }
  

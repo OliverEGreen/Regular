@@ -20,7 +20,7 @@ namespace Regular.Utilities
             BitmapImage ruleManagerButtonIcon = new BitmapImage(new Uri("pack:// application:,,,/Regular;component/Resources/RegularIcon32px.png"));
             ruleManagerButton.LargeImage = ruleManagerButtonIcon;
 
-            PushButtonData exportRulesButtonData = new PushButtonData("Export Rules", "Export" + Environment.NewLine + "Rules", thisAssemblyPath, "Regular.RuleManager");
+            PushButtonData exportRulesButtonData = new PushButtonData("Export Rules", "Export" + Environment.NewLine + "Rules", thisAssemblyPath, "Regular.RuleManagerView");
             PushButton exportRulesButton = ribbonPanelGeneral.AddItem(exportRulesButtonData) as PushButton;
             exportRulesButton.ToolTip = "Export your rules to JSON format for re-use in other projects.";
             BitmapImage exportRulesButtonIcon = new BitmapImage(new Uri("pack:// application:,,,/Regular;component/Resources/ExportIcon32px.png"));

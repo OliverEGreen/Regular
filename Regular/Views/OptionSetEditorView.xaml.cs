@@ -8,12 +8,12 @@ using Regular.ViewModels;
 
 namespace Regular.Views
 {
-    public partial class OptionSetEditor
+    public partial class OptionSetEditorView
     {
         public OptionSetEditorViewModel OptionSetEditorViewModel { get; set; }
         public IRegexRulePart RegexRulePart { get; set; }
         
-        public OptionSetEditor(IRegexRulePart regexRulePart)
+        public OptionSetEditorView(IRegexRulePart regexRulePart)
         {
             InitializeComponent();
             OptionSetEditorViewModel = new OptionSetEditorViewModel(regexRulePart);

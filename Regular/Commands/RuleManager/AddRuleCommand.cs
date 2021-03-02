@@ -21,8 +21,8 @@ namespace Regular.Commands.RuleManager
         public void Execute(object parameter)
         {
             // No second argument is provided, we'll work with a brand new rule
-            Views.RuleEditor ruleEditor = new Views.RuleEditor(ruleManagerViewModel.DocumentGuid, false);
-            ruleEditor.ShowDialog();
+            Views.RuleEditorView ruleEditorView = new Views.RuleEditorView(ruleManagerViewModel.DocumentGuid, false);
+            ruleEditorView.ShowDialog();
         }
 
         public event EventHandler CanExecuteChanged
