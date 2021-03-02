@@ -1,5 +1,5 @@
 ﻿<Window
-    x:Class="Regular.Views.RuleEditor"
+    x:Class="Regular.Views.RuleEditorView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -15,23 +15,22 @@
     Loaded="RuleEditor_OnLoaded"
     ResizeMode="CanResizeWithGrip"
     SizeToContent="WidthAndHeight"
-    Style="{DynamicResource StandardWindow}"
+    Style="{DynamicResource RegularWindow}"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <Window.Resources>
         <ResourceDictionary Source="../Resources/RegularStyles.xaml" />
     </Window.Resources>
-    <Grid Margin="15">
+    <Grid Style="{StaticResource RegularGrid}">
         <Grid.RowDefinitions>
             <RowDefinition Height="10" />
-            <RowDefinition Height="30" />
-            <RowDefinition Height="30" />
-            <RowDefinition Height="30" />
-            <RowDefinition Height="30" />
-            <RowDefinition Height="30" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="50" />
-            <RowDefinition />
-            <RowDefinition Name="RowExamples" Height="30" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="40" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -45,30 +44,23 @@
             Grid.Row="0"
             Grid.Column="0"
             Grid.ColumnSpan="4"
-            Height="25"
-            Margin="-15,-15,-15,0"
-            Padding="12,4,10,3"
-            VerticalAlignment="Top"
-            Background="{StaticResource BackgroundColorWarning}"
-            Style="{StaticResource WarningText}"
+            Margin="-15,-15,-15,5"
+            Padding="15,3,10,3"
+            Style="{StaticResource RegularTextBlockBodyWarning}"
             Text="{Binding UserFeedbackText, UpdateSourceTrigger=PropertyChanged}"
             Visibility="{Binding UserFeedbackTextVisibility, UpdateSourceTrigger=PropertyChanged}" />
-        <Label
+        <TextBlock
             Grid.Row="1"
             Grid.Column="0"
-            Margin="0,5"
-            VerticalContentAlignment="Center"
-            Content="Name Your Rule"
-            FontSize="13"
-            Style="{StaticResource StandardLabel}" />
+            VerticalAlignment="Center"
+            Style="{StaticResource RegularTextBlockBody}"
+            Text="Name Your Rule" />
         <TextBox
             Name="TextBoxNameYourRuleInput"
             Grid.Row="1"
             Grid.Column="1"
-            VerticalAlignment="Center"
-            VerticalContentAlignment="Center"
             MaxLength="30"
-            Style="{StaticResource StandardTextBox}"
+            Style="{StaticResource RegularTextBox}"
             Text="{Binding StagingRule.RuleName, UpdateSourceTrigger=PropertyChanged}"
             TextChanged="TextBoxNameYourRuleInput_OnTextChanged"
             ToolTip="Define a reference ruleName for the rule you're creating." />
@@ -76,10 +68,8 @@
             Name="TextBlockNameYourRuleWatermark"
             Grid.Row="1"
             Grid.Column="1"
-            Padding="7,3"
-            VerticalAlignment="Center"
+            Padding="6,3"
             Panel.ZIndex="1"
-            FontSize="12"
             FontWeight="Regular"
             Foreground="{StaticResource FontColorWatermarkGrey}"
             IsHitTestVisible="False"
@@ -101,83 +91,61 @@
             Grid.Column="1"
             Width="7"
             Height="7"
-            Margin="5,0,6,0"
+            Margin="0,0,5,10"
             HorizontalAlignment="Right"
             Fill="LightGray" />
         <TextBlock
             Name="TextBlockCategories"
             Grid.Row="2"
             Grid.Column="0"
-            Margin="0,5"
-            FontSize="13"
-            Style="{StaticResource StandardText}"
+            Style="{StaticResource RegularTextBlockBody}"
             Text="{Binding NumberCategoriesSelected, UpdateSourceTrigger=PropertyChanged, StringFormat='Categories ({0})'}" />
         <Button
             x:Name="ButtonExpandCategories"
             Grid.Row="2"
             Grid.Column="1"
+            Width="230"
             Height="20"
+            Margin="0,0,0,10"
+            HorizontalAlignment="Stretch"
             Command="{Binding TriggerCategoryPanelCommand}"
             Content="{Binding CategoriesPanelButtonText}"
-            Style="{StaticResource StandardButton}" />
-        <Label
+            Style="{StaticResource RegularButton}" />
+        <DataGrid
             Grid.Row="1"
+            Grid.RowSpan="7"
             Grid.Column="3"
-            Margin="0,5,0,5"
-            VerticalContentAlignment="Center"
-            Content="Select Categories"
-            FontSize="13"
-            Style="{StaticResource StandardLabel}" />
-        <Border
-            Grid.Row="2"
-            Grid.RowSpan="6"
-            Grid.Column="3"
-            Margin="0,3,0,0"
-            BorderBrush="{StaticResource TextBoxBorderColorDefault}"
-            BorderThickness="1">
-            <ScrollViewer
-                x:Name="ScrollViewerCategories"
-                PreviewMouseWheel="ScrollViewerCategories_PreviewMouseWheel"
-                Style="{StaticResource DefaultScrollViewerStyle}">
-                <ListBox
-                    x:Name="ListBoxCategoriesSelection"
-                    BorderThickness="0"
-                    ItemsSource="{Binding StagingRule.TargetCategoryObjects}"
-                    SelectionMode="Extended">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <CheckBox
-                                    x:Name="CategoryCheckBox"
-                                    Width="20"
-                                    VerticalAlignment="Center"
-                                    Command="{Binding ElementName=RuleEditorWindow, Path=DataContext.TriggerCategoryCheckedCommand}"
-                                    CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
-                                    IsChecked="{Binding IsChecked}" />
-                                <TextBlock VerticalAlignment="Center" Text="{Binding CategoryObjectName}" />
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </ScrollViewer>
-        </Border>
-        <Label
+            Margin="0"
+            BorderThickness="1"
+            ItemsSource="{Binding StagingRule.TargetCategoryObjects}"
+            Style="{StaticResource RegularDataGrid}">
+            <DataGrid.Columns>
+                <DataGridCheckBoxColumn
+                    Binding="{Binding Path=IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    ElementStyle="{StaticResource RegularDataGridCheckBoxColumn}"
+                    HeaderStyle="{StaticResource RegularDataGridCheckBoxColumnHeader}"
+                    IsReadOnly="False"
+                    IsThreeState="False" />
+                <DataGridTextColumn
+                    Width="*"
+                    Binding="{Binding Path=CategoryObjectName}"
+                    Header="Category"
+                    HeaderStyle="{StaticResource RegularDataGridColumnHeaderText}"
+                    IsReadOnly="True" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <TextBlock
             Grid.Row="3"
             Grid.Column="0"
-            Margin="0,5"
-            VerticalContentAlignment="Center"
-            Content="Tracking Parameter"
-            FontSize="13"
-            Style="{StaticResource StandardLabel}" />
+            VerticalAlignment="Center"
+            Style="{StaticResource RegularTextBlockBody}"
+            Text="Tracking Parameter" />
         <TextBlock
             Name="ComboBoxTrackingParameterInputWatermark"
             Grid.Row="3"
             Grid.Column="1"
-            Padding="7,3"
-            VerticalAlignment="Center"
+            Padding="6,3"
             Panel.ZIndex="1"
-            FontSize="12"
-            FontWeight="Regular"
             Foreground="{StaticResource FontColorWatermarkGrey}"
             Text="{Binding ComboBoxTrackingParameterText, UpdateSourceTrigger=PropertyChanged}">
             <TextBlock.Style>
@@ -195,28 +163,24 @@
             x:Name="ComboBoxTrackingParameterInput"
             Grid.Row="3"
             Grid.Column="1"
-            VerticalAlignment="Center"
             DisplayMemberPath="ParameterObjectName"
             ItemsSource="{Binding PossibleTrackingParameterObjects, UpdateSourceTrigger=PropertyChanged}"
             SelectedItem="{Binding StagingRule.TrackingParameterObject, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-            Style="{StaticResource StandardComboBox}" />
-        <Label
+            Style="{StaticResource RegularComboBox}" />
+        <TextBlock
             Grid.Row="4"
             Grid.Column="0"
-            Margin="0,5"
-            VerticalContentAlignment="Center"
-            Content="Output Parameter"
-            FontSize="13"
-            Style="{StaticResource StandardLabel}" />
+            VerticalAlignment="Center"
+            Style="{StaticResource RegularTextBlockBody}"
+            Text="Output Parameter" />
         <TextBox
             Name="TextBoxOutputParameterNameInput"
             Grid.Row="4"
             Grid.Column="1"
             VerticalAlignment="Center"
-            VerticalContentAlignment="Center"
             IsEnabled="{Binding OutputParameterNameInputEnabled}"
             MaxLength="30"
-            Style="{StaticResource StandardTextBox}"
+            Style="{StaticResource RegularTextBox}"
             Text="{Binding StagingRule.OutputParameterObject.ParameterObjectName, UpdateSourceTrigger=PropertyChanged}"
             TextChanged="TextBoxOutputParameterNameInput_OnTextChanged"
             ToolTip="This is the project parameter Regular will auto-create and write its validation output to." />
@@ -224,10 +188,8 @@
             Name="TextblockOutputParameterWatermark"
             Grid.Row="4"
             Grid.Column="1"
-            Padding="7,3"
-            VerticalAlignment="Center"
+            Padding="6,3"
             Panel.ZIndex="1"
-            FontSize="12"
             FontWeight="Regular"
             Foreground="{StaticResource FontColorWatermarkGrey}"
             IsHitTestVisible="False"
@@ -249,39 +211,34 @@
             Grid.Column="1"
             Width="7"
             Height="7"
-            Margin="5,0,6,0"
+            Margin="0,0,5,10"
             HorizontalAlignment="Right"
             Panel.ZIndex="1"
             Fill="LightGray" />
-        <Label
+        <TextBlock
             Grid.Row="5"
             Grid.Column="0"
-            Margin="0,5"
-            VerticalContentAlignment="Center"
-            Content="Match Type"
-            FontSize="13"
-            Style="{StaticResource StandardLabel}" />
+            VerticalAlignment="Center"
+            Style="{StaticResource RegularTextBlockBody}"
+            Text="Match Type" />
         <ComboBox
             Name="ComboBoxMatchTypeInput"
             Grid.Row="5"
             Grid.Column="1"
-            VerticalAlignment="Center"
             DisplayMemberPath="Key"
             ItemsSource="{Binding MatchTypesDict}"
             SelectedIndex="0"
             SelectedValue="{Binding SelectedMatchType, UpdateSourceTrigger=PropertyChanged}"
             SelectedValuePath="Value"
-            Style="{StaticResource StandardComboBox}"
+            Style="{StaticResource RegularComboBox}"
             ToolTip="Specify whether you want the parameter value to match the rule completely, just at the beginning or anywhere within its value." />
-        <Label
+        <TextBlock
             Grid.Row="6"
             Grid.Column="0"
             Margin="0,5,0,13"
             VerticalAlignment="Bottom"
-            VerticalContentAlignment="Bottom"
-            Content="Add Rule Parts"
-            FontSize="13"
-            Style="{StaticResource StandardLabel}" />
+            Style="{StaticResource RegularTextBlockBody}"
+            Text="Add Rule Parts" />
         <StackPanel
             Grid.Row="6"
             Grid.Column="1"
@@ -291,14 +248,13 @@
                 Name="ComboBoxRulePartInput"
                 Width="147"
                 Height="24"
-                Margin="0,0,0,10"
                 VerticalAlignment="Bottom"
                 DisplayMemberPath="Key"
                 ItemsSource="{Binding RulesTypeDict}"
                 SelectedIndex="0"
                 SelectedValue="{Binding SelectedRuleType, UpdateSourceTrigger=PropertyChanged}"
                 SelectedValuePath="Value"
-                Style="{StaticResource StandardComboBox}" />
+                Style="{StaticResource RegularComboBox}" />
             <Button
                 Name="ButtonAddRulePart"
                 Width="24"
@@ -329,7 +285,7 @@
             Grid.Row="7"
             Grid.Column="0"
             Grid.ColumnSpan="2"
-            BorderBrush="{StaticResource TextBoxBorderColorDefault}"
+            BorderBrush="{StaticResource RegularInputBorderColor}"
             BorderThickness="1">
             <ScrollViewer
                 Name="ScrollViewerRuleParts"
@@ -343,10 +299,10 @@
                     ItemsSource="{Binding StagingRule.RegexRuleParts}"
                     SelectedIndex="0"
                     SelectedItem="{Binding SelectedRegexRulePart}"
-                    Style="{StaticResource StandardListBox}">
+                    Style="{StaticResource RegularListBox}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <Grid>
+                            <Grid MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="110" />
                                     <ColumnDefinition />
@@ -357,11 +313,12 @@
                                     <ColumnDefinition Width="30" />
                                 </Grid.ColumnDefinitions>
                                 <Rectangle
+                                    Name="ListBoxItemBackgroundRectangle"
                                     Grid.ColumnSpan="7"
                                     Height="30"
                                     Margin="-4,-1,0,-1"
-                                    Fill="{StaticResource RulePartBoxColor}"
-                                    Stroke="#D9D9D9"
+                                    Fill="{StaticResource RegularInputBackgroundColor}"
+                                    Stroke="{StaticResource RegularInputBackgroundColor}"
                                     StrokeThickness="1px" />
                                 <TextBlock
                                     Name="RegexRulePartTypeTextBlock"
@@ -379,9 +336,8 @@
                                     Padding="3,0"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
-                                    Background="{StaticResource RulePartBoxColor}"
+                                    Background="{StaticResource RegularInputBackgroundColor}"
                                     FontSize="13"
-                                    Foreground="{StaticResource FontColorDefault}"
                                     Text="{Binding RawUserInputValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                     TextChanged="RawUserInputValueTextBox_OnTextChanged"
                                     Visibility="{Binding RawUserInputTextBoxVisibility}">
@@ -400,11 +356,10 @@
                                     Name="RawUserInputWatermark"
                                     Grid.Column="0"
                                     Height="17"
-                                    Padding="4,0"
+                                    Padding="5,0"
                                     VerticalAlignment="Center"
                                     Panel.ZIndex="1"
                                     FontSize="13"
-                                    FontWeight="Regular"
                                     Foreground="{StaticResource FontColorWatermarkGrey}">
                                     <TextBlock.Style>
                                         <Style TargetType="{x:Type TextBlock}">
@@ -431,7 +386,7 @@
                                     Command="{Binding ElementName=RuleEditorWindow, Path=DataContext.EditRulePartCommand}"
                                     CommandParameter="{Binding ElementName=ButtonControl, Path=DataContext}"
                                     Content="{Binding ButtonControlDisplayText, UpdateSourceTrigger=PropertyChanged}"
-                                    Style="{StaticResource RulePartButtonControl}" />
+                                    Style="{StaticResource RegularRulePartButtonControl}" />
                                 <TextBlock
                                     Name="TextBlockCaseSensitiveDisplayString"
                                     Grid.Column="2"
@@ -446,7 +401,7 @@
                                     Grid.Column="3"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
-                                    Background="{StaticResource WindowBackgroundColor}"
+                                    Background="{StaticResource RegularWindowBackgroundColor}"
                                     Command="{Binding ElementName=RuleEditorWindow, Path=DataContext.UpdateRegexStringCommand}"
                                     IsChecked="{Binding IsCaseSensitive, UpdateSourceTrigger=PropertyChanged}"
                                     Visibility="{Binding CaseSensitiveCheckboxVisibility}" />
@@ -454,14 +409,14 @@
                                     Grid.Column="4"
                                     Margin="10,0,0,0"
                                     VerticalAlignment="Center"
-                                    Style="{StaticResource StandardText}"
+                                    Style="{StaticResource RegularTextBlockBody}"
                                     Text="Optional" />
                                 <CheckBox
                                     Name="CheckBoxRulePartOptional"
                                     Grid.Column="5"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
-                                    Background="{StaticResource WindowBackgroundColor}"
+                                    Background="{StaticResource RegularWindowBackgroundColor}"
                                     Command="{Binding ElementName=RuleEditorWindow, Path=DataContext.UpdateRegexStringCommand}"
                                     IsChecked="{Binding IsOptional, UpdateSourceTrigger=PropertyChanged}" />
                                 <Button
@@ -486,71 +441,36 @@
             Grid.Row="8"
             Grid.Column="0"
             Grid.ColumnSpan="2"
+            Margin="30,0,0,5"
             HorizontalAlignment="Left"
             VerticalAlignment="Bottom"
-            Style="{StaticResource StandardText}"
+            Style="{StaticResource RegularTextBlockBody}"
             Text="{Binding CompliantExample, UpdateSourceTrigger=PropertyChanged, StringFormat=Example: \{0\}}" />
         <Button
             Name="ButtonTest"
-            Grid.Row="9"
+            Grid.Row="8"
             Grid.Column="0"
-            Width="80"
+            Width="25"
             Height="25"
             HorizontalAlignment="Left"
-            VerticalAlignment="Bottom"
             Command="{Binding GenerateCompliantExampleCommand}"
-            Content="Test"
-            Style="{StaticResource StandardButton}"
+            Content=""
+            Style="{StaticResource RefreshExampleButton}"
             ToolTip="Press the button to generate random examples which are compliant with the rule parts you selected." />
         <Button
             Name="ButtonCancel"
-            Grid.Row="9"
+            Grid.Row="8"
             Grid.Column="1"
-            Width="80"
-            Height="25"
-            Margin="0,10,90,0"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Bottom"
+            Margin="0,0,90,0"
             Click="ButtonCancel_Click"
-            Content="Cancel"
-            Style="{StaticResource StandardButton}" />
+            Style="{StaticResource RegularButtonCancel}" />
         <Button
             Name="ButtonOk"
-            Grid.Row="9"
+            Grid.Row="8"
             Grid.Column="1"
-            Width="80"
-            Height="25"
-            Margin="0,10,0,0"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Bottom"
             Click="ButtonOk_OnClick"
             Command="{Binding SubmitRuleCommand}"
-            Content="OK"
-            Style="{StaticResource StandardButton}" />
-        <Button
-            Name="ButtonSelectAll"
-            Grid.Row="9"
-            Grid.Column="3"
-            Width="85"
-            Height="25"
-            Margin="0,0,0,0"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Bottom"
-            Command="{Binding SelectAllCategoriesCommand}"
-            Content="Select All"
-            Style="{StaticResource StandardButton}" />
-        <Button
-            Name="ButtonSelectNone"
-            Grid.Row="9"
-            Grid.Column="3"
-            Width="85"
-            Height="25"
-            Margin="0,0,90,0"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Bottom"
-            Command="{Binding SelectNoneCategoriesCommand}"
-            Content="Select None"
-            Style="{StaticResource StandardButton}" />
+            Style="{StaticResource RegularButtonOK}" />
     </Grid>
 </Window>
 

@@ -20,9 +20,9 @@ namespace Regular.Commands.RuleManager
         public void Execute(object parameter)
         {
             // Asks user if they're sure before deleting anything
-            ConfirmationDialog confirmationDialog = new ConfirmationDialog();
-            confirmationDialog.ShowDialog();
-            if (!confirmationDialog.ConfirmDelete) return;
+            ConfirmationDialogView confirmationDialogView = new ConfirmationDialogView();
+            confirmationDialogView.ShowDialog();
+            if (confirmationDialogView.DialogResult != true) return;
 
             if (!(parameter is RegexRule regexRule)) return;
             RegexRule.Delete(ruleManagerViewModel.DocumentGuid, regexRule);

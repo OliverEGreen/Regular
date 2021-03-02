@@ -2,20 +2,18 @@
 
 namespace Regular.Views
 {
-    public partial class ConfirmationDialog
+    public partial class ConfirmationDialogView
     {
-        public bool ConfirmDelete { get; set; }
-        public ConfirmationDialog()
+        public ConfirmationDialogView()
         {
             InitializeComponent();
-            ConfirmDelete = false;
         }
 
         private void ButtonCancel_OnClick(object sender, RoutedEventArgs e) => Close();
         
         private void ButtonDelete_OnClick(object sender, RoutedEventArgs e)
         {
-            ConfirmDelete = true;
+            DialogResult = true;
             Close();
         }
     }

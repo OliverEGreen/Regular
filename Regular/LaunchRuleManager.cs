@@ -17,8 +17,8 @@ namespace Regular
             {
                 if (RegularApp.DialogShowing) return Result.Cancelled;
                 string documentGuid = DocumentGuidUtils.GetDocumentGuidFromExtensibleStorage(commandData.Application.ActiveUIDocument.Document);
-                RuleManager ruleManager = new RuleManager(documentGuid);
-                ruleManager.ShowDialog();
+                RuleManagerView ruleManagerView = new RuleManagerView(documentGuid);
+                ruleManagerView.ShowDialog();
                 RegularApp.DialogShowing = false;
                 return Result.Succeeded;
             }

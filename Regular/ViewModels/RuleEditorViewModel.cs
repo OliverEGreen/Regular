@@ -39,9 +39,8 @@ namespace Regular.ViewModels
         public MoveRulePartDownCommand MoveRulePartDownCommand { get; }
         public GenerateCompliantExampleCommand GenerateCompliantExampleCommand { get; }
         public TriggerCategoryPanelCommand TriggerCategoryPanelCommand { get; }
-        public SelectAllCategoriesCommand SelectAllCategoriesCommand { get; }
-        public SelectNoneCategoriesCommand SelectNoneCategoriesCommand { get; }
-        public TriggerCategoryCheckedCommand TriggerCategoryCheckedCommand { get; }
+        public TriggerSelectCategoryCommand TriggerCategoryCheckedCommand { get; }
+        public TriggerSelectAllCategoriesCommand SelectAllCategoriesCommand { get; }
         public UpdateRegexStringCommand UpdateRegexStringCommand { get; }
 
         // Control-based properties
@@ -252,8 +251,9 @@ namespace Regular.ViewModels
                 NotifyPropertyChanged();
             }
         }
-        
 
+        public void UpdateCheckedCategoriesCount() => NumberCategoriesSelected = StagingRule.TargetCategoryObjects.Count(x => x.IsChecked);
+        
         // The two-argument constructor is for editing an existing rule
         // We need a reference to the original rule ID, and to create a 
         // staging rule for the user to play around with until submission
@@ -270,9 +270,8 @@ namespace Regular.ViewModels
             MoveRulePartDownCommand = new MoveRulePartDownCommand(this);
             GenerateCompliantExampleCommand = new GenerateCompliantExampleCommand(this);
             TriggerCategoryPanelCommand = new TriggerCategoryPanelCommand(this);
-            SelectAllCategoriesCommand = new SelectAllCategoriesCommand(this);
-            SelectNoneCategoriesCommand = new SelectNoneCategoriesCommand(this);
-            TriggerCategoryCheckedCommand = new TriggerCategoryCheckedCommand(this);
+            SelectAllCategoriesCommand = new TriggerSelectAllCategoriesCommand(this);
+            TriggerCategoryCheckedCommand = new TriggerSelectCategoryCommand(this);
             UpdateRegexStringCommand = new UpdateRegexStringCommand(this);
             
             // If a rule was passed to the contructor, we're either editing an existing rule
