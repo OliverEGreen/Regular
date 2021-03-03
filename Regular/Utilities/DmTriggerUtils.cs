@@ -2,6 +2,7 @@
 using System.Linq;
 using Autodesk.Revit.DB;
 using Regular.Models;
+using Regular.Services;
 
 namespace Regular.Utilities
 {
@@ -21,6 +22,8 @@ namespace Regular.Utilities
             
             ElementId trackingParameterId = new ElementId(regexRule.TrackingParameterObject.ParameterObjectId);
 
+            RegularApp.DmUpdaterCacheService.AddAndRegisterUpdater(documentGuid, regexRule);
+
             UpdaterRegistry.AddTrigger(
                 regexRule.RegularUpdater.GetUpdaterId(),
                 document,
@@ -38,7 +41,9 @@ namespace Regular.Utilities
         {
             Document document = RegularApp.DocumentCacheService.GetDocument(documentGuid);
             UpdaterId updaterId = regexRule.RegularUpdater.GetUpdaterId();
+            string updaterIdString = updaterId.GetGUID().ToString();
             UpdaterRegistry.RemoveDocumentTriggers(updaterId, document);
+            //RegularApp.DmUpdaterCacheService.RemoveAndDeRegisterUpdater(documentGuid, regexRule);
             AddTrigger(documentGuid, regexRule);
         }
     }

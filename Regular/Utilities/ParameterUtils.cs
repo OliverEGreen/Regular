@@ -156,7 +156,25 @@ namespace Regular.Utilities
                 transaction.Commit();
             }
         }
-        
+
+        public static void DeleteProjectParameter(string documentGuid, RegexRule regexRule)
+        {
+            Document document = RegularApp.DocumentCacheService.GetDocument(documentGuid);
+            ParameterElement parameterElement = GetProjectParameterByName
+            (
+                documentGuid,
+                regexRule.OutputParameterObject.ParameterObjectName
+            );
+            if (parameterElement == null) return;
+            
+            using (Transaction transaction = new Transaction(document, $"Regular - Deleting Parameter { regexRule.OutputParameterObject.ParameterObjectName }")) 
+            {
+                transaction.Start();
+                document.Delete(parameterElement.Id);
+                transaction.Commit();
+            }
+        }
+
         public static string GetParameterName(Document document, ElementId parameterId)
         {
             if (parameterId.IntegerValue < 0) return LabelUtils.GetLabelFor((BuiltInParameter)parameterId.IntegerValue);

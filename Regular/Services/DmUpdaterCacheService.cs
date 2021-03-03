@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Regular.Models;
@@ -57,7 +58,7 @@ namespace Regular.Services
         
         public void RemoveAndDeRegisterUpdater(string documentGuid, RegexRule regexRule)
         {
-            void UnregisterUpdater()
+            void DeregisterUpdater()
             {
                 try
                 {
@@ -74,7 +75,7 @@ namespace Regular.Services
             DmUpdaters[documentGuid].Remove(regexRule.RegularUpdater);
             
             // Unregisters from the document's updater registry
-            UnregisterUpdater();
+            DeregisterUpdater();
         }
 
         public void AddDocumentUpdaters(string documentGuid)

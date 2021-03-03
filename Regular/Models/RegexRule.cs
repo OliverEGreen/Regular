@@ -76,7 +76,7 @@ namespace Regular.Models
         {
             get
             {
-                toolTipString = $"Rule RuleName: {RuleName}" + Environment.NewLine +
+                toolTipString = $"Rule Name: {RuleName}" + Environment.NewLine +
                                 $"Applies To: {string.Join(", ", TargetCategoryObjects.Where(x => x.IsChecked).Select(x => x.CategoryObjectName))}" + Environment.NewLine +
                                 $"Tracks Parameter : {TrackingParameterObject.ParameterObjectName}" + Environment.NewLine +
                                 $"Regex String: {RegexString}" + Environment.NewLine +
@@ -151,6 +151,7 @@ namespace Regular.Models
         public static void Delete(string documentGuid, RegexRule regexRule)
         {
             // Deleting the cached RegexRule, associated DataStorage object, cached DmUpdater, UpdaterRegistry object and Trigger
+            ParameterUtils.DeleteProjectParameter(documentGuid, regexRule);
             RegularApp.RegexRuleCacheService.RemoveRule(documentGuid, regexRule.RuleGuid);
             RegularApp.DmUpdaterCacheService.RemoveAndDeRegisterUpdater(documentGuid, regexRule);
             ExtensibleStorageUtils.DeleteRegexRuleFromExtensibleStorage(documentGuid, regexRule.RuleGuid);
@@ -161,20 +162,19 @@ namespace Regular.Models
             // Takes a newly-generated RegexRule object and sets an existing rules values to match
             // To be used when updating an existing rule from the Rule Editor
 
-            // In case any changes have been made to the rule
+            // In case any changes have been made to the rule's output parameter
             ParameterUtils.UpdateProjectParameter(documentGuid, existingRegexRule, stagingRegexRule);
 
+            RegularUpdater regularUpdater = existingRegexRule.RegularUpdater;
+            string ruleGuid = existingRegexRule.RuleGuid;
             existingRegexRule = SerializationUtils.DeepCopyObject(stagingRegexRule);
             
-            //existingRegexRule.RuleName = stagingRegexRule.RuleName;
-            //existingRegexRule.TargetCategoryObjects = stagingRegexRule.TargetCategoryObjects;
-            //existingRegexRule.TrackingParameterObject = stagingRegexRule.TrackingParameterObject;
-            //existingRegexRule.OutputParameterObject = stagingRegexRule.OutputParameterObject;
-            //existingRegexRule.MatchType = stagingRegexRule.MatchType;
-            //existingRegexRule.RegexRuleParts = stagingRegexRule.RegexRuleParts;
-            //existingRegexRule.RegexString = stagingRegexRule.RegexString;
-            //existingRegexRule.IsFrozen = stagingRegexRule.IsFrozen;
-            //existingRegexRule.RegularUpdater = stagingRegexRule.RegularUpdater;
+            // Deep copy has issues because it instantites new RegularUpdater objects
+            // whereas we just want a reference to the original object when we update it
+            existingRegexRule.RuleGuid = ruleGuid;
+            existingRegexRule.RegularUpdater = regularUpdater;
+            
+            RegularApp.RegexRuleCacheService.UpdateRule(documentGuid, existingRegexRule);
             
             // Need to check if existingRegexRule is in ExtensibleStorage or not.
             ExtensibleStorageUtils.UpdateRegexRuleInExtensibleStorage(documentGuid, existingRegexRule.RuleGuid, stagingRegexRule);
@@ -202,7 +202,6 @@ namespace Regular.Models
             
             if (isStagingRule)
             {
-                duplicateRegexRule.RuleName = sourceRegexRule.RuleName;
                 duplicateRegexRule.RegularUpdater = sourceRegexRule.RegularUpdater;
             }
             else
