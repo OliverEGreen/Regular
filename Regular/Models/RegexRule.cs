@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using Newtonsoft.Json;
 using Regular.Enums;
 using Regular.Utilities;
 
@@ -140,14 +139,13 @@ namespace Regular.Models
 
         public static void Save(string documentGuid, RegexRule regexRule)
         {
+            ParameterUtils.CreateProjectParameter(documentGuid, regexRule);
+            ParameterUtils.ForceOutputParameterToVaryBetweenGroups(documentGuid, regexRule);
+
             // Saves rule to static cache and ExtensibleStorage
             RegularApp.RegexRuleCacheService.AddRule(documentGuid, regexRule);
             RegularApp.DmUpdaterCacheService.AddAndRegisterUpdater(documentGuid, regexRule);
             ExtensibleStorageUtils.SaveRegexRuleToExtensibleStorage(documentGuid, regexRule);
-
-            // TODO: Check this rule is created as we want
-            ParameterUtils.CreateProjectParameter(documentGuid, regexRule);
-            ParameterUtils.ForceOutputParameterToVaryBetweenGroups(documentGuid, regexRule);
         }
 
         public static void Delete(string documentGuid, RegexRule regexRule)
@@ -166,15 +164,17 @@ namespace Regular.Models
             // In case any changes have been made to the rule
             ParameterUtils.UpdateProjectParameter(documentGuid, existingRegexRule, stagingRegexRule);
 
-            existingRegexRule.RuleName = stagingRegexRule.RuleName;
-            existingRegexRule.TargetCategoryObjects = stagingRegexRule.TargetCategoryObjects;
-            existingRegexRule.TrackingParameterObject = stagingRegexRule.TrackingParameterObject;
-            existingRegexRule.OutputParameterObject = stagingRegexRule.OutputParameterObject;
-            existingRegexRule.MatchType = stagingRegexRule.MatchType;
-            existingRegexRule.RegexRuleParts = stagingRegexRule.RegexRuleParts;
-            existingRegexRule.RegexString = stagingRegexRule.RegexString;
-            existingRegexRule.IsFrozen = stagingRegexRule.IsFrozen;
-            existingRegexRule.RegularUpdater = stagingRegexRule.RegularUpdater;
+            existingRegexRule = SerializationUtils.DeepCopyObject(stagingRegexRule);
+            
+            //existingRegexRule.RuleName = stagingRegexRule.RuleName;
+            //existingRegexRule.TargetCategoryObjects = stagingRegexRule.TargetCategoryObjects;
+            //existingRegexRule.TrackingParameterObject = stagingRegexRule.TrackingParameterObject;
+            //existingRegexRule.OutputParameterObject = stagingRegexRule.OutputParameterObject;
+            //existingRegexRule.MatchType = stagingRegexRule.MatchType;
+            //existingRegexRule.RegexRuleParts = stagingRegexRule.RegexRuleParts;
+            //existingRegexRule.RegexString = stagingRegexRule.RegexString;
+            //existingRegexRule.IsFrozen = stagingRegexRule.IsFrozen;
+            //existingRegexRule.RegularUpdater = stagingRegexRule.RegularUpdater;
             
             // Need to check if existingRegexRule is in ExtensibleStorage or not.
             ExtensibleStorageUtils.UpdateRegexRuleInExtensibleStorage(documentGuid, existingRegexRule.RuleGuid, stagingRegexRule);
@@ -198,16 +198,16 @@ namespace Regular.Models
             
             // Returns a deep copy of an existing RegexRule, but with a new GUID
             RegexRule duplicateRegexRule = SerializationUtils.DeepCopyObject(sourceRegexRule);
+            duplicateRegexRule.IsStagingRule = isStagingRule;
             
             if (isStagingRule)
             {
-                duplicateRegexRule.IsStagingRule = true;
                 duplicateRegexRule.RuleName = sourceRegexRule.RuleName;
-                duplicateRegexRule.RuleGuid = Guid.NewGuid().ToString();
                 duplicateRegexRule.RegularUpdater = sourceRegexRule.RegularUpdater;
             }
             else
             {
+                duplicateRegexRule.RuleGuid = Guid.NewGuid().ToString();
                 duplicateRegexRule.RuleName = GenerateRegexRuleDuplicateName();
                 // Newly-duplicated rules that aren't staging rules will need to target a new, and different, parameter
                 duplicateRegexRule.OutputParameterObject = new ParameterObject();
