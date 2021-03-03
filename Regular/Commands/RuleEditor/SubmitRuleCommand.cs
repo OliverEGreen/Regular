@@ -42,18 +42,16 @@ namespace Regular.Commands.RuleEditor
         public void Execute(object parameter)
         {
             // This ICommand executing presumes that all validation logic in CanExecute has returned true
-
             if (ruleEditorViewModel.EditingExistingRule)
             {
-                RegexRule.Update(ruleEditorViewModel.DocumentGuid, ruleEditorViewModel.InputRule, ruleEditorViewModel.StagingRule);
+                RegexRule updatedRegexRule = RegexRule.Update(ruleEditorViewModel.DocumentGuid, ruleEditorViewModel.InputRule, ruleEditorViewModel.StagingRule);
+                RuleExecutionUtils.ExecuteRegexRule(ruleEditorViewModel.DocumentGuid, updatedRegexRule);
             }
             else
             {
                 RegexRule.Save(ruleEditorViewModel.DocumentGuid, ruleEditorViewModel.StagingRule);
+                RuleExecutionUtils.ExecuteRegexRule(ruleEditorViewModel.DocumentGuid, ruleEditorViewModel.StagingRule);
             }
-            
-            // Once the rule has either been created or altered, validation can run against all affected elements
-            RuleExecutionUtils.ExecuteRegexRule(ruleEditorViewModel.DocumentGuid, ruleEditorViewModel.StagingRule);
         }
 
         public event EventHandler CanExecuteChanged

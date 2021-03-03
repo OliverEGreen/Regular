@@ -13,7 +13,13 @@ namespace Regular.Utilities
         {
             return JsonConvert.SerializeObject(regexRule, JsonSerializerSettings);
         }
-
+        
+        public static T DeepCopyObject<T>(T source)
+        {
+            var serialized = JsonConvert.SerializeObject(source, JsonSerializerSettings);
+            return JsonConvert.DeserializeObject<T>(serialized, JsonSerializerSettings);
+        }
+        
         public static RegexRule DeserializeRegexRule(string serializedRegexRule)
         {
             return JsonConvert.DeserializeObject<RegexRule>(serializedRegexRule, JsonSerializerSettings);

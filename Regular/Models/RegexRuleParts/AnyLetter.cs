@@ -69,7 +69,6 @@ namespace Regular.Models.RegexRuleParts
         }
 
         public bool IsOptional { get; set; }
-
         public bool IsCaseSensitive
         {
             get => isCaseSensitive;

@@ -12,6 +12,7 @@
     MaxWidth="700"
     MaxHeight="700"
     DataContext="{Binding OptionSetEditorViewModel, RelativeSource={RelativeSource Self}}"
+    Loaded="OptionSetEditorView_OnLoaded"
     ResizeMode="CanResizeWithGrip"
     Style="{DynamicResource RegularWindow}"
     WindowStartupLocation="CenterScreen"

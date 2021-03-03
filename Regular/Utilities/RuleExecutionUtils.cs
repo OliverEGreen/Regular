@@ -25,13 +25,15 @@ namespace Regular.Utilities
             for (int i = 0; i < modifiedElementIds.Count; i++)
             {
                 // Retrieving the modified element
-                Element element = RegularApp.DocumentCacheService
-                    .GetDocument(documentGuid)
-                    .GetElement(modifiedElementIds[i]);
+                Element element = document.GetElement(modifiedElementIds[i]);
 
+                // We can't edit parameters for elements in groups, even if we want to
+                if (element.GroupId != ElementId.InvalidElementId) continue;
+                
                 BuiltInParameter builtInParameter = (BuiltInParameter)regexRule.OutputParameterObject.ParameterObjectId;
                 Parameter parameter = element.get_Parameter(builtInParameter);
                 if (parameter == null) continue;
+                
                 parameter.Set(TestRuleValidity(regexRule, element));
             }
         }
@@ -54,7 +56,7 @@ namespace Regular.Utilities
             List<Element> targetedElements = new FilteredElementCollector(document)
                 .WhereElementIsNotElementType()
                 .WherePasses(elementMulticategoryFilter)
-                .ToElements()
+                .Where(x => x.GroupId == ElementId.InvalidElementId)
                 .ToList();
 
             if (targetedElements == null || targetedElements.Count < 1) return;
@@ -91,18 +93,18 @@ namespace Regular.Utilities
             }
         }
 
-        private static int TestRuleValidity(RegexRule regexRule, Element element)
+        private static string TestRuleValidity(RegexRule regexRule, Element element)
         {
             // Tests whether a saved rule's regular expression matches the element's parameter value
-            if (element == null) return 0;
+            if (element == null) return "Invalid";
             Parameter parameter = element.get_Parameter((BuiltInParameter)regexRule.TrackingParameterObject.ParameterObjectId);
-            if (parameter == null || parameter.StorageType != StorageType.String) return 0;
+            if (parameter == null || parameter.StorageType != StorageType.String) return "Invalid";
             string parameterValue = parameter.AsString();
-            if (string.IsNullOrWhiteSpace(parameterValue)) return 0;
+            if (string.IsNullOrWhiteSpace(parameterValue)) return "Invalid";
             string regexString = regexRule.RegexString;
-            if (string.IsNullOrWhiteSpace(regexString)) return 0;
+            if (string.IsNullOrWhiteSpace(regexString)) return "Invalid";
             Regex regex = new Regex(regexRule.RegexString);
-            return regex.IsMatch(parameterValue) == true ? 1 : 0;
+            return regex.IsMatch(parameterValue) == true ? "Valid" : "Invalid";
         }
     }
 }

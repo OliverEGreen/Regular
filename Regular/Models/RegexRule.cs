@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using Newtonsoft.Json;
 using Regular.Enums;
 using Regular.Utilities;
 
@@ -119,7 +120,7 @@ namespace Regular.Models
             }
         }
 
-        public bool IsStagingRule { get; set; } = false;
+        public bool IsStagingRule { get; set; }
         public string DateTimeCreated { get; set; } = DateTime.Now.ToString("r");
         public string CreatedBy { get; set; } = Environment.UserName;
         public string RuleGuid { get; private set; }
@@ -146,6 +147,7 @@ namespace Regular.Models
 
             // TODO: Check this rule is created as we want
             ParameterUtils.CreateProjectParameter(documentGuid, regexRule);
+            ParameterUtils.ForceOutputParameterToVaryBetweenGroups(documentGuid, regexRule);
         }
 
         public static void Delete(string documentGuid, RegexRule regexRule)
@@ -156,27 +158,29 @@ namespace Regular.Models
             ExtensibleStorageUtils.DeleteRegexRuleFromExtensibleStorage(documentGuid, regexRule.RuleGuid);
         }
 
-        public static void Update(string documentGuid, RegexRule existingRegexRule, RegexRule newRegexRule)
+        public static RegexRule Update(string documentGuid, RegexRule existingRegexRule, RegexRule stagingRegexRule)
         {
             // Takes a newly-generated RegexRule object and sets an existing rules values to match
             // To be used when updating an existing rule from the Rule Editor
 
             // In case any changes have been made to the rule
-            ParameterUtils.RecreateProjectParameter(documentGuid, existingRegexRule, newRegexRule);
+            ParameterUtils.UpdateProjectParameter(documentGuid, existingRegexRule, stagingRegexRule);
 
-            existingRegexRule.RuleName = newRegexRule.RuleName;
-            existingRegexRule.TargetCategoryObjects = newRegexRule.TargetCategoryObjects;
-            existingRegexRule.TrackingParameterObject = newRegexRule.TrackingParameterObject;
-            existingRegexRule.OutputParameterObject = newRegexRule.OutputParameterObject;
-            existingRegexRule.MatchType = newRegexRule.MatchType;
-            existingRegexRule.RegexRuleParts = newRegexRule.RegexRuleParts;
-            existingRegexRule.RegexString = newRegexRule.RegexString;
-            existingRegexRule.IsFrozen = newRegexRule.IsFrozen;
-            existingRegexRule.RegularUpdater = newRegexRule.RegularUpdater;
+            existingRegexRule.RuleName = stagingRegexRule.RuleName;
+            existingRegexRule.TargetCategoryObjects = stagingRegexRule.TargetCategoryObjects;
+            existingRegexRule.TrackingParameterObject = stagingRegexRule.TrackingParameterObject;
+            existingRegexRule.OutputParameterObject = stagingRegexRule.OutputParameterObject;
+            existingRegexRule.MatchType = stagingRegexRule.MatchType;
+            existingRegexRule.RegexRuleParts = stagingRegexRule.RegexRuleParts;
+            existingRegexRule.RegexString = stagingRegexRule.RegexString;
+            existingRegexRule.IsFrozen = stagingRegexRule.IsFrozen;
+            existingRegexRule.RegularUpdater = stagingRegexRule.RegularUpdater;
             
             // Need to check if existingRegexRule is in ExtensibleStorage or not.
-            ExtensibleStorageUtils.UpdateRegexRuleInExtensibleStorage(documentGuid, existingRegexRule.RuleGuid, newRegexRule);
+            ExtensibleStorageUtils.UpdateRegexRuleInExtensibleStorage(documentGuid, existingRegexRule.RuleGuid, stagingRegexRule);
             DmTriggerUtils.UpdateTrigger(documentGuid, existingRegexRule);
+
+            return existingRegexRule;
         }
 
         public static RegexRule Duplicate(string documentGuid, RegexRule sourceRegexRule, bool isStagingRule)
@@ -192,33 +196,23 @@ namespace Regular.Models
                 return documentRegexRuleNames.Contains(copyName) ? $"{copyName} Copy" : copyName;
             }
             
-            // Returns a copy of an existing RegexRule, but with a new GUID
-            RegexRule duplicateRegexRule = Create(documentGuid);
-
+            // Returns a deep copy of an existing RegexRule, but with a new GUID
+            RegexRule duplicateRegexRule = SerializationUtils.DeepCopyObject(sourceRegexRule);
+            
             if (isStagingRule)
             {
                 duplicateRegexRule.IsStagingRule = true;
                 duplicateRegexRule.RuleName = sourceRegexRule.RuleName;
-                duplicateRegexRule.OutputParameterObject = new ParameterObject
-                {
-                    ParameterObjectId = sourceRegexRule.OutputParameterObject.ParameterObjectId,
-                    ParameterObjectName = sourceRegexRule.OutputParameterObject.ParameterObjectName
-                };
+                duplicateRegexRule.RuleGuid = Guid.NewGuid().ToString();
                 duplicateRegexRule.RegularUpdater = sourceRegexRule.RegularUpdater;
             }
             else
             {
                 duplicateRegexRule.RuleName = GenerateRegexRuleDuplicateName();
+                // Newly-duplicated rules that aren't staging rules will need to target a new, and different, parameter
                 duplicateRegexRule.OutputParameterObject = new ParameterObject();
                 duplicateRegexRule.RegularUpdater = new RegularUpdater(RegularApp.RevitApplication.ActiveAddInId);
             }
-            
-            duplicateRegexRule.TargetCategoryObjects = sourceRegexRule.TargetCategoryObjects;
-            duplicateRegexRule.TrackingParameterObject = sourceRegexRule.TrackingParameterObject;
-            duplicateRegexRule.MatchType = sourceRegexRule.MatchType;
-            duplicateRegexRule.RegexRuleParts = sourceRegexRule.RegexRuleParts;
-            duplicateRegexRule.RegexString = sourceRegexRule.RegexString;
-            duplicateRegexRule.IsFrozen = sourceRegexRule.IsFrozen;
             
             return duplicateRegexRule;
         }

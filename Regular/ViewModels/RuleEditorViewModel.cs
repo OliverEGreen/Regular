@@ -43,6 +43,16 @@ namespace Regular.ViewModels
         public TriggerSelectAllCategoriesCommand SelectAllCategoriesCommand { get; }
         public UpdateRegexStringCommand UpdateRegexStringCommand { get; }
 
+        public int ButtonsColumnNumber
+        {
+            get => buttonsColumnNumber;
+            set
+            {
+                buttonsColumnNumber = value;
+                NotifyPropertyChanged();
+            }
+        }
+
         // Control-based properties
         private RuleType selectedRuleType;
         public RuleType SelectedRuleType
@@ -242,6 +252,8 @@ namespace Regular.ViewModels
         }
 
         private int windowMaxWidth = 436;
+        private int buttonsColumnNumber = 1;
+
         public int WindowMaxWidth
         {
             get => windowMaxWidth;
@@ -282,7 +294,7 @@ namespace Regular.ViewModels
                 // The staging rule is always a carbon copy of the rule we're editing
                 StagingRule = RegexRule.Duplicate(DocumentGuid, InputRule, true);
                 Title = EditingExistingRule ? $"Editing Rule: {StagingRule.RuleName}" : "New Rule";
-                //OutputParameterNameInputEnabled = !EditingExistingRule;
+                OutputParameterNameInputEnabled = !EditingExistingRule;
                 SelectedMatchType = inputRule.MatchType;
                 NumberCategoriesSelected = StagingRule.TargetCategoryObjects.Count(x => x.IsChecked);
             }
