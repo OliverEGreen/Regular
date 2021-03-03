@@ -91,7 +91,7 @@
                     Name="ListBoxRegexRules"
                     HorizontalAlignment="Stretch"
                     HorizontalContentAlignment="Stretch"
-                    ItemsSource="{Binding RegexRules}"
+                    ItemsSource="{Binding RegexRules, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     SelectedIndex="0"
                     SelectedItem="{Binding SelectedRegexRule, UpdateSourceTrigger=PropertyChanged}"
                     Style="{StaticResource RegularListBox}">
@@ -119,12 +119,12 @@
                                     x:Name="RegexRuleNameTextBlock"
                                     Grid.Row="0"
                                     Grid.Column="0"
-                                    Margin="20,0,0,0"
+                                    Margin="10,0,0,0"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
                                     FontSize="13"
                                     Style="{StaticResource RegularTextBlockBody}"
-                                    Text="{Binding RuleName, UpdateSourceTrigger=PropertyChanged}" />
+                                    Text="{Binding RuleName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                 <Button
                                     x:Name="EditRegexRuleButton"
                                     Grid.Row="0"

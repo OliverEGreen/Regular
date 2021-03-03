@@ -63,14 +63,15 @@ namespace Regular
         private static void DeRegisterDocument(Document document)
         {
             string documentGuid = DocumentGuidUtils.GetDocumentGuidFromExtensibleStorage(document) ?? DocumentGuidUtils.RegisterDocumentGuidToExtensibleStorage(document);
-
-            DocumentCacheService.RemoveDocument(documentGuid);
-
+            
             // Handles both clearing the cache and the UpdaterRegistry
             DmUpdaterCacheService.RemoveDocumentUpdaters(documentGuid);
             
             // If there are any saved rules in the application-wide cache, we can remove them
             RegexRuleCacheService.ClearDocumentRules(documentGuid);
+
+            DocumentCacheService.RemoveDocument(documentGuid);
+
         }
 
         public Result OnShutdown(UIControlledApplication uiControlledApp) { return Result.Succeeded; }

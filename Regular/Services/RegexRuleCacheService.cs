@@ -41,6 +41,12 @@ namespace Regular.Services
             RegexRules[documentGuid].Remove(regexRuleToDelete);
         }
 
+        public void UpdateRule(string documentGuid, RegexRule regexRule)
+        {
+            RemoveRule(documentGuid, regexRule.RuleGuid);
+            AddRule(documentGuid, regexRule);
+        }
+
         public ObservableCollection<RegexRule> GetDocumentRules(string documentGuid)
         {
             if (!RegexRules.ContainsKey(documentGuid))

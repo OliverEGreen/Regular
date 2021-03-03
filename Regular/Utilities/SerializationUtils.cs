@@ -5,12 +5,14 @@ namespace Regular.Utilities
 {
     public static class SerializationUtils
     {
-        private static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings()
+        private static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
         {
             TypeNameHandling = TypeNameHandling.Auto
         };
+
         public static string SerializeRegexRule(RegexRule regexRule)
         {
+            string updaterIdString = regexRule.RegularUpdater.GetUpdaterId().GetGUID().ToString();
             return JsonConvert.SerializeObject(regexRule, JsonSerializerSettings);
         }
         
@@ -22,7 +24,9 @@ namespace Regular.Utilities
         
         public static RegexRule DeserializeRegexRule(string serializedRegexRule)
         {
-            return JsonConvert.DeserializeObject<RegexRule>(serializedRegexRule, JsonSerializerSettings);
+            RegexRule deserializedRegexRule = JsonConvert.DeserializeObject<RegexRule>(serializedRegexRule, JsonSerializerSettings);
+            string updaterIdString = deserializedRegexRule.RegularUpdater.GetUpdaterId().GetGUID().ToString();
+            return deserializedRegexRule;
         }
     }
 }
