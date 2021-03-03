@@ -19,7 +19,6 @@ namespace Regular.Commands.RuleManager
 
         public void Execute(object parameter)
         {
-            // Asks user if they're sure before deleting anything
             ConfirmationDialogView confirmationDialogView = new ConfirmationDialogView();
             confirmationDialogView.ShowDialog();
             if (confirmationDialogView.DialogResult != true) return;

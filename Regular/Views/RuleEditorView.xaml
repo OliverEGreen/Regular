@@ -338,6 +338,8 @@
                                     VerticalAlignment="Center"
                                     Background="{StaticResource RegularInputBackgroundColor}"
                                     FontSize="13"
+                                    IsEnabled="false"
+                                    LostFocus="RawUserInputValueTextBox_OnLostFocus"
                                     Text="{Binding RawUserInputValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                     TextChanged="RawUserInputValueTextBox_OnTextChanged"
                                     Visibility="{Binding RawUserInputTextBoxVisibility}">
@@ -382,6 +384,7 @@
                                     Width="35"
                                     Height="15"
                                     HorizontalAlignment="Left"
+                                    Background="{StaticResource RegularButtonBackgroundColor}"
                                     Click="ButtonControl_OnClick"
                                     Command="{Binding ElementName=RuleEditorWindow, Path=DataContext.EditRulePartCommand}"
                                     CommandParameter="{Binding ElementName=ButtonControl, Path=DataContext}"
@@ -460,14 +463,14 @@
         <Button
             Name="ButtonCancel"
             Grid.Row="8"
-            Grid.Column="1"
+            Grid.Column="{Binding ButtonsColumnNumber, UpdateSourceTrigger=PropertyChanged}"
             Margin="0,0,90,0"
             Click="ButtonCancel_Click"
             Style="{StaticResource RegularButtonCancel}" />
         <Button
             Name="ButtonOk"
             Grid.Row="8"
-            Grid.Column="1"
+            Grid.Column="{Binding ButtonsColumnNumber, UpdateSourceTrigger=PropertyChanged}"
             Click="ButtonOk_OnClick"
             Command="{Binding SubmitRuleCommand}"
             Style="{StaticResource RegularButtonOK}" />

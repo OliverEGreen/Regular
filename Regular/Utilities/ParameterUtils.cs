@@ -20,78 +20,141 @@ namespace Regular.Utilities
 
             Document document = RegularApp.DocumentCacheService.GetDocument(documentGuid);
             const BuiltInParameterGroup builtInParameterGroup = BuiltInParameterGroup.PG_IDENTITY_DATA;
-            const ParameterType parameterType = ParameterType.YesNo;
+            const ParameterType parameterType = ParameterType.Text;
 
             //Creating the necessary CategorySet to create the outputParameter
-
             List<ElementId> targetCategoryIds = regexRule.TargetCategoryObjects.Where(x => x.IsChecked).Select(x => new ElementId(x.CategoryObjectId)).ToList();
             List<Category> categories = targetCategoryIds.Select(x => Category.GetCategory(document, x)).ToList();
             CategorySet categorySet = CategoryUtils.ConvertListToCategorySet(categories);
-            ExternalDefinition definition;
 
             using (Transaction transaction = new Transaction(document, $"Regular - Creating New Project Parameter { regexRule.OutputParameterObject.ParameterObjectName }")) 
             {
                 transaction.Start();
 
-                Application revitApplication = RegularApp.RevitApplication;
+                Application application = RegularApp.RevitApplication;
 
-                string oriFile = revitApplication.SharedParametersFilename;
+                string oriFile = application.SharedParametersFilename;
                 string tempFile = Path.GetTempFileName() + ".txt";
                 using (File.Create(tempFile)) { }
-                revitApplication.SharedParametersFilename = tempFile;
+                application.SharedParametersFilename = tempFile;
                 ExternalDefinitionCreationOptions externalDefinitionCreationOptions = new ExternalDefinitionCreationOptions(regexRule.OutputParameterObject.ParameterObjectName, parameterType);
-                definition = revitApplication.OpenSharedParameterFile().Groups.Create("TemporaryDefintionGroup").Definitions.Create(externalDefinitionCreationOptions) as ExternalDefinition;
-                
-                revitApplication.SharedParametersFilename = oriFile;
+                ExternalDefinition externalDefinition = application.OpenSharedParameterFile().Groups.Create("TemporaryDefintionGroup").Definitions.Create(externalDefinitionCreationOptions) as ExternalDefinition;
+            
+                application.SharedParametersFilename = oriFile;
                 File.Delete(tempFile);
 
-                Binding binding = revitApplication.Create.NewInstanceBinding(categorySet);
-                BindingMap bindingMap = new UIApplication(revitApplication).ActiveUIDocument.Document.ParameterBindings;
-                bindingMap.Insert(definition, binding, builtInParameterGroup);
-                
+                Binding binding = application.Create.NewTypeBinding(categorySet);
+                binding = application.Create.NewInstanceBinding(categorySet);
+            
+                SharedParameterElement sharedParameterElement = SharedParameterElement.Lookup(document, externalDefinition.GUID );
+                sharedParameterElement?.GetDefinition().SetAllowVaryBetweenGroups(document, true);
+
+                BindingMap bindingMap = (new UIApplication(application)).ActiveUIDocument.Document.ParameterBindings;
+                bindingMap.Insert(externalDefinition, binding, builtInParameterGroup);
+
                 transaction.Commit();
 
-                if (definition != null)
-                {
-                    regexRule.OutputParameterObject.ParameterObjectId =
-                        GetProjectParameterByName(documentGuid, definition.Name).Id.IntegerValue;
-                }
+                ParameterElement parameterElement = GetProjectParameterByName(documentGuid, externalDefinition.Name);
+                regexRule.OutputParameterObject.ParameterObjectId = parameterElement.Id.IntegerValue;
             }
         }
 
-        private static bool CompareOutputParameters(RegexRule existingRegexRule, RegexRule newRegexRule)
+        public static void ForceOutputParameterToVaryBetweenGroups(string documentGuid, RegexRule regexRule)
         {
-            List<int> existingTargetCategoryIds = existingRegexRule.TargetCategoryObjects.Select(x => x.CategoryObjectId).ToList();
-            List<int> newTargetCategoryIds = newRegexRule.TargetCategoryObjects.Select(x => x.CategoryObjectId).ToList();
+            Document document = RegularApp.DocumentCacheService.GetDocument(documentGuid);
+            //Modifying Parameter so it varies according to group instance.
+            using (Transaction transaction = new Transaction(document, "Setting Parameter to Vary By Group Instance"))
+            {
+                transaction.Start();
+                BindingMap map = document.ParameterBindings;
+                DefinitionBindingMapIterator it = map.ForwardIterator();
+                it.Reset();
+                while (it.MoveNext())
+                {
+                    Definition definition = it.Key;
+                    if (definition.Name != regexRule.OutputParameterObject.ParameterObjectName) continue;
+                    InternalDefinition internalDef = definition as InternalDefinition;
+                    internalDef?.SetAllowVaryBetweenGroups(document, true);
+                }
+                transaction.Commit();
+            }
+        }
+        
+        private static void UpdateTargetCategoryIds(string documentGuid, RegexRule newRegexRule)
+        {
+            Document document = RegularApp.DocumentCacheService.GetDocument(documentGuid);
+            ParameterElement parameterElement = GetProjectParameterByName(documentGuid, newRegexRule.OutputParameterObject.ParameterObjectName);
             
-            var removedIds = existingTargetCategoryIds.Except(newTargetCategoryIds).ToList();
-            var addedIds = newTargetCategoryIds.Except(existingTargetCategoryIds).ToList();
-            bool targetCategoryIdsMatch = !removedIds.Any() && !addedIds.Any();
+            // Helper method to get the instance binding of a ParameterElement object from the document's BindingMap
+            InstanceBinding GetParameterInstanceBinding()
+            {
+                InternalDefinition parameterElementDefinition = parameterElement.GetDefinition();
+                BindingMap bindingMap = document.ParameterBindings;
+                DefinitionBindingMapIterator iterator = bindingMap.ForwardIterator();
+                iterator.Reset();
 
-            return existingRegexRule.OutputParameterObject.ParameterObjectName ==
-                   newRegexRule.OutputParameterObject.ParameterObjectName &&
-                   existingRegexRule.TrackingParameterObject.ParameterObjectId ==
-                   newRegexRule.TrackingParameterObject.ParameterObjectId &&
-                   targetCategoryIdsMatch;
+                while (iterator.MoveNext())
+                {
+                    Definition iteratorKey = iterator.Key;
+                    if (iteratorKey.Name == parameterElementDefinition.Name) return (InstanceBinding)iterator.Current;
+                }
+                return null;
+            }
+            
+            InstanceBinding instanceBinding = GetParameterInstanceBinding();
+            InternalDefinition internalDefinition = parameterElement.GetDefinition();
+            
+            List<ElementId> targetCategoryIds = newRegexRule.TargetCategoryObjects
+                .Where(x => x.IsChecked)
+                .Select(x => new ElementId(x.CategoryObjectId))
+                .ToList();
+
+            List<Category> categories = targetCategoryIds.Select(x => Category.GetCategory(document, x)).ToList();
+            
+            instanceBinding.Categories.Clear();
+            foreach (Category category in categories) instanceBinding.Categories.Insert(category);
+
+            // Apparently this is needed to force the document to accept the new bindings
+            document.ParameterBindings.ReInsert(internalDefinition, instanceBinding);
         }
 
-        public static void RecreateProjectParameter(string documentGuid, RegexRule existingRegexRule, RegexRule newRegexRule)
+        public static void UpdateProjectParameter(string documentGuid, RegexRule existingRegexRule, RegexRule newRegexRule)
         {
-            // Do we really have to delete and recreate from scratcH?
-            if (CompareOutputParameters(existingRegexRule, newRegexRule)) return;
+            bool CompareOutputParameters()
+            {
+                // Compares the TargetCategoryIds of two RegexRules
+
+                List<int> existingTargetCategoryIds = existingRegexRule.TargetCategoryObjects
+                    .Where(x => x.IsChecked)
+                    .Select(x => x.CategoryObjectId)
+                    .ToList();
+
+                List<int> newTargetCategoryIds = newRegexRule.TargetCategoryObjects
+                    .Where(x => x.IsChecked)
+                    .Select(x => x.CategoryObjectId)
+                    .ToList();
+            
+                var removedIds = existingTargetCategoryIds.Except(newTargetCategoryIds).ToList();
+                var addedIds = newTargetCategoryIds.Except(existingTargetCategoryIds).ToList();
+                bool targetCategoryIdsMatch = !removedIds.Any() && !addedIds.Any();
+
+                return targetCategoryIdsMatch;
+            }
+            
+            // If no changes have been made, we can simply return
+            if (CompareOutputParameters()) return;
             
             Document document = RegularApp.DocumentCacheService.GetDocument(documentGuid);
             ParameterElement parameterElement = GetProjectParameterByName(documentGuid, existingRegexRule.OutputParameterObject.ParameterObjectName);
             if (parameterElement == null) return;
-
-            using (Transaction transaction = new Transaction(document, $"Regular - Recreating Parameter { newRegexRule.OutputParameterObject.ParameterObjectName }")) 
+            
+            using (Transaction transaction = new Transaction(document, $"Regular - Updating Parameter { newRegexRule.OutputParameterObject.ParameterObjectName }")) 
             {
                 transaction.Start();
-                document.Delete(parameterElement.Id);
+                // Updating the TargetCategoryIds
+                UpdateTargetCategoryIds(documentGuid, newRegexRule);
                 transaction.Commit();
             }
-            
-            CreateProjectParameter(documentGuid, newRegexRule);
         }
         
         public static string GetParameterName(Document document, ElementId parameterId)
@@ -106,8 +169,8 @@ namespace Regular.Utilities
             List<ParameterElement> parameterElements = new FilteredElementCollector(document)
                 .OfClass(typeof(ParameterElement))
                 .OfType<ParameterElement>().ToList();
-            if (parameterElements.Count < 1) return null;
-            return parameterElements.FirstOrDefault(x => x.Name == parameterName);
+            
+            return parameterElements.Count < 1 ? null : parameterElements.FirstOrDefault(x => x.Name == parameterName);
         }
 
         public static ObservableCollection<ParameterObject> GetParametersOfCategories(string documentGuid, ObservableCollection<CategoryObject> categoryObjects)

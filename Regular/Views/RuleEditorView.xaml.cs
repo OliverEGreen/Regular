@@ -83,7 +83,14 @@ namespace Regular.Views
         private void TextBoxOutputParameterNameInput_OnTextChanged(object sender, TextChangedEventArgs e)
         {
             RuleEditorViewModel.OutputParameterNameInputDirty = true;
-            string outputParameterNameFeedback = InputValidationServices.ValidateOutputParameterName(RuleEditorViewModel.StagingRule.OutputParameterObject.ParameterObjectName);
+            Autodesk.Revit.DB.Document document = RegularApp.DocumentCacheService.GetDocument(RuleEditorViewModel.DocumentGuid);
+            
+            string outputParameterNameFeedback = InputValidationServices.ValidateOutputParameterName
+            (
+                document,
+                RuleEditorViewModel.StagingRule
+            );
+
             TextBox textBox = (TextBox)sender;
 
             if (textBox.Text.Length < 1)
@@ -137,6 +144,7 @@ namespace Regular.Views
             if (textBox == null) return;
             
             // Sets focus to the textbox and highlights and text found in it
+            textBox.IsEnabled = true;
             textBox.Focus();
             textBox.Select(0, textBox.Text.Length);
         }
@@ -162,7 +170,6 @@ namespace Regular.Views
         {
             if (!(sender is Grid grid)) return;
             UIElementCollection children = grid.Children;
-            Color textBlockColorBrush = (Color)ColorConverter.ConvertFromString("#333333");
             foreach (UIElement uiElement in children)
             {
                 switch (uiElement)
@@ -205,6 +212,12 @@ namespace Regular.Views
                     }
                 }
             }
+        }
+
+        private void RawUserInputValueTextBox_OnLostFocus(object sender, RoutedEventArgs e)
+        {
+            if (!(sender is TextBox textBox)) return;
+            textBox.IsEnabled = false;
         }
     }
 }

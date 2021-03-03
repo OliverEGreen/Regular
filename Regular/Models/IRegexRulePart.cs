@@ -39,7 +39,7 @@ namespace Regular.Models
         // Any Digit cannot be case sensitive, Any Letter and Alphanumeric have this set
         // generically via the edit button toggle. 
         bool IsCaseSensitive { get; set; }
-
+        
         // Only Custom Text and Option Set can be case sensitive as per the user's exact inputs
         // This is only visible for those two rule types
         Visibility CaseSensitiveCheckboxVisibility { get; set; }

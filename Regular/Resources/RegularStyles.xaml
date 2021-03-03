@@ -336,6 +336,7 @@
 
     <SolidColorBrush x:Key="ButtonStrokeColorDefault" Color="#666666" />
     <SolidColorBrush x:Key="ButtonStrokeColorHighlight" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="ButtonFillColorDisabled" Color="#E5E5E5" />
     <SolidColorBrush x:Key="ButtonStrokeColorDisabled" Color="#A5A5A5" />
 
     <SolidColorBrush x:Key="FontColorWatermarkGrey" Color="#808080" />
@@ -354,6 +355,8 @@
 
     <Style x:Key="RegularRulePartButtonControl" TargetType="Button">
         <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="Background" Value="{Binding Background, RelativeSource={RelativeSource Self}}" />
+        <Setter Property="Foreground" Value="{Binding Background, RelativeSource={RelativeSource Self}}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
@@ -365,7 +368,7 @@
                             x:Name="BackgroundRectangle"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch"
-                            Fill="{StaticResource RegularButtonBackgroundColor}"
+                            Fill="{TemplateBinding Background}"
                             RadiusX="3"
                             RadiusY="3" />
                         <DockPanel Name="ContentPresenterDockPanel">
@@ -374,7 +377,7 @@
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Content="{TemplateBinding Content}"
-                                TextBlock.Foreground="{StaticResource RegularButtonForegroundColor}">
+                                TextBlock.Foreground="{TemplateBinding Foreground}">
                                 <ContentPresenter.Resources>
                                     <Style BasedOn="{StaticResource ResourceKey=RegularTextBlockBodyNoMargin}" TargetType="TextBlock" />
                                 </ContentPresenter.Resources>
@@ -384,7 +387,6 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="BackgroundRectangle" Property="Rectangle.Fill" Value="{StaticResource RegularButtonBackgroundColorHighlight}" />
-                            <Setter TargetName="ContentPresenter" Property="TextBlock.Foreground" Value="{StaticResource RegularButtonForegroundColorHighlight}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -440,6 +442,7 @@
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter TargetName="Line1" Property="Line.Stroke" Value="{StaticResource ButtonStrokeColorDisabled}" />
                             <Setter TargetName="Line2" Property="Line.Stroke" Value="{StaticResource ButtonStrokeColorDisabled}" />
+                            <Setter TargetName="BackgroundRectangle" Property="Fill" Value="{StaticResource ButtonFillColorDisabled}" />
                             <Setter TargetName="ReorderUpButtonEllipse" Property="Ellipse.Stroke" Value="{StaticResource ButtonStrokeColorDisabled}" />
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
@@ -502,6 +505,7 @@
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter TargetName="Line1" Property="Line.Stroke" Value="{StaticResource ButtonStrokeColorDisabled}" />
                             <Setter TargetName="Line2" Property="Line.Stroke" Value="{StaticResource ButtonStrokeColorDisabled}" />
+                            <Setter TargetName="BackgroundRectangle" Property="Fill" Value="{StaticResource ButtonFillColorDisabled}" />
                             <Setter TargetName="ReorderDownButtonEllipse" Property="Ellipse.Stroke" Value="{StaticResource ButtonStrokeColorDisabled}" />
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
@@ -566,6 +570,7 @@
                     </Canvas>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="BackgroundRectangle" Property="Fill" Value="{StaticResource ButtonFillColorDisabled}" />
                             <Setter TargetName="BackgroundSquare" Property="Line.Stroke" Value="{StaticResource ButtonStrokeColorDisabled}" />
                             <Setter TargetName="ForegroundSquare" Property="Line.Stroke" Value="{StaticResource ButtonStrokeColorDisabled}" />
                             <Setter TargetName="HorizontalLine" Property="Line.Stroke" Value="{StaticResource ButtonStrokeColorDisabled}" />

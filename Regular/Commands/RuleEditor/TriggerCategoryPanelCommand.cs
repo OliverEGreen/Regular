@@ -34,6 +34,7 @@ namespace Regular.Commands.RuleEditor
                 ruleEditorViewModel.WindowMaxWidth = maxWindowWidth;
                 ruleEditorViewModel.ColumnCategoriesPanelWidth = new GridLength(columnCategoriesPanelWidth);
                 ruleEditorViewModel.ColumnMarginWidth = new GridLength(columnMarginWidth);
+                ruleEditorViewModel.ButtonsColumnNumber = 3;
             }
             else
             {
@@ -43,6 +44,7 @@ namespace Regular.Commands.RuleEditor
                 ruleEditorViewModel.WindowMaxWidth = minWindowWidth;
                 ruleEditorViewModel.ColumnCategoriesPanelWidth = new GridLength(0);
                 ruleEditorViewModel.ColumnMarginWidth = new GridLength(0);
+                ruleEditorViewModel.ButtonsColumnNumber = 1;
             }
         }
 

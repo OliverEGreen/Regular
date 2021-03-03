@@ -26,14 +26,14 @@ namespace Regular.Views
         {
             //TODO: Validate that something's been added, feedback if not
             List<string> options = OptionSetEditorViewModel.Options.Select(x => x.OptionValue).ToList();
-            RegexRulePart.RawUserInputValue = String.Join(", ", options);
+            RegexRulePart.RawUserInputValue = string.Join(", ", options);
             RegexRulePart.RawUserInputTextBoxVisibility = Visibility.Visible;
             RegexRulePart.RuleTypeNameVisibility = Visibility.Collapsed;
             Close();
         }
 
         private void ButtonCancel_Click(object sender, RoutedEventArgs e) => Close();
-
         
+        private void OptionSetEditorView_OnLoaded(object sender, RoutedEventArgs e) => DataGridOptions.Focus();
     }
 }

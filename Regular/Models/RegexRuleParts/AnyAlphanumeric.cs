@@ -14,7 +14,7 @@ namespace Regular.Models.RegexRuleParts
         private string editButtonDisplayText;
         private bool isCaseSensitive;
         private ObservableCollection<OptionObject> options;
-
+        
         public AnyAlphanumeric()
         {
             RuleTypeName = "Alphanumeric";
@@ -79,7 +79,7 @@ namespace Regular.Models.RegexRuleParts
                 NotifyPropertyChanged("IsCaseSensitive");
             }
         }
-
+        
         public Visibility CaseSensitiveCheckboxVisibility
         {
             get => caseSensitiveCheckboxVisibility;
