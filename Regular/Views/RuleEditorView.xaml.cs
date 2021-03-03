@@ -88,7 +88,7 @@ namespace Regular.Views
             string outputParameterNameFeedback = InputValidationServices.ValidateOutputParameterName
             (
                 document,
-                RuleEditorViewModel.StagingRule
+                RuleEditorViewModel
             );
 
             TextBox textBox = (TextBox)sender;

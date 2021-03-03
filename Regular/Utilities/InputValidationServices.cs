@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Autodesk.Revit.DB;
 using Regular.Models;
+using Regular.ViewModels;
 
 namespace Regular.Utilities
 {
@@ -18,9 +19,9 @@ namespace Regular.Utilities
             if(regexRule.IsStagingRule) return "";
             return existingRuleNames.Contains(regexRule.RuleName) ? $"Rule name '{regexRule.RuleName}' already exists" : null;
         }
-        public static string ValidateOutputParameterName(Document document, RegexRule stagingRule)
+        public static string ValidateOutputParameterName(Document document, RuleEditorViewModel ruleEditorViewModel)
         {
-            string input = stagingRule.OutputParameterObject.ParameterObjectName;
+            string input = ruleEditorViewModel.StagingRule.OutputParameterObject.ParameterObjectName;
 
             if (string.IsNullOrWhiteSpace(input)) return "Output parameter name cannot be blank.";
             
@@ -30,7 +31,7 @@ namespace Regular.Utilities
                 .ToList();
 
             List<string> existingParameterNames = parameterElements.Select(x => x.GetDefinition().Name).ToList();
-            if(existingParameterNames.Contains(input) && !stagingRule.IsStagingRule) return $"Parameter name {input} is already in use.";
+            if(existingParameterNames.Contains(input) && !ruleEditorViewModel.EditingExistingRule) return $"Parameter name {input} is already in use.";
             return IllegalRevitCharacters.Any(input.Contains) ? @"Output parameter name cannot contain  / : { } [ ] | ; > < ? ` ~" : null;
         }
     }

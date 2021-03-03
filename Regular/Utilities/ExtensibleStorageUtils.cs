@@ -43,7 +43,8 @@ namespace Regular.Utilities
 
             //This needs to be turned into a method taking a RegexRule and saving to ExtensibleStorage
             Entity entity = new Entity(GetRegularSchema());
-            entity.Set("SerializedRegexRule", SerializationUtils.SerializeRegexRule(regexRule));
+            string serializedRegexRule = SerializationUtils.SerializeRegexRule(regexRule);
+            entity.Set("SerializedRegexRule", serializedRegexRule);
             using (Transaction transaction = new Transaction(document, $"Saving RegexRule {regexRule.RuleName}"))
             {
                 transaction.Start();
@@ -58,7 +59,8 @@ namespace Regular.Utilities
             RegexRule ConvertEntityToRegexRule(Entity entity)
             {
                 string serializedRegexRule = entity.Get<string>("SerializedRegexRule");
-                return SerializationUtils.DeserializeRegexRule(serializedRegexRule);
+                RegexRule deserializedRegexRule = SerializationUtils.DeserializeRegexRule(serializedRegexRule);
+                return deserializedRegexRule;
             }
             Schema regularSchema = GetRegularSchema();
 

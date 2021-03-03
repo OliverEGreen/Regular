@@ -64,6 +64,8 @@ namespace Regular
         {
             string documentGuid = DocumentGuidUtils.GetDocumentGuidFromExtensibleStorage(document) ?? DocumentGuidUtils.RegisterDocumentGuidToExtensibleStorage(document);
 
+            DocumentCacheService.RemoveDocument(documentGuid);
+
             // Handles both clearing the cache and the UpdaterRegistry
             DmUpdaterCacheService.RemoveDocumentUpdaters(documentGuid);
             
