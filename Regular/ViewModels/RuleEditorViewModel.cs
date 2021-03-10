@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
@@ -28,7 +29,7 @@ namespace Regular.ViewModels
         // Our staging rule, either a new rule or a copy of an existing rule
         public RegexRule StagingRule { get; set; }
         // Saving the original rule's GUID if editing an existing rule
-        public bool EditingExistingRule { get; set; }
+        public RuleEditorType RuleEditorType { get; set; }
 
         // ICommands
         public AddRulePartCommand AddRulePartCommand { get; }
@@ -43,68 +44,40 @@ namespace Regular.ViewModels
         public TriggerSelectAllCategoriesCommand SelectAllCategoriesCommand { get; }
         public UpdateRegexStringCommand UpdateRegexStringCommand { get; }
 
-        public int ButtonsColumnNumber
-        {
-            get => buttonsColumnNumber;
-            set
-            {
-                buttonsColumnNumber = value;
-                NotifyPropertyChanged();
-            }
-        }
 
-        // Control-based properties
-        private RuleType selectedRuleType;
-        public RuleType SelectedRuleType
-        {
-            get => selectedRuleType;
-            set
-            {
-                selectedRuleType = value;
-                NotifyPropertyChanged();
-            }
-        }
-
-        private MatchType selectedMatchType;
-
-        public MatchType SelectedMatchType
-        {
-            get => selectedMatchType;
-            set
-            {
-                selectedMatchType = value;
-                StagingRule.MatchType = value;
-                NotifyPropertyChanged();
-            }
-        }
-
-        private IRegexRulePart selectedRegexRulePart;
-        public IRegexRulePart SelectedRegexRulePart
-        {
-            get => selectedRegexRulePart;
-            set
-            {
-                selectedRegexRulePart = value;
-                NotifyPropertyChanged();
-            }
-        }
+        // Private Members & Settings Default Values
+        private string titlePrefix = "";
+        private string title = "";
+        private string userFeedbackText = "";
+        private Visibility userFeedbackTextVisibility = Visibility.Hidden;
+        private bool ruleNameInputDirty = false;
+        private int numberCategoriesSelected = 0;
+        private ObservableCollection<ParameterObject> possibleTrackingParameterObjects = new ObservableCollection<ParameterObject>();
+        private string comboBoxTrackingParameterText = "Select Categories";
+        private bool outputParameterNameInputDirty = false;
+        private string categoriesPanelButtonText = "Show Categories";
+        private GridLength columnCategoriesPanelWidth = new GridLength(0);
+        private GridLength columnMarginWidth = new GridLength(0);
+        private IRegexRulePart selectedRegexRulePart = null;
+        private MatchType selectedMatchType = MatchType.ExactMatch;
+        private RuleType selectedRuleType = RuleType.AnyAlphanumeric;
+        private string compliantExample = "";
+        private Visibility compliantExampleVisibility = Visibility.Collapsed;
+        private int buttonsColumnNumber = 1;
+        private int windowMinWidth = 436;
+        private int windowMaxWidth = 436;
         
-        public Dictionary<string, RuleType> RulesTypeDict { get; } = EnumDicts.RulesTypeDict;
-        public Dictionary<string, MatchType> MatchTypesDict { get; } = EnumDicts.MatchTypesDict;
 
-        private ObservableCollection<ParameterObject> possibleTrackingParameterObjects;
-        public ObservableCollection<ParameterObject> PossibleTrackingParameterObjects
+        // Public Properties & Setters
+        public string TitlePrefix
         {
-            get => possibleTrackingParameterObjects;
+            get => titlePrefix;
             set
             {
-                possibleTrackingParameterObjects = value;
+                titlePrefix = value;
                 NotifyPropertyChanged();
             }
         }
-
-        // View-based properties 
-        private string title;
         public string Title
         {
             get => title;
@@ -114,41 +87,6 @@ namespace Regular.ViewModels
                 NotifyPropertyChanged();
             }
         }
-
-        private string compliantExample;
-        public string CompliantExample
-        {
-            get => compliantExample;
-            set
-            {
-                compliantExample = value;
-                NotifyPropertyChanged();
-            }
-        }
-
-        private Visibility compliantExampleVisibility;
-        public Visibility CompliantExampleVisibility
-        {
-            get => compliantExampleVisibility;
-            set
-            {
-                compliantExampleVisibility = value;
-                NotifyPropertyChanged();
-            }
-        }
-
-        private Visibility userFeedbackTextVisibility = Visibility.Hidden;
-        public Visibility UserFeedbackTextVisibility
-        {
-            get => userFeedbackTextVisibility;
-            set
-            {
-                userFeedbackTextVisibility = value;
-                NotifyPropertyChanged();
-            }
-        }
-
-        private string userFeedbackText;
         public string UserFeedbackText
         {
             get => userFeedbackText;
@@ -158,8 +96,15 @@ namespace Regular.ViewModels
                 NotifyPropertyChanged();
             }
         }
-
-        private int numberCategoriesSelected;
+        public Visibility UserFeedbackTextVisibility
+        {
+            get => userFeedbackTextVisibility;
+            set
+            {
+                userFeedbackTextVisibility = value;
+                NotifyPropertyChanged();
+            }
+        }
         public int NumberCategoriesSelected
         {
             get => numberCategoriesSelected;
@@ -169,8 +114,15 @@ namespace Regular.ViewModels
                 NotifyPropertyChanged();
             }
         }
-
-        private string comboBoxTrackingParameterText = "Select Categories";
+        public ObservableCollection<ParameterObject> PossibleTrackingParameterObjects
+        {
+            get => possibleTrackingParameterObjects;
+            set
+            {
+                possibleTrackingParameterObjects = value;
+                NotifyPropertyChanged();
+            }
+        }
         public string ComboBoxTrackingParameterText
         {
             get => comboBoxTrackingParameterText;
@@ -180,23 +132,6 @@ namespace Regular.ViewModels
                 NotifyPropertyChanged();
             }
         }
-
-        public bool OutputParameterNameInputEnabled { get; set; } = true;
-        
-        public bool CategoriesPanelExpanded { get; set; } = false;
-        
-        private bool ruleNameInputDirty;
-        public bool RuleNameInputDirty
-        {
-            get => ruleNameInputDirty;
-            set
-            {
-                ruleNameInputDirty = value;
-                NotifyPropertyChanged();
-            }
-        }
-        
-        private bool outputParameterNameInputDirty;
         public bool OutputParameterNameInputDirty
         {
             get => outputParameterNameInputDirty;
@@ -206,8 +141,6 @@ namespace Regular.ViewModels
                 NotifyPropertyChanged();
             }
         }
-        
-        private string categoriesPanelButtonText = "Show Categories";
         public string CategoriesPanelButtonText
         {
             get => categoriesPanelButtonText;
@@ -217,8 +150,15 @@ namespace Regular.ViewModels
                 NotifyPropertyChanged();
             }
         }
-        
-        private GridLength columnCategoriesPanelWidth = new GridLength(0);
+        public bool RuleNameInputDirty
+        {
+            get => ruleNameInputDirty;
+            set
+            {
+                ruleNameInputDirty = value;
+                NotifyPropertyChanged();
+            }
+        }
         public GridLength ColumnCategoriesPanelWidth
         {
             get => columnCategoriesPanelWidth;
@@ -228,8 +168,6 @@ namespace Regular.ViewModels
                 NotifyPropertyChanged();
             }
         }
-        
-        private GridLength columnMarginWidth = new GridLength(0);
         public GridLength ColumnMarginWidth
         {
             get => columnMarginWidth;
@@ -239,8 +177,62 @@ namespace Regular.ViewModels
                 NotifyPropertyChanged();
             }
         }
-
-        private int windowMinWidth = 436;
+        public IRegexRulePart SelectedRegexRulePart
+        {
+            get => selectedRegexRulePart;
+            set
+            {
+                selectedRegexRulePart = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public MatchType SelectedMatchType
+        {
+            get => selectedMatchType;
+            set
+            {
+                selectedMatchType = value;
+                StagingRule.MatchType = value;
+                UpdateRegexStringCommand.Execute(null);
+                NotifyPropertyChanged();
+            }
+        }
+        public RuleType SelectedRuleType
+        {
+            get => selectedRuleType;
+            set
+            {
+                selectedRuleType = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public string CompliantExample
+        {
+            get => compliantExample;
+            set
+            {
+                compliantExample = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public Visibility CompliantExampleVisibility
+        {
+            get => compliantExampleVisibility;
+            set
+            {
+                compliantExampleVisibility = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public int ButtonsColumnNumber
+        {
+            get => buttonsColumnNumber;
+            set
+            {
+                buttonsColumnNumber = value;
+                NotifyPropertyChanged();
+            }
+        }
         public int WindowMinWidth
         {
             get => windowMinWidth;
@@ -250,10 +242,6 @@ namespace Regular.ViewModels
                 NotifyPropertyChanged();
             }
         }
-
-        private int windowMaxWidth = 436;
-        private int buttonsColumnNumber = 1;
-
         public int WindowMaxWidth
         {
             get => windowMaxWidth;
@@ -264,15 +252,21 @@ namespace Regular.ViewModels
             }
         }
 
+
+        // Auto Properties
+        public bool OutputParameterNameInputEnabled { get; set; } = true;
+        public bool CategoriesPanelExpanded { get; set; } = false;
+        
+        public Dictionary<string, RuleType> RulesTypeDict { get; } = EnumDicts.RulesTypeDict;
+        public Dictionary<string, MatchType> MatchTypesDict { get; } = EnumDicts.MatchTypesDict;
+
         public void UpdateCheckedCategoriesCount() => NumberCategoriesSelected = StagingRule.TargetCategoryObjects.Count(x => x.IsChecked);
         
-        // The two-argument constructor is for editing an existing rule
-        // We need a reference to the original rule ID, and to create a 
-        // staging rule for the user to play around with until submission
-        public RuleEditorViewModel(string documentGuid, bool editingExistingRule, RegexRule inputRule = null)
+        public RuleEditorViewModel(RuleEditorInfo ruleEditorInfo)
         {
-            DocumentGuid = documentGuid;
-            EditingExistingRule = editingExistingRule;
+            DocumentGuid = ruleEditorInfo.DocumentGuid;
+            RuleEditorType = ruleEditorInfo.RuleEditorType;
+            if (ruleEditorInfo.RegexRule != null) InputRule = ruleEditorInfo.RegexRule;
 
             AddRulePartCommand = new AddRulePartCommand(this);
             DeleteRulePartCommand = new DeleteRulePartCommand(this);
@@ -286,25 +280,29 @@ namespace Regular.ViewModels
             TriggerCategoryCheckedCommand = new TriggerSelectCategoryCommand(this);
             UpdateRegexStringCommand = new UpdateRegexStringCommand(this);
             
-            // If a rule was passed to the contructor, we're either editing an existing rule
-            // Or it's been duplicated
-            if (inputRule != null)
+            switch (RuleEditorType)
             {
-                InputRule = inputRule;
-                // The staging rule is always a carbon copy of the rule we're editing
-                StagingRule = RegexRule.Duplicate(DocumentGuid, InputRule, true);
-                Title = EditingExistingRule ? $"Editing Rule: {StagingRule.RuleName}" : "New Rule";
-                OutputParameterNameInputEnabled = !EditingExistingRule;
-                SelectedMatchType = inputRule.MatchType;
-                NumberCategoriesSelected = StagingRule.TargetCategoryObjects.Count(x => x.IsChecked);
-            }
-            // Otherwise we're creating a new rule from scratch
-            else
-            {
-                StagingRule = RegexRule.Create(documentGuid);
-                Title = "New Rule";
+                case RuleEditorType.CreateNewRule:
+                    TitlePrefix = "New Rule";
+                    StagingRule = RegexRule.Create(DocumentGuid);
+                    break;
+                case RuleEditorType.EditingExistingRule:
+                    TitlePrefix = "Editing Rule";
+                    StagingRule = RegexRule.Duplicate(DocumentGuid, InputRule, true);
+                    OutputParameterNameInputEnabled = false;
+                    SelectedMatchType = InputRule.MatchType;
+                    break;
+                case RuleEditorType.DuplicateExistingRule:
+                    TitlePrefix = "New Rule";
+                    StagingRule = RegexRule.Duplicate(DocumentGuid, InputRule, true);
+                    OutputParameterNameInputEnabled = true;
+                    SelectedMatchType = InputRule.MatchType;
+                    break;
             }
             
+            UpdateCheckedCategoriesCount();
+            
+            Title = $"{TitlePrefix}: {StagingRule.RuleName}";
             // Retrieving the list of parameters which might possibly be tracked, given the selected categories
             PossibleTrackingParameterObjects = new ObservableCollection<ParameterObject>(ParameterUtils.GetParametersOfCategories(DocumentGuid, StagingRule.TargetCategoryObjects)
                 .Where(x => x.ParameterObjectId != StagingRule.OutputParameterObject.ParameterObjectId));

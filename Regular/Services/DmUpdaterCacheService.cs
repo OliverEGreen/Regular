@@ -92,6 +92,12 @@ namespace Regular.Services
             documentRegexRules.ForEach(x => RemoveAndDeRegisterUpdater(documentGuid, x));
         }
 
+        public void UpdaterUpdater(string documentGuid, RegexRule regexRule)
+        {
+            RemoveAndDeRegisterUpdater(documentGuid, regexRule);
+            AddAndRegisterUpdater(documentGuid, regexRule);
+        }
+
         public RegularUpdater GetUpdater(string documentGuid, UpdaterId updaterId)
         {
             return !DmUpdaters.ContainsKey(documentGuid) ?

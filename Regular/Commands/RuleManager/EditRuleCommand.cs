@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Windows.Input;
+using Regular.Enums;
 using Regular.Models;
+using Regular.Views;
 using Regular.ViewModels;
 
 namespace Regular.Commands.RuleManager
@@ -25,7 +27,14 @@ namespace Regular.Commands.RuleManager
         public void Execute(object parameter)
         {
             // We open up the editor with the existing rule
-            Views.RuleEditorView ruleEditorView = new Views.RuleEditorView(ruleManagerViewModel.DocumentGuid, true, (RegexRule) parameter);
+            RuleEditorInfo ruleEditorInfo = new RuleEditorInfo
+            {
+                DocumentGuid = ruleManagerViewModel.DocumentGuid,
+                RegexRule = (RegexRule) parameter,
+                RuleEditorType = RuleEditorType.EditingExistingRule
+            };
+
+            RuleEditorView ruleEditorView = new RuleEditorView(ruleEditorInfo);
             ruleEditorView.ShowDialog();
         }
 

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
+using Regular.Enums;
+using Regular.Models;
 using Regular.ViewModels;
 
 namespace Regular.Commands.RuleManager
@@ -20,9 +22,13 @@ namespace Regular.Commands.RuleManager
 
         public void Execute(object parameter)
         {
-            // No second argument is provided, we'll work with a brand new rule
-            Views.RuleEditorView ruleEditorView = new Views.RuleEditorView(ruleManagerViewModel.DocumentGuid, false);
-            ruleEditorView.ShowDialog();
+            RuleEditorInfo ruleEditorInfo = new RuleEditorInfo
+            {
+                DocumentGuid = ruleManagerViewModel.DocumentGuid,
+                RuleEditorType = RuleEditorType.CreateNewRule
+            };
+            
+            new Views.RuleEditorView(ruleEditorInfo).ShowDialog();
         }
 
         public event EventHandler CanExecuteChanged

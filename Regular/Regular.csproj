@@ -94,6 +94,7 @@
     <Compile Include="Enums\CaseSensitivity.cs" />
     <Compile Include="Enums\EnumDicts.cs" />
     <Compile Include="Enums\MatchType.cs" />
+    <Compile Include="Enums\RuleEditorType.cs" />
     <Compile Include="Models\RegexRuleParts\FullStop.cs" />
     <Compile Include="Models\RegexRuleParts\Hyphen.cs" />
     <Compile Include="Models\RegexRuleParts\Underscore.cs" />

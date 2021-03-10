@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Regular.Enums;
 
 namespace Regular.Models
 {
-    class RuleEditorInfo
+    public class RuleEditorInfo
     {
+        public string DocumentGuid { get; set; }
+        public RuleEditorType RuleEditorType { get; set; }
+        public RegexRule RegexRule { get; set; }
     }
 }
