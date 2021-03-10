@@ -24,7 +24,6 @@ namespace Regular.Views
             ComboBoxTrackingParameterInput.SelectedItem = RuleEditorViewModel.PossibleTrackingParameterObjects
                 .FirstOrDefault(x => x.ParameterObjectId == RuleEditorViewModel.StagingRule.TrackingParameterObject.ParameterObjectId);
 
-            PreviewKeyDown += (s, e) => { if (e.Key == Key.Escape) Close(); };
             TextBoxNameYourRuleInput.Focus();
         }
         private void ScrollViewerRuleParts_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
@@ -44,7 +43,7 @@ namespace Regular.Views
 
             // Gathering other RegexRule names to ensure the user inputs a unique name
             List<RegexRule> otherRegexRules = RegularApp.RegexRuleCacheService
-                    .GetDocumentRules(RuleEditorViewModel.DocumentGuid)
+                    .GetDocumentRules(RuleEditorViewModel.RuleEditorInfo.DocumentGuid)
                     .Where(x => x.IsStagingRule = false)
                     .ToList();
 
@@ -85,7 +84,7 @@ namespace Regular.Views
         private void TextBoxOutputParameterNameInput_OnTextChanged(object sender, TextChangedEventArgs e)
         {
             RuleEditorViewModel.OutputParameterNameInputDirty = true;
-            Autodesk.Revit.DB.Document document = RegularApp.DocumentCacheService.GetDocument(RuleEditorViewModel.DocumentGuid);
+            Autodesk.Revit.DB.Document document = RegularApp.DocumentCacheService.GetDocument(RuleEditorViewModel.RuleEditorInfo.DocumentGuid);
             
             string outputParameterNameFeedback = InputValidationServices.ValidateOutputParameterName
             (

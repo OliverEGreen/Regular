@@ -75,10 +75,11 @@ namespace Regular.Models
                 toolTipString = $"Rule Name: {RuleName}" + Environment.NewLine +
                                 $"Applies To: {string.Join(", ", TargetCategoryObjects.Where(x => x.IsChecked).Select(x => x.CategoryObjectName))}" + Environment.NewLine +
                                 $"Tracks Parameter : {TrackingParameterObject.ParameterObjectName}" + Environment.NewLine +
-                                $"Regex String: {RegexString}" + Environment.NewLine +
+                                $"Regular Expression: {RegexString}" + Environment.NewLine +
                                 $"Writes To : {OutputParameterObject.ParameterObjectName}" + Environment.NewLine +
                                 $"Created By: {CreatedBy}" + Environment.NewLine +
-                                $"Created At: {DateTimeCreated}";
+                                $"Created At: {DateTimeCreated}" + Environment.NewLine +
+                                $"Last Modified: {LastModified}";
                 return toolTipString;
             }
             set
@@ -117,17 +118,16 @@ namespace Regular.Models
 
         public bool IsStagingRule { get; set; }
         public string DateTimeCreated { get; set; } = DateTime.Now.ToString("r");
+        public string LastModified { get; set; } = DateTime.Now.ToString("r");
         public string CreatedBy { get; set; } = Environment.UserName;
-        public string RuleGuid { get; private set; }
+        public string RuleGuid { get; private set; } = Guid.NewGuid().ToString();
 
         public RegularUpdater RegularUpdater { get; set; } = new RegularUpdater(RegularApp.RevitApplication.ActiveAddInId);
 
-        public static RegexRule Create(string documentGuid, string regexRuleGuid = null)
+        public static RegexRule Create(string documentGuid)
         {
             RegexRule regexRule = new RegexRule
             {
-                // If given a GUID, a rule is being recreated from memory, otherwise a new rule is being created
-                RuleGuid = regexRuleGuid ?? Guid.NewGuid().ToString(),
                 TargetCategoryObjects = CategoryUtils.GetInitialCategories(documentGuid)
             };
             return regexRule;
@@ -147,6 +147,7 @@ namespace Regular.Models
             RegularApp.RegexRuleCacheService.RemoveRule(documentGuid, regexRule.RuleGuid);
             RegularApp.DmUpdaterCacheService.RemoveAndDeRegisterUpdater(documentGuid, regexRule);
             ExtensibleStorageUtils.DeleteRegexRuleFromExtensibleStorage(documentGuid, regexRule.RuleGuid);
+            DmTriggerUtils.DeleteTrigger(documentGuid, regexRule);
         }
 
         public static RegexRule Update(string documentGuid, RegexRule existingRegexRule, RegexRule stagingRegexRule)
@@ -161,16 +162,19 @@ namespace Regular.Models
             ExtensibleStorageUtils.UpdateRegexRuleInExtensibleStorage(documentGuid, existingRegexRule.RuleGuid, stagingRegexRule);
             DmTriggerUtils.UpdateTrigger(documentGuid, existingRegexRule);
 
+            existingRegexRule.LastModified = DateTime.Now.ToString("r");
             return existingRegexRule;
         }
 
         public static RegexRule DeepCopyRegexRule(RegexRule ruleToCopy)
         {
-            RegularUpdater regularUpdater = ruleToCopy.RegularUpdater;
-            string ruleGuid = ruleToCopy.RuleGuid;
-            ruleToCopy = SerializationUtils.DeepCopyObject(ruleToCopy);
             // Deep copy has issues because it instantites new RegularUpdater objects
             // whereas we just want a reference to the original object when we update it
+            RegularUpdater regularUpdater = ruleToCopy.RegularUpdater;
+            string ruleGuid = ruleToCopy.RuleGuid;
+
+            ruleToCopy = SerializationUtils.DeepCopyObject(ruleToCopy);
+            
             ruleToCopy.RuleGuid = ruleGuid;
             ruleToCopy.RegularUpdater = regularUpdater;
             return ruleToCopy;

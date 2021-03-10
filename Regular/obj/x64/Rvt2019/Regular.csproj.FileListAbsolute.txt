@@ -85,3 +85,5 @@ C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2019\Regular.csproj.Copy
 C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2019\Regular.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2019\Regular.pdb
 C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2019\Regular.csprojAssemblyReference.cache
+C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2019\Views\ProgressBarView.baml
+C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2019\Views\ProgressBarView.g.cs

@@ -40,7 +40,7 @@ namespace Regular.Commands.RuleEditor
             ruleEditorViewModel.PossibleTrackingParameterObjects = ParameterUtils.
             GetParametersOfCategories
             (
-                ruleEditorViewModel.DocumentGuid,
+                ruleEditorViewModel.RuleEditorInfo.DocumentGuid,
                 ruleEditorViewModel.StagingRule.TargetCategoryObjects
             );
 

@@ -171,6 +171,7 @@
         <Setter Property="Background" Value="{StaticResource RegularInputBackgroundColor}" />
         <Setter Property="CanUserAddRows" Value="False" />
         <Setter Property="CanUserReorderColumns" Value="True" />
+        <Setter Property="CanUserDeleteRows" Value="False" />
         <Setter Property="CanUserResizeColumns" Value="True" />
         <Setter Property="CanUserResizeRows" Value="False" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
