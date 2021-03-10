@@ -13,16 +13,7 @@ namespace Regular.Utilities
         {
             return categories.Cast<Category>().ToList();
         }
-        public static CategorySet ConvertListToCategorySet(List<Category> categories)
-        {
-            CategorySet categorySet = RegularApp.RevitApplication.Create.NewCategorySet();
-            foreach (Category category in categories)
-            {
-                categorySet.Insert(category);
-            }
-            return categorySet;
-        }
-
+        
         public static BuiltInCategory GetBuiltInCategoryFromCategory(Category category)
         {
             return (BuiltInCategory)Enum.Parse(typeof(BuiltInCategory), category.Id.ToString());

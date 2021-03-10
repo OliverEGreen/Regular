@@ -28,7 +28,6 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="50" />
             <RowDefinition Height="*" />
             <RowDefinition Height="40" />
@@ -113,7 +112,7 @@
             Style="{StaticResource RegularButton}" />
         <DataGrid
             Grid.Row="1"
-            Grid.RowSpan="7"
+            Grid.RowSpan="6"
             Grid.Column="3"
             Margin="0"
             BorderThickness="1"
@@ -172,58 +171,10 @@
             Grid.Column="0"
             VerticalAlignment="Center"
             Style="{StaticResource RegularTextBlockBody}"
-            Text="Output Parameter" />
-        <TextBox
-            Name="TextBoxOutputParameterNameInput"
-            Grid.Row="4"
-            Grid.Column="1"
-            VerticalAlignment="Center"
-            IsEnabled="{Binding OutputParameterNameInputEnabled}"
-            MaxLength="30"
-            Style="{StaticResource RegularTextBox}"
-            Text="{Binding StagingRule.OutputParameterObject.ParameterObjectName, UpdateSourceTrigger=PropertyChanged}"
-            TextChanged="TextBoxOutputParameterNameInput_OnTextChanged"
-            ToolTip="This is the project parameter Regular will auto-create and write its validation output to." />
-        <TextBlock
-            Name="TextblockOutputParameterWatermark"
-            Grid.Row="4"
-            Grid.Column="1"
-            Padding="6,3"
-            Panel.ZIndex="1"
-            FontWeight="Regular"
-            Foreground="{StaticResource FontColorWatermarkGrey}"
-            IsHitTestVisible="False"
-            Text="Enter a new output parameter name">
-            <TextBlock.Style>
-                <Style TargetType="{x:Type TextBlock}">
-                    <Setter Property="Visibility" Value="Collapsed" />
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding Text, ElementName=TextBoxOutputParameterNameInput}" Value="">
-                            <Setter Property="Visibility" Value="Visible" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </TextBlock.Style>
-        </TextBlock>
-        <Ellipse
-            Name="EllipseOutputParameterNameInput"
-            Grid.Row="4"
-            Grid.Column="1"
-            Width="7"
-            Height="7"
-            Margin="0,0,5,10"
-            HorizontalAlignment="Right"
-            Panel.ZIndex="1"
-            Fill="LightGray" />
-        <TextBlock
-            Grid.Row="5"
-            Grid.Column="0"
-            VerticalAlignment="Center"
-            Style="{StaticResource RegularTextBlockBody}"
             Text="Match Type" />
         <ComboBox
             Name="ComboBoxMatchTypeInput"
-            Grid.Row="5"
+            Grid.Row="4"
             Grid.Column="1"
             DisplayMemberPath="Key"
             ItemsSource="{Binding MatchTypesDict}"
@@ -233,14 +184,14 @@
             Style="{StaticResource RegularComboBox}"
             ToolTip="Specify whether you want the parameter value to match the rule completely, just at the beginning or anywhere within its value." />
         <TextBlock
-            Grid.Row="6"
+            Grid.Row="5"
             Grid.Column="0"
             Margin="0,5,0,13"
             VerticalAlignment="Bottom"
             Style="{StaticResource RegularTextBlockBody}"
             Text="Add Rule Parts" />
         <StackPanel
-            Grid.Row="6"
+            Grid.Row="5"
             Grid.Column="1"
             HorizontalAlignment="Right"
             Orientation="Horizontal">
@@ -282,7 +233,7 @@
         </StackPanel>
 
         <Border
-            Grid.Row="7"
+            Grid.Row="6"
             Grid.Column="0"
             Grid.ColumnSpan="2"
             BorderBrush="{StaticResource RegularInputBorderColor}"
@@ -441,7 +392,7 @@
         </Border>
         <TextBlock
             Name="TextBlockExample"
-            Grid.Row="8"
+            Grid.Row="7"
             Grid.Column="0"
             Grid.ColumnSpan="2"
             Width="200"
@@ -452,7 +403,7 @@
             Text="{Binding CompliantExample, UpdateSourceTrigger=PropertyChanged, StringFormat=Example: \{0\}}" />
         <Button
             Name="ButtonTest"
-            Grid.Row="8"
+            Grid.Row="7"
             Grid.Column="0"
             Width="25"
             Height="25"
@@ -463,18 +414,17 @@
             ToolTip="Press the button to generate random examples which are compliant with the rule parts you selected." />
         <Button
             Name="ButtonCancel"
-            Grid.Row="8"
+            Grid.Row="7"
             Grid.Column="{Binding ButtonsColumnNumber, UpdateSourceTrigger=PropertyChanged}"
             Margin="0,0,90,0"
             Click="ButtonCancel_Click"
             Style="{StaticResource RegularButtonCancel}" />
         <Button
             Name="ButtonOk"
-            Grid.Row="8"
+            Grid.Row="7"
             Grid.Column="{Binding ButtonsColumnNumber, UpdateSourceTrigger=PropertyChanged}"
             Click="ButtonOk_OnClick"
             Command="{Binding SubmitRuleCommand}"
             Style="{StaticResource RegularButtonOK}" />
     </Grid>
 </Window>
-

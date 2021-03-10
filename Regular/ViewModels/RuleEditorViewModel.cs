@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
@@ -301,7 +300,6 @@ namespace Regular.ViewModels
             PossibleTrackingParameterObjects = new ObservableCollection<ParameterObject>
             (
                 ParameterUtils.GetParametersOfCategories(RuleEditorInfo.DocumentGuid, StagingRule.TargetCategoryObjects)
-                .Where(x => x.ParameterObjectId != StagingRule.OutputParameterObject.ParameterObjectId)
             );
             // The compliant example should always update
             GenerateCompliantExampleCommand.Execute(null);
