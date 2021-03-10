@@ -14,7 +14,6 @@ namespace Regular
     {
         public static RegexRuleCacheService RegexRuleCacheService = RegexRuleCacheService.Instance();
         public static DocumentCacheService DocumentCacheService = DocumentCacheService.Instance();
-        public static DmUpdaterCacheService DmUpdaterCacheService = DmUpdaterCacheService.Instance();
         
         public static Application RevitApplication { get; set; }
         public static bool DialogShowing { get; set; } = false;
@@ -49,30 +48,22 @@ namespace Regular
             ObservableCollection<RegexRule> existingRegexRules = ExtensibleStorageUtils.GetAllRegexRulesInExtensibleStorage(documentGuid);
             
             // If there are no saved rules we return, otherwise we establish the updaters
-            if (existingRegexRules != null && existingRegexRules.Count < 1) { return; }
+            if (existingRegexRules != null && existingRegexRules.Count < 1) return;
 
             // If we found rules, load them into the rules cache
             foreach (RegexRule existingRegexRule in existingRegexRules)
             {
-                RegexRuleCacheService.AddRule(documentGuid, existingRegexRule); 
-                DmUpdaterCacheService.AddAndRegisterUpdater(documentGuid, existingRegexRule);
+                RegexRuleCacheService.AddRule(documentGuid, existingRegexRule);
             }
-            
-            // Upon opening, we refresh all values affected by the document's RegexRules, to make sure all values are valid
-            RuleExecutionUtils.ExecuteDocumentRegexRules(documentGuid);
         }
         private static void DeRegisterDocument(Document document)
         {
             string documentGuid = DocumentGuidUtils.GetDocumentGuidFromExtensibleStorage(document) ?? DocumentGuidUtils.RegisterDocumentGuidToExtensibleStorage(document);
             
-            // Handles both clearing the cache and the UpdaterRegistry
-            DmUpdaterCacheService.RemoveDocumentUpdaters(documentGuid);
-            
             // If there are any saved rules in the application-wide cache, we can remove them
             RegexRuleCacheService.ClearDocumentRules(documentGuid);
 
             DocumentCacheService.RemoveDocument(documentGuid);
-
         }
 
         public Result OnShutdown(UIControlledApplication uiControlledApp) { return Result.Succeeded; }

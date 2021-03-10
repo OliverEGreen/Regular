@@ -3,52 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Regular.Models;
-using Regular.Views;
 
 namespace Regular.Utilities
 {
     public static class RuleExecutionUtils
     {
-        public static void TriggerExecuteRegexRule(string documentGuid, UpdaterId updaterId, List<ElementId> modifiedElementIds)
-        {
-            // Executes a single RegexRule on a limited set of elements
-            // Used when user has modified elements in the document and set off the DMU trigger
-            
-            RegexRule regexRule = RegularApp.RegexRuleCacheService
-                .GetDocumentRules(documentGuid)
-                .FirstOrDefault(x => x.RegularUpdater.GetUpdaterId() == updaterId);
-            if (regexRule == null) return;
-
-            Document document = RegularApp.DocumentCacheService.GetDocument(documentGuid);
-            if (document == null) return;
-
-            // We won't bother constantly showing progress bars unless a high number of elements are being processed
-            ProgressBarView progressBarView = null;
-            if (modifiedElementIds.Count > 30)
-            {
-                progressBarView = new ProgressBarView(regexRule, modifiedElementIds.Count);
-                progressBarView.Show();
-            }
-            
-            for (int i = 0; i < modifiedElementIds.Count; i++)
-            {
-                progressBarView?.ProgressBarViewModel.UpdateProgressBar();
-
-                // Retrieving the modified element
-                Element element = document.GetElement(modifiedElementIds[i]);
-
-                // We can't edit parameters for elements in groups, even if we want to
-                if (element.GroupId != ElementId.InvalidElementId) continue;
-                
-                BuiltInParameter builtInParameter = (BuiltInParameter)regexRule.OutputParameterObject.ParameterObjectId;
-                Parameter parameter = element.get_Parameter(builtInParameter);
-
-                parameter?.Set(TestRuleValidity(regexRule, element));
-            }
-
-            progressBarView?.Close();
-        }
-
         public static void ExecuteRegexRule(string documentGuid, RegexRule regexRule)
         {
             // Executes a single RegexRule in a document on all elements it affects
@@ -70,52 +29,22 @@ namespace Regular.Utilities
                 .Where(x => x.GroupId == ElementId.InvalidElementId)
                 .ToList();
 
-            if (targetedElements == null || targetedElements.Count < 1) return;
-
-            ProgressBarView progressBarView = new ProgressBarView(regexRule, targetedElements.Count);
-            progressBarView.Show();
-
+            if (targetedElements.Count < 1) return;
+            
             ElementId trackingParameterId = new ElementId(regexRule.TrackingParameterObject.ParameterObjectId);
 
-            using(Transaction transaction = new Transaction(document, $"Executing Rule: {regexRule.RuleName}"))
+            for (int i = 0; i < targetedElements.Count; i++)
             {
-                transaction.Start();
-
-                for (int i = 0; i < targetedElements.Count; i++)
-                {
-                    progressBarView.ProgressBarViewModel.UpdateProgressBar();
-                    BuiltInParameter builtInParameter = (BuiltInParameter) regexRule.OutputParameterObject.ParameterObjectId;
-                    Parameter parameter = targetedElements[i].get_Parameter(builtInParameter);
-                    if (parameter == null) continue;
-                    parameter.Set(TestRuleValidity(regexRule, targetedElements[i]));
-                }
-
-                transaction.Commit();
-            }
-
-            progressBarView.Close();
-        }
-
-        public static void ExecuteDocumentRegexRules(string documentGuid)
-        {
-            // Runs validation on all regex rules in a document
-            // Used for when opening a file
-
-            List<RegexRule> documentRegexRules = RegularApp.RegexRuleCacheService.GetDocumentRules(documentGuid).ToList();
-            if (documentRegexRules.Count < 1) return;
-
-            for (int i = 0; i < documentRegexRules.Count; i++)
-            {
-                ExecuteRegexRule(documentGuid, documentRegexRules[i]);
+                // TODO: Report Window!
+                string report = TestRuleValidity(regexRule, targetedElements[i]);
             }
         }
-
+        
         private static string TestRuleValidity(RegexRule regexRule, Element element)
         {
             // Tests whether a saved rule's regular expression matches the element's parameter value
             // Ideally would be a Boolean value, but we can only programatically create Project Instance Parameters as strings ¯\_(ツ)_/¯
-            if (element == null) return "Invalid";
-            Parameter parameter = element.get_Parameter((BuiltInParameter)regexRule.TrackingParameterObject.ParameterObjectId);
+            Parameter parameter = element?.get_Parameter((BuiltInParameter)regexRule.TrackingParameterObject.ParameterObjectId);
             if (parameter == null || parameter.StorageType != StorageType.String) return "Invalid";
             string parameterValue = parameter.AsString();
             if (string.IsNullOrWhiteSpace(parameterValue)) return "Invalid";

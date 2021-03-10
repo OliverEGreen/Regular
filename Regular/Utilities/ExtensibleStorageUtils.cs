@@ -77,10 +77,7 @@ namespace Regular.Utilities
             {
                 foreach (Entity entity in regexRuleEntities) { regexRules.Add(ConvertEntityToRegexRule(entity)); }
             }
-            catch
-            {
-                // ignored
-            }
+            catch { }
 
             return regexRules;
         }

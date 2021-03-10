@@ -99,7 +99,6 @@
     <Compile Include="Models\RegexRuleParts\Hyphen.cs" />
     <Compile Include="Models\RegexRuleParts\Underscore.cs" />
     <Compile Include="Models\RuleEditorInfo.cs" />
-    <Compile Include="Services\DmUpdaterCacheService.cs" />
     <Compile Include="Models\IRegexRulePart.cs" />
     <Compile Include="Models\OptionObject.cs" />
     <Compile Include="Models\RegexRuleParts\AnyAlphanumeric.cs" />
@@ -109,7 +108,6 @@
     <Compile Include="Models\RegexRuleParts\OptionSet.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Utilities\AppRibbonUtils.cs" />
-    <Compile Include="Utilities\DmTriggerUtils.cs" />
     <Compile Include="Models\CategoryObject.cs" />
     <Compile Include="Models\ParameterObject.cs" />
     <Compile Include="Models\RegexRule.cs" />
@@ -128,11 +126,9 @@
     <Compile Include="Services\DocumentCacheService.cs" />
     <Compile Include="Utilities\RuleExecutionUtils.cs" />
     <Compile Include="Utilities\SerializationUtils.cs" />
-    <Compile Include="RegularUpdater.cs" />
     <Compile Include="Utilities\EnumUtils.cs" />
     <Compile Include="Utilities\VisualTreeUtils.cs" />
     <Compile Include="ViewModels\OptionSetEditorViewModel.cs" />
-    <Compile Include="ViewModels\ProgressBarViewModel.cs" />
     <Compile Include="ViewModels\RuleEditorViewModel.cs" />
     <Compile Include="ViewModels\RuleManagerViewModel.cs" />
     <Compile Include="Views\ConfirmationDialogView.xaml.cs">
@@ -141,9 +137,6 @@
     <Compile Include="Views\NotifyPropertyChangedBase.cs" />
     <Compile Include="Views\OptionSetEditorView.xaml.cs">
       <DependentUpon>OptionSetEditorView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ProgressBarView.xaml.cs">
-      <DependentUpon>ProgressBarView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\RuleEditorView.xaml.cs">
       <DependentUpon>RuleEditorView.xaml</DependentUpon>
@@ -162,10 +155,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\OptionSetEditorView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\ProgressBarView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

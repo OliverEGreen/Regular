@@ -10,7 +10,7 @@ namespace Regular.Models
         
         private string categoryObjectName = "";
         private int categoryObjectId = -1;
-        private bool isChecked;
+        private bool isChecked = false;
                         
         public string CategoryObjectName
         {
@@ -39,6 +39,7 @@ namespace Regular.Models
                 NotifyPropertyChanged("IsChecked");
             }
         }
+
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string propertyName)
         {
