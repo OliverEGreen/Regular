@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.DB.Events;
@@ -37,7 +38,7 @@ namespace Regular
         {
             // If the document has an existing GUID saved to ExtensibleStorage we retrieve this, otherwise we register it with a new GUID
             string documentGuid = DocumentGuidUtils.GetDocumentGuidFromExtensibleStorage(document) ?? DocumentGuidUtils.RegisterDocumentGuidToExtensibleStorage(document);
-
+            
             // Creates an accessible, stable reference to the Revit document
             DocumentCacheService.AddDocument(documentGuid, document);
 

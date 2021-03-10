@@ -41,9 +41,7 @@ namespace Regular.Utilities
         {
             Document document = RegularApp.DocumentCacheService.GetDocument(documentGuid);
             UpdaterId updaterId = regexRule.RegularUpdater.GetUpdaterId();
-            string updaterIdString = updaterId.GetGUID().ToString();
             UpdaterRegistry.RemoveDocumentTriggers(updaterId, document);
-            //RegularApp.DmUpdaterCacheService.RemoveAndDeRegisterUpdater(documentGuid, regexRule);
             AddTrigger(documentGuid, regexRule);
         }
     }

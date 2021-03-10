@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Windows.Input;
+using Regular.Enums;
 using Regular.Models;
 using Regular.ViewModels;
+using Regular.Views;
 
 namespace Regular.Commands.RuleManager
 {
@@ -22,10 +24,14 @@ namespace Regular.Commands.RuleManager
 
         public void Execute(object parameter)
         {
-            RegexRule duplicatedRegexRule = RegexRule.Duplicate(ruleManagerViewModel.DocumentGuid, ruleManagerViewModel.SelectedRegexRule, false);
-
-            Views.RuleEditorView ruleEditorView = new Views.RuleEditorView(ruleManagerViewModel.DocumentGuid, false, duplicatedRegexRule);
-            ruleEditorView.ShowDialog();
+            RuleEditorInfo ruleEditorInfo = new RuleEditorInfo
+            {
+                DocumentGuid = ruleManagerViewModel.DocumentGuid,
+                RegexRule = RegexRule.Duplicate(ruleManagerViewModel.DocumentGuid, ruleManagerViewModel.SelectedRegexRule, false),
+                RuleEditorType = RuleEditorType.DuplicateExistingRule
+            };
+            
+            new RuleEditorView(ruleEditorInfo).ShowDialog();
         }
 
         public event EventHandler CanExecuteChanged

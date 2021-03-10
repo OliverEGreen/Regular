@@ -57,9 +57,11 @@ namespace Regular.Utilities
                 ParameterElement parameterElement = GetProjectParameterByName(documentGuid, externalDefinition.Name);
                 regexRule.OutputParameterObject.ParameterObjectId = parameterElement.Id.IntegerValue;
             }
+
+            ForceOutputParameterToVaryBetweenGroups(documentGuid, regexRule);
         }
 
-        public static void ForceOutputParameterToVaryBetweenGroups(string documentGuid, RegexRule regexRule)
+        private static void ForceOutputParameterToVaryBetweenGroups(string documentGuid, RegexRule regexRule)
         {
             Document document = RegularApp.DocumentCacheService.GetDocument(documentGuid);
             //Modifying Parameter so it varies according to group instance.

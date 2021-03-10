@@ -15,10 +15,10 @@ namespace Regular.Views
     public partial class RuleEditorView
     {
         public RuleEditorViewModel RuleEditorViewModel { get; set; }
-        public RuleEditorView(string documentGuid, bool editingExistingRule, RegexRule inputRule = null)
+        public RuleEditorView(RuleEditorInfo ruleEditorInfo)
         {
             InitializeComponent();
-            RuleEditorViewModel = inputRule == null ? new RuleEditorViewModel(documentGuid, false) : new RuleEditorViewModel(documentGuid, editingExistingRule, inputRule);
+            RuleEditorViewModel = new RuleEditorViewModel(ruleEditorInfo);
             DataContext = RuleEditorViewModel;
 
             ComboBoxTrackingParameterInput.SelectedItem = RuleEditorViewModel.PossibleTrackingParameterObjects
@@ -40,9 +40,11 @@ namespace Regular.Views
         {
             // Once touched, we can display an error message if the value is invalid
             RuleEditorViewModel.RuleNameInputDirty = true;
+            RuleEditorViewModel.Title = $"{RuleEditorViewModel.TitlePrefix}: {RuleEditorViewModel.StagingRule.RuleName}";
 
             // Gathering other RegexRule names to ensure the user inputs a unique name
-            List<RegexRule> otherRegexRules = RegularApp.RegexRuleCacheService.GetDocumentRules(RuleEditorViewModel.DocumentGuid)
+            List<RegexRule> otherRegexRules = RegularApp.RegexRuleCacheService
+                    .GetDocumentRules(RuleEditorViewModel.DocumentGuid)
                     .Where(x => x.IsStagingRule = false)
                     .ToList();
 

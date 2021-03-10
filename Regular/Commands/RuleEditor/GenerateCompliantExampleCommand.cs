@@ -32,8 +32,11 @@ namespace Regular.Commands.RuleEditor
             Regex regex = new Regex(ruleEditorViewModel.StagingRule.RegexString);
             if (regex.IsMatch(ruleEditorViewModel.CompliantExample) == false)
             {
-                TaskDialog.Show("Regex Mismatch",
-                    $"Compliant example {ruleEditorViewModel.CompliantExample} does not match regular expression {ruleEditorViewModel.StagingRule.RegexString}");
+                TaskDialog.Show
+                (
+                    "Regex Mismatch",
+                    $"Compliant example {ruleEditorViewModel.CompliantExample} does not match regular expression {ruleEditorViewModel.StagingRule.RegexString}"
+                );
             }
         }
 
