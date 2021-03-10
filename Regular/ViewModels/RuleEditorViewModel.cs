@@ -14,22 +14,14 @@ namespace Regular.ViewModels
 {
     public class RuleEditorViewModel : NotifyPropertyChangedBase
     {
-        // We need the ability to validate what a user is doing before making any changes back to the model.
-        // Ideally, we would not have anything confirmed until they pressed OK, whereupon all validation occurs.
-        // So for that to work, we would need to have a 'sketch copy' of the RegexRule to work on.
-        // We can use ICommands to validate whether edits proposed to the 'sketch copy' are valid.
-        // Upon pressing OK, we can update the existing rule (or create it from scratch if we're making a new one).
-        // We need an unsaved 'sketch copy' to work with if editing an existing rule - our "Staging Rule".
+        public RuleEditorInfo RuleEditorInfo { get; }
         
-        // The document we're editing rules within
-        public string DocumentGuid { get; set; }
+        // The original rule object, used if updating the original rule using the Staging Rule's values
+        public RegexRule InputRule { get; }
         
-        // The original rule object, used if updating the original rule using staging rule values
-        public RegexRule InputRule { get; set; }
         // Our staging rule, either a new rule or a copy of an existing rule
-        public RegexRule StagingRule { get; set; }
-        // Saving the original rule's GUID if editing an existing rule
-        public RuleEditorType RuleEditorType { get; set; }
+        public RegexRule StagingRule { get; }
+   
 
         // ICommands
         public AddRulePartCommand AddRulePartCommand { get; }
@@ -262,11 +254,12 @@ namespace Regular.ViewModels
 
         public void UpdateCheckedCategoriesCount() => NumberCategoriesSelected = StagingRule.TargetCategoryObjects.Count(x => x.IsChecked);
         
+
         public RuleEditorViewModel(RuleEditorInfo ruleEditorInfo)
         {
-            DocumentGuid = ruleEditorInfo.DocumentGuid;
-            RuleEditorType = ruleEditorInfo.RuleEditorType;
-            if (ruleEditorInfo.RegexRule != null) InputRule = ruleEditorInfo.RegexRule;
+            RuleEditorInfo = ruleEditorInfo;
+            
+            if (RuleEditorInfo.RegexRule != null) InputRule = RuleEditorInfo.RegexRule;
 
             AddRulePartCommand = new AddRulePartCommand(this);
             DeleteRulePartCommand = new DeleteRulePartCommand(this);
@@ -280,21 +273,22 @@ namespace Regular.ViewModels
             TriggerCategoryCheckedCommand = new TriggerSelectCategoryCommand(this);
             UpdateRegexStringCommand = new UpdateRegexStringCommand(this);
             
-            switch (RuleEditorType)
+            switch (RuleEditorInfo.RuleEditorType)
             {
                 case RuleEditorType.CreateNewRule:
                     TitlePrefix = "New Rule";
-                    StagingRule = RegexRule.Create(DocumentGuid);
+                    StagingRule = RegexRule.Create(RuleEditorInfo.DocumentGuid);
+                    StagingRule.TargetCategoryObjects = CategoryUtils.GetInitialCategories(RuleEditorInfo.DocumentGuid);
                     break;
                 case RuleEditorType.EditingExistingRule:
                     TitlePrefix = "Editing Rule";
-                    StagingRule = RegexRule.Duplicate(DocumentGuid, InputRule, true);
+                    StagingRule = RegexRule.Duplicate(RuleEditorInfo.DocumentGuid, InputRule, true);
                     OutputParameterNameInputEnabled = false;
                     SelectedMatchType = InputRule.MatchType;
                     break;
                 case RuleEditorType.DuplicateExistingRule:
                     TitlePrefix = "New Rule";
-                    StagingRule = RegexRule.Duplicate(DocumentGuid, InputRule, true);
+                    StagingRule = RegexRule.Duplicate(RuleEditorInfo.DocumentGuid, InputRule, true);
                     OutputParameterNameInputEnabled = true;
                     SelectedMatchType = InputRule.MatchType;
                     break;
@@ -304,8 +298,11 @@ namespace Regular.ViewModels
             
             Title = $"{TitlePrefix}: {StagingRule.RuleName}";
             // Retrieving the list of parameters which might possibly be tracked, given the selected categories
-            PossibleTrackingParameterObjects = new ObservableCollection<ParameterObject>(ParameterUtils.GetParametersOfCategories(DocumentGuid, StagingRule.TargetCategoryObjects)
-                .Where(x => x.ParameterObjectId != StagingRule.OutputParameterObject.ParameterObjectId));
+            PossibleTrackingParameterObjects = new ObservableCollection<ParameterObject>
+            (
+                ParameterUtils.GetParametersOfCategories(RuleEditorInfo.DocumentGuid, StagingRule.TargetCategoryObjects)
+                .Where(x => x.ParameterObjectId != StagingRule.OutputParameterObject.ParameterObjectId)
+            );
             // The compliant example should always update
             GenerateCompliantExampleCommand.Execute(null);
         }

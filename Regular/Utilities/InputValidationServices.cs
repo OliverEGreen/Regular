@@ -32,7 +32,7 @@ namespace Regular.Utilities
                 .ToList();
 
             List<string> existingParameterNames = parameterElements.Select(x => x.GetDefinition().Name).ToList();
-            if(existingParameterNames.Contains(input) && ruleEditorViewModel.RuleEditorType != RuleEditorType.EditingExistingRule) return $"Parameter name {input} is already in use.";
+            if(existingParameterNames.Contains(input) && ruleEditorViewModel.RuleEditorInfo.RuleEditorType != RuleEditorType.EditingExistingRule) return $"Parameter name {input} is already in use.";
             return IllegalRevitCharacters.Any(input.Contains) ? @"Output parameter name cannot contain  / : { } [ ] | ; > < ? ` ~" : null;
         }
     }

@@ -34,13 +34,16 @@
             CanUserAddRows="True"
             CanUserReorderColumns="False"
             CanUserResizeColumns="False"
-            ColumnHeaderHeight="0"
+            CanUserSortColumns="True"
             ColumnHeaderStyle="{StaticResource RegularDataGridColumnHeaderText}"
             ItemsSource="{Binding Path=Options}"
             Style="{StaticResource RegularDataGrid}"
             VerticalScrollBarVisibility="Visible">
             <DataGrid.Columns>
-                <DataGridTextColumn Width="*" Binding="{Binding Path=OptionValue, Mode=TwoWay, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridTextColumn
+                    Width="*"
+                    Binding="{Binding Path=OptionValue, Mode=TwoWay, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+                    Header="Values" />
             </DataGrid.Columns>
         </DataGrid>
         <Button

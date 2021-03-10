@@ -43,8 +43,16 @@ namespace Regular.Services
 
         public void UpdateRule(string documentGuid, RegexRule regexRule)
         {
-            RemoveRule(documentGuid, regexRule.RuleGuid);
-            AddRule(documentGuid, regexRule);
+            if (RegexRules.ContainsKey(documentGuid))
+            {
+                // Attempting to find corresponding rule by matching GUID
+                RegexRule sameGuidRegexRule = RegexRules[documentGuid].FirstOrDefault(x => x.RuleGuid == regexRule.RuleGuid);
+                if (sameGuidRegexRule == null) return;
+                // Replacing the old rule with the new at the same index
+                int replacementIndex = RegexRules[documentGuid].IndexOf(sameGuidRegexRule);
+                if (replacementIndex == -1) return;
+                RegexRules[documentGuid][replacementIndex] = regexRule;
+            }
         }
 
         public ObservableCollection<RegexRule> GetDocumentRules(string documentGuid)

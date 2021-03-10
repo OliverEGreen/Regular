@@ -30,7 +30,8 @@ namespace Regular.Commands.RuleEditor
             bool trackingParameterObjectIdValid = stagingRule.TrackingParameterObject.ParameterObjectId != -1;
 
             // If any of the following cases is true, the new rule cannot be submitted
-            return (
+            return
+            (
                 ruleNameLengthValid &&
                 regexRulePartsCountValid &&
                 outputParameterObjectNameLengthValid &&
@@ -42,19 +43,44 @@ namespace Regular.Commands.RuleEditor
 
         public void Execute(object parameter)
         {
-            switch (ruleEditorViewModel.RuleEditorType)
+            switch (ruleEditorViewModel.RuleEditorInfo.RuleEditorType)
             {
                 case RuleEditorType.CreateNewRule:
-                    RegexRule.Save(ruleEditorViewModel.DocumentGuid, ruleEditorViewModel.StagingRule);
-                    RuleExecutionUtils.ExecuteRegexRule(ruleEditorViewModel.DocumentGuid, ruleEditorViewModel.StagingRule);
+                    RegexRule.Save
+                    (
+                        ruleEditorViewModel.RuleEditorInfo.DocumentGuid,
+                        ruleEditorViewModel.StagingRule
+                    );
+                    RuleExecutionUtils.ExecuteRegexRule
+                    (
+                        ruleEditorViewModel.RuleEditorInfo.DocumentGuid,
+                        ruleEditorViewModel.StagingRule
+                    );
                     break;
                 case RuleEditorType.EditingExistingRule:
-                    RegexRule updatedRegexRule = RegexRule.Update(ruleEditorViewModel.DocumentGuid, ruleEditorViewModel.InputRule, ruleEditorViewModel.StagingRule);
-                    RuleExecutionUtils.ExecuteRegexRule(ruleEditorViewModel.DocumentGuid, updatedRegexRule);
+                    RegexRule updatedRegexRule = RegexRule.Update
+                    (
+                        ruleEditorViewModel.RuleEditorInfo.DocumentGuid,
+                        ruleEditorViewModel.InputRule,
+                        ruleEditorViewModel.StagingRule
+                    );
+                    RuleExecutionUtils.ExecuteRegexRule
+                    (
+                        ruleEditorViewModel.RuleEditorInfo.DocumentGuid,
+                        updatedRegexRule
+                    );
                     break;
                 case RuleEditorType.DuplicateExistingRule:
-                    RegexRule.Save(ruleEditorViewModel.DocumentGuid, ruleEditorViewModel.StagingRule);
-                    RuleExecutionUtils.ExecuteRegexRule(ruleEditorViewModel.DocumentGuid, ruleEditorViewModel.StagingRule);
+                    RegexRule.Save
+                    (
+                        ruleEditorViewModel.RuleEditorInfo.DocumentGuid,
+                        ruleEditorViewModel.StagingRule
+                    );
+                    RuleExecutionUtils.ExecuteRegexRule
+                    (
+                        ruleEditorViewModel.RuleEditorInfo.DocumentGuid,
+                        ruleEditorViewModel.StagingRule
+                    );
                     break;
             }
         }

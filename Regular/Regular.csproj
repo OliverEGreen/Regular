@@ -132,6 +132,7 @@
     <Compile Include="Utilities\EnumUtils.cs" />
     <Compile Include="Utilities\VisualTreeUtils.cs" />
     <Compile Include="ViewModels\OptionSetEditorViewModel.cs" />
+    <Compile Include="ViewModels\ProgressBarViewModel.cs" />
     <Compile Include="ViewModels\RuleEditorViewModel.cs" />
     <Compile Include="ViewModels\RuleManagerViewModel.cs" />
     <Compile Include="Views\ConfirmationDialogView.xaml.cs">
@@ -140,6 +141,9 @@
     <Compile Include="Views\NotifyPropertyChangedBase.cs" />
     <Compile Include="Views\OptionSetEditorView.xaml.cs">
       <DependentUpon>OptionSetEditorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ProgressBarView.xaml.cs">
+      <DependentUpon>ProgressBarView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\RuleEditorView.xaml.cs">
       <DependentUpon>RuleEditorView.xaml</DependentUpon>
@@ -158,6 +162,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\OptionSetEditorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ProgressBarView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
