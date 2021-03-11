@@ -70,14 +70,6 @@ C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\2019\ru-RU\AdWindows.resour
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\2019\zh-CN\AdWindows.resources.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\2019\zh-TW\AdWindows.resources.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2019\Resources\RegularStyles.baml
-C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2019\Views\ConfirmationDialogView.baml
-C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2019\Views\OptionSetEditorView.baml
-C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2019\Views\RuleEditorView.baml
-C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2019\Views\RuleManagerView.baml
-C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2019\Views\ConfirmationDialogView.g.cs
-C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2019\Views\OptionSetEditorView.g.cs
-C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2019\Views\RuleEditorView.g.cs
-C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2019\Views\RuleManagerView.g.cs
 C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2019\Regular_MarkupCompile.cache
 C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2019\Regular.g.resources
 C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2019\Regular.csproj.CoreCompileInputs.cache
@@ -85,3 +77,11 @@ C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2019\Regular.csproj.Copy
 C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2019\Regular.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2019\Regular.pdb
 C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2019\Regular.csprojAssemblyReference.cache
+C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2019\UI\ConfirmationDialog\View\ConfirmationDialogView.baml
+C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2019\UI\OptionSetEditor\View\OptionSetEditorView.baml
+C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2019\UI\RuleEditor\View\RuleEditorView.baml
+C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2019\UI\RuleManager\View\RuleManagerView.baml
+C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2019\UI\ConfirmationDialog\View\ConfirmationDialogView.g.cs
+C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2019\UI\OptionSetEditor\View\OptionSetEditorView.g.cs
+C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2019\UI\RuleEditor\View\RuleEditorView.g.cs
+C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2019\UI\RuleManager\View\RuleManagerView.g.cs

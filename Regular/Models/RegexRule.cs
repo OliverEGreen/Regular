@@ -17,8 +17,7 @@ namespace Regular.Models
         private string toolTipString = "";
         private string regexString = "";
         private MatchType matchType = MatchType.ExactMatch;
-        private bool isFrozen = false;
-
+        
         public string RuleName
         {
             get => ruleName;
@@ -96,16 +95,7 @@ namespace Regular.Models
                 NotifyPropertyChanged("MatchType");
             }
         }
-        public bool IsFrozen
-        {
-            get => isFrozen;
-            set
-            {
-                isFrozen = value;
-                NotifyPropertyChanged("IsFrozen");
-            }
-        }
-
+        
         public bool IsStagingRule { get; set; }
         public string DateTimeCreated { get; set; } = DateTime.Now.ToString("r");
         public string LastModified { get; set; } = DateTime.Now.ToString("r");
@@ -133,16 +123,15 @@ namespace Regular.Models
             ExtensibleStorageUtils.DeleteRegexRuleFromExtensibleStorage(documentGuid, regexRule.RuleGuid);
         }
 
-        public static RegexRule Update(string documentGuid, RegexRule existingRegexRule, RegexRule stagingRegexRule)
+        public static void Update(string documentGuid, RegexRule stagingRegexRule)
         {
             // We copy all properties over from the staging rule to the existing rule
-            existingRegexRule = DeepCopyRegexRule(stagingRegexRule);
+            RegexRule existingRegexRule = DeepCopyRegexRule(stagingRegexRule);
             
             RegularApp.RegexRuleCacheService.UpdateRule(documentGuid, existingRegexRule);
             ExtensibleStorageUtils.UpdateRegexRuleInExtensibleStorage(documentGuid, existingRegexRule.RuleGuid, stagingRegexRule);
 
             existingRegexRule.LastModified = DateTime.Now.ToString("r");
-            return existingRegexRule;
         }
 
         public static RegexRule DeepCopyRegexRule(RegexRule ruleToCopy)

@@ -8,11 +8,10 @@ namespace Regular.Utilities
 {
     public static class RuleExecutionUtils
     {
-        public static void ExecuteRegexRule(string documentGuid, RegexRule regexRule)
+        public static List<Element> GetTargetedElements(string documentGuid, string ruleGuid)
         {
-            // Executes a single RegexRule in a document on all elements it affects
-            // Used when creating or updating a rule
-            if (regexRule == null) return;
+            RegexRule regexRule = RegularApp.RegexRuleCacheService.GetRegexRule(documentGuid, ruleGuid);
+            if (regexRule == null) return null;
 
             Document document = RegularApp.DocumentCacheService.GetDocument(documentGuid);
 
@@ -29,29 +28,20 @@ namespace Regular.Utilities
                 .Where(x => x.GroupId == ElementId.InvalidElementId)
                 .ToList();
 
-            if (targetedElements.Count < 1) return;
-            
-            ElementId trackingParameterId = new ElementId(regexRule.TrackingParameterObject.ParameterObjectId);
-
-            for (int i = 0; i < targetedElements.Count; i++)
-            {
-                // TODO: Report Window!
-                string report = TestRuleValidity(regexRule, targetedElements[i]);
-            }
+            return targetedElements;
         }
         
-        private static string TestRuleValidity(RegexRule regexRule, Element element)
+        public static bool TestRuleValidity(string documentGuid, string ruleGuid, Element element)
         {
-            // Tests whether a saved rule's regular expression matches the element's parameter value
-            // Ideally would be a Boolean value, but we can only programatically create Project Instance Parameters as strings ¯\_(ツ)_/¯
-            Parameter parameter = element?.get_Parameter((BuiltInParameter)regexRule.TrackingParameterObject.ParameterObjectId);
-            if (parameter == null || parameter.StorageType != StorageType.String) return "Invalid";
-            string parameterValue = parameter.AsString();
-            if (string.IsNullOrWhiteSpace(parameterValue)) return "Invalid";
+            RegexRule regexRule = RegularApp.RegexRuleCacheService.GetRegexRule(documentGuid, ruleGuid);
+            if (regexRule == null) return false;
+
+            string parameterValue = ParameterUtils.GetTrackingParameterValue(documentGuid, ruleGuid, element);
+            if (string.IsNullOrWhiteSpace(parameterValue)) return false;
             string regexString = regexRule.RegexString;
-            if (string.IsNullOrWhiteSpace(regexString)) return "Invalid";
+            if (string.IsNullOrWhiteSpace(regexString)) return false;
             Regex regex = new Regex(regexRule.RegexString);
-            return regex.IsMatch(parameterValue) == true ? "Valid" : "Invalid";
+            return regex.IsMatch(parameterValue);
         }
     }
 }
