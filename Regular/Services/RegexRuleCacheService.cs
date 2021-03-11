@@ -55,6 +55,12 @@ namespace Regular.Services
             }
         }
 
+        public RegexRule GetRegexRule(string documentGuid, string ruleGuid)
+        {
+            if (!RegexRules.ContainsKey(documentGuid)) return null;
+            return RegexRules[documentGuid].FirstOrDefault(x => x.RuleGuid == ruleGuid);
+        }
+
         public ObservableCollection<RegexRule> GetDocumentRules(string documentGuid)
         {
             if (!RegexRules.ContainsKey(documentGuid))

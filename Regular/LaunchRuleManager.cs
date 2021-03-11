@@ -3,8 +3,8 @@ using System.Windows;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.Attributes;
+using Regular.UI.RuleManager.View;
 using Regular.Utilities;
-using Regular.Views;
 
 namespace Regular
 {

@@ -73,24 +73,26 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\RuleEditor\EditRulePartCommand.cs" />
-    <Compile Include="Commands\RuleEditor\GenerateCompliantExampleCommand.cs" />
-    <Compile Include="Commands\RuleEditor\MoveRulePartDownCommand.cs" />
-    <Compile Include="Commands\RuleEditor\MoveRulePartUpCommand.cs" />
-    <Compile Include="Commands\RuleEditor\TriggerSelectAllCategoriesCommand.cs" />
-    <Compile Include="Commands\RuleEditor\SubmitRuleCommand.cs" />
-    <Compile Include="Commands\RuleEditor\DeleteRulePartCommand.cs" />
-    <Compile Include="Commands\RuleEditor\AddRulePartCommand.cs" />
-    <Compile Include="Commands\RuleEditor\TriggerSelectCategoryCommand.cs" />
-    <Compile Include="Commands\RuleEditor\TriggerCategoryPanelCommand.cs" />
-    <Compile Include="Commands\RuleEditor\UpdateRegexStringCommand.cs" />
-    <Compile Include="Commands\RuleManager\AddRuleCommand.cs" />
-    <Compile Include="Commands\RuleManager\DeleteRuleCommand.cs" />
-    <Compile Include="Commands\RuleManager\DuplicateRuleCommand.cs" />
-    <Compile Include="Commands\RuleManager\EditRuleCommand.cs" />
-    <Compile Include="Commands\RuleManager\MoveRuleDownCommand.cs" />
-    <Compile Include="Commands\RuleManager\MoveRuleUpCommand.cs" />
-    <Compile Include="Commands\RuleManager\TriggerRuleFrozenCommand.cs" />
+    <Compile Include="Models\RuleValidationInfo.cs" />
+    <Compile Include="Models\RuleValidationOutput.cs" />
+    <Compile Include="Properties\Annotations1.cs" />
+    <Compile Include="UI\RuleEditor\Commands\EditRulePartCommand.cs" />
+    <Compile Include="UI\RuleEditor\Commands\GenerateCompliantExampleCommand.cs" />
+    <Compile Include="UI\RuleEditor\Commands\MoveRulePartDownCommand.cs" />
+    <Compile Include="UI\RuleEditor\Commands\MoveRulePartUpCommand.cs" />
+    <Compile Include="UI\RuleEditor\Commands\TriggerSelectAllCategoriesCommand.cs" />
+    <Compile Include="UI\RuleEditor\Commands\SubmitRuleCommand.cs" />
+    <Compile Include="UI\RuleEditor\Commands\DeleteRulePartCommand.cs" />
+    <Compile Include="UI\RuleEditor\Commands\AddRulePartCommand.cs" />
+    <Compile Include="UI\RuleEditor\Commands\TriggerSelectCategoryCommand.cs" />
+    <Compile Include="UI\RuleEditor\Commands\TriggerCategoryPanelCommand.cs" />
+    <Compile Include="UI\RuleEditor\Commands\UpdateRegexStringCommand.cs" />
+    <Compile Include="UI\RuleManager\Commands\AddRuleCommand.cs" />
+    <Compile Include="UI\RuleManager\Commands\DeleteRuleCommand.cs" />
+    <Compile Include="UI\RuleManager\Commands\DuplicateRuleCommand.cs" />
+    <Compile Include="UI\RuleManager\Commands\EditRuleCommand.cs" />
+    <Compile Include="UI\RuleManager\Commands\MoveRuleDownCommand.cs" />
+    <Compile Include="UI\RuleManager\Commands\MoveRuleUpCommand.cs" />
     <Compile Include="Enums\CaseSensitivity.cs" />
     <Compile Include="Enums\EnumDicts.cs" />
     <Compile Include="Enums\MatchType.cs" />
@@ -128,20 +130,20 @@
     <Compile Include="Utilities\SerializationUtils.cs" />
     <Compile Include="Utilities\EnumUtils.cs" />
     <Compile Include="Utilities\VisualTreeUtils.cs" />
-    <Compile Include="ViewModels\OptionSetEditorViewModel.cs" />
-    <Compile Include="ViewModels\RuleEditorViewModel.cs" />
-    <Compile Include="ViewModels\RuleManagerViewModel.cs" />
-    <Compile Include="Views\ConfirmationDialogView.xaml.cs">
+    <Compile Include="UI\OptionSetEditor\ViewModel\OptionSetEditorViewModel.cs" />
+    <Compile Include="UI\RuleEditor\ViewModel\RuleEditorViewModel.cs" />
+    <Compile Include="UI\RuleManager\ViewModel\RuleManagerViewModel.cs" />
+    <Compile Include="UI\ConfirmationDialog\View\ConfirmationDialogView.xaml.cs">
       <DependentUpon>ConfirmationDialogView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\NotifyPropertyChangedBase.cs" />
-    <Compile Include="Views\OptionSetEditorView.xaml.cs">
+    <Compile Include="UI\NotifyPropertyChangedBase.cs" />
+    <Compile Include="UI\OptionSetEditor\View\OptionSetEditorView.xaml.cs">
       <DependentUpon>OptionSetEditorView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\RuleEditorView.xaml.cs">
+    <Compile Include="UI\RuleEditor\View\RuleEditorView.xaml.cs">
       <DependentUpon>RuleEditorView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\RuleManagerView.xaml.cs">
+    <Compile Include="UI\RuleManager\View\RuleManagerView.xaml.cs">
       <DependentUpon>RuleManagerView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
@@ -150,19 +152,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\ConfirmationDialogView.xaml">
+    <Page Include="UI\ConfirmationDialog\View\ConfirmationDialogView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\OptionSetEditorView.xaml">
+    <Page Include="UI\OptionSetEditor\View\OptionSetEditorView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\RuleEditorView.xaml">
+    <Page Include="UI\RuleEditor\View\RuleEditorView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\RuleManagerView.xaml">
+    <Page Include="UI\RuleManager\View\RuleManagerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -173,6 +175,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="UI\ConfirmationDialog\ViewModel\" />
+    <Folder Include="UI\OptionSetEditor\Commands\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

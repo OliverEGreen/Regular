@@ -4,17 +4,17 @@
 library
 C#
 .cs
-C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2019\
+C:\Users\ogreen\source\repos\Regular\Regular\obj\x64\Rvt2019\
 Regular
 none
 false
 TRACE;DEBUG;REVIT2019
 
-5-876504795
+5338131969
 
-63259436246
-16649609570
-Resources\RegularStyles.xaml;Views\ConfirmationDialogView.xaml;Views\OptionSetEditorView.xaml;Views\RuleEditorView.xaml;Views\RuleManagerView.xaml;
+65690437054
+16-1992692905
+Resources\RegularStyles.xaml;UI\ConfirmationDialog\View\ConfirmationDialogView.xaml;UI\OptionSetEditor\View\OptionSetEditorView.xaml;UI\RuleEditor\View\RuleEditorView.xaml;UI\RuleManager\View\RuleManagerView.xaml;
 
 False
 

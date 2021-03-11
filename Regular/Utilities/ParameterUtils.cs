@@ -53,5 +53,16 @@ namespace Regular.Utilities
             }
             return new ObservableCollection<ParameterObject>(parameterObjects.OrderBy(x => x.ParameterObjectName));
         }
+
+        public static string GetTrackingParameterValue(string documentGuid, string ruleGuid, Element element)
+        {
+            RegexRule regexRule = RegularApp.RegexRuleCacheService.GetRegexRule(documentGuid, ruleGuid);
+            if (regexRule == null) return null;
+            
+            Parameter parameter = element?.get_Parameter((BuiltInParameter)regexRule.TrackingParameterObject.ParameterObjectId);
+            if (parameter == null || parameter.StorageType != StorageType.String) return null;
+            string parameterValue = parameter.AsString();
+            return parameterValue;
+        }
     }
 }
