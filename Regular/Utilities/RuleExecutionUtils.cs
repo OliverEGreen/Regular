@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Regular.Enums;
 using Regular.Models;
 
 namespace Regular.Utilities
@@ -31,17 +32,16 @@ namespace Regular.Utilities
             return targetedElements;
         }
         
-        public static bool TestRuleValidity(string documentGuid, string ruleGuid, Element element)
+        public static ValidationResult ExecuteRegexRule(string documentGuid, string ruleGuid, Element element)
         {
             RegexRule regexRule = RegularApp.RegexRuleCacheService.GetRegexRule(documentGuid, ruleGuid);
-            if (regexRule == null) return false;
-
+            if (regexRule == null) return ValidationResult.NotApplicable;
             string parameterValue = ParameterUtils.GetTrackingParameterValue(documentGuid, ruleGuid, element);
-            if (string.IsNullOrWhiteSpace(parameterValue)) return false;
+            if (string.IsNullOrWhiteSpace(parameterValue)) return ValidationResult.NotApplicable;
             string regexString = regexRule.RegexString;
-            if (string.IsNullOrWhiteSpace(regexString)) return false;
+            if (string.IsNullOrWhiteSpace(regexString)) return ValidationResult.NotApplicable;
             Regex regex = new Regex(regexRule.RegexString);
-            return regex.IsMatch(parameterValue);
+            return regex.IsMatch(parameterValue) ? ValidationResult.Valid : ValidationResult.Invalid;
         }
     }
 }

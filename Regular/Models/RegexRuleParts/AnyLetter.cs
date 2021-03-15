@@ -24,7 +24,7 @@ namespace Regular.Models.RegexRuleParts
             CaseSensitiveCheckboxVisibility = Visibility.Hidden;
             IsButtonControlEnabled = true;
             CaseSensitivityMode = CaseSensitivity.UpperCase;
-            CaseSensitiveDisplayString = EnumUtils.GetEnumDescription(CaseSensitivityMode);
+            CaseSensitiveDisplayString = CaseSensitivityMode.GetEnumDescription();
             ButtonControlDisplayText = "A-Z";
             RuleType = RuleType.AnyLetter;
             RawUserInputTextBoxVisibility = Visibility.Collapsed;

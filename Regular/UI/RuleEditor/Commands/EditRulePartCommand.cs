@@ -34,19 +34,19 @@ namespace Regular.UI.RuleEditor.Commands
                         case CaseSensitivity.AnyCase:
                             regexRulePart.CaseSensitivityMode = CaseSensitivity.UpperCase;
                             regexRulePart.CaseSensitiveDisplayString =
-                                EnumUtils.GetEnumDescription(regexRulePart.CaseSensitivityMode);
+                                regexRulePart.CaseSensitivityMode.GetEnumDescription();
                             regexRulePart.ButtonControlDisplayText = "AB3";
                             break;
                         case CaseSensitivity.UpperCase:
                             regexRulePart.CaseSensitivityMode = CaseSensitivity.LowerCase;
                             regexRulePart.CaseSensitiveDisplayString =
-                                EnumUtils.GetEnumDescription(regexRulePart.CaseSensitivityMode);
+                                regexRulePart.CaseSensitivityMode.GetEnumDescription();
                             regexRulePart.ButtonControlDisplayText = "ab3";
                             break;
                         case CaseSensitivity.LowerCase:
                             regexRulePart.CaseSensitivityMode = CaseSensitivity.AnyCase;
                             regexRulePart.CaseSensitiveDisplayString =
-                                EnumUtils.GetEnumDescription(regexRulePart.CaseSensitivityMode);
+                                regexRulePart.CaseSensitivityMode.GetEnumDescription();
                             regexRulePart.ButtonControlDisplayText= "Ab3";
                             break;
                         case CaseSensitivity.None:
@@ -63,19 +63,19 @@ namespace Regular.UI.RuleEditor.Commands
                         case CaseSensitivity.AnyCase:
                             regexRulePart.CaseSensitivityMode = CaseSensitivity.UpperCase;
                             regexRulePart.CaseSensitiveDisplayString =
-                                EnumUtils.GetEnumDescription(regexRulePart.CaseSensitivityMode);
+                                regexRulePart.CaseSensitivityMode.GetEnumDescription();
                             regexRulePart.ButtonControlDisplayText = "A-Z";
                             break;
                         case CaseSensitivity.UpperCase:
                             regexRulePart.CaseSensitivityMode = CaseSensitivity.LowerCase;
                             regexRulePart.CaseSensitiveDisplayString =
-                                EnumUtils.GetEnumDescription(regexRulePart.CaseSensitivityMode);
+                                regexRulePart.CaseSensitivityMode.GetEnumDescription();
                             regexRulePart.ButtonControlDisplayText = "a-z";
                             break;
                         case CaseSensitivity.LowerCase:
                             regexRulePart.CaseSensitivityMode = CaseSensitivity.AnyCase;
                             regexRulePart.CaseSensitiveDisplayString =
-                                EnumUtils.GetEnumDescription(regexRulePart.CaseSensitivityMode);
+                                regexRulePart.CaseSensitivityMode.GetEnumDescription();
                             regexRulePart.ButtonControlDisplayText = "A-z";
                             break;
                         case CaseSensitivity.None:

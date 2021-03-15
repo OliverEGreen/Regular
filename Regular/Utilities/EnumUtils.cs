@@ -6,13 +6,15 @@ namespace Regular.Utilities
 {
     public static class EnumUtils
     {
-        public static string GetEnumDescription(Enum value)
+        public static string GetEnumDescription(this Enum value)
         {
-            // Get the Description attribute value for the enum value
-            FieldInfo fieldInfo = value.GetType().GetField(value.ToString());
-            DescriptionAttribute[] attributes = (DescriptionAttribute[])fieldInfo.GetCustomAttributes(typeof(DescriptionAttribute), false);
-
-            return attributes.Length > 0 ? attributes[0].Description : value.ToString();
+            Type type = value.GetType();
+            string name = Enum.GetName(type, value);
+            if (name == null) return null;
+            FieldInfo field = type.GetField(name);
+            if (field == null) return null;
+            if (Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) is DescriptionAttribute attr) return attr.Description;
+            return null;
         }
     }
 }

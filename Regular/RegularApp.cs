@@ -1,11 +1,11 @@
 ﻿using System.Collections.ObjectModel;
-using System.Windows;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.DB.Events;
 using Application = Autodesk.Revit.ApplicationServices.Application;
 using Regular.Services;
 using Regular.Models;
+using Regular.RibbonLauncher;
 using Regular.Utilities;
 
 namespace Regular
@@ -48,7 +48,7 @@ namespace Regular
             ObservableCollection<RegexRule> existingRegexRules = ExtensibleStorageUtils.GetAllRegexRulesInExtensibleStorage(documentGuid);
             
             // If there are no saved rules we return, otherwise we establish the updaters
-            if (existingRegexRules != null && existingRegexRules.Count < 1) return;
+            if (existingRegexRules == null || existingRegexRules.Count < 1) return;
 
             // If we found rules, load them into the rules cache
             foreach (RegexRule existingRegexRule in existingRegexRules)
