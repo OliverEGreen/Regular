@@ -30,13 +30,24 @@
 
     <!--  Window  -->
     <Style x:Key="RegularWindow" TargetType="Window">
-        <Setter Property="Icon" Value="../Resources/RegularIcon32px.png" />
+        <Setter Property="Icon" Value="../Resources/RuleManager.png" />
         <Setter Property="Background" Value="{StaticResource RegularWindowBackgroundColor}" />
         <Setter Property="ResizeMode" Value="NoResize" />
         <Setter Property="ShowInTaskbar" Value="True" />
         <Setter Property="SizeToContent" Value="Height" />
         <Setter Property="MinHeight" Value="150" />
         <Setter Property="MinWidth" Value="300" />
+    </Style>
+
+    <Style
+        x:Key="RegularWindowResizable"
+        BasedOn="{StaticResource RegularWindow}"
+        TargetType="Window">
+        <Setter Property="ResizeMode" Value="CanResizeWithGrip" />
+        <Setter Property="MinHeight" Value="300" />
+        <Setter Property="MinWidth" Value="800" />
+        <Setter Property="MaxHeight" Value="800" />
+        <Setter Property="MaxWidth" Value="1500" />
     </Style>
 
     <!--  Grid  -->
@@ -899,4 +910,62 @@
         <Setter Property="Padding" Value="0" />
         <Setter Property="BorderThickness" Value="0px" />
     </Style>
+
+    <DataTemplate x:Key="RuleManagerListBoxItem">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="25" />
+                <ColumnDefinition Width="25" />
+            </Grid.ColumnDefinitions>
+            <Rectangle
+                Grid.ColumnSpan="7"
+                Height="30"
+                Margin="-4,-1,-3,-1"
+                Fill="{StaticResource RegularInputBackgroundColor}"
+                Stroke="{StaticResource RegularInputBackgroundColor}"
+                StrokeThickness="1px"
+                ToolTip="{Binding ToolTip}" />
+            <TextBlock
+                x:Name="RegexRuleNameTextBlock"
+                Grid.Row="0"
+                Grid.Column="0"
+                Margin="10,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                FontSize="13"
+                Style="{StaticResource RegularTextBlockBody}"
+                Text="{Binding RuleName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <Button
+                x:Name="EditRegexRuleButton"
+                Grid.Row="0"
+                Grid.Column="1"
+                Width="25"
+                Height="30"
+                HorizontalAlignment="Right"
+                Command="{Binding ElementName=RuleManagerWindow, Path=DataContext.EditRuleCommand}"
+                CommandParameter="{Binding .}"
+                Style="{StaticResource EditItemButton}"
+                ToolTip="Edit Rule" />
+            <Button
+                x:Name="DeleteRegexRuleButton"
+                Grid.Row="0"
+                Grid.Column="2"
+                Width="25"
+                Height="30"
+                Margin="0,0,-2,0"
+                HorizontalAlignment="Right"
+                Command="{Binding ElementName=RuleManagerWindow, Path=DataContext.DeleteRuleCommand}"
+                CommandParameter="{Binding .}"
+                Style="{StaticResource DeleteItemButton}"
+                ToolTip="Delete Rule" />
+        </Grid>
+    </DataTemplate>
+
+
+
 </ResourceDictionary>

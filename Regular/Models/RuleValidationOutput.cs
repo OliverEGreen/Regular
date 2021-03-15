@@ -2,6 +2,7 @@
 using System.Runtime.CompilerServices;
 using Autodesk.Revit.DB;
 using Regular.Annotations;
+using Regular.Enums;
 using Regular.Utilities;
 
 namespace Regular.Models
@@ -9,20 +10,19 @@ namespace Regular.Models
     public class RuleValidationOutput : INotifyPropertyChanged
     {
         // Private Members & Defaults
-        private bool validity = false;
+        private string validationText = Enums.ValidationResult.Invalid.GetEnumDescription();
         private string compliantExample = "";
         private string trackingParameterValue = "";
-
-
+        
         // Public Members & NotifyPropertyChanged
         public ElementId ElementId { get; } = ElementId.InvalidElementId;
         public string ElementName { get; } = "";
-        public bool Validity
+        public string ValidationText
         {
-            get => validity;
+            get => validationText;
             set
             {
-                validity = value;
+                validationText = value;
                 NotifyPropertyChanged();
             }
         }
@@ -45,20 +45,26 @@ namespace Regular.Models
             }
         }
 
+        public ValidationResult ValidationResult { get; set; } = ValidationResult.Invalid;
 
         public RuleValidationOutput(RuleValidationInfo ruleValidationInfo)
         {
             ElementId = ruleValidationInfo.Element.Id;
             ElementName = ruleValidationInfo.Element.Name;
 
-            Validity = RuleExecutionUtils.TestRuleValidity
+            ValidationResult = RuleExecutionUtils.ExecuteRegexRule
             (
                 ruleValidationInfo.DocumentGuid,
                 ruleValidationInfo.RegexRule.RuleGuid,
                 ruleValidationInfo.Element
             );
             
-            CompliantExample = RegexAssemblyUtils.GenerateRandomExample(ruleValidationInfo.RegexRule.RegexRuleParts);
+            validationText = ValidationResult.GetEnumDescription();
+            
+            if(ValidationResult == ValidationResult.Invalid)
+            {
+                CompliantExample = RegexAssemblyUtils.GenerateRandomExample(ruleValidationInfo.RegexRule.RegexRuleParts);
+            }
             
             TrackingParameterValue = ParameterUtils.GetTrackingParameterValue
             (

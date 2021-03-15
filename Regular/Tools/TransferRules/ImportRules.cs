@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Windows;
+using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
-using Autodesk.Revit.Attributes;
 using Regular.UI.RuleManager.View;
 using Regular.Utilities;
 
-namespace Regular
+namespace Regular.Tools.TransferRules
 {
     [Transaction(TransactionMode.Manual)]
-    public class LaunchRuleManager : IExternalCommand
+    public class ImportRules : IExternalCommand
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
@@ -30,4 +30,3 @@ namespace Regular
         }
     }
 }
-
