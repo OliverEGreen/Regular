@@ -1,0 +1,32 @@
+﻿<Window
+    x:Class="Regular.UI.InfoWindow.View.InfoWindowView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="{Binding Title}"
+    Width="400"
+    MaxHeight="700"
+    DataContext="{Binding InfoWindowViewModel, RelativeSource={RelativeSource Self}}"
+    Style="{DynamicResource RegularWindow}"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+    <Window.Resources>
+        <ResourceDictionary Source="../../../Resources/RegularStyles.xaml" />
+    </Window.Resources>
+    <Grid Style="{StaticResource RegularGrid}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0">
+            <TextBlock Name="TextBlockHeader" Text="{Binding HeaderText}" />
+            <TextBlock Name="TextBlockBody" Text="{Binding BodyText}" />
+        </StackPanel>
+        <Button
+            Grid.Row="1"
+            Click="ButtonOK_Click"
+            IsCancel="true"
+            Style="{StaticResource RegularButtonOK}" />
+    </Grid>
+</Window>

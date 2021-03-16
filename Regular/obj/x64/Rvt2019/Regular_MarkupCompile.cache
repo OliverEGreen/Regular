@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;REVIT2019
 
-5338131969
+7-31455578
 
-74-102247279
+861004178883
 16649609570
-Resources\RegularStyles.xaml;UI\ConfirmationDialog\View\ConfirmationDialogView.xaml;UI\OptionSetEditor\View\OptionSetEditorView.xaml;UI\RuleEditor\View\RuleEditorView.xaml;UI\RuleManager\View\RuleManagerView.xaml;
+Resources\RegularStyles.xaml;UI\ConfirmationDialog\View\ConfirmationDialogView.xaml;UI\InfoWindow\View\InfoWindowView.xaml;UI\OptionSetEditor\View\OptionSetEditorView.xaml;UI\RuleEditor\View\RuleEditorView.xaml;UI\RuleManager\View\RuleManagerView.xaml;UI\SelectElements\View\SelectElementsView.xaml;
 
 False
 

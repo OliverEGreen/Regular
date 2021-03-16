@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
 using Autodesk.Revit.DB;
@@ -37,6 +38,16 @@ namespace Regular.UI.RuleManager.Commands
 
             if (targetedElements.Count < 1) return;
 
+            ruleManagerViewModel.ColumnMarginWidth = new GridLength(10);
+            ruleManagerViewModel.ColumnReportWidth = new GridLength(1, GridUnitType.Star);
+
+            ruleManagerViewModel.WindowMinHeight = 300;
+            ruleManagerViewModel.WindowHeight = 500;
+            ruleManagerViewModel.WindowMaxHeight = 700;
+
+            ruleManagerViewModel.WindowMinWidth = 600;
+            ruleManagerViewModel.WindowWidth = 800;
+            
             ruleManagerViewModel.TrackingParameterName = ruleManagerViewModel.SelectedRegexRule.TrackingParameterObject.ParameterObjectName;
             ruleManagerViewModel.ProgressBarTotalNumberElementsProcessed = 0;
             ruleManagerViewModel.ProgressBarTotalNumberOfElements = targetedElements.Count;

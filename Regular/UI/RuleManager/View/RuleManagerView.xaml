@@ -6,10 +6,11 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     x:Name="RuleManagerWindow"
     Title=" Rule Manager"
-    Width="800"
-    Height="400"
-    MinWidth="420"
-    MinHeight="400"
+    Width="{Binding WindowWidth, UpdateSourceTrigger=PropertyChanged}"
+    Height="{Binding WindowHeight, UpdateSourceTrigger=PropertyChanged}"
+    MinWidth="{Binding WindowMinWidth, UpdateSourceTrigger=PropertyChanged}"
+    MinHeight="{Binding WindowMinHeight, UpdateSourceTrigger=PropertyChanged}"
+    MaxHeight="{Binding WindowMaxHeight, UpdateSourceTrigger=PropertyChanged}"
     DataContext="{Binding RuleManagerViewModel, RelativeSource={RelativeSource Self}}"
     SizeToContent="WidthAndHeight"
     Style="{DynamicResource RegularWindowResizable}"
@@ -19,16 +20,16 @@
     </Window.Resources>
     <Grid Style="{StaticResource RegularGrid}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="25" />
             <RowDefinition Height="10" />
             <RowDefinition Height="*" />
             <RowDefinition Height="10" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="25" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="300" />
-            <ColumnDefinition Width="10" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="{Binding ColumnMarginWidth, UpdateSourceTrigger=PropertyChanged}" />
+            <ColumnDefinition Width="{Binding ColumnReportWidth, UpdateSourceTrigger=PropertyChanged}" />
         </Grid.ColumnDefinitions>
         <TextBlock
             Grid.Row="0"
@@ -69,8 +70,9 @@
             BorderThickness="1">
             <ScrollViewer
                 Name="RulesScrollViewer"
+                HorizontalScrollBarVisibility="Auto"
                 PreviewMouseWheel="RegexRulesScrollViewer_PreviewMouseWheel"
-                Style="{StaticResource DefaultScrollViewerStyle}"
+                Style="{StaticResource RegularScrollViewer}"
                 VerticalScrollBarVisibility="Visible">
                 <ListBox
                     Name="ListBoxRegexRules"
@@ -115,6 +117,7 @@
         <Button
             Grid.Row="4"
             Grid.Column="0"
+            Click="ButtonExecuteRule_OnClick"
             Command="{Binding ExecuteRuleCommand}"
             Content="Execute"
             Style="{StaticResource RegularButton}" />
@@ -122,32 +125,45 @@
             Grid.Row="2"
             Grid.Column="2"
             Margin="0"
+            CellEditEnding="DataGrid_OnCellEditEnding"
+            HorizontalScrollBarVisibility="Visible"
             ItemsSource="{Binding RuleValidationOutputs, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-            Style="{StaticResource RegularDataGrid}">
+            Style="{StaticResource RegularDataGrid}"
+            VerticalScrollBarVisibility="Visible">
             <DataGrid.Columns>
                 <DataGridTextColumn
+                    Width="Auto"
+                    MinWidth="80"
                     Binding="{Binding Path=ElementId}"
                     Header="Element ID"
                     HeaderStyle="{StaticResource RegularDataGridColumnHeaderText}"
                     IsReadOnly="True" />
                 <DataGridTextColumn
+                    Width="Auto"
+                    MinWidth="100"
                     Binding="{Binding Path=ElementName}"
                     Header="Name"
                     HeaderStyle="{StaticResource RegularDataGridColumnHeaderText}"
                     IsReadOnly="True" />
                 <DataGridTextColumn
+                    x:Name="ReportParameterNameColumn"
+                    Width="Auto"
+                    MinWidth="100"
                     Binding="{Binding Path=TrackingParameterValue, UpdateSourceTrigger=PropertyChanged}"
                     Header="{Binding TrackingParameterName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                     HeaderStyle="{StaticResource RegularDataGridColumnHeaderText}"
-                    IsReadOnly="True" />
+                    IsReadOnly="False" />
                 <DataGridTextColumn
-                    Binding="{Binding Path=ValidationText}"
+                    Width="80"
+                    MinWidth="100"
+                    Binding="{Binding Path=ValidationText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                     Header="Validity"
                     HeaderStyle="{StaticResource RegularDataGridColumnHeaderText}"
                     IsReadOnly="True" />
                 <DataGridTextColumn
                     Width="*"
-                    Binding="{Binding Path=CompliantExample}"
+                    MinWidth="120"
+                    Binding="{Binding Path=CompliantExample, UpdateSourceTrigger=PropertyChanged}"
                     Header="Compliant Example"
                     HeaderStyle="{StaticResource RegularDataGridColumnHeaderText}"
                     IsReadOnly="True" />

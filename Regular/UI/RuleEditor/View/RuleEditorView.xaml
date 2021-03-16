@@ -241,7 +241,7 @@
             <ScrollViewer
                 Name="ScrollViewerRuleParts"
                 PreviewMouseWheel="ScrollViewerRuleParts_PreviewMouseWheel"
-                Style="{StaticResource DefaultScrollViewerStyle}"
+                Style="{StaticResource RegularScrollViewer}"
                 VerticalScrollBarVisibility="Visible">
                 <ListBox
                     Name="ListBoxRuleParts"

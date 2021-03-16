@@ -32,16 +32,16 @@ namespace Regular.Utilities
             return targetedElements;
         }
         
-        public static ValidationResult ExecuteRegexRule(string documentGuid, string ruleGuid, Element element)
+        public static RuleValidationResult ExecuteRegexRule(string documentGuid, string ruleGuid, Element element)
         {
             RegexRule regexRule = RegularApp.RegexRuleCacheService.GetRegexRule(documentGuid, ruleGuid);
-            if (regexRule == null) return ValidationResult.NotApplicable;
+            if (regexRule == null) return RuleValidationResult.NotApplicable;
             string parameterValue = ParameterUtils.GetTrackingParameterValue(documentGuid, ruleGuid, element);
-            if (string.IsNullOrWhiteSpace(parameterValue)) return ValidationResult.NotApplicable;
+            if (string.IsNullOrWhiteSpace(parameterValue)) return RuleValidationResult.NotApplicable;
             string regexString = regexRule.RegexString;
-            if (string.IsNullOrWhiteSpace(regexString)) return ValidationResult.NotApplicable;
+            if (string.IsNullOrWhiteSpace(regexString)) return RuleValidationResult.NotApplicable;
             Regex regex = new Regex(regexRule.RegexString);
-            return regex.IsMatch(parameterValue) ? ValidationResult.Valid : ValidationResult.Invalid;
+            return regex.IsMatch(parameterValue) ? RuleValidationResult.Valid : RuleValidationResult.Invalid;
         }
     }
 }
