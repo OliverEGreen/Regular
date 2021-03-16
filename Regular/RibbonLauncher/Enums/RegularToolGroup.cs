@@ -4,9 +4,9 @@ namespace Regular.RibbonLauncher.Enums
 {
     public enum RegularToolGroup
     {
-        [Description("Data Spec")]
+        [Description("DataSpec")]
         DataSpec = 0,
-        [Description("Data Palette")]
+        [Description("DataPalette")]
         DataPalette = 1,
     }
 }

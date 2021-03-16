@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows;
 using System.Windows.Threading;
 using Regular.Models;
 using Regular.UI.RuleManager.Commands;
@@ -20,7 +21,14 @@ namespace Regular.UI.RuleManager.ViewModel
         private int progressBarTotalNumberElementsProcessed = 0;
         private string trackingParameterName = "";
         private int progressBarPercentage = 0;
-        
+        private GridLength columnMarginWidth = new GridLength(0);
+        private GridLength columnReportWidth = new GridLength(0);
+        private int windowMinWidth = 350;
+        private int windowMaxHeight = 300;
+        private int windowMinHeight = 500;
+        private int windowWidth = 800;
+        private int windowHeight = 500;
+
 
         // Public Properties and NotifyPropertyChanged
         public ObservableCollection<RegexRule> RegexRules
@@ -86,8 +94,73 @@ namespace Regular.UI.RuleManager.ViewModel
                 NotifyPropertyChanged();
             }
         }
+        public GridLength ColumnMarginWidth
+        {
+            get => columnMarginWidth;
+            set
+            {
+                columnMarginWidth = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public GridLength ColumnReportWidth
+        {
+            get => columnReportWidth;
+            set
+            {
+                columnReportWidth = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public int WindowMinWidth
+        {
+            get => windowMinWidth;
+            set
+            {
+                windowMinWidth = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public int WindowMaxHeight
+        {
+            get => windowMaxHeight;
+            set
+            {
+                windowMaxHeight = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public int WindowMinHeight
+        {
+            get => windowMinHeight;
+            set
+            {
+                windowMinHeight = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public int WindowWidth
+        {
+            get => windowWidth;
+            set
+            {
+                windowWidth = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public int WindowHeight
+        {
+            get => windowHeight;
+            set
+            {
+                windowHeight = value;
+                NotifyPropertyChanged();
+            }
+        }
+
 
         public bool ExportReportEnabled { get; set; } = false;
+
 
         // ICommands
         public AddRuleCommand AddRuleCommand { get; }

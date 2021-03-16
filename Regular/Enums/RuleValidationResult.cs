@@ -2,7 +2,7 @@
 
 namespace Regular.Enums
 {
-    public enum ValidationResult
+    public enum RuleValidationResult
     {
         [Description("N/A")]
         NotApplicable,

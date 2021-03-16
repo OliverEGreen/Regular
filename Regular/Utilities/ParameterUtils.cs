@@ -64,5 +64,38 @@ namespace Regular.Utilities
             string parameterValue = parameter.AsString();
             return parameterValue;
         }
+
+        public static Parameter GetParameterById(Document document, Element element, int parameterIdIntegerValue)
+        {
+            // Creating a list of all the element's Parameter IDs
+            List<int> elementParameterIds = SetUtils.ConvertParameterSetToList(element.Parameters)
+                .Select(x => x.Id.IntegerValue)
+                .ToList();
+            List<int> elementTypeParameterIds = new List<int>();
+
+            // If the element has a Type, we'll want to keep track of its Parameter IDs
+            ElementType elementType = document.GetElement(element.GetTypeId()) as ElementType;
+            if (elementType != null)
+            {
+                elementTypeParameterIds.AddRange
+                (
+                    SetUtils.ConvertParameterSetToList(elementType.Parameters)
+                    .Select(x => x.Id.IntegerValue)
+                    .ToList()
+                );
+            }
+
+            if (parameterIdIntegerValue < 0)
+            {
+                if (elementParameterIds.Contains(parameterIdIntegerValue)) return element.get_Parameter((BuiltInParameter) parameterIdIntegerValue);
+                return elementTypeParameterIds.Contains(parameterIdIntegerValue) ? elementType.get_Parameter((BuiltInParameter) parameterIdIntegerValue) : null;
+            }
+
+            Definition definition = ((ParameterElement) document.GetElement(new ElementId(parameterIdIntegerValue)))
+                .GetDefinition();
+            
+            if (elementParameterIds.Contains(parameterIdIntegerValue)) return element.get_Parameter(definition);
+            return elementTypeParameterIds.Contains(parameterIdIntegerValue) ? elementType.get_Parameter(definition) : null;
+        }
     }
 }

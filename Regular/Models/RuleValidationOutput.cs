@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Autodesk.Revit.DB;
-using Regular.Annotations;
 using Regular.Enums;
 using Regular.Utilities;
 
@@ -10,10 +9,11 @@ namespace Regular.Models
     public class RuleValidationOutput : INotifyPropertyChanged
     {
         // Private Members & Defaults
-        private string validationText = Enums.ValidationResult.Invalid.GetEnumDescription();
+        private string validationText = RuleValidationResult.Invalid.GetEnumDescription();
         private string compliantExample = "";
         private string trackingParameterValue = "";
-        
+        private RuleValidationResult ruleValidationResult = RuleValidationResult.Invalid;
+
         // Public Members & NotifyPropertyChanged
         public ElementId ElementId { get; } = ElementId.InvalidElementId;
         public string ElementName { get; } = "";
@@ -44,24 +44,33 @@ namespace Regular.Models
                 NotifyPropertyChanged();
             }
         }
+        public RuleValidationResult RuleValidationResult
+        {
+            get => ruleValidationResult;
+            set
+            {
+                ruleValidationResult = value;
+                validationText = ruleValidationResult.GetEnumDescription();
+                NotifyPropertyChanged();
+            }
+        }
 
-        public ValidationResult ValidationResult { get; set; } = ValidationResult.Invalid;
 
         public RuleValidationOutput(RuleValidationInfo ruleValidationInfo)
         {
             ElementId = ruleValidationInfo.Element.Id;
             ElementName = ruleValidationInfo.Element.Name;
 
-            ValidationResult = RuleExecutionUtils.ExecuteRegexRule
+            RuleValidationResult = RuleExecutionUtils.ExecuteRegexRule
             (
                 ruleValidationInfo.DocumentGuid,
                 ruleValidationInfo.RegexRule.RuleGuid,
                 ruleValidationInfo.Element
             );
             
-            validationText = ValidationResult.GetEnumDescription();
+            ValidationText = RuleValidationResult.GetEnumDescription();
             
-            if(ValidationResult == ValidationResult.Invalid)
+            if(RuleValidationResult == RuleValidationResult.Invalid)
             {
                 CompliantExample = RegexAssemblyUtils.GenerateRandomExample(ruleValidationInfo.RegexRule.RegexRuleParts);
             }
@@ -76,7 +85,6 @@ namespace Regular.Models
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        [NotifyPropertyChangedInvocator]
         protected virtual void NotifyPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

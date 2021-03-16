@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 using Regular.Models;
 
 namespace Regular.Utilities
@@ -24,6 +26,11 @@ namespace Regular.Utilities
         public static RegexRule DeserializeRegexRule(string serializedRegexRule)
         {
             return JsonConvert.DeserializeObject<RegexRule>(serializedRegexRule, JsonSerializerSettings);
+        }
+
+        public static List<RegexRule> DeserializeRegexRules(string serializedRegexRules)
+        {
+            return JsonConvert.DeserializeObject<List<RegexRule>>(serializedRegexRules, JsonSerializerSettings);
         }
     }
 }
