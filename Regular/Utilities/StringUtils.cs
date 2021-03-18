@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Regular.Utilities
@@ -36,7 +35,7 @@ namespace Regular.Utilities
 
         public static string ReplaceFirstInstance(string text, string search, string replace)
         {
-            int pos = text.IndexOf(search);
+            int pos = text.IndexOf(search, StringComparison.Ordinal);
             if (pos < 0) return text;
             return text.Substring(0, pos) + replace + text.Substring(pos + search.Length);
         }

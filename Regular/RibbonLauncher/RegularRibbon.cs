@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Regular.RibbonLauncher.Enums;
 using Regular.Utilities;
 
 namespace Regular.RibbonLauncher
 {
-    public class Availability : IExternalCommandAvailability { public bool IsCommandAvailable(UIApplication uiApplication, CategorySet categorySet) { return true; } }
     public class RegularRibbon
     {
         public static UIControlledApplication UiControlledApplication { get; set; }

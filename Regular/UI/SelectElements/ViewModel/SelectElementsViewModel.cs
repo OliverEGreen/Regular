@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using Regular.UI.SelectElements.Commands;
 using Regular.UI.SelectElements.Model;
