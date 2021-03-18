@@ -80,49 +80,6 @@ namespace Regular.UI.RuleEditor.View
                 RuleEditorViewModel.UserFeedbackTextVisibility = Visibility.Visible;
             }
         }
-
-        private void TextBoxOutputParameterNameInput_OnTextChanged(object sender, TextChangedEventArgs e)
-        {
-            //RuleEditorViewModel.OutputParameterNameInputDirty = true;
-            //Autodesk.Revit.DB.Document document = RegularApp.DocumentCacheService.GetDocument(RuleEditorViewModel.RuleEditorInfo.DocumentGuid);
-            
-            //string outputParameterNameFeedback = InputValidationServices.ValidateOutputParameterName
-            //(
-            //    document,
-            //    RuleEditorViewModel
-            //);
-
-            //TextBox textBox = (TextBox)sender;
-
-            //if (textBox.Text.Length < 1)
-            //{
-            //    if (RuleEditorViewModel.OutputParameterNameInputDirty)
-            //    {
-            //        EllipseOutputParameterNameInput.Fill = (SolidColorBrush)this.Resources["EllipseColorRed"];
-            //        RuleEditorViewModel.UserFeedbackText = outputParameterNameFeedback;
-            //        RuleEditorViewModel.UserFeedbackTextVisibility = Visibility.Visible;
-            //    }
-            //    else
-            //    {
-            //        EllipseOutputParameterNameInput.Fill = (SolidColorBrush)this.Resources["EllipseColorGray"];
-            //        RuleEditorViewModel.UserFeedbackTextVisibility = Visibility.Hidden;
-            //    }
-            //    return;
-            //}
-            
-            //if (string.IsNullOrWhiteSpace(outputParameterNameFeedback))
-            //{
-            //    EllipseOutputParameterNameInput.Fill = (SolidColorBrush) this.Resources["EllipseColorGreen"];
-            //    RuleEditorViewModel.UserFeedbackText = "";
-            //    RuleEditorViewModel.UserFeedbackTextVisibility = Visibility.Hidden;
-            //}
-            //else
-            //{
-            //    EllipseOutputParameterNameInput.Fill = (SolidColorBrush)this.Resources["EllipseColorRed"];
-            //    RuleEditorViewModel.UserFeedbackText = outputParameterNameFeedback;
-            //    RuleEditorViewModel.UserFeedbackTextVisibility = Visibility.Visible;
-            //}
-        }
         
         private void RuleEditor_OnLoaded(object sender, RoutedEventArgs e)
         {
@@ -181,6 +138,13 @@ namespace Regular.UI.RuleEditor.View
                         rectangle.Fill = new SolidColorBrush(rolloutColor);
                         break;
                     }
+                    case Button button:
+                    {
+                        Color rolloverColor = (Color) ColorConverter.ConvertFromString("#CCCCCC");
+                        button.Background = new SolidColorBrush(rolloverColor);
+                        button.Foreground = new SolidColorBrush(Colors.Red);
+                        break;
+                    }
                     case TextBox textBox:
                     {
                         Color rolloverColor = (Color)ColorConverter.ConvertFromString("#E5E5E5");
@@ -203,6 +167,12 @@ namespace Regular.UI.RuleEditor.View
                     {
                         Color rolloverColor = (Color)ColorConverter.ConvertFromString("#CCCCCC");
                         rectangle.Fill = new SolidColorBrush(rolloverColor);
+                        break;
+                    }
+                    case Button button:
+                    {
+                        Color rolloverColor = (Color) ColorConverter.ConvertFromString("#B2B2B2");
+                        button.Background = new SolidColorBrush(rolloverColor);
                         break;
                     }
                     case TextBox textBox:

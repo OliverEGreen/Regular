@@ -20,5 +20,9 @@ namespace Regular.Enums
         Hyphen = 6,
         [Description("Underscore")]
         Underscore = 7,
+        [Description("Open Parenthesis '('")]
+        OpenParenthesis = 8,
+        [Description("Close Parenthesis ')'")]
+        CloseParenthesis = 9,
     }
 }

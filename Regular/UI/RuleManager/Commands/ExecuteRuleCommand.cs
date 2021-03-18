@@ -47,6 +47,7 @@ namespace Regular.UI.RuleManager.Commands
 
             ruleManagerViewModel.WindowMinWidth = 600;
             ruleManagerViewModel.WindowWidth = 800;
+            ruleManagerViewModel.WindowMaxWidth = 1500;
             
             ruleManagerViewModel.TrackingParameterName = ruleManagerViewModel.SelectedRegexRule.TrackingParameterObject.ParameterObjectName;
             ruleManagerViewModel.ProgressBarTotalNumberElementsProcessed = 0;

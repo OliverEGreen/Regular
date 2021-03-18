@@ -24,7 +24,7 @@ namespace Regular.Tools.TransferRules
             {
                 Document document = commandData.Application.ActiveUIDocument.Document;
                 
-                string filePath = IOUtils.PromptUserToSelectJSONFile();
+                string filePath = IOUtils.PromptUserToSelectFile(".json");
                 if (string.IsNullOrWhiteSpace(filePath))
                 {
                     new InfoWindowView

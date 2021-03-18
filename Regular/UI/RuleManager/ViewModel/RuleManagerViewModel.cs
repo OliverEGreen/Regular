@@ -24,10 +24,11 @@ namespace Regular.UI.RuleManager.ViewModel
         private GridLength columnMarginWidth = new GridLength(0);
         private GridLength columnReportWidth = new GridLength(0);
         private int windowMinWidth = 350;
-        private int windowMaxHeight = 300;
+        private int windowWidth = 350;
+        private int windowMaxWidth = 350;
         private int windowMinHeight = 500;
-        private int windowWidth = 800;
         private int windowHeight = 500;
+        private int windowMaxHeight = 500;
 
 
         // Public Properties and NotifyPropertyChanged
@@ -109,6 +110,16 @@ namespace Regular.UI.RuleManager.ViewModel
             set
             {
                 columnReportWidth = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public int WindowMaxWidth
+        {
+            get => windowMaxWidth;
+            set
+            {
+                windowMaxWidth = value;
                 NotifyPropertyChanged();
             }
         }

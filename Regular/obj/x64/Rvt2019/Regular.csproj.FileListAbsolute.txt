@@ -1,5 +1,6 @@
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\2019\Regular.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\2019\Regular.pdb
+C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\2019\CsvHelper.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\2019\Newtonsoft.Json.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\2019\RevitAPI.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\2019\RevitAPIUI.dll
@@ -52,6 +53,7 @@ C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\2019\DetailUIAPI.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\2019\UIFrameworkServices.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\2019\ManagedMC3.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\2019\Xceed.Wpf.AvalonDock.dll
+C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\2019\CsvHelper.xml
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\2019\Newtonsoft.Json.xml
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\2019\RevitAPI.xml
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\2019\RevitAPIUI.xml

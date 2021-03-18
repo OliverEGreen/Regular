@@ -23,7 +23,7 @@
     </Window.Resources>
     <Grid Style="{StaticResource RegularGrid}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="10" />
+            <RowDefinition Height="14" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -43,8 +43,8 @@
             Grid.Row="0"
             Grid.Column="0"
             Grid.ColumnSpan="4"
-            Margin="-15,-15,-15,5"
-            Padding="15,3,10,3"
+            Margin="-15,-15,-15,3"
+            Padding="15,4,10,3"
             Style="{StaticResource RegularTextBlockBodyWarning}"
             Text="{Binding UserFeedbackText, UpdateSourceTrigger=PropertyChanged}"
             Visibility="{Binding UserFeedbackTextVisibility, UpdateSourceTrigger=PropertyChanged}" />
@@ -333,7 +333,7 @@
                                     Name="ButtonControl"
                                     Grid.Column="1"
                                     Width="35"
-                                    Height="15"
+                                    Height="16"
                                     HorizontalAlignment="Left"
                                     Background="{StaticResource RegularButtonBackgroundColor}"
                                     Click="ButtonControl_OnClick"
@@ -357,7 +357,7 @@
                                     VerticalAlignment="Center"
                                     Background="{StaticResource RegularWindowBackgroundColor}"
                                     Command="{Binding ElementName=RuleEditorWindow, Path=DataContext.UpdateRegexStringCommand}"
-                                    IsChecked="{Binding IsCaseSensitive, UpdateSourceTrigger=PropertyChanged}"
+                                    IsChecked="{Binding IsCaseSensitive, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                     Visibility="{Binding CaseSensitiveCheckboxVisibility}" />
                                 <TextBlock
                                     Grid.Column="4"
@@ -372,7 +372,7 @@
                                     VerticalAlignment="Center"
                                     Background="{StaticResource RegularWindowBackgroundColor}"
                                     Command="{Binding ElementName=RuleEditorWindow, Path=DataContext.UpdateRegexStringCommand}"
-                                    IsChecked="{Binding IsOptional, UpdateSourceTrigger=PropertyChanged}" />
+                                    IsChecked="{Binding IsOptional, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                                 <Button
                                     Name="ButtonDeleteRegexRulePart"
                                     Grid.Column="6"

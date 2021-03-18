@@ -56,6 +56,7 @@ namespace Regular.Tools.TransferRules
                     UIDocument = commandData.Application.ActiveUIDocument,
                     UserMessage = "Select one or more DataSpec rules to export to the .json file format.",
                 };
+
                 SelectElementsView selectElementsView = new SelectElementsView(selectElementsInfo);
                 selectElementsView.ShowDialog();
                 if (selectElementsView.DialogResult != true)
@@ -67,6 +68,7 @@ namespace Regular.Tools.TransferRules
                         "The user cancelled the export.",
                         true
                     ).ShowDialog();
+
                     return Result.Cancelled;
                 }
 
@@ -76,8 +78,9 @@ namespace Regular.Tools.TransferRules
                     .OfType<RegexRule>()
                     .ToList();
                 
+
                 // Prompting the user to specify where the JSON file should be exported to
-                string filePath = IOUtils.PromptUserToSelectDestination();
+                string filePath = IOUtils.PromptUserToSelectDestination("DataSpec Rule Export", ".json");
                 if (string.IsNullOrWhiteSpace(filePath))
                 {
                     new InfoWindowView
@@ -87,6 +90,7 @@ namespace Regular.Tools.TransferRules
                         "The user cancelled the export.",
                         true
                     ).ShowDialog();
+
                     return Result.Cancelled;
                 }
                 
