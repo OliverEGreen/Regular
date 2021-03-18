@@ -14,6 +14,8 @@ namespace Regular.Enums
             { "Full Stop", RuleType.FullStop },
             { "Hyphen", RuleType.Hyphen },
             { "Underscore", RuleType.Underscore },
+            { "Open Parenthesis", RuleType.OpenParenthesis },
+            { "Close Parenthesis", RuleType.CloseParenthesis },
         };
 
         public static Dictionary<string, MatchType> MatchTypesDict = new Dictionary<string, MatchType>

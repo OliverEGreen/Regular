@@ -10,6 +10,7 @@
     Height="{Binding WindowHeight, UpdateSourceTrigger=PropertyChanged}"
     MinWidth="{Binding WindowMinWidth, UpdateSourceTrigger=PropertyChanged}"
     MinHeight="{Binding WindowMinHeight, UpdateSourceTrigger=PropertyChanged}"
+    MaxWidth="{Binding WindowMaxWidth, UpdateSourceTrigger=PropertyChanged}"
     MaxHeight="{Binding WindowMaxHeight, UpdateSourceTrigger=PropertyChanged}"
     DataContext="{Binding RuleManagerViewModel, RelativeSource={RelativeSource Self}}"
     SizeToContent="WidthAndHeight"
@@ -78,11 +79,68 @@
                     Name="ListBoxRegexRules"
                     HorizontalAlignment="Stretch"
                     HorizontalContentAlignment="Stretch"
-                    ItemTemplate="{StaticResource RuleManagerListBoxItem}"
                     ItemsSource="{Binding RegexRules, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     SelectedIndex="0"
                     SelectedItem="{Binding SelectedRegexRule, UpdateSourceTrigger=PropertyChanged}"
-                    Style="{StaticResource RegularListBox}" />
+                    Style="{StaticResource RegularListBox}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid MouseEnter="ListBoxItem_OnMouseEnter" MouseLeave="ListBoxItem_OnMouseLeave">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="25" />
+                                    <ColumnDefinition Width="25" />
+                                </Grid.ColumnDefinitions>
+                                <Rectangle
+                                    Name="BackgroundRectangle"
+                                    Grid.ColumnSpan="7"
+                                    Height="30"
+                                    Margin="-4,-1,-3,-1"
+                                    Fill="{StaticResource RegularInputBackgroundColor}"
+                                    Stroke="{StaticResource RegularInputBackgroundColor}"
+                                    StrokeThickness="1px"
+                                    ToolTip="{Binding ToolTip}" />
+                                <TextBlock
+                                    x:Name="RegexRuleNameTextBlock"
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Margin="10,0,0,0"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    FontSize="13"
+                                    Style="{StaticResource RegularTextBlockBody}"
+                                    Text="{Binding RuleName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <Button
+                                    x:Name="EditRegexRuleButton"
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    Width="25"
+                                    Height="30"
+                                    HorizontalAlignment="Right"
+                                    Command="{Binding ElementName=RuleManagerWindow, Path=DataContext.EditRuleCommand}"
+                                    CommandParameter="{Binding .}"
+                                    Style="{StaticResource EditItemButton}"
+                                    ToolTip="Edit Rule" />
+                                <Button
+                                    x:Name="DeleteRegexRuleButton"
+                                    Grid.Row="0"
+                                    Grid.Column="2"
+                                    Width="25"
+                                    Height="30"
+                                    Margin="0,0,-2,0"
+                                    HorizontalAlignment="Right"
+                                    Command="{Binding ElementName=RuleManagerWindow, Path=DataContext.DeleteRuleCommand}"
+                                    CommandParameter="{Binding .}"
+                                    Style="{StaticResource DeleteItemButton}"
+                                    ToolTip="Delete Rule" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
             </ScrollViewer>
         </Border>
         <StackPanel

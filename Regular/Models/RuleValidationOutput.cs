@@ -13,10 +13,20 @@ namespace Regular.Models
         private string compliantExample = "";
         private string trackingParameterValue = "";
         private RuleValidationResult ruleValidationResult = RuleValidationResult.Invalid;
+        private string elementName = "";
 
         // Public Members & NotifyPropertyChanged
         public ElementId ElementId { get; } = ElementId.InvalidElementId;
-        public string ElementName { get; } = "";
+
+        public string ElementName
+        {
+            get => elementName;
+            set
+            {
+                elementName = value;
+                NotifyPropertyChanged();
+            }
+        }
         public string ValidationText
         {
             get => validationText;
@@ -59,7 +69,7 @@ namespace Regular.Models
         public RuleValidationOutput(RuleValidationInfo ruleValidationInfo)
         {
             ElementId = ruleValidationInfo.Element.Id;
-            ElementName = ruleValidationInfo.Element.Name;
+            elementName = ruleValidationInfo.Element.Name;
 
             RuleValidationResult = RuleExecutionUtils.ExecuteRegexRule
             (
@@ -69,11 +79,7 @@ namespace Regular.Models
             );
             
             ValidationText = RuleValidationResult.GetEnumDescription();
-            
-            if(RuleValidationResult == RuleValidationResult.Invalid)
-            {
-                CompliantExample = RegexAssemblyUtils.GenerateRandomExample(ruleValidationInfo.RegexRule.RegexRuleParts);
-            }
+            CompliantExample = ruleValidationResult == RuleValidationResult.Invalid ? RegexAssemblyUtils.GenerateRandomExample(ruleValidationInfo.RegexRule.RegexRuleParts) : "-";
             
             TrackingParameterValue = ParameterUtils.GetTrackingParameterValue
             (

@@ -27,6 +27,10 @@ namespace Regular.Models
                     return new Hyphen();
                 case RuleType.Underscore:
                     return new Underscore();
+                case RuleType.OpenParenthesis:
+                    return new OpenParenthesis();
+                case RuleType.CloseParenthesis:
+                    return new CloseParenthesis();
                 default:
                     throw new ArgumentOutOfRangeException(nameof(ruleType), ruleType, null);
             }

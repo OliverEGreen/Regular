@@ -1,11 +1,15 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using Autodesk.Revit.DB;
 using Regular.Enums;
 using Regular.Models;
 using Regular.UI.RuleManager.ViewModel;
 using Regular.Utilities;
+using Color = System.Windows.Media.Color;
+using Grid = System.Windows.Controls.Grid;
+using Rectangle = System.Windows.Shapes.Rectangle;
 
 namespace Regular.UI.RuleManager.View
 {
@@ -38,6 +42,55 @@ namespace Regular.UI.RuleManager.View
         {
             ReportParameterNameColumn.Header = RuleManagerViewModel.SelectedRegexRule.TrackingParameterObject.ParameterObjectName;
         }
+
+        private void Grid_MouseLeave(object sender, MouseEventArgs e)
+        {
+            if (!(sender is Grid grid)) return;
+            UIElementCollection children = grid.Children;
+            foreach (UIElement uiElement in children)
+            {
+                switch (uiElement)
+                {
+                    case Rectangle rectangle:
+                    {
+                        Color rolloutColor = (Color)ColorConverter.ConvertFromString("#E5E5E5");
+                        rectangle.Fill = new SolidColorBrush(rolloutColor);
+                        break;
+                    }
+                    case TextBox textBox:
+                    {
+                        Color rolloverColor = (Color)ColorConverter.ConvertFromString("#E5E5E5");
+                        textBox.Background = new SolidColorBrush(rolloverColor);
+                        break;
+                    }
+                }
+            }
+        }
+        
+        private void Grid_MouseEnter(object sender, MouseEventArgs e)
+        {
+            if (!(sender is Grid grid)) return;
+            UIElementCollection children = grid.Children;
+            foreach (UIElement uiElement in children)
+            {
+                switch (uiElement)
+                {
+                    case Rectangle rectangle:
+                    {
+                        Color rolloverColor = (Color)ColorConverter.ConvertFromString("#CCCCCC");
+                        rectangle.Fill = new SolidColorBrush(rolloverColor);
+                        break;
+                    }
+                    case TextBox textBox:
+                    {
+                        Color rolloverColor = (Color)ColorConverter.ConvertFromString("#CCCCCC");
+                        textBox.Background = new SolidColorBrush(rolloverColor);
+                        break;
+                    }
+                }
+            }
+        }
+
 
         private void DataGrid_OnCellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
@@ -74,6 +127,79 @@ namespace Regular.UI.RuleManager.View
                     if (ruleValidationOutput.RuleValidationResult == RuleValidationResult.Valid)
                     {
                         ruleValidationOutput.CompliantExample = "";
+                    }
+                }
+            }
+        }
+
+        private void ListBoxItem_OnMouseEnter(object sender, MouseEventArgs e)
+        {
+            if (!(sender is Grid grid)) return;
+            UIElementCollection children = grid.Children;
+            foreach (UIElement uiElement in children)
+            {
+                switch (uiElement)
+                {
+                    case Rectangle rectangle:
+                    {
+                        Color rolloverColor = (Color)ColorConverter.ConvertFromString("#CCCCCC");
+                        rectangle.Fill = new SolidColorBrush(rolloverColor);
+                        break;
+                    }
+                    case TextBox textBox:
+                    {
+                        Color rolloverColor = (Color)ColorConverter.ConvertFromString("#CCCCCC");
+                        textBox.Background = new SolidColorBrush(rolloverColor);
+                        break;
+                    }
+                }
+            }
+        }
+
+        private void ListBoxItem_OnMouseLeave(object sender, MouseEventArgs e)
+        {
+            if (!(sender is Grid grid)) return;
+            UIElementCollection children = grid.Children;
+            foreach (UIElement uiElement in children)
+            {
+                switch (uiElement)
+                {
+                    case Rectangle rectangle:
+                    {
+                        Color rolloutColor = (Color)ColorConverter.ConvertFromString("#E5E5E5");
+                        rectangle.Fill = new SolidColorBrush(rolloutColor);
+                        break;
+                    }
+                    case TextBox textBox:
+                    {
+                        Color rolloverColor = (Color)ColorConverter.ConvertFromString("#E5E5E5");
+                        textBox.Background = new SolidColorBrush(rolloverColor);
+                        break;
+                    }
+                }
+            }
+        }
+
+
+        private void UIElement_OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (!(sender is Grid grid)) return;
+            UIElementCollection children = grid.Children;
+            foreach (UIElement uiElement in children)
+            {
+                switch (uiElement)
+                {
+                    case Rectangle rectangle:
+                    {
+                        Color rolloutColor = (Color)ColorConverter.ConvertFromString("#7CCEF4");
+                        rectangle.Fill = new SolidColorBrush(rolloutColor);
+                        break;
+                    }
+                    case TextBox textBox:
+                    {
+                        Color rolloverColor = (Color)ColorConverter.ConvertFromString("#7CCEF4");
+                        textBox.Background = new SolidColorBrush(rolloverColor);
+                        break;
                     }
                 }
             }

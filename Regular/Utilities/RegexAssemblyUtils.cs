@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Regular.Enums;
 using Regular.Models;
+using static Regular.Enums.RuleType;
 
 namespace Regular.Utilities
 {
@@ -19,7 +20,7 @@ namespace Regular.Utilities
             string caseSensitiveModifierEnd = regexRulePart.IsCaseSensitive ? @"(?i)" : @"(?-i)";
             switch (regexRulePart.RuleType)
             {
-                case RuleType.AnyLetter:
+                case AnyLetter:
                     switch (regexRulePart.CaseSensitivityMode)
                     {
                         case CaseSensitivity.UpperCase:
@@ -37,7 +38,7 @@ namespace Regular.Utilities
                             throw new ArgumentOutOfRangeException();
                     }
                     break;
-                case RuleType.AnyAlphanumeric:
+                case AnyAlphanumeric:
                     switch (regexRulePart.CaseSensitivityMode)
                     {
                         case CaseSensitivity.UpperCase:
@@ -55,16 +56,16 @@ namespace Regular.Utilities
                             throw new ArgumentOutOfRangeException();
                     }
                     break;
-                case RuleType.AnyDigit:
+                case AnyDigit:
                     regexPartOutput += @"\d";
                     break;
-                case RuleType.CustomText:
+                case CustomText:
                     regexPartOutput += caseSensitiveModifierStart +
                                        SanitizeWord(regexRulePart.RawUserInputValue) +
                                        caseSensitiveModifierEnd;
                                        
                     break;
-                case RuleType.OptionSet:
+                case OptionSet:
                     List<string> options = regexRulePart.Options
                         .Select(x => SanitizeWord(x.OptionValue))
                         .Where(x => !string.IsNullOrWhiteSpace(x))
@@ -74,14 +75,20 @@ namespace Regular.Utilities
                                       $"({string.Join(@"|", options)})" +
                                       caseSensitiveModifierEnd;
                     break;
-                case RuleType.FullStop:
-                    regexPartOutput = @"\.";
+                case FullStop:
+                    regexPartOutput = SanitizeCharacter(@".");
                     break;
-                case RuleType.Hyphen:
-                    regexPartOutput = @"-";
+                case Hyphen:
+                    regexPartOutput = SanitizeCharacter(@"-");
                     break;
-                case RuleType.Underscore:
-                    regexPartOutput = @"_";
+                case Underscore:
+                    regexPartOutput = SanitizeCharacter(@"_");
+                    break;
+                case OpenParenthesis:
+                    regexPartOutput = SanitizeCharacter(@"(");
+                    break;
+                case CloseParenthesis:
+                    regexPartOutput = SanitizeCharacter(@")");
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -146,7 +153,7 @@ namespace Regular.Utilities
                 if (regexRulePart.IsOptional && randomDouble > 0.5) continue;
                 switch (regexRulePart.RuleType)
                 {
-                    case RuleType.AnyLetter:
+                    case AnyLetter:
                         string randomLetter = Letters[random.Next(Letters.Length)].ToString();
                         switch (regexRulePart.CaseSensitiveDisplayString)
                         {
@@ -164,10 +171,10 @@ namespace Regular.Utilities
                                 break;
                         }
                         break;
-                    case RuleType.AnyDigit:
+                    case AnyDigit:
                         randomExampleString += Numbers[random.Next(Numbers.Length)];
                         break;
-                    case RuleType.AnyAlphanumeric:
+                    case AnyAlphanumeric:
                         string randomCharacter = Characters[random.Next(Characters.Length)].ToString();
                         switch (regexRulePart.CaseSensitiveDisplayString)
                         {
@@ -185,7 +192,7 @@ namespace Regular.Utilities
                                 break;
                         }
                         break;
-                    case RuleType.CustomText:
+                    case CustomText:
                         if (regexRulePart.IsCaseSensitive)
                         {
                             randomExampleString += regexRulePart.RawUserInputValue;
@@ -195,7 +202,7 @@ namespace Regular.Utilities
                             ? regexRulePart.RawUserInputValue.ToLower()
                             : regexRulePart.RawUserInputValue.ToUpper();
                         break;
-                    case RuleType.OptionSet:
+                    case OptionSet:
                         List<string> values = regexRulePart.Options
                             .Select(x => x.OptionValue)
                             .Where(x => !string.IsNullOrWhiteSpace(x))
@@ -213,14 +220,20 @@ namespace Regular.Utilities
                                 : randomValue.ToUpper();
                         }
                         break;
-                    case RuleType.FullStop:
+                    case FullStop:
                         randomExampleString += @".";
                         break;
-                    case RuleType.Hyphen:
+                    case Hyphen:
                         randomExampleString += @"-";
                         break;
-                    case RuleType.Underscore:
+                    case Underscore:
                         randomExampleString += @"_";
+                        break;
+                    case OpenParenthesis:
+                        randomExampleString += @"(";
+                        break;
+                    case CloseParenthesis:
+                        randomExampleString += @")";
                         break;
                     default:
                         randomExampleString += "";

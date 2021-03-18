@@ -34,25 +34,22 @@ namespace Regular.Services
         public void RemoveRule(string documentGuid, string regexRuleGuid)
         {
             if (!RegexRules.ContainsKey(documentGuid)) return;
-            RegexRule regexRuleToDelete =
-                GetDocumentRules(documentGuid)
-                    .FirstOrDefault(x => x.RuleGuid == regexRuleGuid);
+            RegexRule regexRuleToDelete = GetDocumentRules(documentGuid).FirstOrDefault(x => x.RuleGuid == regexRuleGuid);
             if (regexRuleToDelete == null) return;
             RegexRules[documentGuid].Remove(regexRuleToDelete);
         }
 
         public void UpdateRule(string documentGuid, RegexRule regexRule)
         {
-            if (RegexRules.ContainsKey(documentGuid))
-            {
-                // Attempting to find corresponding rule by matching GUID
-                RegexRule sameGuidRegexRule = RegexRules[documentGuid].FirstOrDefault(x => x.RuleGuid == regexRule.RuleGuid);
-                if (sameGuidRegexRule == null) return;
-                // Replacing the old rule with the new at the same index
-                int replacementIndex = RegexRules[documentGuid].IndexOf(sameGuidRegexRule);
-                if (replacementIndex == -1) return;
-                RegexRules[documentGuid][replacementIndex] = regexRule;
-            }
+            if (!RegexRules.ContainsKey(documentGuid)) return;
+            
+            // Attempting to find corresponding rule by matching GUID
+            RegexRule sameGuidRegexRule = RegexRules[documentGuid].FirstOrDefault(x => x.RuleGuid == regexRule.RuleGuid);
+            if (sameGuidRegexRule == null) return;
+            // Replacing the old rule with the new at the same index
+            int replacementIndex = RegexRules[documentGuid].IndexOf(sameGuidRegexRule);
+            if (replacementIndex == -1) return;
+            RegexRules[documentGuid][replacementIndex] = regexRule;
         }
 
         public RegexRule GetRegexRule(string documentGuid, string ruleGuid)

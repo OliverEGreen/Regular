@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using Regular.Enums;
 using Regular.Utilities;
 
@@ -17,7 +18,8 @@ namespace Regular.Models
         private string toolTipString = "";
         private string regexString = "";
         private MatchType matchType = MatchType.ExactMatch;
-        
+        private string ruleGuid = "";
+
         public string RuleName
         {
             get => ruleName;
@@ -100,13 +102,22 @@ namespace Regular.Models
         public string DateTimeCreated { get; set; } = DateTime.Now.ToString("r");
         public string LastModified { get; set; } = DateTime.Now.ToString("r");
         public string CreatedBy { get; set; } = Environment.UserName;
-        public string RuleGuid { get; private set; } = Guid.NewGuid().ToString();
-        
+        public string RuleGuid
+        {
+            get => ruleGuid;
+            set
+            {
+                ruleGuid = value;
+                NotifyPropertyChanged("RuleGuid");
+            }
+        }
+
         public static RegexRule Create(string documentGuid)
         {
             RegexRule regexRule = new RegexRule
             {
-                TargetCategoryObjects = CategoryUtils.GetInitialCategories(documentGuid)
+                TargetCategoryObjects = CategoryUtils.GetInitialCategories(documentGuid),
+                RuleGuid = Guid.NewGuid().ToString()
             };
             return regexRule;
         }
@@ -125,22 +136,22 @@ namespace Regular.Models
 
         public static void Update(string documentGuid, RegexRule stagingRegexRule)
         {
+            MessageBox.Show($"Updating RegexRule with GUID: {stagingRegexRule.RuleGuid}");
             // We copy all properties over from the staging rule to the existing rule
             RegexRule existingRegexRule = DeepCopyRegexRule(stagingRegexRule);
+            existingRegexRule.LastModified = DateTime.Now.ToString("r");
             
             RegularApp.RegexRuleCacheService.UpdateRule(documentGuid, existingRegexRule);
             ExtensibleStorageUtils.UpdateRegexRuleInExtensibleStorage(documentGuid, existingRegexRule.RuleGuid, stagingRegexRule);
-
-            existingRegexRule.LastModified = DateTime.Now.ToString("r");
+            MessageBox.Show($"Updated! GUID is: {existingRegexRule.RuleGuid}");
         }
 
         public static RegexRule DeepCopyRegexRule(RegexRule ruleToCopy)
         {
-            // Deep copy has issues because it instantites new RegularUpdater objects
-            // whereas we just want a reference to the original object when we update it
             string ruleGuid = ruleToCopy.RuleGuid;
             ruleToCopy = SerializationUtils.DeepCopyObject(ruleToCopy);
             ruleToCopy.RuleGuid = ruleGuid;
+            ruleToCopy.IsStagingRule = false;
             return ruleToCopy;
         }
         

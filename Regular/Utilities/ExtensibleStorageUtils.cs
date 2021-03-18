@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.ExtensibleStorage;
 using Regular.Models;
@@ -140,6 +141,7 @@ namespace Regular.Utilities
                 // If the rule has the right GUID, we return the DataStorage and Entity objects to be worked with
                 if(regexRule.RuleGuid == regexRuleGuid) return new KeyValuePair<DataStorage, Entity>(dataStorage, regexRuleEntity);
             }
+            MessageBox.Show($"Unable to find rule with given value of: {regexRuleGuid}");
             // If the rule wasn't found, we return nothing
             return new KeyValuePair<DataStorage, Entity>(null, null);
         }

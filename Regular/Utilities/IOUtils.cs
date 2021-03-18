@@ -1,44 +1,59 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.Win32;
-using Regular.Models;
 using Regular.UI.InfoWindow.View;
 
 namespace Regular.Utilities
 {
     public static class IOUtils
     {
-        public static string PromptUserToSelectDestination()
+        public static string GetFilterString(string fileExtension)
+        {
+            switch (fileExtension)
+            {
+                case ".json":
+                    return $"JSON Files (*{fileExtension})|*{fileExtension}";
+                case ".jpeg":
+                    return $"JPEG Files (*{fileExtension})|*{fileExtension}";
+                case ".gif":
+                    return $"GIF Files (*{fileExtension})|*{fileExtension}";
+                case ".bmp":
+                    return $"Bitmap Files (*{fileExtension})|*{fileExtension}";
+                case ".png":
+                    return $"PNG Files (*{fileExtension})|*{fileExtension}";
+                case ".csv":
+                    return $"Comma Separated Value Files (*{fileExtension})|*{fileExtension}";
+                case ".txt":
+                    return $"Text Files (*{fileExtension})|*{fileExtension}";
+            }
+            return "";
+        }
+        
+        public static string PromptUserToSelectDestination(string fileName, string fileExtension = "")
         {
             string timeStamp = DateTime.Now.ToString("yyMMdd HHmm");
             
             SaveFileDialog saveFileDialog = new SaveFileDialog
             {
-                FileName = $"Regular - DataSpec Rules {timeStamp}",
-                DefaultExt = ".json",
+                FileName = $"{fileName} - {timeStamp}",
                 InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
             };
 
-            bool? result = saveFileDialog.ShowDialog();
-            if (result == true) return saveFileDialog.FileName;
-            
-            new InfoWindowView
-            (
-                "Regular DataSpec",
-                "Rule Export Was Cancelled",
-                "The user cancelled the export.",
-                true
-            ).ShowDialog();
+            if (!string.IsNullOrWhiteSpace(fileExtension))
+            {
+                saveFileDialog.DefaultExt = fileExtension;
+                saveFileDialog.Filter = GetFilterString(fileExtension);
+            }
 
-            return null;
+            bool? result = saveFileDialog.ShowDialog();
+            return result == true ? saveFileDialog.FileName : null;
         }
 
-        public static string PromptUserToSelectJSONFile()
+        public static string PromptUserToSelectFile(string fileExtension)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
-                DefaultExt = ".json",
-                Filter = "JSON Files (.json)|*.json",
+                DefaultExt = fileExtension,
+                Filter = GetFilterString(fileExtension),
                 InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
             };
 
