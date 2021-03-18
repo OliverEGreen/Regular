@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Documents;
 using System.Windows.Input;
 using Autodesk.Revit.DB;
-using Regular.Enums;
 using Regular.Models;
-using Regular.UI.RuleEditor.View;
 using Regular.UI.RuleManager.ViewModel;
 using Regular.Utilities;
 
