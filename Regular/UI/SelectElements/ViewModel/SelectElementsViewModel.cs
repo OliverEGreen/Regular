@@ -64,6 +64,8 @@ namespace Regular.UI.SelectElements.ViewModel
             TriggerSelectAllElementsCommand = new TriggerSelectAllElementsCommand(this);
             TriggerSelectElementCommand = new TriggerSelectElementCommand(this);
             NumberElementsTotal = selectElementsInfo.ObservableObjects.Count;
+
+            RefreshSelectedElementCount();
         }
     }
 }

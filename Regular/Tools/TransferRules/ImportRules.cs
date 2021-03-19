@@ -8,6 +8,9 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Regular.Models;
 using Regular.UI;
+using Regular.UI.ImportRule.Enums;
+using Regular.UI.ImportRule.Model;
+using Regular.UI.ImportRule.View;
 using Regular.UI.InfoWindow.View;
 using Regular.UI.SelectElements.Model;
 using Regular.UI.SelectElements.View;
@@ -23,6 +26,7 @@ namespace Regular.Tools.TransferRules
             try
             {
                 Document document = commandData.Application.ActiveUIDocument.Document;
+                string documentGuid = DocumentGuidUtils.GetDocumentGuidFromExtensibleStorage(document);
                 
                 string filePath = IOUtils.PromptUserToSelectFile(".json");
                 if (string.IsNullOrWhiteSpace(filePath))
@@ -73,6 +77,7 @@ namespace Regular.Tools.TransferRules
 
                 SelectElementsView selectElementsView = new SelectElementsView(selectElementsInfo);
                 selectElementsView.ShowDialog();
+                
                 if (selectElementsView.DialogResult != true)
                 {
                     new InfoWindowView
@@ -85,13 +90,72 @@ namespace Regular.Tools.TransferRules
                     return Result.Cancelled;
                 }
                 
-                List<RegexRule> selectedRegexRules = selectElementsView.SelectElementsViewModel.InputObservableObjects
+                List<RegexRule> selectedRulesToImport = selectElementsView.SelectElementsViewModel.InputObservableObjects
                     .Where(x => x.IsChecked)
                     .Select(x => x.OriginalObject)
                     .OfType<RegexRule>()
                     .ToList();
 
+                List<RegexRule> existingRegexRules = RegularApp.RegexRuleCacheService
+                    .GetDocumentRules(documentGuid)
+                    .ToList();
 
+                List<string> existingRegexRuleNames = existingRegexRules
+                    .Select(x => x.RuleName)
+                    .ToList();
+
+                List<string> conflictingRegexRuleGuids = selectedRulesToImport
+                    .Where(x => existingRegexRuleNames.Contains(x.RuleName))
+                    .Select(x => x.RuleGuid)
+                    .ToList();
+
+                OverrideMode overrideMode = OverrideMode.None;
+
+                foreach(RegexRule selectedRegexRule in selectedRulesToImport)
+                {
+                    // If there's no conflict then we save and iterate
+                    if (!conflictingRegexRuleGuids.Contains(selectedRegexRule.RuleGuid))
+                    {
+                        RegexRule.Save(documentGuid, selectedRegexRule);
+                        continue;
+                    }
+
+                    RegexRule conflictingRegexRule = existingRegexRules.FirstOrDefault(x => x.RuleName == selectedRegexRule.RuleName);
+                    
+                    // Otherwise we can go one of 3 ways
+                    switch (overrideMode)
+                    {
+                        case OverrideMode.None:
+                            // Only used for the initial conflicting rule to fall through to the dialog
+                            break;
+                        case OverrideMode.ReplaceAll:
+                            if (conflictingRegexRule == null) continue;
+                            RegexRule.ReplaceRegexRule(documentGuid, conflictingRegexRule, selectedRegexRule);
+                            continue;
+                        case OverrideMode.RenameAll:
+                            selectedRegexRule.RuleName = RegexRule.GenerateRegexRuleDuplicateName(documentGuid, selectedRegexRule);
+                            RegexRule.SaveRenamedRegexRule(documentGuid, selectedRegexRule);
+                            continue;
+                        case OverrideMode.SkipAll:
+                            continue;
+                        default:
+                            continue;
+                    }
+
+                    ImportRuleInfo importRuleInfo = new ImportRuleInfo
+                    {
+                        DocumentGuid = documentGuid,
+                        ExistingRegexRule = conflictingRegexRule,
+                        NewRegexRule = selectedRegexRule
+                    };
+                    
+                    ImportRuleView importRuleView = new ImportRuleView(importRuleInfo);
+                    importRuleView.ShowDialog();
+                    
+                    if (importRuleView.DialogResult != true) break;
+                    overrideMode = importRuleView.ImportRuleViewModel.OverrideMode;
+                }
+                
                 return Result.Succeeded;
             }
             catch (Exception ex)

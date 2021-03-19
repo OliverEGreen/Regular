@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;REVIT2019
 
-7-31455578
+91980448193
 
-881962114351
+100602603873
 17-584304973
-Resources\RegularStyles.xaml;UI\ConfirmationDialog\View\ConfirmationDialogView.xaml;UI\InfoWindow\View\InfoWindowView.xaml;UI\OptionSetEditor\View\OptionSetEditorView.xaml;UI\RuleEditor\View\RuleEditorView.xaml;UI\RuleManager\View\RuleManagerView.xaml;UI\SelectElements\View\SelectElementsView.xaml;
+Resources\RegularStyles.xaml;UI\ConfirmationDialog\View\ConfirmationDialogView.xaml;UI\DebugWindow\View\DebugWindowView.xaml;UI\ImportRule\View\ImportRuleView.xaml;UI\InfoWindow\View\InfoWindowView.xaml;UI\OptionSetEditor\View\OptionSetEditorView.xaml;UI\RuleEditor\View\RuleEditorView.xaml;UI\RuleManager\View\RuleManagerView.xaml;UI\SelectElements\View\SelectElementsView.xaml;
 
 False
 

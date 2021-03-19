@@ -63,6 +63,7 @@ namespace Regular.Utilities
                 RegexRule deserializedRegexRule = SerializationUtils.DeserializeRegexRule(serializedRegexRule);
                 return deserializedRegexRule;
             }
+            
             Schema regularSchema = GetRegularSchema();
 
             // Retrieving and testing all DataStorage objects in the document against our Regular schema.
