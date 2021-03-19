@@ -5,7 +5,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="DebugWindowView"
-    MaxWidth="1000"
+    Width="Auto"
+    Height="Auto"
     DataContext="{Binding DebugWindowViewModel, RelativeSource={RelativeSource Self}}"
     Style="{DynamicResource RegularWindowResizable}"
     Topmost="True"
@@ -24,28 +25,28 @@
                     HeaderStyle="{StaticResource RegularDataGridColumnHeaderText}"
                     IsReadOnly="True" />
                 <DataGridTextColumn
-                    Width="Auto"
+                    Width="*"
                     MaxWidth="200"
                     Binding="{Binding Path=RuleName}"
                     Header="Name"
                     HeaderStyle="{StaticResource RegularDataGridColumnHeaderText}"
                     IsReadOnly="True" />
                 <DataGridTextColumn
-                    Width="Auto"
+                    Width="*"
                     MaxWidth="80"
                     Binding="{Binding Path=RegexRuleParts.Count}"
                     Header="No Parts"
                     HeaderStyle="{StaticResource RegularDataGridColumnHeaderText}"
                     IsReadOnly="True" />
                 <DataGridTextColumn
-                    Width="Auto"
+                    Width="*"
                     MaxWidth="200"
                     Binding="{Binding Path=RegexString}"
                     Header="Regex String"
                     HeaderStyle="{StaticResource RegularDataGridColumnHeaderText}"
                     IsReadOnly="True" />
                 <DataGridTextColumn
-                    Width="Auto"
+                    Width="*"
                     Binding="{Binding Path=LastModified}"
                     Header="Last Modified"
                     HeaderStyle="{StaticResource RegularDataGridColumnHeaderText}"

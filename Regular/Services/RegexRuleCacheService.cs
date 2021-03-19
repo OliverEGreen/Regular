@@ -24,6 +24,7 @@ namespace Regular.Services
         {
             if (RegexRules.ContainsKey(documentGuid))
             {
+                if (RegexRules[documentGuid].Select(x => x.RuleGuid).ToList().Contains(regexRule.RuleGuid)) return;
                 RegexRules[documentGuid].Add(regexRule);
             }
             else
