@@ -187,15 +187,15 @@ namespace Regular.Models
 
         public static void ReplaceRegexRule(string documentGuid, RegexRule regexRuleToReplace, RegexRule replacementRegexRule)
         {
-            MessageBox.Show("Replacing Regex Rule!");
             Delete(documentGuid, regexRuleToReplace);
             Save(documentGuid, replacementRegexRule);
         }
 
         public static void SaveRenamedRegexRule(string documentGuid, RegexRule regexRuleToSave)
         {
-            MessageBox.Show("Renaming Regex Rule!");
             regexRuleToSave.RuleName = GenerateRegexRuleDuplicateName(documentGuid, regexRuleToSave);
+            regexRuleToSave.RuleGuid = Guid.NewGuid().ToString();
+            regexRuleToSave.LastModified = DateTime.Now.ToString("r");
             Save(documentGuid, regexRuleToSave);
         }
        

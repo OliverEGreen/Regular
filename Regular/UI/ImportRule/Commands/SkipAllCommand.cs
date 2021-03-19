@@ -5,7 +5,7 @@ using Regular.UI.ImportRule.ViewModel;
 
 namespace Regular.UI.ImportRule.Commands
 {
-    public class SkipRuleCommand : ICommand
+    public class SkipAllCommand : ICommand
     {
         public ImportRuleViewModel ImportRuleViewModel {get;}
         public bool CanExecute(object parameter) => true;
@@ -16,7 +16,7 @@ namespace Regular.UI.ImportRule.Commands
             ImportRuleViewModel.SkipRuleCommand.Execute(null);
         }
 
-        public SkipRuleCommand(ImportRuleViewModel importRuleViewModel)
+        public SkipAllCommand(ImportRuleViewModel importRuleViewModel)
         {
             ImportRuleViewModel = importRuleViewModel;
         }

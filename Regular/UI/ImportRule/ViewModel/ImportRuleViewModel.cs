@@ -1,5 +1,4 @@
-﻿using Regular.Models;
-using Regular.UI.ImportRule.Commands;
+﻿using Regular.UI.ImportRule.Commands;
 using Regular.UI.ImportRule.Enums;
 using Regular.UI.ImportRule.Model;
 

@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Windows.Input;
-using Regular.UI.ImportRule.Enums;
 using Regular.UI.ImportRule.ViewModel;
 
 namespace Regular.UI.ImportRule.Commands
 {
-    public class SkipAllCommand : ICommand
+    public class SkipRuleCommand : ICommand
     {
         public ImportRuleViewModel ImportRuleViewModel {get;}
         public bool CanExecute(object parameter) => true;
         
         public void Execute(object parameter) { }
 
-        public SkipAllCommand(ImportRuleViewModel importRuleViewModel)
+        public SkipRuleCommand(ImportRuleViewModel importRuleViewModel)
         {
             ImportRuleViewModel = importRuleViewModel;
         }
