@@ -136,14 +136,12 @@ namespace Regular.Models
 
         public static void Update(string documentGuid, RegexRule stagingRegexRule)
         {
-            MessageBox.Show($"Updating RegexRule with GUID: {stagingRegexRule.RuleGuid}");
             // We copy all properties over from the staging rule to the existing rule
             RegexRule existingRegexRule = DeepCopyRegexRule(stagingRegexRule);
             existingRegexRule.LastModified = DateTime.Now.ToString("r");
             
             RegularApp.RegexRuleCacheService.UpdateRule(documentGuid, existingRegexRule);
             ExtensibleStorageUtils.UpdateRegexRuleInExtensibleStorage(documentGuid, existingRegexRule.RuleGuid, stagingRegexRule);
-            MessageBox.Show($"Updated! GUID is: {existingRegexRule.RuleGuid}");
         }
 
         public static RegexRule DeepCopyRegexRule(RegexRule ruleToCopy)
@@ -155,30 +153,50 @@ namespace Regular.Models
             return ruleToCopy;
         }
         
-        public static RegexRule Duplicate(string documentGuid, RegexRule sourceRegexRule, bool isStagingRule)
+        public static string GenerateRegexRuleDuplicateName(string documentGuid, RegexRule sourceRegexRule)
         {
             // Helper method to ensure duplicate rules always have a unique name
-            string GenerateRegexRuleDuplicateName()
-            {
-                List<string> documentRegexRuleNames = RegularApp.RegexRuleCacheService
-                    .GetDocumentRules(documentGuid)
-                    .Select(x => x.RuleName)
-                    .ToList();
-                string copyName = $"{sourceRegexRule.RuleName} Copy";
-                return documentRegexRuleNames.Contains(copyName) ? $"{copyName} Copy" : copyName;
-            }
+            List<string> documentRegexRuleNames = RegularApp.RegexRuleCacheService
+                .GetDocumentRules(documentGuid)
+                .Select(x => x.RuleName)
+                .ToList();
             
+            string copyName = $"{sourceRegexRule.RuleName} Copy";
+            
+            while (documentRegexRuleNames.Contains(copyName))
+            {
+                copyName = $"{copyName} Copy";
+            }
+
+            return copyName;
+        }
+
+        public static RegexRule Duplicate(string documentGuid, RegexRule sourceRegexRule, bool isStagingRule)
+        {
             // Returns a deep copy of an existing RegexRule, but with a new GUID
             RegexRule duplicateRegexRule = DeepCopyRegexRule(sourceRegexRule);
             duplicateRegexRule.IsStagingRule = isStagingRule;
-            
-            if (!isStagingRule)
-            {
-                duplicateRegexRule.RuleGuid = Guid.NewGuid().ToString();
-                duplicateRegexRule.RuleName = GenerateRegexRuleDuplicateName();
-            }
-            
+
+            if (isStagingRule) return duplicateRegexRule;
+
+            duplicateRegexRule.RuleGuid = Guid.NewGuid().ToString();
+            duplicateRegexRule.RuleName = GenerateRegexRuleDuplicateName(documentGuid, sourceRegexRule);
+
             return duplicateRegexRule;
+        }
+
+        public static void ReplaceRegexRule(string documentGuid, RegexRule regexRuleToReplace, RegexRule replacementRegexRule)
+        {
+            MessageBox.Show("Replacing Regex Rule!");
+            Delete(documentGuid, regexRuleToReplace);
+            Save(documentGuid, replacementRegexRule);
+        }
+
+        public static void SaveRenamedRegexRule(string documentGuid, RegexRule regexRuleToSave)
+        {
+            MessageBox.Show("Renaming Regex Rule!");
+            regexRuleToSave.RuleName = GenerateRegexRuleDuplicateName(documentGuid, regexRuleToSave);
+            Save(documentGuid, regexRuleToSave);
         }
        
         public event PropertyChangedEventHandler PropertyChanged;

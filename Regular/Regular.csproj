@@ -88,6 +88,22 @@
     <Compile Include="RibbonLauncher\RegularTool.cs" />
     <Compile Include="Tools\TransferRules\ImportRules.cs" />
     <Compile Include="Tools\TransferRules\ExportRules.cs" />
+    <Compile Include="UI\DebugWindow\ViewModel\DebugWindowViewModel.cs" />
+    <Compile Include="UI\DebugWindow\View\DebugWindowView.xaml.cs">
+      <DependentUpon>DebugWindowView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ImportRule\Commands\RenameRuleCommand.cs" />
+    <Compile Include="UI\ImportRule\Commands\RenameAllCommand.cs" />
+    <Compile Include="UI\ImportRule\Commands\ReplaceRuleCommand.cs" />
+    <Compile Include="UI\ImportRule\Commands\ReplaceAllCommand.cs" />
+    <Compile Include="UI\ImportRule\Commands\SkipRuleCommand.cs" />
+    <Compile Include="UI\ImportRule\Commands\SkipAllCommand.cs" />
+    <Compile Include="UI\ImportRule\Enums\OverrideMode.cs" />
+    <Compile Include="UI\ImportRule\Model\ImportRuleInfo.cs" />
+    <Compile Include="UI\ImportRule\ViewModel\ImportRuleViewModel.cs" />
+    <Compile Include="UI\ImportRule\View\ImportRuleView.xaml.cs">
+      <DependentUpon>ImportRuleView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\InfoWindow\ViewModel\InfoWindowViewModel.cs" />
     <Compile Include="UI\InfoWindow\View\InfoWindowView.xaml.cs">
       <DependentUpon>InfoWindowView.xaml</DependentUpon>
@@ -183,6 +199,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UI\ConfirmationDialog\View\ConfirmationDialogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\DebugWindow\View\DebugWindowView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\ImportRule\View\ImportRuleView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
