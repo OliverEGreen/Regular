@@ -1,21 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
-
 <RevitAddIns>
-
   <AddIn Type="Application">
-
     <Name>Regular</Name>
-    
-<Assembly>"C:\ProgramData\Autodesk\Revit\Addins\2019\Regular.dll"</Assembly>
-
+<Assembly>"Regular.dll"</Assembly>
     <AddInId>12aed8e1-c380-49be-b037-9e44af606255</AddInId>
-
     <FullClassName>Regular.RegularApp</FullClassName>
-    
-<VendorId>Regular</VendorId>
-    
-<VendorDescription>Regular</VendorDescription>
-  
+<VendorId>OGRN</VendorId>
+<VendorDescription>olivergreen.dev</VendorDescription>
 </AddIn>
-
 </RevitAddIns>
