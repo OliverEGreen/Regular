@@ -8,7 +8,7 @@
     
 <Assembly>"C:\ProgramData\Autodesk\Revit\Addins\2019\Regular.dll"</Assembly>
 
-    <AddInId>274AACE0-1A30-4EA1-9F62-CD31E2C9932F</AddInId>
+    <AddInId>12aed8e1-c380-49be-b037-9e44af606255</AddInId>
 
     <FullClassName>Regular.RegularApp</FullClassName>
     

@@ -73,8 +73,6 @@ C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\2019\zh-CN\AdWindows.resour
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\2019\zh-TW\AdWindows.resources.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2019\Regular.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2019\Regular.pdb
-C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2019\CsvHelper.dll
-C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2019\Newtonsoft.Json.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2019\RevitAPI.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2019\RevitAPIUI.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2019\RevitAPIFoundation.dll
@@ -126,8 +124,6 @@ C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2019\DetailUIAPI.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2019\UIFrameworkServices.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2019\ManagedMC3.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2019\Xceed.Wpf.AvalonDock.dll
-C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2019\CsvHelper.xml
-C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2019\Newtonsoft.Json.xml
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2019\RevitAPI.xml
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2019\RevitAPIUI.xml
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2019\cs-CZ\AdWindows.resources.dll
@@ -167,3 +163,4 @@ C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2019\Regular.csproj.Core
 C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2019\Regular.csproj.CopyComplete
 C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2019\Regular.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2019\Regular.pdb
+C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2019\Regular.csprojAssemblyReference.cache

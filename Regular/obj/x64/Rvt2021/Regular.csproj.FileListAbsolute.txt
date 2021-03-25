@@ -1,9 +1,8 @@
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2021\Regular.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2021\Regular.pdb
-C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2021\CsvHelper.dll
-C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2021\Newtonsoft.Json.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2021\RevitAPI.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2021\RevitAPIUI.dll
+C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2021\AdpSDKCSharpWrapper.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2021\RevitAPIFoundation.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2021\RevitDBAPI.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2021\PersistenceDBAPI.dll
@@ -36,6 +35,7 @@ C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2021\PointCloudAccessAPI
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2021\StairRampDBAPI.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2021\AnalysisAppsDBAPI.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2021\MaterialDBAPI.dll
+C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2021\IntfATFAPI.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2021\DBManagedServices.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2021\AdWindows.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2021\RevitAddInUtility.dll
@@ -51,11 +51,12 @@ C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2021\EssentialsUIAPI.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2021\EnergyAnalysisUtilitiesAPI.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2021\DetailUIAPI.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2021\UIFrameworkServices.dll
+C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2021\Autodesk.UI.Windows.dll
+C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2021\Autodesk.UI.Themes.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2021\Xceed.Wpf.AvalonDock.dll
-C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2021\CsvHelper.xml
-C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2021\Newtonsoft.Json.xml
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2021\RevitAPI.xml
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2021\RevitAPIUI.xml
+C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2021\RevitAddInUtility.xml
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2021\cs-CZ\AdWindows.resources.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2021\de-DE\AdWindows.resources.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2021\en-GB\AdWindows.resources.dll
@@ -70,7 +71,6 @@ C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2021\pt-BR\AdWindows.res
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2021\ru-RU\AdWindows.resources.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2021\zh-CN\AdWindows.resources.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2021\zh-TW\AdWindows.resources.dll
-C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2021\Regular.csprojAssemblyReference.cache
 C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2021\Resources\RegularStyles.baml
 C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2021\UI\ConfirmationDialog\View\ConfirmationDialogView.baml
 C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2021\UI\DebugWindow\View\DebugWindowView.baml
@@ -94,8 +94,3 @@ C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2021\Regular.csproj.Core
 C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2021\Regular.csproj.CopyComplete
 C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2021\Regular.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2021\Regular.pdb
-C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2021\AdpSDKCSharpWrapper.dll
-C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2021\IntfATFAPI.dll
-C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2021\Autodesk.UI.Windows.dll
-C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2021\Autodesk.UI.Themes.dll
-C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2021\RevitAddInUtility.xml

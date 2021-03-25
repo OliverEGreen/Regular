@@ -8,12 +8,12 @@ C:\Users\ogreen\Source\Repos\Regular\Regular\obj\x64\Rvt2018\
 Regular
 none
 false
-TRACE;DEBUG;REVIT2019
+TRACE;DEBUG;REVIT2018
 
 91980448193
 
-1011889589462
-17-584304973
+101-1680407178
+17-927185721
 Resources\RegularStyles.xaml;UI\ConfirmationDialog\View\ConfirmationDialogView.xaml;UI\DebugWindow\View\DebugWindowView.xaml;UI\ImportRule\View\ImportRuleView.xaml;UI\InfoWindow\View\InfoWindowView.xaml;UI\OptionSetEditor\View\OptionSetEditorView.xaml;UI\RuleEditor\View\RuleEditorView.xaml;UI\RuleManager\View\RuleManagerView.xaml;UI\SelectElements\View\SelectElementsView.xaml;
 
 False
