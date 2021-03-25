@@ -21,12 +21,11 @@ namespace Regular.Utilities
                 // The schema doesn't exist; we need to define the schema for the first time
                 SchemaBuilder schemaBuilder = new SchemaBuilder(Guid.NewGuid());
                 schemaBuilder.SetSchemaName("RegularSchema");
+                schemaBuilder.SetApplicationGUID(RegularApp.RegularApplicationGUID);
                 schemaBuilder.SetReadAccessLevel(AccessLevel.Public);
                 schemaBuilder.SetWriteAccessLevel(AccessLevel.Public);
-                // TODO: Sort out these permissions
-                //schemaBuilder.SetReadAccessLevel(AccessLevel.Application);
-                //schemaBuilder.SetWriteAccessLevel(AccessLevel.Application);
-                //schemaBuilder.SetVendorId("OGRN");
+                schemaBuilder.SetVendorId("OGRN");
+                
                 // Constructing the scheme for regexRules stored in ExtensibleStorage
                 schemaBuilder.AddSimpleField("SerializedRegexRule", typeof(string));
                 return schemaBuilder.Finish();
@@ -46,6 +45,7 @@ namespace Regular.Utilities
             Entity entity = new Entity(GetRegularSchema());
             string serializedRegexRule = SerializationUtils.SerializeRegexRule(regexRule);
             entity.Set("SerializedRegexRule", serializedRegexRule);
+            
             using (Transaction transaction = new Transaction(document, $"Saving RegexRule {regexRule.RuleName}"))
             {
                 transaction.Start();
@@ -142,7 +142,7 @@ namespace Regular.Utilities
                 // If the rule has the right GUID, we return the DataStorage and Entity objects to be worked with
                 if(regexRule.RuleGuid == regexRuleGuid) return new KeyValuePair<DataStorage, Entity>(dataStorage, regexRuleEntity);
             }
-            MessageBox.Show($"Unable to find rule with given value of: {regexRuleGuid}");
+            MessageBox.Show($"Unable to find rule with GUID: {regexRuleGuid}");
             // If the rule wasn't found, we return nothing
             return new KeyValuePair<DataStorage, Entity>(null, null);
         }

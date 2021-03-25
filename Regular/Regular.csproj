@@ -6,46 +6,73 @@
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
     <ProjectGuid>{12AED8E1-C380-49BE-B037-9E44AF606255}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Regular</RootNamespace>
     <AssemblyName>Regular</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <Authors>Oliver Green</Authors>
+    <TargetFrameworkVersion Condition="'$(Configuration)' == 'Rvt2016'">v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion Condition="'$(Configuration)' == 'Rvt2017'">v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion Condition="'$(Configuration)' == 'Rvt2018'">v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion Condition="'$(Configuration)' == 'Rvt2019'">v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion Condition="'$(Configuration)' == 'Rvt2020'">v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion Condition="'$(Configuration)' == 'Rvt2021'">v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Rvt2019|x64' ">
-    <OutputPath>bin\x64\2019\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;REVIT2019</DefineConstants>
-    <DebugType>full</DebugType>
-    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Rvt2016|x64'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x64\Rvt2016\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;REVIT2019</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;REVIT2016</DefineConstants>
     <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <LangVersion>7.3</LangVersion>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Rvt2019|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Rvt2017|x64'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\Rvt2019\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;REVIT2019</DefineConstants>
+    <OutputPath>bin\x64\Rvt2017\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;REVIT2017</DefineConstants>
     <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <LangVersion>7.3</LangVersion>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Rvt2016|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Rvt2018|x64'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\Rvt2016\</OutputPath>
+    <OutputPath>bin\x64\Rvt2018\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;REVIT2018</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Rvt2019|x64' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Rvt2019\</OutputPath>
     <DefineConstants>TRACE;DEBUG;REVIT2019</DefineConstants>
     <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Rvt2020|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Rvt2020\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;REVIT2020</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Rvt2021|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Rvt2021\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;REVIT2021</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
     <LangVersion>7.3</LangVersion>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
@@ -58,11 +85,41 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="RevitAPI">
-      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Revit 2019\RevitAPI.dll</HintPath>
+    <Reference Include="RevitAPI" Condition="'$(Configuration)' == 'Rvt2016'">
+      <HintPath>C:\Program Files\Autodesk\Revit 2016\RevitAPI.dll</HintPath>
     </Reference>
-    <Reference Include="RevitAPIUI">
-      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Revit 2019\RevitAPIUI.dll</HintPath>
+    <Reference Include="RevitAPIUI" Condition="'$(Configuration)' == 'Rvt2016'">
+      <HintPath>C:\Program Files\Autodesk\Revit 2016\RevitAPIUI.dll</HintPath>
+    </Reference>
+    <Reference Include="RevitAPI" Condition="'$(Configuration)' == 'Rvt2017'">
+      <HintPath>C:\Program Files\Autodesk\Revit 2017\RevitAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="RevitAPIUI" Condition="'$(Configuration)' == 'Rvt2017'">
+      <HintPath>C:\Program Files\Autodesk\Revit 2017\RevitAPIUI.dll</HintPath>
+    </Reference>
+    <Reference Include="RevitAPI" Condition="'$(Configuration)' == 'Rvt2018'">
+      <HintPath>C:\Program Files\Autodesk\Revit 2018\RevitAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="RevitAPIUI" Condition="'$(Configuration)' == 'Rvt2018'">
+      <HintPath>C:\Program Files\Autodesk\Revit 2018\RevitAPIUI.dll</HintPath>
+    </Reference>
+    <Reference Include="RevitAPI" Condition="'$(Configuration)' == 'Rvt2019'">
+      <HintPath>C:\Program Files\Autodesk\Revit 2019\RevitAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="RevitAPIUI" Condition="'$(Configuration)' == 'Rvt2019'">
+      <HintPath>C:\Program Files\Autodesk\Revit 2019\RevitAPIUI.dll</HintPath>
+    </Reference>
+    <Reference Include="RevitAPI" Condition="'$(Configuration)' == 'Rvt2020'">
+      <HintPath>C:\Program Files\Autodesk\Revit 2020\RevitAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="RevitAPIUI" Condition="'$(Configuration)' == 'Rvt2020'">
+      <HintPath>C:\Program Files\Autodesk\Revit 2020\RevitAPIUI.dll</HintPath>
+    </Reference>
+    <Reference Include="RevitAPI" Condition="'$(Configuration)' == 'Rvt2021'">
+      <HintPath>C:\Program Files\Autodesk\Revit 2021\RevitAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="RevitAPIUI" Condition="'$(Configuration)' == 'Rvt2021'">
+      <HintPath>C:\Program Files\Autodesk\Revit 2021\RevitAPIUI.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -249,51 +306,42 @@
   <PropertyGroup>
     <PostBuildEvent>
       echo Configuration: $(Configuration)
+
       if $(Configuration) == Rvt2016 goto 2016
       if $(Configuration) == Rvt2017 goto 2017
       if $(Configuration) == Rvt2018 goto 2018
       if $(Configuration) == Rvt2019 goto 2019
-      if $(Configuration) == Debug goto 2019
+      if $(Configuration) == Rvt2020 goto 2020
+      if $(Configuration) == Rvt2021 goto 2021
 
       :2016
       echo Copying results to 2016
       xcopy /Q/Y "$(TargetPath)" "C:\ProgramData\Autodesk\Revit\Addins\2016"
-
       goto exit
 
       :2017
       echo Copying results to 2017
       xcopy /Q/Y "$(TargetPath)" "C:\ProgramData\Autodesk\Revit\Addins\2017"
-
-      goto exit:2017
-
-      echo Copying results to 2017
-      xcopy /Q/Y "$(TargetPath)" "C:\ProgramData\Autodesk\Revit\Addins\2017"
-
-      goto exit
-
-      :2017
-      echo Copying results to 2017
-      xcopy /Q/Y "$(TargetPath)" "C:\ProgramData\Autodesk\Revit\Addins\2017"
-
-      goto exit
-
-      :2017
-      echo Copying results to 2017
-      xcopy /Q/Y "$(TargetPath)" "C:\ProgramData\Autodesk\Revit\Addins\2017"
-
       goto exit
 
       :2018
       echo Copying results to 2018
       xcopy /Q/Y "$(TargetPath)" "C:\ProgramData\Autodesk\Revit\Addins\2018"
-
       goto exit
 
       :2019
       echo Copying results to 2019
       xcopy /Q/Y "$(TargetPath)" "C:\ProgramData\Autodesk\Revit\Addins\2019"
+      goto exit
 
+      :2020
+      echo Copying results to 2020
+      xcopy /Q/Y "$(TargetPath)" "C:\ProgramData\Autodesk\Revit\Addins\2020"
+      goto exit
+
+      :2021
+      echo Copying results to 2021
+      xcopy /Q/Y "$(TargetPath)" "C:\ProgramData\Autodesk\Revit\Addins\2021"
       goto exit
 
       :exit</PostBuildEvent>
