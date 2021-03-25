@@ -27,7 +27,7 @@ namespace Regular.UI.RuleManager.Commands
         public void Execute(object parameter)
         {
             ruleManagerViewModel.RuleValidationOutputs.Clear();
-            ruleManagerViewModel.NumberElementsValid = 0;
+            ruleManagerViewModel.ReportSummary = "";
             
             List<Element> targetedElements = RuleExecutionUtils.GetTargetedElements
             (

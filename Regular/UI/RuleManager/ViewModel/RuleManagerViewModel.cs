@@ -218,8 +218,8 @@ namespace Regular.UI.RuleManager.ViewModel
         public void UpdateReportSummary()
         {
             NumberElementsValid = RuleValidationOutputs.Count(x => x.RuleValidationResult == RuleValidationResult.Valid);
-            double percentageValid = Math.Round(NumberElementsValid * 100.0 / ProgressBarTotalNumberElementsProcessed, 1);
-            ReportSummary = $"{NumberElementsValid}/{ProgressBarTotalNumberElementsProcessed} ({percentageValid}%) values are valid.";
+            string percentageValid = (NumberElementsValid * 100.0 / ProgressBarTotalNumberElementsProcessed).ToString("0.0");
+            ReportSummary = $"{NumberElementsValid}/{ProgressBarTotalNumberElementsProcessed} ({percentageValid}%) Valid";
         }
 
         public RuleManagerViewModel(string documentGuid)
