@@ -231,7 +231,6 @@
                 Command="{Binding MoveRulePartDownCommand}"
                 Style="{StaticResource ReorderDownButton}" />
         </StackPanel>
-
         <Border
             Grid.Row="6"
             Grid.Column="0"
@@ -390,28 +389,29 @@
                 </ListBox>
             </ScrollViewer>
         </Border>
-        <TextBlock
-            Name="TextBlockExample"
+        <DockPanel
             Grid.Row="7"
             Grid.Column="0"
-            Grid.ColumnSpan="2"
-            Width="200"
-            Margin="30,0,0,5"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Bottom"
-            Style="{StaticResource RegularTextBlockBody}"
-            Text="{Binding CompliantExample, UpdateSourceTrigger=PropertyChanged, StringFormat=Example: \{0\}}" />
-        <Button
-            Name="ButtonTest"
-            Grid.Row="7"
-            Grid.Column="0"
-            Width="25"
-            Height="25"
-            HorizontalAlignment="Left"
-            Command="{Binding GenerateCompliantExampleCommand}"
-            Content=""
-            Style="{StaticResource RefreshExampleButton}"
-            ToolTip="Press the button to generate random examples which are compliant with the rule parts you selected." />
+            Grid.ColumnSpan="{Binding DockPanelColumnSpan, UpdateSourceTrigger=PropertyChanged}">
+            <Button
+                Name="ButtonTest"
+                Width="25"
+                Height="25"
+                Command="{Binding GenerateCompliantExampleCommand}"
+                Content=""
+                DockPanel.Dock="Left"
+                Style="{StaticResource RefreshExampleButton}"
+                ToolTip="Press the button to generate random examples which are compliant with the rule parts you selected." />
+            <TextBlock
+                Name="TextBlockExample"
+                MaxWidth="{Binding TextBlockExampleMaxWidth, UpdateSourceTrigger=PropertyChanged}"
+                Margin="10,0,0,5"
+                VerticalAlignment="Bottom"
+                DockPanel.Dock="Left"
+                Style="{StaticResource RegularTextBlockBody}"
+                Text="{Binding CompliantExample, UpdateSourceTrigger=PropertyChanged, StringFormat=Example: \{0\}}"
+                TextWrapping="NoWrap" />
+        </DockPanel>
         <Button
             Name="ButtonCancel"
             Grid.Row="7"

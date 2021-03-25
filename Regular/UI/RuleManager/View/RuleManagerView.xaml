@@ -46,6 +46,7 @@
             VerticalAlignment="Center"
             Command="{Binding AddRuleCommand}"
             Content="New Rule"
+            IsEnabled="{Binding ButtonsEnabled, UpdateSourceTrigger=PropertyChanged}"
             Style="{StaticResource RegularButton}" />
         <ProgressBar
             Grid.Row="0"
@@ -155,6 +156,7 @@
                 Height="25"
                 Margin="0,0,3,0"
                 Command="{Binding MoveRuleUpCommand}"
+                IsEnabled="{Binding ButtonsEnabled, UpdateSourceTrigger=PropertyChanged}"
                 Style="{StaticResource ReorderUpButton}" />
             <Button
                 Name="ButtonMoveRulePartDown"
@@ -162,6 +164,7 @@
                 Height="25"
                 Margin="0,0,3,0"
                 Command="{Binding MoveRuleDownCommand}"
+                IsEnabled="{Binding ButtonsEnabled, UpdateSourceTrigger=PropertyChanged}"
                 Style="{StaticResource ReorderDownButton}" />
             <Button
                 Name="ButtonDuplicateRule"
@@ -170,6 +173,7 @@
                 Margin="0,0,3,0"
                 Command="{Binding DuplicateRuleCommand}"
                 FontSize="13"
+                IsEnabled="{Binding ButtonsEnabled, UpdateSourceTrigger=PropertyChanged}"
                 Style="{StaticResource DuplicateRuleButton}" />
         </StackPanel>
         <Button
@@ -178,6 +182,7 @@
             Click="ButtonExecuteRule_OnClick"
             Command="{Binding ExecuteRuleCommand}"
             Content="Execute"
+            IsEnabled="{Binding ButtonsEnabled, UpdateSourceTrigger=PropertyChanged}"
             Style="{StaticResource RegularButton}" />
         <DataGrid
             Grid.Row="2"
@@ -232,6 +237,7 @@
                 Command="{Binding ExportReportCommand}"
                 Content="Export"
                 DockPanel.Dock="Left"
+                IsEnabled="{Binding ButtonsEnabled, UpdateSourceTrigger=PropertyChanged}"
                 Style="{StaticResource RegularButton}" />
             <TextBlock
                 Margin="10,0,0,0"

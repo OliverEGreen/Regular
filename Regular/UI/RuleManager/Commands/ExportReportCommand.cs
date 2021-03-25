@@ -19,7 +19,7 @@ namespace Regular.UI.RuleManager.Commands
             this.ruleManagerViewModel = ruleManagerViewModel;
         }
 
-        public bool CanExecute(object parameter) => ruleManagerViewModel.ExportReportEnabled;
+        public bool CanExecute(object parameter) => ruleManagerViewModel.ButtonsEnabled;
         
         public void Execute(object parameter)
         {

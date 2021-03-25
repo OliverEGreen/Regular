@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
 using Autodesk.Revit.DB;
-using Regular.Enums;
 using Regular.Models;
 using Regular.UI.RuleManager.ViewModel;
 using Regular.Utilities;
@@ -27,6 +26,7 @@ namespace Regular.UI.RuleManager.Commands
         public void Execute(object parameter)
         {
             ruleManagerViewModel.RuleValidationOutputs.Clear();
+            ruleManagerViewModel.ButtonsEnabled = false;
             ruleManagerViewModel.ReportSummary = "";
             
             List<Element> targetedElements = RuleExecutionUtils.GetTargetedElements
@@ -66,7 +66,7 @@ namespace Regular.UI.RuleManager.Commands
             }
             
             ruleManagerViewModel.UpdateReportSummary();
-            ruleManagerViewModel.ExportReportEnabled = true;
+            ruleManagerViewModel.ButtonsEnabled = true;
         }
 
         public event EventHandler CanExecuteChanged
