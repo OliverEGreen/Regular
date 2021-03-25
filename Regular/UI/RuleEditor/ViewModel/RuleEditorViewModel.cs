@@ -53,9 +53,11 @@ namespace Regular.UI.RuleEditor.ViewModel
         private RuleType selectedRuleType = RuleType.AnyAlphanumeric;
         private string compliantExample = "";
         private Visibility compliantExampleVisibility = Visibility.Collapsed;
+        private int dockPanelColumnSpan = 1;
         private int buttonsColumnNumber = 1;
         private int windowMinWidth = 436;
         private int windowMaxWidth = 436;
+        private int textBlockExampleMaxWidth = 170;
         
 
         // Public Properties & Setters
@@ -214,6 +216,15 @@ namespace Regular.UI.RuleEditor.ViewModel
                 NotifyPropertyChanged();
             }
         }
+        public int DockPanelColumnSpan
+        {
+            get => dockPanelColumnSpan;
+            set
+            {
+                dockPanelColumnSpan = value;
+                NotifyPropertyChanged();
+            }
+        }
         public int ButtonsColumnNumber
         {
             get => buttonsColumnNumber;
@@ -238,6 +249,16 @@ namespace Regular.UI.RuleEditor.ViewModel
             set
             {
                 windowMaxWidth = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public int TextBlockExampleMaxWidth
+        {
+            get => textBlockExampleMaxWidth;
+            set
+            {
+                textBlockExampleMaxWidth = value;
                 NotifyPropertyChanged();
             }
         }

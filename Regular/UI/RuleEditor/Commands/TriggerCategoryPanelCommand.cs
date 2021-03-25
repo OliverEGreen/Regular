@@ -35,6 +35,8 @@ namespace Regular.UI.RuleEditor.Commands
                 ruleEditorViewModel.ColumnCategoriesPanelWidth = new GridLength(columnCategoriesPanelWidth);
                 ruleEditorViewModel.ColumnMarginWidth = new GridLength(columnMarginWidth);
                 ruleEditorViewModel.ButtonsColumnNumber = 3;
+                ruleEditorViewModel.DockPanelColumnSpan = 4;
+                ruleEditorViewModel.TextBlockExampleMaxWidth = 350;
             }
             else
             {
@@ -45,6 +47,8 @@ namespace Regular.UI.RuleEditor.Commands
                 ruleEditorViewModel.ColumnCategoriesPanelWidth = new GridLength(0);
                 ruleEditorViewModel.ColumnMarginWidth = new GridLength(0);
                 ruleEditorViewModel.ButtonsColumnNumber = 1;
+                ruleEditorViewModel.DockPanelColumnSpan = 2;
+                ruleEditorViewModel.TextBlockExampleMaxWidth = 170;
             }
         }
 

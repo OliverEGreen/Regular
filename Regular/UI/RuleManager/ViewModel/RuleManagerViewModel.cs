@@ -183,7 +183,7 @@ namespace Regular.UI.RuleManager.ViewModel
             }
         }
 
-        public bool ExportReportEnabled { get; set; } = false;
+        public bool ButtonsEnabled { get; set; } = true;
         public int NumberElementsValid { get; set; } = 0;
 
         // ICommands
