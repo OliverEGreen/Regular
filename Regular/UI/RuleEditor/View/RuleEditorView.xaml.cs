@@ -44,7 +44,7 @@ namespace Regular.UI.RuleEditor.View
             // Gathering other RegexRule names to ensure the user inputs a unique name
             List<RegexRule> otherRegexRules = RegularApp.RegexRuleCacheService
                     .GetDocumentRules(RuleEditorViewModel.RuleEditorInfo.DocumentGuid)
-                    .Where(x => x.IsStagingRule = false)
+                    .Where(x => x.IsStagingRule == false)
                     .ToList();
 
             string ruleNameInputFeedback = InputValidationServices.ValidateRuleName(RuleEditorViewModel.StagingRule, otherRegexRules);

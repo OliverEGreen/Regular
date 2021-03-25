@@ -12,8 +12,9 @@ namespace Regular.UI.ImportRule.Commands
         
         public void Execute(object parameter)
         {
+            // If there's no override, we execute and then flip the switch
+            if(ImportRuleViewModel.OverrideMode == OverrideMode.None) ImportRuleViewModel.ReplaceRuleCommand.Execute(null);
             ImportRuleViewModel.OverrideMode = OverrideMode.ReplaceAll;
-            ImportRuleViewModel.ReplaceRuleCommand.Execute(null);
         }
 
         public ReplaceAllCommand(ImportRuleViewModel importRuleViewModel)

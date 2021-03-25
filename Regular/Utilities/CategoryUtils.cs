@@ -22,7 +22,7 @@ namespace Regular.Utilities
         public static ObservableCollection<CategoryObject> GetInitialCategories(string documentGuid)
         {
             // Relevant categories are assigned by the user using a Checkbox List
-            // CategoryObjects tie together the cateogry name, its ID and its checked state as a Boolean
+            // CategoryObjects tie together the category name, its ID and its checked state as a Boolean
             // Here we return all possible category objects for the new RegexRule and set them all to unchecked
 
             ObservableCollection<CategoryObject> observableObjects = new ObservableCollection<CategoryObject>();

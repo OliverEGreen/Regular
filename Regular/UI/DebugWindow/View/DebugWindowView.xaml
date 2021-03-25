@@ -5,9 +5,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="DebugWindowView"
-    Width="Auto"
-    Height="Auto"
     DataContext="{Binding DebugWindowViewModel, RelativeSource={RelativeSource Self}}"
+    SizeToContent="WidthAndHeight"
     Style="{DynamicResource RegularWindowResizable}"
     Topmost="True"
     WindowStartupLocation="CenterScreen"
@@ -16,37 +15,47 @@
         <ResourceDictionary Source="../../../Resources/RegularStyles.xaml" />
     </Window.Resources>
     <Grid Style="{StaticResource RegularGrid}">
-        <DataGrid ItemsSource="{Binding RegexRules, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource RegularDataGrid}">
+        <DataGrid
+            Width="Auto"
+            ItemsSource="{Binding RegexRules, UpdateSourceTrigger=PropertyChanged}"
+            Style="{StaticResource RegularDataGrid}">
             <DataGrid.Columns>
                 <DataGridTextColumn
-                    Width="*"
+                    Width="Auto"
                     Binding="{Binding Path=RuleGuid}"
                     Header="Guid"
                     HeaderStyle="{StaticResource RegularDataGridColumnHeaderText}"
                     IsReadOnly="True" />
                 <DataGridTextColumn
-                    Width="*"
+                    Width="Auto"
                     MaxWidth="200"
                     Binding="{Binding Path=RuleName}"
                     Header="Name"
                     HeaderStyle="{StaticResource RegularDataGridColumnHeaderText}"
                     IsReadOnly="True" />
                 <DataGridTextColumn
-                    Width="*"
+                    Width="Auto"
                     MaxWidth="80"
                     Binding="{Binding Path=RegexRuleParts.Count}"
                     Header="No Parts"
                     HeaderStyle="{StaticResource RegularDataGridColumnHeaderText}"
                     IsReadOnly="True" />
                 <DataGridTextColumn
-                    Width="*"
+                    Width="Auto"
+                    MaxWidth="80"
+                    Binding="{Binding Path=IsStagingRule}"
+                    Header="Is Staging"
+                    HeaderStyle="{StaticResource RegularDataGridColumnHeaderText}"
+                    IsReadOnly="True" />
+                <DataGridTextColumn
+                    Width="Auto"
                     MaxWidth="200"
                     Binding="{Binding Path=RegexString}"
                     Header="Regex String"
                     HeaderStyle="{StaticResource RegularDataGridColumnHeaderText}"
                     IsReadOnly="True" />
                 <DataGridTextColumn
-                    Width="*"
+                    Width="Auto"
                     Binding="{Binding Path=LastModified}"
                     Header="Last Modified"
                     HeaderStyle="{StaticResource RegularDataGridColumnHeaderText}"
