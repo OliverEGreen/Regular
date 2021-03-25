@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using Autodesk.Revit.DB;
+using Regular.Enums;
 using Regular.Models;
 using Regular.UI.RuleManager.ViewModel;
 using Regular.Utilities;
@@ -27,7 +29,6 @@ namespace Regular.UI.RuleManager.Commands
         {
             ruleManagerViewModel.RuleValidationOutputs.Clear();
             ruleManagerViewModel.ButtonsEnabled = false;
-            ruleManagerViewModel.ReportSummary = "";
             
             List<Element> targetedElements = RuleExecutionUtils.GetTargetedElements
             (
@@ -65,7 +66,10 @@ namespace Regular.UI.RuleManager.Commands
                 ruleManagerViewModel.UpdateProgressBar();
             }
             
-            ruleManagerViewModel.UpdateReportSummary();
+            ruleManagerViewModel.NumberElementsValid = ruleManagerViewModel.RuleValidationOutputs.Count(x => x.RuleValidationResult == RuleValidationResult.Valid);
+            string percentageValid = (ruleManagerViewModel.NumberElementsValid * 100.0 / ruleManagerViewModel.ProgressBarTotalNumberElementsProcessed).ToString("0.0");
+            ruleManagerViewModel.ProgressBarText = $"{ruleManagerViewModel.NumberElementsValid}/{ruleManagerViewModel.ProgressBarTotalNumberElementsProcessed} ({percentageValid}%) Valid";
+
             ruleManagerViewModel.ButtonsEnabled = true;
         }
 
