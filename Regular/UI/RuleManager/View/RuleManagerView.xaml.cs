@@ -124,10 +124,8 @@ namespace Regular.UI.RuleManager.View
 
                     ruleValidationOutput.RuleValidationResult = ruleValidationResult;
                     ruleValidationOutput.ValidationText = ruleValidationResult.GetEnumDescription();
-                    if (ruleValidationOutput.RuleValidationResult == RuleValidationResult.Valid)
-                    {
-                        ruleValidationOutput.CompliantExample = "";
-                    }
+                    if (ruleValidationOutput.RuleValidationResult != RuleValidationResult.Valid) return;
+                    ruleValidationOutput.CompliantExample = "";
                 }
             }
         }

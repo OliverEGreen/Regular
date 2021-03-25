@@ -212,8 +212,7 @@
                     HeaderStyle="{StaticResource RegularDataGridColumnHeaderText}"
                     IsReadOnly="False" />
                 <DataGridTextColumn
-                    Width="80"
-                    MinWidth="100"
+                    Width="50"
                     Binding="{Binding Path=ValidationText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                     Header="Validity"
                     HeaderStyle="{StaticResource RegularDataGridColumnHeaderText}"
@@ -227,19 +226,25 @@
                     IsReadOnly="True" />
             </DataGrid.Columns>
         </DataGrid>
-        <Button
-            Grid.Row="4"
-            Grid.Column="2"
-            HorizontalAlignment="Left"
-            Command="{Binding ExportReportCommand}"
-            Content="Export"
-            Style="{StaticResource RegularButton}" />
-        <Button
-            Name="ButtonClose"
-            Grid.Row="4"
-            Grid.Column="2"
-            Click="ButtonClose_Click"
-            Content="Close"
-            Style="{StaticResource RegularButtonCancel}" />
+        <DockPanel Grid.Row="4" Grid.Column="2">
+            <Button
+                HorizontalAlignment="Left"
+                Command="{Binding ExportReportCommand}"
+                Content="Export"
+                DockPanel.Dock="Left"
+                Style="{StaticResource RegularButton}" />
+            <TextBlock
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                DockPanel.Dock="Left"
+                Style="{StaticResource RegularTextBlockBody}"
+                Text="{Binding ReportSummary, UpdateSourceTrigger=PropertyChanged}" />
+            <Button
+                Name="ButtonClose"
+                Click="ButtonClose_Click"
+                Content="Close"
+                DockPanel.Dock="Right"
+                Style="{StaticResource RegularButtonCancel}" />
+        </DockPanel>
     </Grid>
 </Window>

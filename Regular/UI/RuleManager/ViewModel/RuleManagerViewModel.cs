@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Threading;
+using Regular.Enums;
 using Regular.Models;
 using Regular.UI.RuleManager.Commands;
 
@@ -21,6 +23,7 @@ namespace Regular.UI.RuleManager.ViewModel
         private int progressBarTotalNumberElementsProcessed = 0;
         private string trackingParameterName = "";
         private int progressBarPercentage = 0;
+        private string reportSummary = "";
         private GridLength columnMarginWidth = new GridLength(0);
         private GridLength columnReportWidth = new GridLength(0);
         private int windowMinWidth = 350;
@@ -86,6 +89,17 @@ namespace Regular.UI.RuleManager.ViewModel
                 NotifyPropertyChanged();
             }
         }
+
+        public string ReportSummary
+        {
+            get => reportSummary;
+            set
+            {
+                reportSummary = value;
+                NotifyPropertyChanged();
+            }
+        }
+
         public string TrackingParameterName
         {
             get => trackingParameterName;
@@ -169,9 +183,8 @@ namespace Regular.UI.RuleManager.ViewModel
             }
         }
 
-
         public bool ExportReportEnabled { get; set; } = false;
-
+        public int NumberElementsValid { get; set; } = 0;
 
         // ICommands
         public AddRuleCommand AddRuleCommand { get; }
@@ -202,6 +215,12 @@ namespace Regular.UI.RuleManager.ViewModel
             ProgressBar.Dispatcher.Invoke(new ProgressBarDelegate(UpdateProgress), DispatcherPriority.Background);
         }
 
+        public void UpdateReportSummary()
+        {
+            NumberElementsValid = RuleValidationOutputs.Count(x => x.RuleValidationResult == RuleValidationResult.Valid);
+            double percentageValid = Math.Round(NumberElementsValid * 100.0 / ProgressBarTotalNumberElementsProcessed, 1);
+            ReportSummary = $"{NumberElementsValid}/{ProgressBarTotalNumberElementsProcessed} ({percentageValid}%) values are valid.";
+        }
 
         public RuleManagerViewModel(string documentGuid)
         {
