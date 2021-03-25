@@ -4,6 +4,7 @@ using System.Windows.Input;
 using CsvHelper;
 using CsvHelper.Configuration;
 using Regular.Models;
+using Regular.UI.InfoWindow.View;
 using Regular.UI.RuleManager.ViewModel;
 using Regular.Utilities;
 
@@ -31,6 +32,14 @@ namespace Regular.UI.RuleManager.Commands
                 csv.Context.WriterConfiguration.RegisterClassMap(new RuleValidationOutputMap());
                 csv.WriteRecords(ruleManagerViewModel.RuleValidationOutputs);
             }
+
+            new InfoWindowView
+            (
+                "Regular DataSpec",
+                "Export Completed",
+                "The report has been exported to .csv format.",
+                false
+            ).ShowDialog();
         }
 
         public sealed class RuleValidationOutputMap : ClassMap<RuleValidationOutput>

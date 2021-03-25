@@ -18,7 +18,10 @@
     <TargetFrameworkVersion Condition="'$(Configuration)' == 'Rvt2020'">v4.7.2</TargetFrameworkVersion>
     <TargetFrameworkVersion Condition="'$(Configuration)' == 'Rvt2021'">v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Rvt2018|x64'">
     <DebugSymbols>true</DebugSymbols>
