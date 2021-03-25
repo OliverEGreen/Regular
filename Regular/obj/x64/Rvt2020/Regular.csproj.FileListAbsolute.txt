@@ -1,7 +1,5 @@
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2020\Regular.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2020\Regular.pdb
-C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2020\CsvHelper.dll
-C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2020\Newtonsoft.Json.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2020\RevitAPI.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2020\RevitAPIUI.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2020\RevitAPIFoundation.dll
@@ -53,8 +51,6 @@ C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2020\DetailUIAPI.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2020\UIFrameworkServices.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2020\ManagedMC3.dll
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2020\Xceed.Wpf.AvalonDock.dll
-C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2020\CsvHelper.xml
-C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2020\Newtonsoft.Json.xml
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2020\RevitAPI.xml
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2020\RevitAPIUI.xml
 C:\Users\ogreen\Source\Repos\Regular\Regular\bin\x64\Rvt2020\cs-CZ\AdWindows.resources.dll

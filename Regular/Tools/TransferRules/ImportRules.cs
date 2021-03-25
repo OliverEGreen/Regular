@@ -133,7 +133,6 @@ namespace Regular.Tools.TransferRules
                             RegexRule.ReplaceRegexRule(documentGuid, conflictingRegexRule, selectedRegexRule);
                             continue;
                         case OverrideMode.RenameAll:
-                            //selectedRegexRule.RuleName = RegexRule.GenerateRegexRuleDuplicateName(documentGuid, selectedRegexRule);
                             RegexRule.SaveRenamedRegexRule(documentGuid, selectedRegexRule);
                             continue;
                         case OverrideMode.SkipAll:

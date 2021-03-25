@@ -14,7 +14,7 @@ namespace Regular
 {
     public class RegularApp : IExternalApplication
     {
-        public static Guid RegularApplicationGUID = new Guid("274AACE0-1A30-4EA1-9F62-CD31E2C9932F");
+        public static Guid RegularApplicationGUID = new Guid("12aed8e1-c380-49be-b037-9e44af606255");
 
         public static RegexRuleCacheService RegexRuleCacheService = RegexRuleCacheService.Instance();
         public static DocumentCacheService DocumentCacheService = DocumentCacheService.Instance();
@@ -40,16 +40,8 @@ namespace Regular
         private static void RegisterDocument(Document document)
         {
             // If the document has an existing GUID saved to ExtensibleStorage we retrieve this, otherwise we register it with a new GUID
-            string documentGuid;
-
-            if (DocumentGuidUtils.GetDocumentGuidFromExtensibleStorage(document) == null)
-            {
-                documentGuid = DocumentGuidUtils.RegisterDocumentGuidToExtensibleStorage(document);
-            }
-            else
-            {
-                documentGuid = DocumentGuidUtils.GetDocumentGuidFromExtensibleStorage(document);
-            }
+            string documentGuid = DocumentGuidUtils.GetDocumentGuidFromExtensibleStorage(document) ??
+                                  DocumentGuidUtils.RegisterDocumentGuidToExtensibleStorage(document);
             
             // Creates an accessible, stable reference to the Revit document
             DocumentCacheService.AddDocument(documentGuid, document);
