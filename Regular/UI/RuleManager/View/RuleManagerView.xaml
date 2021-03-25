@@ -60,11 +60,8 @@
             Margin="0"
             VerticalAlignment="Center"
             Style="{StaticResource RegularTextBlockProgressBar}"
-            TextAlignment="Center">
-            <Run Text="{Binding ProgressBarTotalNumberElementsProcessed}" />
-            <Run Text="/" />
-            <Run Text="{Binding ProgressBarTotalNumberOfElements}" />
-        </TextBlock>
+            Text="{Binding ProgressBarText, UpdateSourceTrigger=PropertyChanged}"
+            TextAlignment="Center" />
         <Border
             Grid.Row="2"
             Grid.Column="0"
@@ -124,6 +121,7 @@
                                     HorizontalAlignment="Right"
                                     Command="{Binding ElementName=RuleManagerWindow, Path=DataContext.EditRuleCommand}"
                                     CommandParameter="{Binding .}"
+                                    IsEnabled="{Binding ElementName=RuleManagerWindow, Path=DataContext.ButtonsEnabled, UpdateSourceTrigger=PropertyChanged}"
                                     Style="{StaticResource EditItemButton}"
                                     ToolTip="Edit Rule" />
                                 <Button
@@ -136,6 +134,7 @@
                                     HorizontalAlignment="Right"
                                     Command="{Binding ElementName=RuleManagerWindow, Path=DataContext.DeleteRuleCommand}"
                                     CommandParameter="{Binding .}"
+                                    IsEnabled="{Binding ElementName=RuleManagerWindow, Path=DataContext.ButtonsEnabled, UpdateSourceTrigger=PropertyChanged}"
                                     Style="{StaticResource DeleteItemButton}"
                                     ToolTip="Delete Rule" />
                             </Grid>
@@ -239,12 +238,6 @@
                 DockPanel.Dock="Left"
                 IsEnabled="{Binding ButtonsEnabled, UpdateSourceTrigger=PropertyChanged}"
                 Style="{StaticResource RegularButton}" />
-            <TextBlock
-                Margin="10,0,0,0"
-                VerticalAlignment="Center"
-                DockPanel.Dock="Left"
-                Style="{StaticResource RegularTextBlockBody}"
-                Text="{Binding ReportSummary, UpdateSourceTrigger=PropertyChanged}" />
             <Button
                 Name="ButtonClose"
                 Click="ButtonClose_Click"

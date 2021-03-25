@@ -19,11 +19,11 @@ namespace Regular.UI.RuleManager.ViewModel
         private ObservableCollection<RegexRule> regexRules = new ObservableCollection<RegexRule>();
         private RegexRule selectedRegexRule = null;
         private ObservableCollection<RuleValidationOutput> ruleValidationOutputs = new ObservableCollection<RuleValidationOutput>();
+        private string progressBarText = "";
         private int progressBarTotalNumberOfElements = 0;
         private int progressBarTotalNumberElementsProcessed = 0;
         private string trackingParameterName = "";
         private int progressBarPercentage = 0;
-        private string reportSummary = "";
         private GridLength columnMarginWidth = new GridLength(0);
         private GridLength columnReportWidth = new GridLength(0);
         private int windowMinWidth = 350;
@@ -32,6 +32,7 @@ namespace Regular.UI.RuleManager.ViewModel
         private int windowMinHeight = 500;
         private int windowHeight = 500;
         private int windowMaxHeight = 500;
+        private bool buttonsEnabled = true;
 
 
         // Public Properties and NotifyPropertyChanged
@@ -71,6 +72,16 @@ namespace Regular.UI.RuleManager.ViewModel
                 NotifyPropertyChanged();
             }
         }
+
+        public string ProgressBarText
+        {
+            get => progressBarText;
+            set
+            {
+                progressBarText = value;
+                NotifyPropertyChanged();
+            }
+        }
         public int ProgressBarTotalNumberElementsProcessed
         {
             get => progressBarTotalNumberElementsProcessed;
@@ -89,17 +100,7 @@ namespace Regular.UI.RuleManager.ViewModel
                 NotifyPropertyChanged();
             }
         }
-
-        public string ReportSummary
-        {
-            get => reportSummary;
-            set
-            {
-                reportSummary = value;
-                NotifyPropertyChanged();
-            }
-        }
-
+        
         public string TrackingParameterName
         {
             get => trackingParameterName;
@@ -183,7 +184,15 @@ namespace Regular.UI.RuleManager.ViewModel
             }
         }
 
-        public bool ButtonsEnabled { get; set; } = true;
+        public bool ButtonsEnabled
+        {
+            get => buttonsEnabled;
+            set
+            {
+                buttonsEnabled = value;
+                NotifyPropertyChanged();
+            }
+        }
         public int NumberElementsValid { get; set; } = 0;
 
         // ICommands
@@ -210,16 +219,9 @@ namespace Regular.UI.RuleManager.ViewModel
             BackgroundWorker progressBarWorker = new BackgroundWorker { WorkerReportsProgress = true };
             progressBarWorker.DoWork += ProgressBarWorker_DoWork;
             progressBarWorker.RunWorkerAsync();
-
             ProgressBarTotalNumberElementsProcessed++;
+            ProgressBarText = $"{ProgressBarTotalNumberElementsProcessed}/{ProgressBarTotalNumberOfElements}";
             ProgressBar.Dispatcher.Invoke(new ProgressBarDelegate(UpdateProgress), DispatcherPriority.Background);
-        }
-
-        public void UpdateReportSummary()
-        {
-            NumberElementsValid = RuleValidationOutputs.Count(x => x.RuleValidationResult == RuleValidationResult.Valid);
-            string percentageValid = (NumberElementsValid * 100.0 / ProgressBarTotalNumberElementsProcessed).ToString("0.0");
-            ReportSummary = $"{NumberElementsValid}/{ProgressBarTotalNumberElementsProcessed} ({percentageValid}%) Valid";
         }
 
         public RuleManagerViewModel(string documentGuid)
