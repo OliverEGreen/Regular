@@ -1,4 +1,4 @@
-#Examples
+# Examples
 
 Let's walk through a basic example: creating a rule to ensure consistent door numbers. In Revit, this often means targeting the 'Mark' parameter for all elements of the 'Door' category. Our theoretical company states that all door codes must either begin with **'ID'** for internal doors, or **'ED'** for external doors. This is followed by a **full-stop**, and then **3 numbers**, for instance `'ID.001'` or `'ED.101'`.
 
