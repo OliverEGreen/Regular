@@ -28,7 +28,7 @@ Enter DataSpec, designed to address the 3 problems above.
 ## How It Works
 Behind the scenes, DataSpec uses **regular expressions** - a technology commonly used by programmers to define rules for validating data that needs to be follow a specific format, such as email addresses or phone numbers. Regular expressions (often shortened to 'regex') are an incredibly powerful tool, but one which requires specialist programming knowledge. Even programmers can find them difficult to work with!
 
-DataSpec works by abstracting away the complexities of regex behind an intuitive user interface, which lets non-technical users define rules for their data formats in plain English. Our goal is to >'bring Regular Expressions to Regular Users'. 
+DataSpec works by abstracting away the complexities of regex behind an intuitive user interface, which lets non-technical users define rules for their data formats in plain English. Our goal is to 🪄'bring Regular Expressions to Regular Users'🪄. 
 
 Data format rules are stored locally in a Revit document using the ExtensibleStorage API. These can be exported and imported between files using the .json file format, allowing for data format standards to be defined for a project, a company or even shared industry-wide. Those wishing to define a universal data format for, say, park benches are encouraged to pick up the mantle.
 
@@ -43,7 +43,7 @@ Data format rules are stored locally in a Revit document using the ExtensibleSto
 ## License & Data Safety
 
 - All data is processed locally on your machine, no external connections are made to anywhere or anything.
-- Regular is available using the highly-permissive GNU Public License v3.0. See our [license file](https://github.com/OliverEGreen/Regular/edit/master/LICENSE) for full details.
+- Regular is available using the highly-permissive [GNU Public License v3.0](https://github.com/OliverEGreen/Regular/edit/master/LICENSE).
 
 
 ## Current Limitations
