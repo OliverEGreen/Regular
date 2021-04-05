@@ -70,15 +70,31 @@ Enough soapboxing, let's learn how to use DataSpec!
 ### Rule Parts
 DataSpec rules are defined using a series of 'rule parts', which are arranged in a specific sequence by the user. Let's examine each of these rule parts in detail:
 
-- Any Alphanumeric (A-Z, 0-9) will allow any letter or number in a code. Case specificity can be toggled between only uppercase, lowercase or any case by clicking on the A-Z button in the rule part body. This equates to the regex `'[A-Z0-9]'`, `'[a-z0-9]'` or `'[A-Za-z0-9]'`, depending on the chosen case options.  
-- Any Letter (A-Z) refers to any single letter in a code. Case specificity can be toggled between only uppercase, lowercase or any case by clicking on the A-Z button in the rule part body. This equates to the regex `'[A-Z]'`, `'[a-z]'` or `'[A-Za-z]'`, depending on the chosen case options. 
-- Any Digit (0-9) allows for any single digit in a value. This equates to the regex `'\d'`
-- Custom Text allows the user to specify any particular word or symbol they want. This is defined by clicking the 'Edit' button and typing in the text box once the rule part has been added. This can be useful for company names, such as 'ACME'. Protected regex symbols are automatically sanitised from any user input. This can be made case sensitive by ticking the 'Case Sensitive' checkbox.
-- Option Set lets the user define several options for part of a code, any of which will be accepted by the validator. As with Custom Text, any protected regex symbols are sanitised as they are entered. These options can be made case sensitive by ticking the 'Case Sensitive' checkbox.
-- Full Stop (.) is a simple shortcut for defining a '.' character.
-- Hyphen (-) is a simple shortcut for defining a '-' character.
-- Underscore (_) is a simple shortcut for defining a '_' character.
-- Open '(' and Close ')' parentheses are simple shortcuts for defining these characters.
+**Any Alphanumeric (A-Z, 0-9)** will allow any letter or number in a code. Case specificity can be toggled between only uppercase, lowercase or any case by clicking on the A-Z button in the rule part body.  
+>This equates to the regex `'[A-Z0-9]'`, `'[a-z0-9]'` or `'[A-Za-z0-9]'`, depending on the chosen case options.
+
+**Any Letter (A-Z)** refers to any single letter in a code. Case specificity can be toggled between only uppercase, lowercase or any case by clicking on the A-Z button in the rule part body.  
+>This equates to the regex `'[A-Z]'`, `'[a-z]'` or `'[A-Za-z]'`, depending on the chosen case options.
+
+**Any Digit (0-9)** allows for any single digit in a value.  
+>This equates to the regex `'\d'`
+
+**Custom Text** allows the user to specify any particular word or symbol they want. This is defined by clicking the 'Edit' button and typing in the text box once the rule part has been added.  
+>This can be useful for company names, such as 'ACME'.
+>Protected regex symbols are automatically sanitised from any user input.
+>This can be made case sensitive by ticking the 'Case Sensitive' checkbox.
+
+**Option Set** lets the user define several options for part of a code, any of which will be accepted by the validator.  
+>As with Custom Text, any protected regex symbols are sanitised as they are entered.
+>These options can be made case sensitive by ticking the 'Case Sensitive' checkbox.
+
+**Full Stop (.)** is a simple shortcut for defining a `'.'` character.
+
+**Hyphen (-)** is a simple shortcut for defining a `'-'` character.
+
+**Underscore (_)** is a simple shortcut for defining a `'_'` character.
+
+**Open Parenthesis '('** and **Close Parenthesis ')'** are simple shortcuts for defining the `'('` and `')'` characters.
 
 *Please Note: Any rule part can be made optional by ticking the 'Optional' checkbox in the rule part body.*
 
