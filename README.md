@@ -36,7 +36,7 @@ Data format rules are stored locally in a Revit document using the ExtensibleSto
 ## Wiki Guidance
 - [Installation](https://github.com/OliverEGreen/Regular/wiki/DataSpec-Installation)
 - [Getting Started](https://github.com/OliverEGreen/Regular/wiki/DataSpec-Getting-Started)
-- [Examples](https://github.com/OliverEGreen/Regular/wiki/DataSpec-Examples) for step-by-step examples and links to video guides
+- [Worked Examples & Video Tutorials](https://github.com/OliverEGreen/Regular/wiki/DataSpec-Examples)
 - [Dependencies](https://github.com/OliverEGreen/Regular/wiki/DataSpec-Dependencies)
 
 
