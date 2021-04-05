@@ -37,68 +37,6 @@ Data format rules are stored locally in a Revit document using the ExtensibleSto
 For installation notes, see [INSTALLATION.md](https://github.com/OliverEGreen/Regular/blob/master/INSTALLATION.md)
 
 
-## Using DataSpec
-Enough soapboxing, let's learn how to use DataSpec!
-
-### Creating A Rule
-
-1. To get started, click on the DataSpec Rule Manager button in the Regular ribbon tab. This will launch the Rule Manager window.
-2. To create a new rule, click on the '+' New Rule button.
-3. Name your rule (something self-describing like 'door codes' will work best).
-4. Each rule is designed to target a specific parameter for one or more Revit categories, such as walls or floors. To target categories, press the 'Show Categories' button. This will expand a side panel allowing users to multi-select as many categories as they want to target.
-5. The next step is to specify the parameter value whose values are being validated against your new rule. The Target Parameter drop-down will only display parameters which all selected categories have in common. If there are no common parameters, it will tell you so.
-6. The Match Type dropdown lets you specify whether your rule is intended to validate just the start or end of a parameter value, or whether it must be applied to the entire value (this is the default approach). 
-7. Data format rules are built up piecemeal, as a sequence of rule parts. You can begin building a rule by selecting a rule part type from the dropdown and pressing the + button. Rule parts will appear in the lower half of the dialog, and can be added, reordered and deleted using the buttons provided.
-8. To help you define the right data standards, DataSpec will auto-generate random values that are compliant with the rule you're specifying. These will update as the rule changes. Click the refresh button to generate new compliant examples as a logic check.
-
-### Validating Data
-
-- Once a rule has been defined, users can select the rule by clicking on it and pressing the 'Execute' button. 
-- Executing a rule will expand a resizable side panel and begin creating a validation report. The UI will be frozen as this report is created.
-- Once the report has run, DataSpec will report what percentage of data was valid against your chosen rule.
-- Data can be sorted by clicking any of the column headers.
-- Where data has been found to be invalid against the rule, a randomised value has been generated in compliance with the rule's format standards.
-- For ease of use, any of the target parameter values can be edited and revalidated directly in the UI, by clicking and re-typing a new value in the cell.
-- Validation reports can be easily exported to .CSV format for review in other software.
-
-### Managing Rules
-- Once defined, rules are saved into the Revit model, and can be easily accessed and edited at any time. To edit a rule, open the Rule Manager dialog and click the blue pencil icon next to a rule.
-- To delete a rule, simply click the red 'x' button next to that rule.
-- To duplicate a rule, as a convenient basis for creating a new rule, select a rule and click on the 'Duplicate Rule' button. The editor window will then appear. 
-- Rules can be exported to or imported from .JSON files using the 'Transfer Rules' button.
-
-### Rule Parts
-DataSpec rules are defined using a series of 'rule parts', which are arranged in a specific sequence by the user. Let's examine each of these rule parts in detail:
-
-**Any Alphanumeric (A-Z, 0-9)** will allow any letter or number in a code. Case specificity can be toggled between only uppercase, lowercase or any case by clicking on the A-Z button in the rule part body.  
->This equates to the regex `'[A-Z0-9]'`, `'[a-z0-9]'` or `'[A-Za-z0-9]'`, depending on the chosen case options.
-
-**Any Letter (A-Z)** refers to any single letter in a code. Case specificity can be toggled between only uppercase, lowercase or any case by clicking on the A-Z button in the rule part body.  
->This equates to the regex `'[A-Z]'`, `'[a-z]'` or `'[A-Za-z]'`, depending on the chosen case options.
-
-**Any Digit (0-9)** allows for any single digit in a value.  
->This equates to the regex `'\d'`
-
-**Custom Text** allows the user to specify any particular word or symbol they want. This is defined by clicking the 'Edit' button and typing in the text box once the rule part has been added.  
->This can be useful for company names, such as 'ACME'.
->Protected regex symbols are automatically sanitised from any user input.
->This can be made case sensitive by ticking the 'Case Sensitive' checkbox.
-
-**Option Set** lets the user define several options for part of a code, any of which will be accepted by the validator.  
->As with Custom Text, any protected regex symbols are sanitised as they are entered.
->These options can be made case sensitive by ticking the 'Case Sensitive' checkbox.
-
-**Full Stop (.)** is a simple shortcut for defining a `'.'` character.
-
-**Hyphen (-)** is a simple shortcut for defining a `'-'` character.
-
-**Underscore (_)** is a simple shortcut for defining a `'_'` character.
-
-**Open Parenthesis '('** and **Close Parenthesis ')'** are simple shortcuts for defining the `'('` and `')'` characters.
-
-*Please Note: Any rule part can be made optional by ticking the 'Optional' checkbox in the rule part body.*
-
-
 ## Examples
 For step-by-step examples and links to video guides, see [EXAMPLES.md](https://github.com/OliverEGreen/Regular/blob/master/EXAMPLES.md).
 
