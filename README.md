@@ -37,17 +37,13 @@ Data format rules are stored locally in a Revit document using the ExtensibleSto
 - [Installation](https://github.com/OliverEGreen/Regular/wiki/DataSpec-Installation)
 - [Getting Started](https://github.com/OliverEGreen/Regular/wiki/DataSpec-Getting-Started)
 - [Examples](https://github.com/OliverEGreen/Regular/wiki/DataSpec-Examples) for step-by-step examples and links to video guides
+- [Dependencies](https://github.com/OliverEGreen/Regular/wiki/DataSpec-Dependencies)
 
 
 ## License & Data Safety
 
 - All data is processed locally on your machine, no external connections are made to anywhere or anything.
 - Regular is available using the highly-permissive GNU Public License v3.0. See our [license file](https://github.com/OliverEGreen/Regular/edit/master/LICENSE) for full details.
-
-Key Dependencies:
-- [Newtonsoft JSON.NET](https://www.newtonsoft.com/json)
-- [CSVHelper](https://joshclose.github.io/CsvHelper/)
-- Regex validation relies on the .NET [System.Text.RegularExpressions](https://docs.microsoft.com/en-us/dotnet/api/system.text.regularexpressions?view=net-5.0) library.
 
 
 ## Current Limitations
