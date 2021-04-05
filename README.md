@@ -33,12 +33,10 @@ DataSpec works by abstracting away the complexities of regex behind an intuitive
 Data format rules are stored locally in a Revit document using the ExtensibleStorage API. These can be exported and imported between files using the .json file format, allowing for data format standards to be defined for a project, a company or even shared industry-wide. Those wishing to define a universal data format for, say, park benches are encouraged to pick up the mantle.
 
 
-## Installation
-For installation notes, see [INSTALLATION.md](https://github.com/OliverEGreen/Regular/blob/master/INSTALLATION.md)
-
-
-## Examples
-For step-by-step examples and links to video guides, see [EXAMPLES.md](https://github.com/OliverEGreen/Regular/blob/master/EXAMPLES.md).
+## Wiki Guidance
+- [Installation](https://github.com/OliverEGreen/Regular/wiki/DataSpec-Installation)
+- [Getting Started](https://github.com/OliverEGreen/Regular/wiki/DataSpec-Getting-Started)
+- [Examples](https://github.com/OliverEGreen/Regular/wiki/DataSpec-Examples) for step-by-step examples and links to video guides
 
 
 ## License & Data Safety
@@ -64,4 +62,4 @@ See our [CONTRIBUTING.md](https://github.com/OliverEGreen/Regular/blob/master/CO
 
 
 ## Genesis
-Regular was started at the Thornton Tomasetti AEC Tech Hackathon 2019 in New York, presented by team ☕**Regular Espressos**☕ 
+Regular was started at the Thornton Tomasetti AEC Tech Hackathon 2019 in New York, presented by team ☕ **Regular Espressos** ☕ 
