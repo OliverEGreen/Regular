@@ -2,7 +2,7 @@
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-## TL;DR
+## Summary
 Regular is an open-source Revit plugin, designed to help users manage construction data. The first tool, DataSpec, lets users define flexible format rules for Revit parameter values. Data can then be validated (and, if necessary, corrected) using an intuitive user interface. 
 
 
@@ -10,17 +10,17 @@ Regular is an open-source Revit plugin, designed to help users manage constructi
 
 It is frequently stated that construction technology suffers from a lack of common, established data standards. It is this standards vacuum which underlies several problems faced within the industry every day:
 
-1. Agreeing on optimal data formats for is hard: opinions are strong and will often differ, between companies and sectors that have already invested in establishing their own internal standards.  
-2. Validating data created in line with any format specifications is a specialist task that too often falls to those originally trained as architects, engineers, or project managers - not data managers.
-3. The few standards we have are prone to frequent change. Moving the goalposts mid-way through a project often results in costly and unappealing manual data correction work. The risk of this happening is great enough to deter further standardisation from taking place.
+1. Agreeing on optimal formats for data is hard: opinions are strong and will often differ between companies and sectors that have already invested in establishing their own internal standards.  
+2. Validating data created in line with any format specifications is a specialist task that too often falls to those who originally trained as architects, engineers, or project managers - not data managers.
+3. The few standards we have are prone to frequent change. Moving the goalposts mid-way through a project often results in costly and unenjoyable data correction work. The risk of this happening is great enough to deter further standardisation from taking place.
 
-The second and third problem above can be overcome with programming skills, which are in short supply.
+The second and third problems above can be minimised by investing in programming skills. However, for AEC these remain in short supply.
 
-Enter DataSpec, designed to address the 3 problems above.
+Enter DataSpec, designed to address the three problems above.
 
-- DataSpec gives users control over establishing data format standards at whatever level is right for them, be it project-specific, company-wide or industry-wide standards.
+- DataSpec gives users control over establishing data format standards at whatever level is right for them, be it project-specific, company-wide or industry-wide.
 - It provides an intuitive interface for rapid, automatic format validation against these rules. 
-- It lets users easily adjust rules, and rapidly revalidate against new standards, should these be introduced. 
+- It lets users easily adjust rules and rapidly revalidate against new standards, should these be introduced. 
 
 >Regular is an ongoing project. Future tools are currently being developed to help further reduce the cost of AEC data management.
 
@@ -28,7 +28,7 @@ Enter DataSpec, designed to address the 3 problems above.
 ## How It Works
 Behind the scenes, DataSpec uses **regular expressions** - a technology commonly used by programmers to define rules for validating data that needs to be follow a specific format, such as email addresses or phone numbers. Regular expressions (often shortened to 'regex') are an incredibly powerful tool, but one which requires specialist programming knowledge. Even programmers can find them difficult to work with!
 
-DataSpec works by abstracting away the complexities of regex behind an intuitive user interface, which lets non-technical users define rules for their data formats in plain English. Our goal is to 🙌 *"bring Regular Expressions to Regular Users"* 🙌. 
+DataSpec works by abstracting away the complexities of regex behind an intuitive user interface, which lets non-technical users define rules for their data formats in plain English. Our goal is to 🙌 *bring Regular Expressions to Regular Users* 🙌. 
 
 Data format rules are stored locally in a Revit document using the ExtensibleStorage API. These can be exported and imported between files using the .json file format, allowing for data format standards to be defined for a project, a company or even shared industry-wide. Those wishing to define a universal data format for, say, park benches are encouraged to pick up the mantle.
 
