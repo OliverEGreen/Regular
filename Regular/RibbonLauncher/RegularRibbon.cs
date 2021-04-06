@@ -92,13 +92,13 @@ namespace Regular.RibbonLauncher
         
         public static List<RegularTool> RegularToolObjects = new List<RegularTool>
         {
-            new RegularTool(RegularToolGroup.DataSpec, RibbonButtonType.PushButton, "Rule Manager", "Description goes here!"),
-            new RegularTool(RegularToolGroup.DataSpec, RibbonButtonType.PulldownButtonHeader, "Transfer Rules", "Description goes here!")
+            new RegularTool(RegularToolGroup.DataSpec, RibbonButtonType.PushButton, "Rule Manager", "Create, edit and delete DataSpec rules."),
+            new RegularTool(RegularToolGroup.DataSpec, RibbonButtonType.PulldownButtonHeader, "Transfer Rules", "Tools to import and export DataSpec rules between documents.")
             {
                 DropdownButtonData = new List<RegularTool>
                 {
-                    new RegularTool(RegularToolGroup.DataSpec, RibbonButtonType.PulldownButtonMenuItem, "Export Rules", "Export your Regular rules to JSON format to transfer them between documents."),
-                    new RegularTool(RegularToolGroup.DataSpec, RibbonButtonType.PulldownButtonMenuItem, "Import Rules", "Import one of more Regular rules from a JSON file."),
+                    new RegularTool(RegularToolGroup.DataSpec, RibbonButtonType.PulldownButtonMenuItem, "Export Rules", "Export your DataSpec rules to JSON format to transfer them between documents."),
+                    new RegularTool(RegularToolGroup.DataSpec, RibbonButtonType.PulldownButtonMenuItem, "Import Rules", "Import one of more DataSpec rules from a JSON file."),
                 }
             }
         };

@@ -70,10 +70,6 @@
         BasedOn="{StaticResource RegularWindow}"
         TargetType="Window">
         <Setter Property="ResizeMode" Value="CanResizeWithGrip" />
-        <!--<Setter Property="MinHeight" Value="300" />
-        <Setter Property="MinWidth" Value="800" />
-        <Setter Property="MaxHeight" Value="800" />
-        <Setter Property="MaxWidth" Value="1500" />-->
     </Style>
 
     <!--  Grid  -->
