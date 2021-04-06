@@ -56,7 +56,7 @@
 
     <!--  Window  -->
     <Style x:Key="RegularWindow" TargetType="Window">
-        <Setter Property="Icon" Value="../Resources/RuleManager.png" />
+        <Setter Property="Icon" Value="../Resources/RegularFavicon.png" />
         <Setter Property="Background" Value="{StaticResource RegularWindowBackgroundColor}" />
         <Setter Property="ResizeMode" Value="NoResize" />
         <Setter Property="ShowInTaskbar" Value="True" />
