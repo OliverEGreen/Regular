@@ -1,8 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Input;
-using CsvHelper;
-using CsvHelper.Configuration;
 using Regular.Models;
 using Regular.UI.InfoWindow.View;
 using Regular.UI.RuleManager.ViewModel;
@@ -25,12 +24,28 @@ namespace Regular.UI.RuleManager.Commands
         {
             string filePath = IOUtils.PromptUserToSelectDestination("DataSpec Report", ".csv");
             if (string.IsNullOrWhiteSpace(filePath)) return;
+
+            List<string> reportRows = new List<string>();
             
-            using (var writer = new StreamWriter(filePath))
-            using (var csv = new CsvWriter(writer, false))
+            string headers = $"Element ID, Name, {ruleManagerViewModel.TrackingParameterName}, Validity, Compliant Example";
+            reportRows.Add(headers);
+
+            foreach(RuleValidationOutput ruleValidationOutput in ruleManagerViewModel.RuleValidationOutputs)
             {
-                csv.Context.WriterConfiguration.RegisterClassMap(new RuleValidationOutputMap());
-                csv.WriteRecords(ruleManagerViewModel.RuleValidationOutputs);
+                string rowData = $"{ruleValidationOutput.ElementId.IntegerValue.ToString().Replace(",", "")}," +
+                                 $"{ruleValidationOutput.ElementName.Replace(",", "")}," +
+                                 $"{ruleValidationOutput.TrackingParameterValue.Replace(",", "")}," +
+                                 $"{ruleValidationOutput.ValidationText.Replace(",", "")}," +
+                                 $"{ruleValidationOutput.CompliantExample.Replace(",", "")}";
+                
+                reportRows.Add(rowData);
+            }
+
+            string report = string.Join(Environment.NewLine, reportRows);
+
+            using (var writer = new StreamWriter(filePath))
+            {
+                writer.Write(report);
             }
 
             new InfoWindowView
@@ -41,19 +56,6 @@ namespace Regular.UI.RuleManager.Commands
                 false
             ).ShowDialog();
         }
-
-        public sealed class RuleValidationOutputMap : ClassMap<RuleValidationOutput>
-        {
-            public RuleValidationOutputMap()
-            {
-                Map(m => m.ElementId).Index(0).Name("Element ID");
-                Map(m => m.ElementName).Index(1).Name("Name");
-                Map(m => m.TrackingParameterValue).Index(2).Name("Value");
-                Map(m => m.ValidationText).Index(3).Name("Validity");
-                Map(m => m.CompliantExample).Index(4).Name("Compliant Example");
-            }
-        }
-
 
         public event EventHandler CanExecuteChanged
         {

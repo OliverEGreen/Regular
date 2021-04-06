@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Media.Imaging;
 using Regular.RibbonLauncher.Enums;
@@ -42,11 +41,7 @@ namespace Regular.RibbonLauncher
 
             // The class name and its namespace folder must match exactly
             FullClassName = $"Regular.Tools.{ClassName}.{ClassName}";
-            
-            // The class name and the PNG icon name must match exactly
-            FileInfo fileInfo = new FileInfo($@"C:\Users\ogreen\Source\Repos\Regular\Regular\Resources\{condensedName}.png");
-            if (!fileInfo.Exists) return;
-            
+
             // If the .png can be found, we instantiate it for the button creation
             BitmapImage = new BitmapImage(new Uri($"pack://application:,,,/Regular;component/Resources/{condensedName}.png"));
         }

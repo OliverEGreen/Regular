@@ -6,7 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     x:Name="RuleManagerWindow"
     Title=" Rule Manager"
-    Width="{Binding WindowWidth, UpdateSourceTrigger=PropertyChanged}"
+    Width="{Binding WindowWidth, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
     Height="{Binding WindowHeight, UpdateSourceTrigger=PropertyChanged}"
     MinWidth="{Binding WindowMinWidth, UpdateSourceTrigger=PropertyChanged}"
     MinHeight="{Binding WindowMinHeight, UpdateSourceTrigger=PropertyChanged}"
