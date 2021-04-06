@@ -1,4 +1,4 @@
-![Regular Logo Smaller](https://user-images.githubusercontent.com/29973601/113752072-7a276e80-9704-11eb-8416-8bb2b15e74ec.png)
+![Regular Logo Smaller](https://user-images.githubusercontent.com/29973601/113752321-ba86ec80-9704-11eb-8447-44e7fc995e57.png)
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
