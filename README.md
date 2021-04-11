@@ -5,13 +5,13 @@
 # Summary
 Regular is an open-source Revit plugin, designed to help users manage construction data. The first tool, DataSpec, lets users define flexible format rules for Revit parameter values. Data can then be validated (and, if necessary, corrected) using an intuitive user interface. 
 
+&nbsp;
+
 # Quick Links
 - [Installation](https://github.com/OliverEGreen/Regular/wiki/DataSpec-Installation)
 - [Getting Started](https://github.com/OliverEGreen/Regular/wiki/DataSpec-Getting-Started)
 - [Worked Examples & Video Tutorials](https://github.com/OliverEGreen/Regular/wiki/DataSpec-Examples)
 - [Dependencies](https://github.com/OliverEGreen/Regular/wiki/DataSpec-Dependencies)
-
-&nbsp;
 
 # The Big Idea
 
@@ -54,7 +54,7 @@ Data format rules are stored locally in a Revit document using the ExtensibleSto
 - Conditional logic cannot be applied within rules - only relatively simple format logic can be used. 
 - For simplicity's sake, DataSpec uses an intentionally-limited subset of the full regular expression syntax. AEC data formats tend to be relatively simple, so it's better to cover 99% of cases than push for 100%.
 
-# Contributing
+## Contributing
 If you'd like to help contribute to Regular, feel free to raise any issues, create pull requests and/or [message me on Twitter](https://twitter.com/Oliver_E_Green).  
 See our [CONTRIBUTING.md](https://github.com/OliverEGreen/Regular/blob/master/CONTRIBUTING.md) file for more details. 
 
