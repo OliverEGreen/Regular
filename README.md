@@ -22,6 +22,8 @@ Enter DataSpec, designed to address the three problems above.
 - It provides an intuitive interface for rapid, automatic format validation against these rules. 
 - It lets users easily adjust rules and rapidly revalidate against new standards, should these be introduced. 
 
+DataSpec makes creating and sharing data standards easy, even for non-technical users.
+
 >Regular is an ongoing project. Future tools are currently being developed to help further reduce the cost of AEC data management.
 
 
