@@ -5,6 +5,15 @@
 ## Summary
 Regular is an open-source Revit plugin, designed to help users manage construction data. The first tool, DataSpec, lets users define flexible format rules for Revit parameter values. Data can then be validated (and, if necessary, corrected) using an intuitive user interface. 
 
+&nbsp;
+
+## Quick Links
+- [Installation](https://github.com/OliverEGreen/Regular/wiki/DataSpec-Installation)
+- [Getting Started](https://github.com/OliverEGreen/Regular/wiki/DataSpec-Getting-Started)
+- [Worked Examples & Video Tutorials](https://github.com/OliverEGreen/Regular/wiki/DataSpec-Examples)
+- [Dependencies](https://github.com/OliverEGreen/Regular/wiki/DataSpec-Dependencies)
+
+&nbsp;
 
 ## The Big Idea
 
@@ -26,6 +35,7 @@ DataSpec makes creating and sharing data standards easy, even for non-technical 
 
 >Regular is an ongoing project. Future tools are currently being developed to help further reduce the cost of AEC data management.
 
+&nbsp;
 
 ## How It Works
 Behind the scenes, DataSpec uses **regular expressions** - a technology commonly used by programmers to define rules for validating data that needs to follow a specific format, such as email addresses or phone numbers. Regular expressions (often shortened to 'regex') are an incredibly powerful tool, but one which requires specialist programming knowledge. Even programmers can find them difficult to work with!
@@ -34,30 +44,27 @@ DataSpec works by abstracting away the complexities of regex behind an intuitive
 
 Data format rules are stored locally in a Revit document using the ExtensibleStorage API. These can be exported and imported between files using the .json file format, allowing for data format standards to be defined for a project, a company or even shared industry-wide. Those wishing to define a universal data format for, say, park benches are encouraged to pick up the mantle.
 
-
-## Wiki Guidance
-- [Installation](https://github.com/OliverEGreen/Regular/wiki/DataSpec-Installation)
-- [Getting Started](https://github.com/OliverEGreen/Regular/wiki/DataSpec-Getting-Started)
-- [Worked Examples & Video Tutorials](https://github.com/OliverEGreen/Regular/wiki/DataSpec-Examples)
-- [Dependencies](https://github.com/OliverEGreen/Regular/wiki/DataSpec-Dependencies)
-
+&nbsp;
 
 ## License & Data Safety
 
 - All data is processed locally on your machine, no external connections are made to anywhere or anything.
 - Regular is available using the highly-permissive [GNU Public License v3.0](https://github.com/OliverEGreen/Regular/edit/master/LICENSE).
 
+&nbsp;
 
 ## Current Limitations
 - DataSpec can only validate text-based parameter values.
 - Conditional logic cannot be applied within rules - only relatively simple format logic can be used. 
 - For simplicity's sake, DataSpec uses an intentionally-limited subset of the full regular expression syntax. AEC data formats tend to be relatively simple, so it's better to cover 99% of cases than push for 100%.
 
+&nbsp;
 
 ## Contributing
 If you'd like to help contribute to Regular, feel free to raise any issues, create pull requests and/or [message me on Twitter](https://twitter.com/Oliver_E_Green).  
 See our [CONTRIBUTING.md](https://github.com/OliverEGreen/Regular/blob/master/CONTRIBUTING.md) file for more details. 
 
+&nbsp;
 
 ## Genesis
 Regular was started at the Thornton Tomasetti AEC Tech Hackathon 2019 in New York, presented by team ☕ **Regular Espressos** ☕ 
