@@ -6,7 +6,7 @@
 Regular is an open-source Revit plugin, designed to help users manage construction data. The first tool, DataSpec, lets users define flexible format rules for Revit parameter values. Data can then be validated (and, if necessary, corrected) using an intuitive user interface. 
 
 
-## The Vision
+## The Big Idea
 
 It is frequently stated that construction technology suffers from a lack of common, established data standards. It is this standards vacuum which underlies several problems faced within the industry every day:
 
