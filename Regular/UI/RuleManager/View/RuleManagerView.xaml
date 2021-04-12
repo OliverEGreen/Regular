@@ -83,7 +83,10 @@
                     Style="{StaticResource RegularListBox}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <Grid MouseEnter="ListBoxItem_OnMouseEnter" MouseLeave="ListBoxItem_OnMouseLeave">
+                            <Grid
+                                MouseDown="UIElement_OnMouseDown"
+                                MouseEnter="ListBoxItem_OnMouseEnter"
+                                MouseLeave="ListBoxItem_OnMouseLeave">
                                 <Grid.RowDefinitions>
                                     <RowDefinition />
                                     <RowDefinition />
@@ -228,13 +231,14 @@
                     IsReadOnly="False" />
                 <DataGridTextColumn
                     Width="50"
+                    MinWidth="50"
                     Binding="{Binding Path=ValidationText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                     Header="Validity"
                     HeaderStyle="{StaticResource RegularDataGridColumnHeaderText}"
                     IsReadOnly="True" />
                 <DataGridTextColumn
                     Width="*"
-                    MinWidth="120"
+                    MinWidth="130"
                     Binding="{Binding Path=CompliantExample, UpdateSourceTrigger=PropertyChanged}"
                     Header="Compliant Example"
                     HeaderStyle="{StaticResource RegularDataGridColumnHeaderText}"

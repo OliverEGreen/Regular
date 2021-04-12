@@ -143,6 +143,8 @@
     <Compile Include="RibbonLauncher\RegularTool.cs" />
     <Compile Include="Tools\TransferRules\ImportRules.cs" />
     <Compile Include="Tools\TransferRules\ExportRules.cs" />
+    <Compile Include="UI\ConfirmationDialog\Model\ConfirmationDialogInfo.cs" />
+    <Compile Include="UI\ConfirmationDialog\ViewModel\ConfirmationDialogViewModel.cs" />
     <Compile Include="UI\DebugWindow\ViewModel\DebugWindowViewModel.cs" />
     <Compile Include="UI\DebugWindow\View\DebugWindowView.xaml.cs">
       <DependentUpon>DebugWindowView.xaml</DependentUpon>
@@ -295,7 +297,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="UI\ConfirmationDialog\ViewModel\" />
     <Folder Include="UI\OptionSetEditor\Commands\" />
   </ItemGroup>
   <ItemGroup>

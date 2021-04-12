@@ -19,11 +19,20 @@ namespace Regular.UI.RuleManager.Commands
 
         public void Execute(object parameter)
         {
-            ConfirmationDialogView confirmationDialogView = new ConfirmationDialogView();
+            if (!(parameter is RegexRule regexRule)) return;
+
+            ConfirmationDialogView confirmationDialogView = new ConfirmationDialogView
+            (
+                new ConfirmationDialog.Model.ConfirmationDialogInfo
+                {
+                    Title = $"Delete { regexRule.RuleName }?",
+                    Header = $"Warning: Deleted Rules Cannot Be Retrieved",
+                    Body = "Please confirm that you would like to delete this rule."
+                }
+            );
             confirmationDialogView.ShowDialog();
             if (confirmationDialogView.DialogResult != true) return;
 
-            if (!(parameter is RegexRule regexRule)) return;
             RegexRule.Delete(ruleManagerViewModel.DocumentGuid, regexRule);
         }
 

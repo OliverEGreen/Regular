@@ -4,8 +4,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="Confirm Deletion"
-    Width="300"
+    Title="{Binding Title, UpdateSourceTrigger=PropertyChanged}"
+    Width="350"
+    DataContext="{Binding ConfirmationDialogViewModel, RelativeSource={RelativeSource Self}}"
     Style="{DynamicResource RegularWindow}"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
@@ -15,18 +16,26 @@
     <Grid Style="{StaticResource RegularGrid}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <TextBlock Style="{StaticResource RegularTextBlockBodyWarning}" Text="Are you sure you want to delete this rule?" />
-        <Button
+        <TextBlock
+            Grid.Row="0"
+            Style="{StaticResource RegularTextBlockHeaderWarning}"
+            Text="{Binding Header, UpdateSourceTrigger=PropertyChanged}" />
+        <TextBlock
             Grid.Row="1"
+            Style="{StaticResource RegularTextBlockBodyWarning}"
+            Text="{Binding Body, UpdateSourceTrigger=PropertyChanged}" />
+        <Button
+            Grid.Row="2"
             Click="ButtonCancel_OnClick"
             Style="{StaticResource RegularButtonCancel}" />
         <Button
-            Grid.Row="1"
+            Grid.Row="2"
             Margin="0,0,90,0"
-            Click="ButtonDelete_OnClick"
-            Content="Delete"
+            Click="ButtonConfirm_OnClick"
+            Content="Confirm"
             Style="{StaticResource RegularButtonOK}" />
     </Grid>
 </Window>

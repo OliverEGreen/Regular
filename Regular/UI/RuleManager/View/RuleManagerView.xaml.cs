@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -42,30 +44,6 @@ namespace Regular.UI.RuleManager.View
         {
             ReportParameterNameColumn.Header = RuleManagerViewModel.SelectedRegexRule.TrackingParameterObject.ParameterObjectName;
         }
-
-        private void Grid_MouseLeave(object sender, MouseEventArgs e)
-        {
-            if (!(sender is Grid grid)) return;
-            UIElementCollection children = grid.Children;
-            foreach (UIElement uiElement in children)
-            {
-                switch (uiElement)
-                {
-                    case Rectangle rectangle:
-                    {
-                        Color rolloutColor = (Color)ColorConverter.ConvertFromString("#E5E5E5");
-                        rectangle.Fill = new SolidColorBrush(rolloutColor);
-                        break;
-                    }
-                    case TextBox textBox:
-                    {
-                        Color rolloverColor = (Color)ColorConverter.ConvertFromString("#E5E5E5");
-                        textBox.Background = new SolidColorBrush(rolloverColor);
-                        break;
-                    }
-                }
-            }
-        }
         
         private void Grid_MouseEnter(object sender, MouseEventArgs e)
         {
@@ -91,7 +69,30 @@ namespace Regular.UI.RuleManager.View
             }
         }
 
-
+        private void Grid_MouseLeave(object sender, MouseEventArgs e)
+        {
+            if (!(sender is Grid grid)) return;
+            UIElementCollection children = grid.Children;
+            foreach (UIElement uiElement in children)
+            {
+                switch (uiElement)
+                {
+                    case Rectangle rectangle:
+                    {
+                        Color rolloutColor = (Color)ColorConverter.ConvertFromString("#E5E5E5");
+                        rectangle.Fill = new SolidColorBrush(rolloutColor);
+                        break;
+                    }
+                    case TextBox textBox:
+                    {
+                        Color rolloverColor = (Color)ColorConverter.ConvertFromString("#E5E5E5");
+                        textBox.Background = new SolidColorBrush(rolloverColor);
+                        break;
+                    }
+                }
+            }
+        }
+        
         private void DataGrid_OnCellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
             if (!(e.EditingElement is TextBox textBox)) return;
@@ -133,23 +134,34 @@ namespace Regular.UI.RuleManager.View
         private void ListBoxItem_OnMouseEnter(object sender, MouseEventArgs e)
         {
             if (!(sender is Grid grid)) return;
+            if (!(grid.DataContext is RegexRule gridRegexRule)) return;
+
+            ListBox listBox = VisualTreeUtils.FindParent<ListBox>(grid);
+            if (listBox == null) return;
+            
+            if(listBox.SelectedItem != null)
+            {
+                RegexRule regexRule = listBox.SelectedItem as RegexRule;
+                if (regexRule.RuleGuid == gridRegexRule.RuleGuid) return;
+            }
+
             UIElementCollection children = grid.Children;
             foreach (UIElement uiElement in children)
             {
                 switch (uiElement)
                 {
                     case Rectangle rectangle:
-                    {
-                        Color rolloverColor = (Color)ColorConverter.ConvertFromString("#CCCCCC");
-                        rectangle.Fill = new SolidColorBrush(rolloverColor);
-                        break;
-                    }
+                        {
+                            Color rolloverColor = (Color)ColorConverter.ConvertFromString("#CCCCCC");
+                            rectangle.Fill = new SolidColorBrush(rolloverColor);
+                            break;
+                        }
                     case TextBox textBox:
-                    {
-                        Color rolloverColor = (Color)ColorConverter.ConvertFromString("#CCCCCC");
-                        textBox.Background = new SolidColorBrush(rolloverColor);
-                        break;
-                    }
+                        {
+                            Color rolloverColor = (Color)ColorConverter.ConvertFromString("#CCCCCC");
+                            textBox.Background = new SolidColorBrush(rolloverColor);
+                            break;
+                        }
                 }
             }
         }
@@ -157,23 +169,34 @@ namespace Regular.UI.RuleManager.View
         private void ListBoxItem_OnMouseLeave(object sender, MouseEventArgs e)
         {
             if (!(sender is Grid grid)) return;
+            if (!(grid.DataContext is RegexRule gridRegexRule)) return;
+
+            ListBox listBox = VisualTreeUtils.FindParent<ListBox>(grid);
+            if (listBox == null) return;
+
+            if (listBox.SelectedItem != null)
+            {
+                RegexRule regexRule = listBox.SelectedItem as RegexRule;
+                if (regexRule.RuleGuid == gridRegexRule.RuleGuid) return;
+            }
+
             UIElementCollection children = grid.Children;
             foreach (UIElement uiElement in children)
             {
                 switch (uiElement)
                 {
                     case Rectangle rectangle:
-                    {
-                        Color rolloutColor = (Color)ColorConverter.ConvertFromString("#E5E5E5");
-                        rectangle.Fill = new SolidColorBrush(rolloutColor);
-                        break;
-                    }
+                        {
+                            Color rolloutColor = (Color)ColorConverter.ConvertFromString("#E5E5E5");
+                            rectangle.Fill = new SolidColorBrush(rolloutColor);
+                            break;
+                        }
                     case TextBox textBox:
-                    {
-                        Color rolloverColor = (Color)ColorConverter.ConvertFromString("#E5E5E5");
-                        textBox.Background = new SolidColorBrush(rolloverColor);
-                        break;
-                    }
+                        {
+                            Color rolloutColor = (Color)ColorConverter.ConvertFromString("#E5E5E5");
+                            textBox.Background = new SolidColorBrush(rolloutColor);
+                            break;
+                        }
                 }
             }
         }
@@ -181,23 +204,58 @@ namespace Regular.UI.RuleManager.View
 
         private void UIElement_OnMouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (!(sender is Grid grid)) return;
-            UIElementCollection children = grid.Children;
-            foreach (UIElement uiElement in children)
+            if (!(sender is Grid senderGrid)) return;
+            if (!(senderGrid.DataContext is RegexRule senderRegexRule)) return;
+
+            ListBox listBox = VisualTreeUtils.FindParent<ListBox>(senderGrid);
+            if (listBox == null) return;
+            List<Grid> grids = listBox.FindVisualChildren<Grid>().ToList();
+
+            foreach(Grid grid in grids)
             {
-                switch (uiElement)
+                if (!(grid.DataContext is RegexRule regexRule)) continue;
+                if (regexRule.RuleGuid == senderRegexRule.RuleGuid)
                 {
-                    case Rectangle rectangle:
+                    UIElementCollection children = grid.Children;
+                    foreach (UIElement uiElement in children)
                     {
-                        Color rolloutColor = (Color)ColorConverter.ConvertFromString("#7CCEF4");
-                        rectangle.Fill = new SolidColorBrush(rolloutColor);
-                        break;
+                        switch (uiElement)
+                        {
+                            case Rectangle rectangle:
+                            {
+                                Color rolloverColor = (Color)ColorConverter.ConvertFromString("#7CCEF4");
+                                rectangle.Fill = new SolidColorBrush(rolloverColor);
+                                break;
+                            }
+                            case TextBox textBox:
+                            {
+                                Color rolloverColor = (Color)ColorConverter.ConvertFromString("#7CCEF4");
+                                textBox.Background = new SolidColorBrush(rolloverColor);
+                                break;
+                            }
+                        }
                     }
-                    case TextBox textBox:
+                }
+                else
+                {
+                    UIElementCollection children = grid.Children;
+                    foreach (UIElement uiElement in children)
                     {
-                        Color rolloverColor = (Color)ColorConverter.ConvertFromString("#7CCEF4");
-                        textBox.Background = new SolidColorBrush(rolloverColor);
-                        break;
+                        switch (uiElement)
+                        {
+                            case Rectangle rectangle:
+                            {
+                                Color rolloutColor = (Color)ColorConverter.ConvertFromString("#E5E5E5");
+                                rectangle.Fill = new SolidColorBrush(rolloutColor);
+                                break;
+                            }
+                            case TextBox textBox:
+                            {
+                                Color rolloutColor = (Color)ColorConverter.ConvertFromString("#E5E5E5");
+                                textBox.Background = new SolidColorBrush(rolloutColor);
+                                break;
+                            }
+                        }
                     }
                 }
             }
