@@ -18,6 +18,7 @@ namespace Regular.Models
         private string regexString = "";
         private MatchType matchType = MatchType.ExactMatch;
         private string ruleGuid = "";
+        private string validationScore = "";
 
         public string RuleName
         {
@@ -108,6 +109,16 @@ namespace Regular.Models
             {
                 ruleGuid = value;
                 NotifyPropertyChanged("RuleGuid");
+            }
+        }
+
+        public string ValidationScore
+        {
+            get => validationScore;
+            set
+            {
+                validationScore = value;
+                NotifyPropertyChanged("ValidationScore");
             }
         }
 

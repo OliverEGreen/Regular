@@ -113,6 +113,9 @@ namespace Regular.Tools.TransferRules
 
                 foreach(RegexRule selectedRegexRule in selectedRulesToImport)
                 {
+                    // Resetting validation score
+                    selectedRegexRule.ValidationScore = "";
+                    
                     // If there's no conflict then we save and iterate
                     if (!conflictingRegexRuleGuids.Contains(selectedRegexRule.RuleGuid))
                     {

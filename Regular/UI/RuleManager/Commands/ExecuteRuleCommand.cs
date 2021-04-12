@@ -68,8 +68,17 @@ namespace Regular.UI.RuleManager.Commands
             
             ruleManagerViewModel.NumberElementsValid = ruleManagerViewModel.RuleValidationOutputs.Count(x => x.RuleValidationResult == RuleValidationResult.Valid);
             string percentageValid = (ruleManagerViewModel.NumberElementsValid * 100.0 / ruleManagerViewModel.ProgressBarTotalNumberElementsProcessed).ToString("0.0");
+            
+            // Saving the last-validated score to the RegexRule itself
+            ruleManagerViewModel.SelectedRegexRule.ValidationScore = $"{percentageValid}%";
+            ExtensibleStorageUtils.UpdateRegexRuleInExtensibleStorage
+            (
+                ruleManagerViewModel.DocumentGuid,
+                ruleManagerViewModel.SelectedRegexRule.RuleGuid,
+                ruleManagerViewModel.SelectedRegexRule
+            );
+            
             ruleManagerViewModel.ProgressBarText = $"{ruleManagerViewModel.NumberElementsValid}/{ruleManagerViewModel.ProgressBarTotalNumberElementsProcessed} ({percentageValid}%) Valid";
-
             ruleManagerViewModel.ButtonsEnabled = true;
         }
 

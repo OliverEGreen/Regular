@@ -79,7 +79,7 @@
                     HorizontalContentAlignment="Stretch"
                     ItemsSource="{Binding RegexRules, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     SelectedIndex="0"
-                    SelectedItem="{Binding SelectedRegexRule, UpdateSourceTrigger=PropertyChanged}"
+                    SelectedItem="{Binding SelectedRegexRule, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                     Style="{StaticResource RegularListBox}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
@@ -90,6 +90,7 @@
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition />
+                                    <ColumnDefinition Width="60" />
                                     <ColumnDefinition Width="25" />
                                     <ColumnDefinition Width="25" />
                                 </Grid.ColumnDefinitions>
@@ -112,10 +113,20 @@
                                     FontSize="13"
                                     Style="{StaticResource RegularTextBlockBody}"
                                     Text="{Binding RuleName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <TextBlock
+                                    x:Name="RegexRuleValidationTextBlock"
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    Margin="0,0,10,0"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Center"
+                                    FontSize="13"
+                                    Style="{StaticResource RegularTextBlockBody}"
+                                    Text="{Binding ValidationScore, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                 <Button
                                     x:Name="EditRegexRuleButton"
                                     Grid.Row="0"
-                                    Grid.Column="1"
+                                    Grid.Column="2"
                                     Width="25"
                                     Height="30"
                                     HorizontalAlignment="Right"
@@ -127,7 +138,7 @@
                                 <Button
                                     x:Name="DeleteRegexRuleButton"
                                     Grid.Row="0"
-                                    Grid.Column="2"
+                                    Grid.Column="3"
                                     Width="25"
                                     Height="30"
                                     Margin="0,0,-2,0"
@@ -150,7 +161,7 @@
             VerticalAlignment="Top"
             Orientation="Horizontal">
             <Button
-                Name="ButtonMoveRulePartUp"
+                Name="ButtonMoveRuleUp"
                 Width="25"
                 Height="25"
                 Margin="0,0,3,0"
@@ -158,7 +169,7 @@
                 IsEnabled="{Binding ButtonsEnabled, UpdateSourceTrigger=PropertyChanged}"
                 Style="{StaticResource ReorderUpButton}" />
             <Button
-                Name="ButtonMoveRulePartDown"
+                Name="ButtonMoveRuleDown"
                 Width="25"
                 Height="25"
                 Margin="0,0,3,0"

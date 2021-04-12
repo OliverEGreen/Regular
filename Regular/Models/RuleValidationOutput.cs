@@ -79,7 +79,9 @@ namespace Regular.Models
             );
             
             ValidationText = RuleValidationResult.GetEnumDescription();
-            CompliantExample = ruleValidationResult == RuleValidationResult.Invalid ? RegexAssemblyUtils.GenerateRandomExample(ruleValidationInfo.RegexRule.RegexRuleParts) : "-";
+            CompliantExample = ruleValidationResult == RuleValidationResult.Invalid ?
+                $"e.g. {RegexAssemblyUtils.GenerateRandomExample(ruleValidationInfo.RegexRule.RegexRuleParts)}" :
+                "-";
             
             TrackingParameterValue = ParameterUtils.GetTrackingParameterValue
             (

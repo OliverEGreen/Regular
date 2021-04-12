@@ -82,12 +82,11 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="Regular.Newtonsoft.Json">
+      <HintPath>..\NewtonsoftJSON\Source\Src\Newtonsoft.Json\bin\Release\net45\Regular.Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="RevitAPI" Condition="'$(Configuration)' == 'Rvt2016'">
       <HintPath>C:\Program Files\Autodesk\Revit 2016\RevitAPI.dll</HintPath>
     </Reference>
