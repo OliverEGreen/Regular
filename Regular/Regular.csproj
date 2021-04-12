@@ -5,9 +5,6 @@
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
   </PropertyGroup>
   <PropertyGroup>
-    <DoNotCopyLocalIfInGac>true</DoNotCopyLocalIfInGac>
-  </PropertyGroup>
-  <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
     <ProjectGuid>{12AED8E1-C380-49BE-B037-9E44AF606255}</ProjectGuid>
@@ -16,14 +13,13 @@
     <RootNamespace>Regular</RootNamespace>
     <AssemblyName>Regular</AssemblyName>
     <Authors>Oliver Green</Authors>
-    <TargetFrameworkVersion Condition="'$(Configuration)' == 'Rvt2016'">v4.6.1</TargetFrameworkVersion>
-    <TargetFrameworkVersion Condition="'$(Configuration)' == 'Rvt2018'">v4.6.1</TargetFrameworkVersion>
-    <TargetFrameworkVersion Condition="'$(Configuration)' == 'Rvt2019'">v4.7.2</TargetFrameworkVersion>
-    <TargetFrameworkVersion Condition="'$(Configuration)' == 'Rvt2020'">v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion Condition="'$(Configuration)' == 'Rvt2016'">v4.6.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion Condition="'$(Configuration)' == 'Rvt2018'">v4.6.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion Condition="'$(Configuration)' == 'Rvt2019'">v4.7</TargetFrameworkVersion>
+    <TargetFrameworkVersion Condition="'$(Configuration)' == 'Rvt2020'">v4.7</TargetFrameworkVersion>
     <TargetFrameworkVersion Condition="'$(Configuration)' == 'Rvt2021'">v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
@@ -89,9 +85,11 @@
     </Reference>
     <Reference Include="RevitAPI" Condition="'$(Configuration)' == 'Rvt2016'">
       <HintPath>C:\Program Files\Autodesk\Revit 2016\RevitAPI.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="RevitAPIUI" Condition="'$(Configuration)' == 'Rvt2016'">
       <HintPath>C:\Program Files\Autodesk\Revit 2016\RevitAPIUI.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="RevitAPI" Condition="'$(Configuration)' == 'Rvt2018'">
       <HintPath>C:\Program Files\Autodesk\Revit 2018\RevitAPI.dll</HintPath>
@@ -122,6 +120,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />

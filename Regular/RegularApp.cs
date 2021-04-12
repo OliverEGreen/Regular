@@ -7,7 +7,6 @@ using Application = Autodesk.Revit.ApplicationServices.Application;
 using Regular.Services;
 using Regular.Models;
 using Regular.RibbonLauncher;
-using Regular.UI.DebugWindow.View;
 using Regular.Utilities;
 
 namespace Regular
