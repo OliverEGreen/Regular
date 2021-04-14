@@ -47,7 +47,8 @@
             Command="{Binding AddRuleCommand}"
             Content="New Rule"
             IsEnabled="{Binding ButtonsEnabled, UpdateSourceTrigger=PropertyChanged}"
-            Style="{StaticResource RegularButton}" />
+            Style="{StaticResource RegularButton}"
+            ToolTip="Create a new DataSpec rule" />
         <ProgressBar
             Grid.Row="0"
             Grid.Column="2"
@@ -170,7 +171,8 @@
                 Margin="0,0,3,0"
                 Command="{Binding MoveRuleUpCommand}"
                 IsEnabled="{Binding ButtonsEnabled, UpdateSourceTrigger=PropertyChanged}"
-                Style="{StaticResource ReorderUpButton}" />
+                Style="{StaticResource ReorderUpButton}"
+                ToolTip="Reorder the DataSpec rules by moving the currently selected rule up" />
             <Button
                 Name="ButtonMoveRuleDown"
                 Width="25"
@@ -178,7 +180,8 @@
                 Margin="0,0,3,0"
                 Command="{Binding MoveRuleDownCommand}"
                 IsEnabled="{Binding ButtonsEnabled, UpdateSourceTrigger=PropertyChanged}"
-                Style="{StaticResource ReorderDownButton}" />
+                Style="{StaticResource ReorderDownButton}"
+                ToolTip="Reorder the DataSpec rules by moving the currently selected rule down" />
             <Button
                 Name="ButtonDuplicateRule"
                 Width="25"
@@ -187,7 +190,8 @@
                 Command="{Binding DuplicateRuleCommand}"
                 FontSize="13"
                 IsEnabled="{Binding ButtonsEnabled, UpdateSourceTrigger=PropertyChanged}"
-                Style="{StaticResource DuplicateRuleButton}" />
+                Style="{StaticResource DuplicateRuleButton}"
+                ToolTip="Duplicate the currently selected rule - a convenient basis for creating a new rule" />
         </StackPanel>
         <Button
             Grid.Row="4"
@@ -196,7 +200,8 @@
             Command="{Binding ExecuteRuleCommand}"
             Content="Execute"
             IsEnabled="{Binding ButtonsEnabled, UpdateSourceTrigger=PropertyChanged}"
-            Style="{StaticResource RegularButton}" />
+            Style="{StaticResource RegularButton}"
+            ToolTip="Expands the report window and creates a validation report" />
         <DataGrid
             Grid.Row="2"
             Grid.Column="2"
@@ -252,13 +257,15 @@
                 Content="Export"
                 DockPanel.Dock="Left"
                 IsEnabled="{Binding ButtonsEnabled, UpdateSourceTrigger=PropertyChanged}"
-                Style="{StaticResource RegularButton}" />
+                Style="{StaticResource RegularButton}"
+                ToolTip="Export the current report to .CSV format" />
             <Button
                 Name="ButtonClose"
                 Click="ButtonClose_Click"
                 Content="Close"
                 DockPanel.Dock="Right"
-                Style="{StaticResource RegularButtonCancel}" />
+                Style="{StaticResource RegularButtonCancel}"
+                ToolTip="Close this window" />
         </DockPanel>
     </Grid>
 </Window>

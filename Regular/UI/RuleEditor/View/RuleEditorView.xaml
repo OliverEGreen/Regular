@@ -62,7 +62,7 @@
             Style="{StaticResource RegularTextBox}"
             Text="{Binding StagingRule.RuleName, UpdateSourceTrigger=PropertyChanged}"
             TextChanged="TextBoxNameYourRuleInput_OnTextChanged"
-            ToolTip="Define a reference ruleName for the rule you're creating." />
+            ToolTip="Define a reference name for the rule you're creating" />
         <TextBlock
             Name="TextBlockNameYourRuleWatermark"
             Grid.Row="1"
@@ -109,7 +109,8 @@
             HorizontalAlignment="Stretch"
             Command="{Binding TriggerCategoryPanelCommand}"
             Content="{Binding CategoriesPanelButtonText}"
-            Style="{StaticResource RegularButton}" />
+            Style="{StaticResource RegularButton}"
+            ToolTip="Expands and collapses the category selection panel" />
         <DataGrid
             Grid.Row="1"
             Grid.RowSpan="6"
@@ -156,7 +157,8 @@
             DisplayMemberPath="ParameterObjectName"
             ItemsSource="{Binding PossibleTrackingParameterObjects, UpdateSourceTrigger=PropertyChanged}"
             SelectedItem="{Binding StagingRule.TrackingParameterObject, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-            Style="{StaticResource RegularComboBox}" />
+            Style="{StaticResource RegularComboBox}"
+            ToolTip="Select the parameter this rule whose value this rule should be tracking" />
         <TextBlock
             Grid.Row="4"
             Grid.Column="0"
@@ -173,7 +175,7 @@
             SelectedValue="{Binding SelectedMatchType, UpdateSourceTrigger=PropertyChanged}"
             SelectedValuePath="Value"
             Style="{StaticResource RegularComboBox}"
-            ToolTip="Specify whether you want the parameter value to match the rule completely, just at the beginning or anywhere within its value." />
+            ToolTip="Specify whether you want the parameter value to match the rule completely, just at the beginning or anywhere within its value" />
         <TextBlock
             Grid.Row="5"
             Grid.Column="0"
@@ -196,7 +198,8 @@
                 SelectedIndex="0"
                 SelectedValue="{Binding SelectedRuleType, UpdateSourceTrigger=PropertyChanged}"
                 SelectedValuePath="Value"
-                Style="{StaticResource RegularComboBox}" />
+                Style="{StaticResource RegularComboBox}"
+                ToolTip="Use this dropdown to select parts and the + button to add them to the rule" />
             <Button
                 Name="ButtonAddRulePart"
                 Width="24"
@@ -204,7 +207,8 @@
                 Margin="5,0,0,10"
                 VerticalAlignment="Bottom"
                 Command="{Binding AddRulePartCommand}"
-                Style="{StaticResource AddItemButton}" />
+                Style="{StaticResource AddItemButton}"
+                ToolTip="Adds the selected rule part to your rule specification" />
             <Button
                 Name="ButtonMoveRulePartUp"
                 Width="24"
@@ -212,7 +216,8 @@
                 Margin="3,0,0,10"
                 VerticalAlignment="Bottom"
                 Command="{Binding MoveRulePartUpCommand}"
-                Style="{StaticResource ReorderUpButton}" />
+                Style="{StaticResource ReorderUpButton}"
+                ToolTip="Reorders the rule parts by moving the selected rule part up" />
             <Button
                 Name="ButtonMoveRulePartDown"
                 Width="24"
@@ -220,7 +225,8 @@
                 Margin="3,0,0,10"
                 VerticalAlignment="Bottom"
                 Command="{Binding MoveRulePartDownCommand}"
-                Style="{StaticResource ReorderDownButton}" />
+                Style="{StaticResource ReorderDownButton}"
+                ToolTip="Reodrers the rule parts by moving the selected rule part down" />
         </StackPanel>
         <Border
             Grid.Row="6"
@@ -391,7 +397,7 @@
             Command="{Binding GenerateCompliantExampleCommand}"
             Content=""
             Style="{StaticResource RefreshExampleButton}"
-            ToolTip="Press the button to generate random examples which are compliant with the rule parts you selected." />
+            ToolTip="Press the button to generate random examples which are compliant with the rule parts you selected" />
         <TextBlock
             Name="TextBlockExample"
             Grid.Row="7"
@@ -411,13 +417,15 @@
             Grid.Column="{Binding ButtonsColumnNumber, UpdateSourceTrigger=PropertyChanged}"
             Margin="0,0,90,0"
             Click="ButtonCancel_Click"
-            Style="{StaticResource RegularButtonCancel}" />
+            Style="{StaticResource RegularButtonCancel}"
+            ToolTip="Disregard this rule and close the Rule Editor window" />
         <Button
             Name="ButtonOk"
             Grid.Row="7"
             Grid.Column="{Binding ButtonsColumnNumber, UpdateSourceTrigger=PropertyChanged}"
             Click="ButtonOk_OnClick"
             Command="{Binding SubmitRuleCommand}"
-            Style="{StaticResource RegularButtonOK}" />
+            Style="{StaticResource RegularButtonOK}"
+            ToolTip="Save the current rule to your Revit model" />
     </Grid>
 </Window>

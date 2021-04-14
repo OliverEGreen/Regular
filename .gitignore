@@ -65,3 +65,4 @@ Regular/bin/x64/Rvt2019/RevitAPI.dll
 Regular/bin/x64/Rvt2019/RevitAPIUI.dll
 Regular/bin/x64/Rvt2020/RevitAPI.dll
 Regular/bin/x64/Rvt2020/RevitAPIUI.dll
+*.xml
