@@ -3,7 +3,7 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 # Summary
-Regular is an open-source Revit plugin, designed to help users manage construction data. The first tool, DataSpec, lets users define flexible format rules for Revit parameter values. Data can then be validated (and, if necessary, corrected) using an intuitive user interface. 
+Regular is an open-source Revit plugin, designed to help users manage construction data. Our first tool, DataSpec, lets users define flexible format rules for Revit parameter values. Data can then be validated (and, if necessary, corrected) using an intuitive user interface. 
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/29973601/114715635-30a1d980-9d2b-11eb-8b0b-fb4b03d4a367.jpg" width="903">
