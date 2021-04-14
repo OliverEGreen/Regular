@@ -5,6 +5,10 @@
 # Summary
 Regular is an open-source Revit plugin, designed to help users manage construction data. The first tool, DataSpec, lets users define flexible format rules for Revit parameter values. Data can then be validated (and, if necessary, corrected) using an intuitive user interface. 
 
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/29973601/114715635-30a1d980-9d2b-11eb-8b0b-fb4b03d4a367.jpg" width="903">
+</p>
+
 &nbsp;
 # Quick Links
 - [Installation](https://github.com/OliverEGreen/Regular/wiki/DataSpec-Installation)
@@ -17,10 +21,10 @@ Regular is an open-source Revit plugin, designed to help users manage constructi
 &nbsp;
 # The Big Idea
 
-It is frequently stated that construction technology suffers from a lack of common, established data standards. It is this standards vacuum which underlies several problems faced within the industry every day:
+It is widely known that construction technology suffers from a lack of established data standards. Without robust, common data standards it becomes impossible to develop technology that escapes local practice and creates a global impact. To briefly restate the problems we face:
 
-1. Agreeing on optimal formats for data is hard: opinions are strong and will often differ between companies and sectors that have already invested in establishing their own internal standards.  
-2. Validating data created in line with any format specifications is a specialist task that too often falls to those who originally trained as architects, engineers, or project managers - not data managers.
+1. Agreeing on optimal formats for data is hard: opinions are strong and will often differ between companies and sectors that have already invested in establishing their own internal processes.  
+2. Validating data created in line with any format specifications is a specialist task that too often falls to those who originally trained as architects, engineers, or project managers - not experienced data managers.
 3. The few standards we have are prone to frequent change. Moving the goalposts mid-way through a project often results in costly and unenjoyable data correction work. The risk of this happening is great enough to deter further standardisation from taking place.
 
 The second and third problems above can be minimised by investing in programming skills. However, for AEC these remain in short supply.
