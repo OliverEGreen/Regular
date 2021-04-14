@@ -55,3 +55,13 @@ obj
 /Regular/bin/x64/Rvt2016/AddInManager.dll
 /Regular/bin/x64/Rvt2016
 /packages/System.ValueTuple.4.4.0
+*.pdb
+*.pdb
+Regular/bin/x64/Rvt2021/RevitAPI.dll
+Regular/bin/x64/Rvt2021/RevitAPIUI.dll
+Regular/bin/x64/Rvt2018/RevitAPI.dll
+Regular/bin/x64/Rvt2018/RevitAPIUI.dll
+Regular/bin/x64/Rvt2019/RevitAPI.dll
+Regular/bin/x64/Rvt2019/RevitAPIUI.dll
+Regular/bin/x64/Rvt2020/RevitAPI.dll
+Regular/bin/x64/Rvt2020/RevitAPIUI.dll
