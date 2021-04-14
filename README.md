@@ -11,6 +11,8 @@ Regular is an open-source Revit plugin, designed to help users manage constructi
 - [Getting Started](https://github.com/OliverEGreen/Regular/wiki/DataSpec-Getting-Started)
 - [Worked Examples & Video Tutorials](https://github.com/OliverEGreen/Regular/wiki/DataSpec-Examples)
 - [Dependencies](https://github.com/OliverEGreen/Regular/wiki/DataSpec-Dependencies)
+- [Sharing Rules](https://github.com/OliverEGreen/Regular/wiki/DataSpec-Sharing-Rules)
+- [Exporting Reports](https://github.com/OliverEGreen/Regular/wiki/Exporting-Reports)
 
 &nbsp;
 # The Big Idea
