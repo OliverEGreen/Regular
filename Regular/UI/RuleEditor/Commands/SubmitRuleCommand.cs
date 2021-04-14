@@ -23,7 +23,7 @@ namespace Regular.UI.RuleEditor.Commands
             bool regexRulePartsCountValid = stagingRule.RegexRuleParts.Count > 0;
             bool regexStringLengthValid = !string.IsNullOrWhiteSpace(stagingRule.RegexString);
             bool targetCategoryObjectCountValid = stagingRule.TargetCategoryObjects.Count(x => x.IsChecked) > 0;
-            bool trackingParameterObjectIdValid = stagingRule.TrackingParameterObject.ParameterObjectId != -1;
+            bool trackingParameterObjectIdValid = stagingRule.TrackingParameterObject != null ;
 
             // If any of the following cases is true, the new rule cannot be submitted
             return

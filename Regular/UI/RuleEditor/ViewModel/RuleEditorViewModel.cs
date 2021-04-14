@@ -40,6 +40,7 @@ namespace Regular.UI.RuleEditor.ViewModel
         private string title = "";
         private string userFeedbackText = "";
         private Visibility userFeedbackTextVisibility = Visibility.Hidden;
+        private Visibility trackingParameterWatermarkVisibility = Visibility.Hidden;
         private bool ruleNameInputDirty = false;
         private int numberCategoriesSelected = 0;
         private ObservableCollection<ParameterObject> possibleTrackingParameterObjects = new ObservableCollection<ParameterObject>();
@@ -97,6 +98,17 @@ namespace Regular.UI.RuleEditor.ViewModel
                 NotifyPropertyChanged();
             }
         }
+
+        public Visibility TrackingParameterWatermarkVisibility
+        {
+            get => trackingParameterWatermarkVisibility;
+            set
+            {
+                trackingParameterWatermarkVisibility = value;
+                NotifyPropertyChanged();
+            }
+        }
+
         public int NumberCategoriesSelected
         {
             get => numberCategoriesSelected;
@@ -271,8 +283,66 @@ namespace Regular.UI.RuleEditor.ViewModel
         public Dictionary<string, RuleType> RulesTypeDict { get; } = EnumDicts.RulesTypeDict;
         public Dictionary<string, MatchType> MatchTypesDict { get; } = EnumDicts.MatchTypesDict;
 
-        public void UpdateCheckedCategoriesCount() => NumberCategoriesSelected = StagingRule.TargetCategoryObjects.Count(x => x.IsChecked);
-        
+        public void UpdateCheckedCategoriesCount()
+        {
+            void UpdateTrackingParameter()
+            {
+                // If something is ticked, we need to ascertain which parameters are now valid for the selection
+                PossibleTrackingParameterObjects = ParameterUtils.
+                GetParametersOfCategories
+                (
+                    RuleEditorInfo.DocumentGuid,
+                    StagingRule.TargetCategoryObjects
+                );
+
+                ParameterObject selectedTrackingParameterObject = StagingRule.TrackingParameterObject;
+
+                if (NumberCategoriesSelected < 1)
+                {
+                    // If no categories are selected, no tracking parameters can possibly be selected
+                    TrackingParameterWatermarkVisibility = System.Windows.Visibility.Visible;
+                    ComboBoxTrackingParameterText = "Select Categories";
+                    return;
+                }
+
+                // If no common parameters can be found based on what is ticked, we let the user know and return
+                if (PossibleTrackingParameterObjects.Count < 1)
+                {
+                    TrackingParameterWatermarkVisibility = System.Windows.Visibility.Visible;
+                    ComboBoxTrackingParameterText = "No Common Parameters Found";
+                    return;
+                }
+
+                List<int> possibleTrackingParameterObjectIds = PossibleTrackingParameterObjects
+                    .Select(x => x.ParameterObjectId)
+                    .ToList();
+
+                // If the parameter is still available after categories selection has ended, we don't need to change anything
+                if
+                (
+                    selectedTrackingParameterObject != null &&
+                    possibleTrackingParameterObjectIds.Contains(selectedTrackingParameterObject.ParameterObjectId)
+                )
+                {
+                    TrackingParameterWatermarkVisibility = System.Windows.Visibility.Hidden;
+                    return;
+                }
+
+                // However if the previously selected tracking parameter is no longer available, we'll default to the first item in the list
+                if (PossibleTrackingParameterObjects.Count > 0)
+                {
+                    StagingRule.TrackingParameterObject = PossibleTrackingParameterObjects.First();
+                    TrackingParameterWatermarkVisibility = Visibility.Hidden;
+                    return;
+                }
+
+                // Falls through to here if our logic went wrong
+                TrackingParameterWatermarkVisibility = System.Windows.Visibility.Visible;
+                ComboBoxTrackingParameterText = "ERROR";
+            }
+            NumberCategoriesSelected = StagingRule.TargetCategoryObjects.Count(x => x.IsChecked);
+            UpdateTrackingParameter();
+        }
 
         public RuleEditorViewModel(RuleEditorInfo ruleEditorInfo)
         {

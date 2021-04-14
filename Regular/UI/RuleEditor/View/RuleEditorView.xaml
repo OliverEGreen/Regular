@@ -116,6 +116,7 @@
             Grid.Column="3"
             Margin="0"
             BorderThickness="1"
+            CanUserReorderColumns="False"
             ItemsSource="{Binding StagingRule.TargetCategoryObjects}"
             Style="{StaticResource RegularDataGrid}">
             <DataGrid.Columns>
@@ -146,18 +147,8 @@
             Padding="6,3"
             Panel.ZIndex="1"
             Foreground="{StaticResource FontColorWatermarkGrey}"
-            Text="{Binding ComboBoxTrackingParameterText, UpdateSourceTrigger=PropertyChanged}">
-            <TextBlock.Style>
-                <Style TargetType="{x:Type TextBlock}">
-                    <Setter Property="Visibility" Value="Collapsed" />
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding ElementName=RuleEditorWindow, Path=DataContext.NumberCategoriesSelected, UpdateSourceTrigger=PropertyChanged}" Value="0">
-                            <Setter Property="Visibility" Value="Visible" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </TextBlock.Style>
-        </TextBlock>
+            Text="{Binding ComboBoxTrackingParameterText, UpdateSourceTrigger=PropertyChanged}"
+            Visibility="{Binding TrackingParameterWatermarkVisibility, UpdateSourceTrigger=PropertyChanged}" />
         <ComboBox
             x:Name="ComboBoxTrackingParameterInput"
             Grid.Row="3"

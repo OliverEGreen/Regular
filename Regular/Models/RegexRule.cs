@@ -13,7 +13,7 @@ namespace Regular.Models
         private string ruleName = "";
         private ObservableCollection<CategoryObject> targetCategoryObjects = new ObservableCollection<CategoryObject>();
         private ObservableCollection<IRegexRulePart> regexRuleParts = new ObservableCollection<IRegexRulePart>();
-        private ParameterObject trackingParameterObject = new ParameterObject {ParameterObjectId = -1, ParameterObjectName = ""};
+        private ParameterObject trackingParameterObject = null;
         private string toolTipString = "";
         private string regexString = "";
         private MatchType matchType = MatchType.ExactMatch;
@@ -52,11 +52,12 @@ namespace Regular.Models
             get => trackingParameterObject;
             set
             {
-                if (value != null)
-                {
-                    trackingParameterObject = value;
-                    NotifyPropertyChanged("TrackingParameterObject");
-                }
+                trackingParameterObject = value;
+                NotifyPropertyChanged("TrackingParameterObject");
+                //if (value != null)
+                //{
+                    
+                //}
             }
         }
         
