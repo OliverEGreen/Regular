@@ -5,7 +5,11 @@ It is hoped that these tools will be able to grow over time, with feedback from 
 
 ## How You Can Help
 
-* Bug Reports! Did Regular do something unexpected? Is this a behaviour you can reliably reproduce? We'd love to hear from you: Please raise a [Github issue](https://github.com/OliverEGreen/Regular/issues) if this is something you know how to do, otherwise feel free to message me on [Twitter](https://twitter.com/Oliver_E_Green) or [LinkedIn](https://www.linkedin.com/in/oliver-green/).
+* Bug Reports! Did Regular do something unexpected? Is this a behaviour you can reliably reproduce? We'd love to hear from you!
+* Opinionated UI Feedback! Does the UI/UX suck? Should we begin working on a dark mode? This is your invitation to **roast Regular**.
+* Our Guidance: Are our instructions unclear? Does something require further clarification?
+
+Please raise a [Github issue](https://github.com/OliverEGreen/Regular/issues) if this is something you know how to do, otherwise feel free to message me on [Twitter](https://twitter.com/Oliver_E_Green) or [LinkedIn](https://www.linkedin.com/in/oliver-green/).
 
 ## Areas for Improvement
 
