@@ -60,9 +60,25 @@ namespace Regular.Utilities
             if (regexRule == null) return null;
             
             Parameter parameter = element?.get_Parameter((BuiltInParameter)regexRule.TrackingParameterObject.ParameterObjectId);
-            if (parameter == null || parameter.StorageType != StorageType.String) return null;
-            string parameterValue = parameter.AsString();
-            return parameterValue;
+            if (parameter != null)
+            {
+                // Regular only works with text-based parameters
+                if (parameter.StorageType != StorageType.String) return null;
+                return parameter.AsString();
+            }
+
+            Document document = RegularApp.DocumentCacheService.GetDocument(documentGuid);
+            Element elementType = document.GetElement(element.GetTypeId());
+            Parameter typeParameter = elementType?.get_Parameter((BuiltInParameter)regexRule.TrackingParameterObject.ParameterObjectId);
+            if (typeParameter != null)
+            {
+                if (typeParameter.StorageType != StorageType.String) return null;
+                string parameterString = typeParameter.AsString();
+                string valueString = typeParameter.AsValueString();
+                bool hasValue = typeParameter.HasValue;
+                return typeParameter.AsString();
+            }
+            return null;
         }
 
         public static Parameter GetParameterById(Document document, Element element, int parameterIdIntegerValue)

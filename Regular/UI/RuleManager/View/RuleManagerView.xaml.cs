@@ -115,7 +115,7 @@ namespace Regular.UI.RuleManager.View
                     transaction.Start();
                     parameter.Set(textBox.Text);
                     transaction.Commit();
-                    
+
                     RuleValidationResult ruleValidationResult = RuleExecutionUtils.ExecuteRegexRule
                     (
                         RuleManagerViewModel.DocumentGuid,
