@@ -6,7 +6,7 @@
 Regular is an open-source Revit plugin, designed to help users manage construction data. Our first tool, DataSpec, lets users define flexible format rules for Revit parameter values. Data can then be validated (and, if necessary, corrected) using an intuitive user interface. 
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/29973601/114715635-30a1d980-9d2b-11eb-8b0b-fb4b03d4a367.jpg" width="903">
+  <img src="https://user-images.githubusercontent.com/29973601/114840351-a3b05c00-9dce-11eb-863b-2eb6a68dd0cd.gif">
 </p>
 
 &nbsp;
