@@ -63,7 +63,7 @@
         <Setter Property="SizeToContent" Value="Height" />
         <Setter Property="MinHeight" Value="150" />
         <Setter Property="MinWidth" Value="300" />
-		<Setter Property="Topmost" Value="True"/>
+        <Setter Property="Topmost" Value="True"/>
     </Style>
 
     <Style
